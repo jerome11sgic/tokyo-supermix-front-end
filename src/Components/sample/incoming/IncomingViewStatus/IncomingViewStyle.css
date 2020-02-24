@@ -1,0 +1,9 @@
+.incomingViewStatus{
+    box-shadow: 8px 5px 15px 5px rgba(0, 0, 0, 0.19);
+    width: 1000px;
+    height: 450px;
+    background: rgba(2, 2, 2, 0.55);
+    margin-left: 160px;
+    border-radius: 20px;
+    background-origin: padding-box;
+}

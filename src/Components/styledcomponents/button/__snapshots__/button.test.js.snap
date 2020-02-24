@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`it works 1`] = `
+<button
+  className="ant-btn sc-bdVaJa ibTDPh"
+  onClick={[Function]}
+  type="button"
+/>
+`;

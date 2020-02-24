@@ -1,0 +1,39 @@
+.equation_wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  height: auto;
+  align-self: center;
+  width: 1250px;
+  padding: 10px;
+  background-color: rgba(220, 220, 220, 0.9);
+  border-radius: 15px;
+}
+.equation_playground {
+  display: flex;
+  width: 600px;
+  border-radius: 15px;
+}
+
+.calculators {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  border-radius: 15px;
+  justify-content: space-evenly;
+  background-color: white;
+  width: 400px;
+  height: 150px;
+  padding: 10px;
+  justify-content: space-between;
+}
+
+.backImg {
+  display: flex;
+  font-size: 38px;
+  font-weight: bold;
+  color: #001422;
+  vertical-align: middle;
+  margin-top: -4px;
+}

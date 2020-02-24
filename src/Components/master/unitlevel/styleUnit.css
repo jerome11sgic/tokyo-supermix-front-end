@@ -1,0 +1,219 @@
+/* Styles for CustomerAddForm.jsx */
+.unit_tiles_area {
+  min-height: 200px;
+  width: auto;
+  position: sticky;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  margin-left: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.unit_text_area {
+  margin-top: 9px;
+  font-size: 13px;
+}
+
+.unit_action_area {
+  margin-top: 7px;
+}
+
+/* Styles for ManagePlants.jssx */
+
+.table {
+  box-shadow: 8px 5px 15px 5px rgba(0, 0, 0, 0.19);
+  width: 490px;
+  background: "white";
+  border-radius: 10px;
+  margin-top: 15px;
+  /* height: 220px; */
+}
+
+/* Form heading */
+/* style={{width:'650px',height:'40px',background:"#001328",borderTopRightRadius:"10px",borderTopLeftRadius:"10px",borderBottomRightRadius:'-10px'   */
+.heading {
+  width: 650px;
+  height: 40px;
+  background: #001328;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+/* Styles for PlantAddForm.jsx */
+.form {
+  width: 650px;
+  background: white;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  flex-grow: inherit;
+  text-align: justify;
+  /* padding: 8px; */
+  border-radius: 10px;
+  box-shadow: 4px 5px 15px 5px rgba(43, 42, 42, 0.3);
+  margin-top: -15px;
+  height: 220px;
+}
+
+.unit_basic_card {
+  background: #001328;
+  height: 50px;
+  padding-right: 50px;
+  font-size: 12px;
+  color: #ffff;
+  width: 150px;
+  padding: 6px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.label {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  color: #8e8e8e;
+}
+
+.input_wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  margin: 1px;
+  padding: 3px;
+}
+
+.input_number {
+  width: 175px;
+}
+.input {
+  width: auto;
+}
+.textarea {
+  width: 200px;
+}
+
+.legend {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  color: #8e8e8e;
+}
+
+/* Styles for UserRoleAddForm.jsx */
+.form1 {
+  width: 320px;
+  background: white;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  flex-grow: inherit;
+  text-align: justify;
+  /* padding: 8px; */
+  border-radius: 10px;
+  /* box-shadow: 4px 5px 15px 5px rgba(0, 0, 0, 0.19); */
+  margin-top: -15px;
+  height: 100px;
+}
+
+/* Styles for EmployeeAddForm.jsx */
+.form2 {
+  width: 800px;
+  background: white;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  flex-grow: inherit;
+  text-align: justify;
+  /* padding: 8px; */
+  border-radius: 10px;
+  /* box-shadow: 4px 5px 15px 5px rgba(0, 0, 0, 0.19); */
+  margin-top: -15px;
+  height: 100px;
+}
+
+.textarea1 {
+  width: 172px;
+}
+
+.input_number1 {
+  width: auto;
+}
+/* Style for BarChart.jsx */
+.barchart {
+  background: white;
+  margin-top: 10px;
+  box-shadow: 4px 5px 15px 5px rgba(0, 0, 0, 0.19);
+  border-radius: 15px;
+}
+
+/* container and main flex styles */
+.wrapper_container {
+  width: 1150px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.inner_container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.inner_container2 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+/* Styles for ManageQCStaff.jsx  */
+.qcstafftable {
+  width: 1150px;
+  height: 245px;
+  outline: none;
+}
+
+/* Styles for ManageUserRoles.jsx */
+/* .table_row {
+      height: -1pc;
+    } */
+
+/* media queries */
+@media (min-width: 1920px) {
+  .form {
+    width: 850px;
+  }
+  .input {
+    width: 240px;
+  }
+  .heading {
+    width: 850px;
+  }
+  .table {
+    width: 600px;
+  }
+
+  .inner_container {
+    justify-content: space-evenly;
+  }
+  .inner_container2 {
+    justify-content: space-around;
+    margin-top: 25px;
+  }
+  .wrapper_container {
+    width: 1700px;
+  }
+  .qcstafftable {
+    width: 1300px;
+    height: 345px;
+  }
+}

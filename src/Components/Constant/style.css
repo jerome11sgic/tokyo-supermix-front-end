@@ -1,0 +1,93 @@
+.logo {
+  height: 55px;
+  width: 210px;
+  background: url("../../assets/tokyosuper.png");
+  background-size: contain;
+}
+
+.homebtn {
+  height: 50px;
+  width: 50px;
+  background: url("../../assets/homebtn.png");
+  background-size: cover;
+}
+
+.master_logo_gap {
+  margin-left: 63px;
+}
+.homescreen_logo_gap {
+  width: 920px;
+}
+.samples_logo_gap {
+  width: 1009px;
+}
+.testrials_logo_gap {
+  width: 1009px;
+}
+.configuration_logo_gap {
+  width: 720px;
+}
+
+.topnavmenu {
+  line-height: "55px";
+  width: "1000px";
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.topnavmenu_home {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.menuitemwrapper {
+  background: #001422;
+  color: white;
+}
+
+.menuitemwrapper :enabled {
+  background: #001422;
+  color: white;
+}
+
+.menuitem {
+  background: #001422;
+  color: green;
+}
+
+.menuitem :enabled {
+  background: #001422;
+  color: white;
+}
+
+@media only screen and (max-height: 800px) {
+  .testrials_logo_gap {
+    width: 999px;
+  }
+}
+
+@media only screen and (min-width: 1920px) {
+  .homescreen_logo_gap {
+    width: 1600px;
+  }
+  .master_logo_gap {
+    width: 561px;
+  }
+  .samples_logo_gap {
+    width: 1600px;
+  }
+  .testrials_logo_gap {
+    width: 1600px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .logo {
+    width: 150px;
+    background: url("../../assets/logorestablet.png");
+  }
+}

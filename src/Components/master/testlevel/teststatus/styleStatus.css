@@ -1,0 +1,59 @@
+.heading {
+  width: 650px;
+  height: 40px;
+  background: #001328;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+/* Styles for PlantAddForm.jsx */
+.formStatus {
+  width: 600px;
+  background: white;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  flex-grow: inherit;
+  text-align: justify;
+  /* padding: 8px; */
+  border-radius: 10px;
+  box-shadow: 4px 5px 15px 5px rgba(43, 42, 42, 0.3);
+  margin-top: -15px;
+  height: 220px;
+  margin-right: 40px;
+}
+
+.label {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  color: #8e8e8e;
+}
+
+.input_wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  margin: 1px;
+  padding: 3px;
+}
+
+.input_number {
+  width: 175px;
+}
+.inputStatus {
+  width: 160px;
+}
+.textarea {
+  width: 200px;
+}
+
+.table {
+  box-shadow: 8px 5px 15px 5px rgba(0, 0, 0, 0.19);
+  width: 490px;
+  background: "white";
+  border-radius: 10px;
+  margin-top: 15px;
+  /* height: 220px; */
+}

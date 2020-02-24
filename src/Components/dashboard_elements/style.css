@@ -1,0 +1,111 @@
+.rectangle-6 {
+  width: 340px;
+  height: 121px;
+  opacity: 0.96;
+  border: solid 1px #131b23;
+  background-color: #131b23;
+  border-radius: 15px 15px 15px 35px;
+  box-shadow: 4px 12px 12px 5px rgba(0, 0, 0, 0.2);
+  animation-name: carousel;
+  -moz-animation-name: carousel;
+  -webkit-animation-name: carousel;
+  animation-duration: 3s;
+  -webkit-animation-duration: 3s;
+  -moz-animation-duration: 3s;
+  animation-delay: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.rectangle-7 {
+  width: 90px;
+  height: 88px;
+  border-radius: 20px;
+  box-shadow: 10px 10px 5px 0 rgba(0, 0, 0, 0.16);
+  background-color: #ffffff;
+  left: 4.06%;
+  right: 70.11%;
+  top: 2.94%;
+  bottom: 47.06%;
+  margin-top: -30px;
+  margin-left: 10px;
+}
+
+.concrete {
+  width: 76px;
+  height: 76px;
+  object-fit: cover;
+  position: relative;
+}
+
+.Samples-Tested {
+  width: 138px;
+  height: 27px;
+  opacity: 0.95;
+  margin-top: 7px;
+  margin-left: 20px;
+  position: relative;
+  font-family: SegoeUI;
+  font-size: 21px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.35;
+  letter-spacing: -0.1px;
+  text-align: right;
+  color: #ffffff;
+}
+
+.arranger {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.arranger2 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+/* 
+.Icon-material-keyboard-arrow-down {
+  width: 13.3px;
+  height: 14.5px;
+  background: url("../../assets/next.png");
+  background-size: cover;
+  transform: translateX(-40px) translateY(10px);
+  position: relative;
+} */
+
+.data_area {
+  width: 42px;
+  height: 47px;
+  font-family: SegoeUI;
+  font-size: 40px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.34;
+  letter-spacing: 1.75px;
+  text-align: left;
+  color: #ffffff;
+  margin-top: -30px;
+  margin-right: 45px;
+}
+
+@keyframes carousel {
+  0% {
+    border: solid 1px #373737;
+    background-color: #373737;
+  }
+  50% {
+    border: solid 1px #1f363d;
+    background-color: #1f363d;
+  }
+  100% {
+    border: solid 1px #131b23;
+    background-color: #131b23;
+  }
+}

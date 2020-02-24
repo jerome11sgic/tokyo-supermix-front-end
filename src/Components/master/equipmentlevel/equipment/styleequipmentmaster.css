@@ -1,0 +1,37 @@
+.EquipmentAddForm{
+  width: 330px;
+  background: white;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  flex-grow: 50px;
+  text-align: justify;
+  /* padding: 8px; */
+  border-radius: 10px;
+  /* box-shadow: 4px 5px 15px 5px rgba(0, 0, 0, 0.19); */
+  margin-left: -24px;
+  margin-top: -28px;
+  height: 250px;
+}
+
+.equipmentAddFormHeadingContainer{
+  width: 500px;
+  height: 40px;
+  background: #001328;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  border-bottom-right-radius: -10px;
+}
+
+.EquipmentManageTable{
+    box-shadow: 8px 5px 15px 5px rgba(0, 0, 0, 0.19);
+    width: 600px;
+  
+    height: auto;
+    background: white;
+    border-radius: 15px;
+}
+.input{
+  width: 160px;
+}

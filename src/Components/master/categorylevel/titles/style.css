@@ -1,0 +1,25 @@
+.mainCategory_title_text {
+  font-size: medium;
+  font-weight: 600;
+}
+
+.mainCategory_title_wrapper {
+  height: 20px;
+  width: auto;
+  justify-content: space-between;
+  border-radius: 5px;
+}
+
+.title_text {
+  font-size: medium;
+  font-weight: 600;
+  align-self: auto;
+  padding: 20px;
+}
+
+/* media queries */
+@media (min-width: 1920px) {
+  .title_wrapper {
+    justify-content: space-around;
+  }
+}

@@ -1,0 +1,102 @@
+.testconfig {
+  align-self: center;
+  color: #000;
+}
+.steps-content {
+  margin-top: 16px;
+  border: 1px dashed #e9e9e9;
+  border-radius: 6px;
+  background-color: #fafafa;
+  min-height: 200px;
+  text-align: center;
+  padding-top: 80px;
+  margin-left: 10px;
+}
+
+.steps-action {
+  margin-top: 24px;
+  margin-left: 20px;
+}
+.step {
+  width: auto;
+  align-content: center;
+}
+
+.step-area {
+  width: 800px;
+  margin-left: 260px;
+}
+
+.TestConfigAddForm {
+  width: 900px;
+  background: white;
+  background: "#001422";
+  /* padding: 8px; */
+  border-radius: 15px;
+  /* box-shadow: 4px 5px 15px 5px rgba(0, 0, 0, 0.19); */
+  margin-top: 20px;
+  margin-left: 200px;
+  height: auto;
+}
+
+.additionalParameter {
+  width: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  flex-grow: initial;
+  text-align: justify;
+  /* padding: 8px; */
+  border-radius: 10px;
+  /* box-shadow: 4px 5px 15px 5px rgba(0, 0, 0, 0.19); */
+  margin-top: -40px;
+  height: auto;
+}
+
+.label {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  color: #8e8e8e;
+}
+
+.input_wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin: 1px;
+  margin-left: 20px;
+  margin-top: 20px;
+  padding: 3px;
+}
+
+.input_number {
+  width: 175px;
+}
+
+.textarea {
+  width: 200px;
+}
+
+.legend {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  color: #8e8e8e;
+}
+
+.input_Field {
+  width: 180px;
+}
+
+@media only screen and (min-width: 1920px) {
+  .step-area {
+    justify-content: center;
+    align-self: auto;
+    margin-left: 560px;
+  }
+}

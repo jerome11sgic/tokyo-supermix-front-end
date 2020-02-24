@@ -1,0 +1,96 @@
+.process_tiles_area {
+    min-height: 200px;
+    width: auto;
+    position: sticky;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    margin-left: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .process_text_area {
+    margin-top: 9px;
+    font-size: 13px;
+  }
+  
+  .process_action_area {
+    margin-top: 7px;
+  }
+  
+  .process_basic_card {
+    background: #001328;
+    height: 50px;
+    padding-right: 50px;
+    font-size: 12px;
+    color: #ffff;
+    width: 150px;
+    padding: 6px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+
+  /* .parameterTableWrapper {
+    background: white;
+    border-radius: 10px;
+    margin-top: 15px;
+    height: 320px;
+  }
+  
+  .parameterTable {
+    min-height: 320px;
+  }
+   */
+  /* Styles for AddSupplier.jsx */
+  .addprocessFormWrapper {
+    height: auto;
+    width: 1100px;
+  }
+  
+  .addprocessForm {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background: white;
+    border-radius: 10px;
+    text-align: justify;
+    box-shadow: 4px 5px 15px 5px rgba(43, 42, 42, 0.3);
+  }
+  
+  .addprocessFormHeadingContainer {
+    width: 100%;
+    height: 40px;
+    background: #001328;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    border-bottom-right-radius: -10px;
+  }
+  
+  .addprocessFormInnerWrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: space-around;
+    justify-content: space-between;
+    padding: 15px;
+  }
+
+  .processTableWrapper {
+    background: white;
+    border-radius: 10px;
+    margin-top: 15px;
+    height: 300px;
+    width: 1100px;
+    margin-left:190px ;
+  }
+  
+  .processTable {
+    min-height: 320px;
+  }
+
+  .inputProcessfield{
+      width: 250px;
+  }
+  

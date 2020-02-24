@@ -1,0 +1,112 @@
+.login {
+  background: #001328;
+  height: 657px;
+}
+
+.image_area {
+  display: flex;
+  flex-direction: row;
+  align-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.image {
+  width: 800px;
+  height: 657px;
+}
+
+.login_form_card {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 350px;
+  height: 350px;
+  box-shadow: 4px 5px 10px 5px rgba(245, 241, 241, 0.41);
+  background: #f2f9f5;
+  align-content: center;
+  margin-top: 150px;
+  margin-right: 100px;
+  border-radius: 10px;
+}
+
+.login_form {
+  width: 250px;
+  height: 350px;
+  align-content: center;
+  margin-top: 30px;
+}
+
+.h1_login {
+  align-content: center;
+  margin-left: 15px;
+  color: #000;
+  margin-top: 10px;
+}
+
+.login_form_area {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.logo_login {
+  align-content: center;
+  margin-top: 40px;
+  margin-left: -25px;
+  border-radius: 10px;
+  box-shadow: 4px 5px 10px 5px rgba(245, 241, 241, 0.41);
+}
+
+.follow {
+  margin-top: 60px;
+  margin-left: -80px;
+}
+
+.footer {
+  margin-top: 20px;
+  margin-left: -100px;
+}
+
+.h5 {
+  color: #f2f9f5;
+}
+
+@media (min-width: 1920px) {
+  .login {
+    background: #001328;
+    height: 1080px;
+  }
+
+  .image {
+    width: 1100px;
+    height: 1080px;
+  }
+
+  .login_form_card {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 450px;
+    height: 450px;
+    box-shadow: 4px 5px 10px 5px rgba(245, 241, 241, 0.41);
+    background: #f2f9f5;
+    align-content: center;
+    margin-top: 350px;
+    margin-right: 200px;
+    border-radius: 30px;
+  }
+
+  .logo_login {
+    align-content: center;
+    margin-top: 80px;
+    margin-left: 20px;
+    border-radius: 10px;
+    box-shadow: 4px 5px 10px 5px rgba(245, 241, 241, 0.41);
+    width: 500px;
+    height: 100px;
+  }
+  .h5 {
+    color: #f2f9f5;
+    margin-right: 25px;
+  }
+}

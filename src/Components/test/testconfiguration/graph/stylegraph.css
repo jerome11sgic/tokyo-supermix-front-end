@@ -1,0 +1,169 @@
+.headingAddGraph {
+    width: 1200px;
+    height: 40px;
+    background: #001328;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;    
+  }
+
+.innerAddGraphFormContainer{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.innerAddGraphContainer{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    background-color: white;
+    border-radius: 10px;
+}
+  .input{
+      width: 200px;
+  }
+  
+  .addFormOuterDiv{
+        height: 150px;
+        margin-top: 28px;
+        width: 800px;
+  }
+ 
+  .addgraphform{
+
+    width: 1200px;
+    margin-left: 70px;
+    margin-top:-40px ;
+    height: 200px;
+  }
+ 
+  .tablegraph{
+
+        background: white;
+        width: 1200px;
+        margin-left: 70px;
+        margin-top: 30px;
+  }
+
+  /* style={{ height: "220px", marginTop: "-1px", borderRadius: "10px" ,width:'1200px'}} */
+ 
+  .graphtitle{
+
+    background: #001328;
+    width:1200px ;
+    margin-left: -9px;
+    height: 40px;
+    margin-top: -12px;
+    border-radius: 10px;
+  }
+
+  @media (min-width: 1920px) {
+
+    .headingAddGraph {
+        width: 1800px;
+        height: 60px;
+        background: #001328;
+        border-top-right-radius: 30px;
+        border-top-left-radius: 30px;
+      }
+      .input{
+          width: 300px;
+      }
+      
+      .addFormOuterDiv{
+            height: 250px;
+            margin-top: 48px;
+            width: 1200px;
+      }
+     
+      .innerAddGraphFormContainer{
+    
+       height: 120px;
+       width: 1800px;
+      }
+      .innerAddGraphContainer{
+          width: 1800px;
+      }
+      .ant-select-selection {
+        width: 250px;
+      }
+
+      .tablegraph{
+
+        background: white;
+        width: 1800px;
+        height:300px ;
+        margin-left: 70px;
+        margin-top: 30px;
+  }
+
+  .graphtitle{
+
+    background: #001328;
+    width:1800px ;
+    margin-left: -9px;
+    height: 40px;
+    margin-top: -12px;
+    border-radius: 10px;
+  }
+ 
+
+  }
+/* 
+  @media(min-width: 320px){
+    .headingAddGraph {
+        width: 300px;
+        height: 20px;
+        background: #001328;
+        border-top-right-radius: 30px;
+        border-top-left-radius: 30px;
+      }
+      .input{
+          width: 60px;
+      }
+      
+      .addFormOuterDiv{
+            height: 250px;
+            margin-top: 48px;
+            width: 300px;
+      }
+     
+      .innerAddGraphFormContainer{
+    
+       height: 120px;
+       width: 300px;
+      }
+      .innerAddGraphContainer{
+          width: 600px;
+      }
+      .ant-select-selection {
+        width: 60px;
+      }
+      
+      .tablegraph{
+
+        background: white;
+        width: 300px;
+        height:300px ;
+        margin-left: 70px;
+        margin-top: 30px;
+  }
+
+  .graphtitle{
+
+    background: #001328;
+    width:300px ;
+    margin-left: -9px;
+    height: 40px;
+    margin-top: -12px;
+    border-radius: 10px;
+  }
+ 
+
+
+  } */
