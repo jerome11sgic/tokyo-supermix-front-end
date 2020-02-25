@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/tokyo-supermix-front-end/precache-manifest.25f4cf0e5f4a56a7691da89caefce720.js"
+  "/tokyo-supermix-front-end/precache-manifest.bbe65751c25fd3a58f4294ab01a68381.js"
 );
 
 self.addEventListener('message', (event) => {
