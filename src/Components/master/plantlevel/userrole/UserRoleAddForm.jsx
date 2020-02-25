@@ -106,7 +106,8 @@ class UserRoleAddForm extends Component {
       errors: {
         designation: "",
         description: ""
-      }
+      },
+      errormgs: ""
     });
   };
 
@@ -183,27 +184,36 @@ class UserRoleAddForm extends Component {
           description: this.state.designation_description
         };
         console.log(data);
-        api("PUT", "supermix", "/designation", "", data, "").then(res => {
-          console.log(res.data);
+        api("PUT", "supermix", "/designation", "", data, "").then(
+          res => {
+            console.log(res.data);
 
-          if (res.data.status === "VALIDATION_FAILURE") {
-            console.log("update");
-            this.responeserror(res.data.results.name.message);
-          } else {
-            Notification("success", res.data.message);
-            this.props.reloadrole();
-            this.setState({ loading: true });
+            if (res.data.status === "VALIDATION_FAILURE") {
+              console.log("update");
+              this.responeserror(res.data.results.name.message);
+            } else {
+              Notification("success", res.data.message);
+              this.props.reloadrole();
+              this.setState({ loading: true });
+              this.setState({
+                designation_code: "",
+                designation_name: "",
+                designation_description: "",
+                errormgs: ""
+              });
+              setTimeout(() => {
+                this.setState({ loading: false, visible: false });
+              }, 3000);
+            }
+          },
+          error => {
             this.setState({
-              designation_code: "",
-              designation_name: "",
-              designation_description: "",
-              errormgs: ""
+              errormgs: error.validationFailures[0]
             });
-            setTimeout(() => {
-              this.setState({ loading: false, visible: false });
-            }, 3000);
+            console.log("DEBUG34: ", error);
+            console.log(HandelError(error.validationFailures[0]));
           }
-        });
+        );
       } else {
         const data = {
           name: this.state.designation_name,
@@ -285,17 +295,17 @@ class UserRoleAddForm extends Component {
           Add Designation
         </PrimaryButton>
         <Modal
-          width='400px'
+          width="400px"
           visible={visible}
           closable={false}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[
-            <Button key='back' onClick={this.handleCancel}>
+            <Button key="back" onClick={this.handleCancel}>
               Cancel
             </Button>,
             <PrimaryButton
-              key='submit'
+              key="submit"
               loading={loading}
               onClick={this.handleSubmit}
               style={{ background: "#001328", color: "white", border: "none" }}
@@ -315,7 +325,7 @@ class UserRoleAddForm extends Component {
                   : "Add Designation"}
               </p>
               <Icon
-                type='close-circle'
+                type="close-circle"
                 onClick={this.handleCancel}
                 style={{
                   color: "white"
@@ -344,15 +354,15 @@ class UserRoleAddForm extends Component {
             </div> */}
 
             {/* User Role */}
-            <div className='input_wrapper'>
-              <label for='designation_name' className='label'>
+            <div className="input_wrapper">
+              <label for="designation_name" className="label">
                 Desigination:
               </label>
 
               <Input
-                id='designation_name'
-                name='designation_name'
-                placeholder='Enter the Desigination'
+                id="designation_name"
+                name="designation_name"
+                placeholder="Enter the Desigination"
                 onChange={this.handleChange}
                 value={this.state.designation_name}
               />
@@ -366,18 +376,18 @@ class UserRoleAddForm extends Component {
               )}
               <div style={{ height: "12px" }}></div>
             </div>
-            <div className='input_wrapper'>
+            <div className="input_wrapper">
               <label
-                for='designation_description'
-                className='label'
+                for="designation_description"
+                className="label"
                 style={{ width: "180px" }}
               >
                 Description:
               </label>
               <TextArea
-                id='designation_description'
-                name='designation_description'
-                placeholder='Enter the Description'
+                id="designation_description"
+                name="designation_description"
+                placeholder="Enter the Description"
                 onChange={this.handleChange}
                 value={this.state.designation_description}
               />

@@ -64,7 +64,7 @@ export default error => {
       return "supplier notExists";
     // do something when you're unauthenticated
     case "45001":
-      return "supplier is Exists";
+      return "Email is Exists";
     // do something when you're unauthorized to access a resource
     case "45002":
       // do something when your server exploded

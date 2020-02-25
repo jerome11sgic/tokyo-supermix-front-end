@@ -261,28 +261,37 @@ class PlantAddForm extends Component {
           phoneNumber: this.state.plant_contactno
         };
         api("PUT", "supermix", "/plant", "", data, "")
-          .then(res => {
-            console.log(res.data);
+          .then(
+            res => {
+              console.log(res.data);
 
-            if (res.data.status == "VALIDATION_FAILURE") {
-              console.log("update");
-              this.responeserror(res.data.results.name.message);
-            } else {
-              Notificationfuc("success", res.data.message);
-              this.props.reload();
-              this.setState({ loading: true });
+              if (res.data.status == "VALIDATION_FAILURE") {
+                console.log("update");
+                this.responeserror(res.data.results.name.message);
+              } else {
+                Notificationfuc("success", res.data.message);
+                this.props.reload();
+                this.setState({ loading: true });
+                this.setState({
+                  plant_code: "",
+                  plant_name: "",
+                  plant_address: "",
+                  plant_contactno: "",
+                  errormgs: ""
+                });
+                setTimeout(() => {
+                  this.setState({ loading: false, visible: false });
+                }, 3000);
+              }
+            },
+            error => {
               this.setState({
-                plant_code: "",
-                plant_name: "",
-                plant_address: "",
-                plant_contactno: "",
-                errormgs: ""
+                errormgs: error.validationFailures[0]
               });
-              setTimeout(() => {
-                this.setState({ loading: false, visible: false });
-              }, 3000);
+              console.log("DEBUG34: ", error);
+              console.log(HandelError(error.validationFailures[0]));
             }
-          })
+          )
           .catch(error => {
             // this.setState({
             //   errormgs: "Plant Name Exist"
@@ -331,7 +340,8 @@ class PlantAddForm extends Component {
       plant_code: "",
       plant_name: "",
       plant_address: "",
-      plant_contactno: ""
+      plant_contactno: "",
+      errormgs: ""
     });
   };
 
@@ -383,7 +393,7 @@ class PlantAddForm extends Component {
                 {this.state.type === "edit" ? "Edit Plant" : "Add Plant"}
               </p>
               <Icon
-                type='close-circle'
+                type="close-circle"
                 onClick={this.handleCancel}
                 style={{
                   color: "white"
@@ -392,11 +402,11 @@ class PlantAddForm extends Component {
             </MasterLevelFormTitle>
           }
           footer={[
-            <Button key='back' onClick={this.handleCancel}>
+            <Button key="back" onClick={this.handleCancel}>
               Cancel
             </Button>,
             <PrimaryButton
-              key='submit'
+              key="submit"
               loading={loading}
               onClick={this.handleSubmit}
               style={{ background: "#001328", color: "white", border: "none" }}
@@ -404,20 +414,20 @@ class PlantAddForm extends Component {
               {this.state.type === "edit" ? "Edit" : "Save"}
             </PrimaryButton>
           ]}
-          width='600px'
+          width="600px"
         >
           <MasterLevelForm style={{ justifyContent: "space-evenly" }}>
             {/* Code */}
 
             {/* Code */}
-            <div className='input_wrapper'>
-              <label for='plant_code' className='label'>
+            <div className="input_wrapper">
+              <label for="plant_code" className="label">
                 Code:
               </label>
               <Input
-                id='plant_code'
-                name='plant_code'
-                placeholder='Enter the Code '
+                id="plant_code"
+                name="plant_code"
+                placeholder="Enter the Code "
                 onChange={this.handleChange}
                 value={this.state.plant_code}
                 disabled={this.state.type === "edit" ? true : false}
@@ -433,14 +443,14 @@ class PlantAddForm extends Component {
             </div>
 
             {/* Plant Name */}
-            <div className='input_wrapper'>
-              <label for='plant_name' className='label'>
+            <div className="input_wrapper">
+              <label for="plant_name" className="label">
                 Plant Name:
               </label>
               <Input
-                id='plant_name'
-                name='plant_name'
-                placeholder='Enter the Plant Name '
+                id="plant_name"
+                name="plant_name"
+                placeholder="Enter the Plant Name "
                 onChange={this.handleChange}
                 value={this.state.plant_name}
               />
@@ -458,14 +468,14 @@ class PlantAddForm extends Component {
             </div>
 
             {/* Place */}
-            <div className='input_wrapper'>
-              <label for='plant_address' className='label'>
+            <div className="input_wrapper">
+              <label for="plant_address" className="label">
                 Address:
               </label>
               <Input
-                id='plant_address'
-                name='plant_address'
-                placeholder='Enter the Address '
+                id="plant_address"
+                name="plant_address"
+                placeholder="Enter the Address "
                 onChange={this.handleChange}
                 value={this.state.plant_address}
               />
@@ -476,15 +486,15 @@ class PlantAddForm extends Component {
             </div>
 
             {/* Contact Number */}
-            <div className='input_wrapper'>
-              <label for='plant_contactno' className='label'>
+            <div className="input_wrapper">
+              <label for="plant_contactno" className="label">
                 Contact No:
               </label>
               <Input
-                className='input_number'
-                id='plant_contactno'
-                name='plant_contactno'
-                placeholder='Enter the Contact No '
+                className="input_number"
+                id="plant_contactno"
+                name="plant_contactno"
+                placeholder="Enter the Contact No "
                 onChange={this.handleChange}
                 value={this.state.plant_contactno}
               />

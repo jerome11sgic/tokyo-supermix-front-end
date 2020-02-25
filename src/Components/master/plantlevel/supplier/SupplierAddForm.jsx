@@ -3,7 +3,7 @@ import { Input, Modal, Button, Icon, Select } from "antd";
 import { PrimaryButton } from "../../../styledcomponents/button/button";
 import { api } from "../../../services/AxiosService";
 import Notification from "../../../Constant/Notification";
-
+import HandelError from "../../../Constant/HandleError";
 import {
   MasterLevelForm,
   MasterLevelFormTitle
@@ -61,7 +61,8 @@ class SupplierAddForm extends Component {
     supplier_contactno: "",
     supplier_email: "",
     errormgs: "",
-    type: ""
+    type: "",
+    edit_supplier_category: ""
   };
 
   validateForm = errors => {
@@ -105,21 +106,6 @@ class SupplierAddForm extends Component {
         email: this.state.errors.email
       }
     });
-    // console.log(value);
-    // console.log(value.length);
-    // if (this.state.supplier_category.length > 0) {
-    //   console.log("dgsdfgs");
-    // this.setState({
-    //   errors: {
-    //     code: "",
-    //     name: "",
-    //     companyName: "",
-    //     category: "",
-    //     address: "",
-    //     contactno: "",
-    //     email: ""
-    //   }
-    // });
   };
   componentWillReceiveProps(nextProps) {
     console.log(nextProps.editPlantData);
@@ -127,11 +113,13 @@ class SupplierAddForm extends Component {
       visible: nextProps.visible,
       supplier_code: nextProps.editPlantData.id,
       supplier_name: nextProps.editPlantData.name,
-      supplier_category: nextProps.editPlantData.suppilerCategory,
+      supplier_category: nextProps.editPlantData.supplierCategoryId,
       supplier_address: nextProps.editPlantData.address,
       supplier_contactno: nextProps.editPlantData.phoneNumber,
       supplier_email: nextProps.editPlantData.email,
       supplier_company_name: nextProps.editPlantData.companyName,
+      edit_supplier_category: nextProps.editPlantData.category,
+
       type: nextProps.type
     });
   }
@@ -226,7 +214,8 @@ class SupplierAddForm extends Component {
         address: "",
         contactno: "",
         email: ""
-      }
+      },
+      errormgs: ""
     });
   };
 
@@ -254,27 +243,7 @@ class SupplierAddForm extends Component {
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
       });
-    }
-    // code
-    // else if (
-    //   this.state.supplier_code.length === 0 &&
-    //   this.state.errors.code.length === 0
-    // ) {
-    //   this.setState({
-    //     errors: {
-    //       // code: this.state.errors.code || "Code can't be empty",
-    //       name: this.state.errors.name || "Name can't be empty",
-    //       category: this.state.errors.category || "Category can't be empty",
-    //       address: this.state.errors.address || "Address can't be empty",
-    //       contactno: this.state.errors.contactno || "Contact No can't be empty",
-    //       email: this.state.errors.email || "Email can't be empty"
-    //     },
-    //     formValid: this.validateForm(this.state.errors),
-    //     errorCount: this.countErrors(this.state.errors)
-    //   });
-    // }
-    // supplier name
-    else if (
+    } else if (
       this.state.supplier_name.length === 0 &&
       this.state.errors.name.length === 0
     ) {
@@ -417,33 +386,42 @@ class SupplierAddForm extends Component {
           phoneNumber: this.state.supplier_contactno,
           email: this.state.supplier_email
         };
-        console.log("edit" + data);
+        console.log(data);
         api("PUT", "supermix", "/supplier", "", data, "")
-          .then(res => {
-            console.log(res.data);
+          .then(
+            res => {
+              console.log(res.data);
 
-            if (res.data.status === "VALIDATION_FAILURE") {
-              console.log("update");
-              this.responeserror(res.data.results.name.message);
-            } else {
-              Notification("success", res.data.message);
-              this.props.reload();
-              this.setState({ loading: true });
+              if (res.data.status === "VALIDATION_FAILURE") {
+                console.log("update");
+                this.responeserror(res.data.results.name.message);
+              } else {
+                Notification("success", res.data.message);
+                this.props.reload();
+                this.setState({ loading: true });
+                this.setState({
+                  supplier_code: "",
+                  supplier_name: "",
+                  supplier_company_name: "",
+                  supplier_category: "",
+                  supplier_address: "",
+                  supplier_contactno: "",
+                  supplier_email: "",
+                  errormgs: ""
+                });
+                setTimeout(() => {
+                  this.setState({ loading: false, visible: false });
+                }, 3000);
+              }
+            },
+            error => {
               this.setState({
-                supplier_code: "",
-                supplier_name: "",
-                supplier_company_name: "",
-                supplier_category: "",
-                supplier_address: "",
-                supplier_contactno: "",
-                supplier_email: "",
-                errormgs: ""
+                errormgs: error.validationFailures[0]
               });
-              setTimeout(() => {
-                this.setState({ loading: false, visible: false });
-              }, 3000);
+              console.log("DEBUG34: ", error);
+              console.log(HandelError(error.validationFailures[0]));
             }
-          })
+          )
           .catch(error => {
             // this.setState({
             //   errormgs: "Plant Name Exist"
@@ -460,31 +438,40 @@ class SupplierAddForm extends Component {
           email: this.state.supplier_email
         };
         console.log(data);
-        api("POST", "supermix", "/supplier", "", data, "").then(res => {
-          console.log("jjjj");
-          console.log(res.data);
-          if (res.data.status === "VALIDATION_FAILURE") {
+        api("POST", "supermix", "/supplier", "", data, "").then(
+          res => {
             console.log("jjjj");
-            // this.responeserror(res.data.results.name.message);
-          } else {
-            this.props.reload();
-            Notification("success", res.data.message);
-            this.setState({ loading: true });
+            console.log(res.data);
+            if (res.data.status === "VALIDATION_FAILURE") {
+              console.log("jjjj");
+              // this.responeserror(res.data.results.name.message);
+            } else {
+              this.props.reload();
+              Notification("success", res.data.message);
+              this.setState({ loading: true });
+              this.setState({
+                // supplier_code: "",
+                supplier_name: "",
+                supplier_company_name: "",
+                supplier_category: "",
+                supplier_address: "",
+                supplier_contactno: "",
+                supplier_email: "",
+                errormgs: ""
+              });
+              setTimeout(() => {
+                this.setState({ loading: false, visible: false });
+              }, 3000);
+            }
+          },
+          error => {
             this.setState({
-              // supplier_code: "",
-              supplier_name: "",
-              supplier_company_name: "",
-              supplier_category: "",
-              supplier_address: "",
-              supplier_contactno: "",
-              supplier_email: "",
-              errormgs: ""
+              errormgs: error.validationFailures[0]
             });
-            setTimeout(() => {
-              this.setState({ loading: false, visible: false });
-            }, 3000);
+            console.log("DEBUG34: ", error);
+            console.log(HandelError(error.validationFailures[0]));
           }
-        });
+        );
       }
 
       console.log("form is valid");
@@ -535,17 +522,17 @@ class SupplierAddForm extends Component {
           Add Supplier
         </PrimaryButton>
         <Modal
-          width='500px'
+          width="500px"
           visible={visible}
           closable={false}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[
-            <Button key='back' onClick={this.handleCancel}>
+            <Button key="back" onClick={this.handleCancel}>
               Cancel
             </Button>,
             <PrimaryButton
-              key='submit'
+              key="submit"
               loading={loading}
               onClick={e => this.handleSubmit(e)}
               style={{ background: "#001328", color: "white", border: "none" }}
@@ -560,10 +547,10 @@ class SupplierAddForm extends Component {
                   color: "white"
                 }}
               >
-                Add Supplier
+                {this.state.type === "edit" ? "Edit Supplier" : " Add Supplier"}
               </p>
               <Icon
-                type='close-circle'
+                type="close-circle"
                 onClick={this.handleCancel}
                 style={{
                   color: "white"
@@ -582,15 +569,15 @@ class SupplierAddForm extends Component {
               }}
             >
               {/* Code */}
-              <div className='input_wrapper'>
-                <label for='supplier_code' className='label'>
+              <div className="input_wrapper">
+                <label for="supplier_code" className="label">
                   Code:
                 </label>
 
                 <Input
-                  id='supplier_code'
-                  name='supplier_code'
-                  placeholder='Enter the Code'
+                  id="supplier_code"
+                  name="supplier_code"
+                  placeholder="Enter the Code"
                   onChange={this.handleChange}
                   value={this.state.supplier_code}
                   disabled={this.state.type == "edit" ? true : true}
@@ -602,15 +589,15 @@ class SupplierAddForm extends Component {
               </div>
 
               {/* Plant Name */}
-              <div className='input_wrapper'>
-                <label for='supplier_name' className='label'>
+              <div className="input_wrapper">
+                <label for="supplier_name" className="label">
                   Supplier Name:
                 </label>
 
                 <Input
-                  id='supplier_name'
-                  name='supplier_name'
-                  placeholder='Enter the Supplier'
+                  id="supplier_name"
+                  name="supplier_name"
+                  placeholder="Enter the Supplier"
                   onChange={this.handleChange}
                   value={this.state.supplier_name}
                 />
@@ -621,15 +608,15 @@ class SupplierAddForm extends Component {
               </div>
 
               {/* Company Name */}
-              <div className='input_wrapper'>
-                <label for='supplier_company_name' className='label'>
+              <div className="input_wrapper">
+                <label for="supplier_company_name" className="label">
                   Company Name:
                 </label>
 
                 <Input
-                  id='supplier_company_name'
-                  name='supplier_company_name'
-                  placeholder='Enter the Supplier'
+                  id="supplier_company_name"
+                  name="supplier_company_name"
+                  placeholder="Enter the Supplier"
                   onChange={this.handleChange}
                   value={this.state.supplier_company_name}
                 />
@@ -638,21 +625,21 @@ class SupplierAddForm extends Component {
                 )}
                 <div style={{ height: "12px" }}></div>
               </div>
-              <div className='input_wrapper'>
-                <label for='supplier_category' className='label'>
+              <div className="input_wrapper">
+                <label for="supplier_category" className="label">
                   Supplier Category:
                 </label>
 
                 <Select
                   showSearch
                   style={{ width: "170px" }}
-                  id='supplier_category'
-                  name='supplier_category'
-                  placeholder='Select Category '
-                  optionFilterProp='children'
+                  id="supplier_category"
+                  name="supplier_category"
+                  placeholder="Select Category "
+                  optionFilterProp="children"
                   onChange={this.handleSelect}
                   defaultValue={this.state.supplier_category}
-                  value={this.state.supplier_category}
+                  value={this.state.edit_supplier_category}
                   onFocus={onFocus}
                   onBlur={onBlur}
                   onSearch={onSearch}
@@ -674,15 +661,15 @@ class SupplierAddForm extends Component {
               </div>
 
               {/* Place */}
-              <div className='input_wrapper'>
-                <label for='supplier_address' className='label'>
+              <div className="input_wrapper">
+                <label for="supplier_address" className="label">
                   Address:
                 </label>
 
                 <Input
-                  id='supplier_address'
-                  name='supplier_address'
-                  placeholder='Enter the Address'
+                  id="supplier_address"
+                  name="supplier_address"
+                  placeholder="Enter the Address"
                   onChange={this.handleChange}
                   value={this.state.supplier_address}
                 />
@@ -693,16 +680,16 @@ class SupplierAddForm extends Component {
               </div>
 
               {/* T.P No */}
-              <div className='input_wrapper'>
-                <label for='supplier_contactno' className='label'>
+              <div className="input_wrapper">
+                <label for="supplier_contactno" className="label">
                   Contact No:
                 </label>
 
                 <Input
-                  className='input_number'
-                  id='supplier_contactno'
-                  name='supplier_contactno'
-                  placeholder='Enter Contact No'
+                  className="input_number"
+                  id="supplier_contactno"
+                  name="supplier_contactno"
+                  placeholder="Enter Contact No"
                   onChange={this.handleChange}
                   value={this.state.supplier_contactno}
                 />
@@ -713,39 +700,28 @@ class SupplierAddForm extends Component {
               </div>
 
               {/* Description  */}
-              <div className='input_wrapper'>
-                <label for='supplier_email' className='label'>
+              <div className="input_wrapper">
+                <label for="supplier_email" className="label">
                   Email:
                 </label>
 
                 <Input
-                  id='supplier_email'
-                  name='supplier_email'
-                  placeholder='Enter the Email'
+                  id="supplier_email"
+                  name="supplier_email"
+                  placeholder="Enter the Email"
                   onChange={this.handleChange}
                   value={this.state.supplier_email}
                 />
                 {errors.email.length > 0 && (
                   <div style={error}>{errors.email}</div>
                 )}
+                {this.state.errormgs.message == "email" ? (
+                  <div style={error}>{HandelError(this.state.errormgs)}</div>
+                ) : (
+                  ""
+                )}
                 <div style={{ height: "12px" }}></div>
               </div>
-
-              {/* Date */}
-              {/* <div className="input_wrapper">
-              <label for="date" className="label">
-                Date
-              </label>
-              <DatePicker id="date" name="date" placeholder="" />
-            </div> */}
-
-              {/* <PrimaryButton
-              type="primary"
-              style={{ background: "#001328", color: "white", border: "none" }}
-            >
-              Submit
-            </PrimaryButton> */}
-              {/* <PrimaryButton>Clear</PrimaryButton> */}
             </div>
           </MasterLevelForm>
         </Modal>

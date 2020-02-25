@@ -7,7 +7,7 @@ import { api } from "../../../services/AxiosService";
 import { connect } from "react-redux";
 import { SWITCH_TO_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
 import Notification from "../../../Constant/Notification";
-
+const datalist = [];
 class ManageSupplier extends Component {
   state = {
     filteredInfo: null,
@@ -90,8 +90,25 @@ class ManageSupplier extends Component {
   getallSupplier = () => {
     api("GET", "supermix", "/suppliers", "", "", "").then(res => {
       console.log(res.data);
+
+      res.data.results.Supplier.map((post, index) => {
+        console.log(post);
+        datalist.push({
+          id: post.id,
+          name: post.name,
+          companyName: post.companyName,
+          address: post.address,
+          phoneNumber: post.phoneNumber,
+          email: post.email,
+          supplierCategoryId: post.supplierCategory.id,
+          category: post.supplierCategory.category,
+          description: post.supplierCategory
+        });
+        console.log(datalist);
+      });
+      console.log(datalist);
       this.setState({
-        data: res.data.results.Supplier
+        data: datalist
       });
     });
   };
@@ -123,7 +140,7 @@ class ManageSupplier extends Component {
 
       {
         title: "Supplier Category",
-        dataIndex: "suppilerCategory",
+        dataIndex: "category",
         key: "supplier_category",
         width: "8%"
       },
@@ -160,7 +177,7 @@ class ManageSupplier extends Component {
           <span>
             <a>
               <Icon
-                type='edit'
+                type="edit"
                 style={{ fontSize: "1.2em" }}
                 onClick={this.props.passSupplireEditRecordtoModal.bind(
                   this,
@@ -168,18 +185,18 @@ class ManageSupplier extends Component {
                 )}
               />
             </a>
-            <Divider type='vertical' />
+            <Divider type="vertical" />
             <a>
               <Popconfirm
-                title='Are you sure you want to Delete this?'
+                title="Are you sure you want to Delete this?"
                 icon={
-                  <Icon type='question-circle-o' style={{ color: "red" }} />
+                  <Icon type="question-circle-o" style={{ color: "red" }} />
                 }
                 onConfirm={this.onConfirmdelete.bind(this, record.id)}
               >
-                <a href='#'>
+                <a href="#">
                   <Icon
-                    type='delete'
+                    type="delete"
                     style={{ color: "red", fontSize: "1.2em" }}
                   />
                 </a>
@@ -193,7 +210,7 @@ class ManageSupplier extends Component {
       <AntTable
         maxlength
         title={() => <SupplierMasterTitle reload={this.getallSupplier} />}
-        className='plantManageTable'
+        className="plantManageTable"
         columns={columns}
         dataSource={this.state.data}
         onChange={this.handleChange}
