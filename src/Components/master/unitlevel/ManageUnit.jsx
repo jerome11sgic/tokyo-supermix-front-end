@@ -1,18 +1,23 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from "react";
-import { Icon, Popconfirm, Divider } from "antd";
-import "./styleUnit.css";
-
-import UnitTitle from "./title/UnitTitle";
+import { Popconfirm, Divider, Icon } from "antd";
+import UnitMasterTitle from "./title/UnitTitle";
 import { AntTable } from "../../styledcomponents/table/AntTabl";
-// import UnitTileArea from './UnitTileArea'
+import { api } from "../../services/AxiosService";
+import Notification from "../../Constant/Notification";
+import { SWITCH_TO_EDIT_MODE } from "../../../redux/action/master/plantlevel/PlantLevel";
+import { connect } from "react-redux";
 
-export default class ManageUnit extends Component {
+const data = [];
+
+class ManageUnit extends Component {
   state = {
     filteredInfo: null,
     sortedInfo: null,
     searchText: "",
     visible: false,
-    size: "small"
+    size: "small",
+    listData: ""
   };
 
   componentWillMount() {
@@ -27,6 +32,30 @@ export default class ManageUnit extends Component {
       });
     }
   }
+
+  componentDidMount() {
+    this.getallunit();
+  }
+
+  showModal = () => {
+    this.setState({
+      visible: true
+    });
+  };
+
+  handleOk = e => {
+    console.log(e);
+    this.setState({
+      visible: false
+    });
+  };
+
+  handleCancel = e => {
+    console.log(e);
+    this.setState({
+      visible: false
+    });
+  };
 
   handleChange = (pagination, filters, sorter) => {
     console.log("Various parameters", pagination, filters, sorter);
@@ -56,6 +85,27 @@ export default class ManageUnit extends Component {
     });
   };
 
+  getallunit = () => {
+    api("GET", "supermix", "/units", "", "", "").then(res => {
+      console.log(res.data);
+      this.setState({
+        listData: res.data.results.units
+      });
+    });
+  };
+
+  onConfirmdelete(id) {
+    console.log(id);
+    let mesg = "plant delete";
+
+    api("DELETE", "supermix", "/unit", "", "", id).then(res => {
+      console.log(res.data);
+      this.getallunit();
+      Notification("success", res.data.message);
+    });
+    console.log(this.state.id);
+  }
+
   onChange(pageNumber) {
     console.log("Page: ", pageNumber);
   }
@@ -68,41 +118,40 @@ export default class ManageUnit extends Component {
       {
         title: "Code",
         dataIndex: "id",
-        // width: "10%",
-        key: "id",
-        sorter: (a, b) => a.id - b.id,
-        sortOrder: sortedInfo.columnKey === "id" && sortedInfo.order
-      },
-      {
-        title: "Unit Name",
-        dataIndex: "date",
-        // width: "16%",
-        key: "id",
-        sorter: (a, b) => a.id - b.id,
-        sortOrder: sortedInfo.columnKey === "id" && sortedInfo.order
+        key: "code",
+        width: "4%",
+
+        filteredValue: filteredInfo.name || null,
+        onFilter: (value, record) => record.name.includes(value),
+        sorter: (a, b) => a.code - b.code,
+        sortOrder: sortedInfo.columnKey === "code" && sortedInfo.order
       },
       {
         title: "Unit",
-        dataIndex: "name",
-        key: "name",
-        // width: "16%",
-        filters: [
-          { text: "Joe", value: "Joe" },
-          { text: "Jim", value: "Jim" }
-        ],
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.name.length - b.name.length,
-        sortOrder: sortedInfo.columnKey === "name" && sortedInfo.order
+        dataIndex: "unit",
+        key: "unit",
+        width: "6%",
+        filteredValue: filteredInfo.designation || null,
+        onFilter: (value, record) => record.designation.includes(value),
+        sorter: (a, b) => a.designation - b.designation,
+        sortOrder: sortedInfo.columnKey === "unit" && sortedInfo.order
       },
+
       {
         title: "Edit & Delete",
         key: "action",
-        // width: "7%",
-        render: (text, record) => (
+        width: "7%",
+        render: (text, record = this.state.listData) => (
           <span>
             <a>
-              <Icon type='edit' />
+              <Icon
+                type='edit'
+                style={{ fontSize: "1.2em" }}
+                onClick={this.props.passEditDesignationRecordToModal.bind(
+                  this,
+                  record
+                )}
+              />
             </a>
             <Divider type='vertical' />
             <a>
@@ -111,9 +160,13 @@ export default class ManageUnit extends Component {
                 icon={
                   <Icon type='question-circle-o' style={{ color: "red" }} />
                 }
+                onConfirm={this.onConfirmdelete.bind(this, record.id)}
               >
                 <a href='#'>
-                  <Icon type='delete'></Icon>
+                  <Icon
+                    type='delete'
+                    style={{ color: "red", fontSize: "1.2em" }}
+                  />
                 </a>
               </Popconfirm>
             </a>
@@ -121,16 +174,39 @@ export default class ManageUnit extends Component {
         )
       }
     ];
+
     return (
       <AntTable
         length
-        title={() => <UnitTitle />}
+        className='userRolesManageTable'
+        title={() => <UnitMasterTitle reload={this.getallunit} />}
         columns={columns}
-        // dataSource={data}
+        dataSource={this.state.listData}
         onChange={this.handleChange}
-        pagination={{ defaultPageSize: 4 }}
+        pagination={{ defaultPageSize: 8 }}
         size={this.state.size}
       />
     );
   }
 }
+
+const mapStateToProps = state => {
+  // return {
+  //   visible: state.plantLevelReducers.EditPlantReducer.visible,
+  //   type: state.plantLevelReducers.EditPlantReducer.type,
+  //   editPlantData: state.plantLevelReducers.EditPlantReducer.editPlantData
+  // };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    // if this function dispatches modal will be shown and the data will be drawn :)
+    passEditDesignationRecordToModal: record => {
+      //this payload is the data we pass into redux which is in the row which we clicked
+      dispatch({ type: SWITCH_TO_EDIT_MODE, payload: record });
+      console.log(record);
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ManageUnit);

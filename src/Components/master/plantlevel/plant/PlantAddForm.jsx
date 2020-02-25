@@ -94,6 +94,8 @@ class PlantAddForm extends Component {
             ? "Plant Name can't be empty"
             : value.length < 3
             ? "Plant Name \n must be 3 characters long!"
+            : value.replace(/^[a-zA-Z-,]+(\s{0,1}[a-zA-Z-, ])*$/, "")
+            ? "Plant Name allow only letters"
             : "";
         break;
       case "plant_address":
