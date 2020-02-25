@@ -9,6 +9,8 @@ import SupplierChain from "./SupplierChain";
 import Slider from "./Slider";
 import Slider2 from "./Slider2";
 import { connect } from "react-redux";
+
+import { ToggleDisplayWindow } from "./ToggleDisplayWindow";
 import {
   TOGGLE_TO_MASTER_TYPE_NAVIGATION,
   TOGGLE_TO_HOME_SCREEN_NAVIGATION,
@@ -20,6 +22,8 @@ import {
 } from "../../redux/action/topbarnavigation/TopbarNavigation";
 import { HomeColoredCard } from "./HomeColoredCard";
 import StrengthTest from "./charts/StrengthTest";
+import { ChartResContainer } from "../styledcomponents/container/ChartResContainer";
+import { CircularRadialBar } from "./charts/CircularRadialBar";
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -277,22 +281,20 @@ class HomeScreen extends Component {
         </div> */}
         <FlexContainer column>
           <FlexContainer resCardArea>
-            {HomeColoredCard(
-              "blue",
-              "Fine Aggregate",
-              "Tested Date 20/01/2020"
-            )}
-            {HomeColoredCard("green", "Cement", "Tested Date 21/01/2020")}
-            {HomeColoredCard("purple", "Admixture", "Tested Date 22/01/2020")}
-            {HomeColoredCard(
-              "red",
-              "Coarse Aggregate",
-              "Tested Date 22/01/2020"
-            )}
+            {/* {CircularRadialBar(75)}
+            {CircularRadialBar(85)}
+            {CircularRadialBar(65)}
+            {CircularRadialBar(25)} */}
+            {HomeColoredCard("blue", "Fine Aggregate", 25)}
+            {HomeColoredCard("green", "Cement", 15)}
+            {HomeColoredCard("purple", "Admixture", 6)}
+            {HomeColoredCard("red", "Coarse Aggregate", 2)}
+
+            {/* <ToggleDisplayWindow /> */}
           </FlexContainer>
-          <div style={{ background: "white", borderRadius: "15px" }}>
+          <ChartResContainer>
             <StrengthTest />
-          </div>
+          </ChartResContainer>
         </FlexContainer>
 
         {/* <SupplierChain /> */}

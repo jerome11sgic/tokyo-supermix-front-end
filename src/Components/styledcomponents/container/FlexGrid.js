@@ -77,7 +77,8 @@ export const FlexContainer = styled.div`
       border-radius: 15px;
 
       @media (min-width: 1920px) {
-        width: 1200px;
+        width: 1000px;
+        height: 400px;
       }
     `}
     

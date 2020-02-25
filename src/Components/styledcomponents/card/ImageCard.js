@@ -198,8 +198,8 @@ export const ImageCard = styled.div`
       }
     }
     @media ${device.desktop} {  
-        height: 180px;
-        width: 300px;
+        height: 250px;
+        width: 360px;
         margin: 20px;
     }
     @media ${device.tablet} {  
