@@ -20,10 +20,11 @@ export const ColoredCard = styled.div`
   flex-wrap: wrap;
   justify-content: space-evenly;
   box-shadow: 1.5px 4px 4px 3px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
 
   @media (min-width: 1920px) {
-    height: 120px;
-    width: 280px;
+    height: 180px;
+    width: 480px;
   }
 
   /* cursor: wait; */
@@ -38,6 +39,7 @@ export const ColoredCardText = styled.h3`
 export const ColoredCardDescription = styled.h4`
   color: white;
   text-align: center;
+  width: 90%;
 `;
 
 export const ColoredCardImageArea = styled.div`
