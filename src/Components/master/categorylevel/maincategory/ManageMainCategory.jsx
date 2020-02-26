@@ -3,22 +3,20 @@ import React, { Component } from "react";
 import { Popconfirm, Divider, Icon } from "antd";
 import ManageMainCategoryMasterTitle from "../titles/ManageMainCategoryMasterTitle";
 import { AntTable } from "../../../styledcomponents/table/AntTabl";
+import { api } from "../../../services/AxiosService";
+import Notification from "../../../Constant/Notification";
+import { SWITCH_TO_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
+import { connect } from "react-redux";
 
-const data = [
-  // { code: "QC/MA", user: "QC Manager" },
-  // { code: "QC/AM", user: "QC Assistent Manager" },
-  // { code: "QC/ST", user: "QC staff" },
-  // { code: "QC/TE", user: "QC Technician" },
-  // { code: "QC/PM", user: "Plant manager" }
-];
-
-export default class ManageMainCategory extends Component {
+// const datalist = [];
+class ManageMainCategory extends Component {
   state = {
     filteredInfo: null,
     sortedInfo: null,
     searchText: "",
     visible: false,
-    size: "small"
+    size: "small",
+    datalist: ""
   };
 
   componentWillMount() {
@@ -53,7 +51,9 @@ export default class ManageMainCategory extends Component {
       visible: false
     });
   };
-
+  componentDidMount() {
+    this.getallsubcategory();
+  }
   handleChange = (pagination, filters, sorter) => {
     console.log("Various parameters", pagination, filters, sorter);
     this.setState({
@@ -61,6 +61,45 @@ export default class ManageMainCategory extends Component {
       sortedInfo: sorter
     });
   };
+  getallsubcategory = () => {
+    api("GET", "supermix", "/material-sub-categories", "", "", "").then(res => {
+      console.log(res.data);
+
+      // res.data.results.Supplier.map((post, index) => {
+      //   console.log(post);
+      //   datalist.push({
+      //     id: post.id,
+      //     name: post.name,
+      //     companyName: post.companyName,
+      //     address: post.address,
+      //     phoneNumber: post.phoneNumber,
+      //     email: post.email,
+      //     supplierCategoryId: post.supplierCategory.id,
+      //     category: post.supplierCategory.category,
+      //     description: post.supplierCategory
+      //   });
+      //   console.log(datalist);
+      // });
+      // console.log(datalist);
+      this.setState({
+        datalist: res.data.results.materialSubCategories
+      });
+    });
+  };
+
+  onConfirmdelete(id) {
+    console.log(id);
+    let mesg = "suppliers delete";
+
+    api("DELETE", "supermix", "/material-sub-category", "", "", id).then(
+      res => {
+        console.log(res.data);
+        this.getallsubcategory();
+        Notification("success", res.data.message);
+      }
+    );
+    console.log(this.state.id);
+  }
 
   clearFilters = () => {
     this.setState({ filteredInfo: null });
@@ -92,58 +131,43 @@ export default class ManageMainCategory extends Component {
     filteredInfo = filteredInfo || {};
     const columns = [
       {
-        title: "Code",
-        dataIndex: "code",
-        key: "code",
-        width: "3%",
-        filters: [
-          { text: "Joe", value: "Joe" },
-          { text: "Jim", value: "Jim" }
-        ],
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.code - b.code,
-        sortOrder: sortedInfo.columnKey === "code" && sortedInfo.order
-      },
-      {
         title: "Sub Category",
-        dataIndex: "subCategory",
+        dataIndex: "name",
         key: "subCategory",
-        width: "10%",
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        width: "10%"
       },
       {
         title: "Material Category",
-        dataIndex: "materialCategory",
+        dataIndex: "materialCategoryName",
         key: "materialCategory",
-        width: "10%",
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        width: "10%"
       },
       {
         title: "Edit & Delete",
         key: "action",
         width: "7%",
-        render: (text, record) => (
+        render: (text, record = this.state.datalist) => (
           <span>
             <a>
-              <Icon type='edit' />
+              <Icon
+                type="edit"
+                onClick={this.props.passEditSubManageCategoryToModal.bind(
+                  this,
+                  record
+                )}
+              />
             </a>
-            <Divider type='vertical' />
+            <Divider type="vertical" />
             <a>
               <Popconfirm
-                title='Are you sure you want to Delete this?'
+                title="Are you sure you want to Delete this?"
                 icon={
-                  <Icon type='question-circle-o' style={{ color: "red" }} />
+                  <Icon type="question-circle-o" style={{ color: "red" }} />
                 }
+                onConfirm={this.onConfirmdelete.bind(this, record.id)}
               >
-                <a href='#'>
-                  <Icon type='delete'></Icon>
+                <a href="#">
+                  <Icon type="delete" style={{ color: "red" }}></Icon>
                 </a>
               </Popconfirm>
             </a>
@@ -155,14 +179,28 @@ export default class ManageMainCategory extends Component {
     return (
       <div>
         <AntTable
-          title={() => <ManageMainCategoryMasterTitle />}
+          title={() => (
+            <ManageMainCategoryMasterTitle reload={this.getallsubcategory} />
+          )}
           columns={columns}
-          dataSource={data}
+          dataSource={this.state.datalist}
           onChange={this.handleChange}
-          pagination={{ defaultPageSize: 3 }}
+          pagination={{ defaultPageSize: 8 }}
           size={this.state.size}
         />
       </div>
     );
   }
 }
+const mapDispatchToProps = dispatch => {
+  return {
+    // if this function dispatches modal will be shown and the data will be drawn :)
+    passEditSubManageCategoryToModal: record => {
+      //this payload is the data we pass into redux which is in the row which we clicked
+      dispatch({ type: SWITCH_TO_EDIT_MODE, payload: record });
+      console.log(record);
+    }
+  };
+};
+
+export default connect(null, mapDispatchToProps)(ManageMainCategory);

@@ -13,11 +13,14 @@ const style = {
 };
 
 export default class ManageMainCategoryMasterTitle extends Component {
+  getallsubcategory = () => {
+    this.props.reload();
+  };
   render() {
     return (
       <FlexContainer titles leveltitles>
         <Paragraph style={style}>Material Sub Category Master</Paragraph>
-        <AddMainCategoryForm />
+        <AddMainCategoryForm reload={this.getallsubcategory} />
       </FlexContainer>
     );
   }

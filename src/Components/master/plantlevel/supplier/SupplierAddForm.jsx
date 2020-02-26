@@ -4,7 +4,6 @@ import { PrimaryButton } from "../../../styledcomponents/button/button";
 import { api } from "../../../services/AxiosService";
 import Notification from "../../../Constant/Notification";
 import HandelError from "../../../Constant/HandleError";
-import "./style.css";
 
 import {
   MasterLevelForm,
@@ -12,7 +11,6 @@ import {
 } from "../../../styledcomponents/form/MasterLevelForms";
 import { connect } from "react-redux";
 import { DISABLE_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
-import { Selector } from "../../../styledcomponents/select/Selection";
 
 function onBlur() {
   console.log("blur");
@@ -525,17 +523,17 @@ class SupplierAddForm extends Component {
           Add Supplier
         </PrimaryButton>
         <Modal
-          style={{ width: "1500px" }}
+          width="500px"
           visible={visible}
           closable={false}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[
-            <Button key='back' onClick={this.handleCancel}>
+            <Button key="back" onClick={this.handleCancel}>
               Cancel
             </Button>,
             <PrimaryButton
-              key='submit'
+              key="submit"
               loading={loading}
               onClick={e => this.handleSubmit(e)}
               style={{ background: "#001328", color: "white", border: "none" }}
@@ -553,7 +551,7 @@ class SupplierAddForm extends Component {
                 {this.state.type === "edit" ? "Edit Supplier" : " Add Supplier"}
               </p>
               <Icon
-                type='close-circle'
+                type="close-circle"
                 onClick={this.handleCancel}
                 style={{
                   color: "white"
@@ -563,162 +561,169 @@ class SupplierAddForm extends Component {
           }
         >
           <MasterLevelForm>
-            {/* Code */}
-            {this.state.type === "edit" ? (
-              <div className='input_wrapper'>
-                <label for='supplier_code' className='label'>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: "wrap",
+                justifyContent: "space-evenly"
+              }}
+            >
+              {/* Code */}
+              <div className="input_wrapper">
+                <label for="supplier_code" className="label">
                   Code:
                 </label>
 
                 <Input
-                  id='supplier_code'
-                  name='supplier_code'
-                  placeholder='Enter the Code'
+                  id="supplier_code"
+                  name="supplier_code"
+                  placeholder="Enter the Code"
                   onChange={this.handleChange}
                   value={this.state.supplier_code}
-                  disabled
+                  disabled={this.state.type == "edit" ? true : true}
                 />
                 {/* {errors.code.length > 0 && (
-                <div style={error}>{errors.code}</div>
-              )} */}
+                  <div style={error}>{errors.code}</div>
+                )} */}
                 <div style={{ height: "12px" }}></div>
               </div>
-            ) : (
-              ""
-            )}
 
-            {/* Plant Name */}
-            <div className='input_wrapper'>
-              <label for='supplier_name' className='label'>
-                Supplier Name:
-              </label>
+              {/* Plant Name */}
+              <div className="input_wrapper">
+                <label for="supplier_name" className="label">
+                  Supplier Name:
+                </label>
 
-              <Input
-                id='supplier_name'
-                name='supplier_name'
-                placeholder='Enter the Supplier'
-                onChange={this.handleChange}
-                value={this.state.supplier_name}
-              />
-              {errors.name.length > 0 && <div style={error}>{errors.name}</div>}
-              <div style={{ height: "12px" }}></div>
-            </div>
+                <Input
+                  id="supplier_name"
+                  name="supplier_name"
+                  placeholder="Enter the Supplier"
+                  onChange={this.handleChange}
+                  value={this.state.supplier_name}
+                />
+                {errors.name.length > 0 && (
+                  <div style={error}>{errors.name}</div>
+                )}
+                <div style={{ height: "12px" }}></div>
+              </div>
 
-            {/* Company Name */}
-            <div className='input_wrapper'>
-              <label for='supplier_company_name' className='label'>
-                Company Name:
-              </label>
+              {/* Company Name */}
+              <div className="input_wrapper">
+                <label for="supplier_company_name" className="label">
+                  Company Name:
+                </label>
 
-              <Input
-                id='supplier_company_name'
-                name='supplier_company_name'
-                placeholder='Enter the Supplier'
-                onChange={this.handleChange}
-                value={this.state.supplier_company_name}
-              />
-              {errors.companyName.length > 0 && (
-                <div style={error}>{errors.companyName}</div>
-              )}
-              <div style={{ height: "12px" }}></div>
-            </div>
-            <div className='input_wrapper'>
-              <label for='supplier_category' className='label'>
-                Supplier Category:
-              </label>
+                <Input
+                  id="supplier_company_name"
+                  name="supplier_company_name"
+                  placeholder="Enter the Supplier"
+                  onChange={this.handleChange}
+                  value={this.state.supplier_company_name}
+                />
+                {errors.companyName.length > 0 && (
+                  <div style={error}>{errors.companyName}</div>
+                )}
+                <div style={{ height: "12px" }}></div>
+              </div>
+              <div className="input_wrapper">
+                <label for="supplier_category" className="label">
+                  Supplier Category:
+                </label>
 
-              <Select
-                c
-                id='supplier_category'
-                name='supplier_category'
-                placeholder='Select Category '
-                onChange={this.handleSelect}
-                value={this.state.supplier_category}
-              />
-              {this.state.categ}
-              {/* Hard Coded */}
-              {/* <Option value="category01">Category 01</Option>
+                <Select
+                  showSearch
+                  style={{ width: "170px" }}
+                  id="supplier_category"
+                  name="supplier_category"
+                  placeholder="Select Category "
+                  optionFilterProp="children"
+                  onChange={this.handleSelect}
+                  defaultValue={this.state.supplier_category}
+                  value={this.state.edit_supplier_category}
+                  onFocus={onFocus}
+                  onBlur={onBlur}
+                  onSearch={onSearch}
+                  filterOption={(input, option) =>
+                    option.props.children
+                      .toLowerCase()
+                      .indexOf(input.toLowerCase()) >= 0
+                  }
+                >
+                  {this.state.categ}
+                  {/* Hard Coded */}
+                  {/* <Option value="category01">Category 01</Option>
                   <Option value="category02">Category 02</Option> */}
+                </Select>
+                {errors.category.length > 0 && (
+                  <div style={error}>{errors.category}</div>
+                )}
+                <div style={{ height: "12px" }}></div>
+              </div>
 
-              {errors.category.length > 0 && (
-                <div style={error}>{errors.category}</div>
-              )}
-              <div style={{ height: "12px" }}></div>
+              {/* Place */}
+              <div className="input_wrapper">
+                <label for="supplier_address" className="label">
+                  Address:
+                </label>
+
+                <Input
+                  id="supplier_address"
+                  name="supplier_address"
+                  placeholder="Enter the Address"
+                  onChange={this.handleChange}
+                  value={this.state.supplier_address}
+                />
+                {errors.address.length > 0 && (
+                  <div style={error}>{errors.address}</div>
+                )}
+                <div style={{ height: "12px" }}></div>
+              </div>
+
+              {/* T.P No */}
+              <div className="input_wrapper">
+                <label for="supplier_contactno" className="label">
+                  Contact No:
+                </label>
+
+                <Input
+                  className="input_number"
+                  id="supplier_contactno"
+                  name="supplier_contactno"
+                  placeholder="Enter Contact No"
+                  onChange={this.handleChange}
+                  value={this.state.supplier_contactno}
+                />
+                {errors.contactno.length > 0 && (
+                  <div style={error}>{errors.contactno}</div>
+                )}
+                <div style={{ height: "12px" }}></div>
+              </div>
+
+              {/* Description  */}
+              <div className="input_wrapper">
+                <label for="supplier_email" className="label">
+                  Email:
+                </label>
+
+                <Input
+                  id="supplier_email"
+                  name="supplier_email"
+                  placeholder="Enter the Email"
+                  onChange={this.handleChange}
+                  value={this.state.supplier_email}
+                />
+                {errors.email.length > 0 && (
+                  <div style={error}>{errors.email}</div>
+                )}
+                {this.state.errormgs.message == "email" ? (
+                  <div style={error}>{HandelError(this.state.errormgs)}</div>
+                ) : (
+                  ""
+                )}
+                <div style={{ height: "12px" }}></div>
+              </div>
             </div>
-
-            {/* Place */}
-            <div className='input_wrapper'>
-              <label for='supplier_address' className='label'>
-                Address:
-              </label>
-
-              <Input
-                id='supplier_address'
-                name='supplier_address'
-                placeholder='Enter the Address'
-                onChange={this.handleChange}
-                value={this.state.supplier_address}
-              />
-              {errors.address.length > 0 && (
-                <div style={error}>{errors.address}</div>
-              )}
-              <div style={{ height: "12px" }}></div>
-            </div>
-
-            {/* T.P No */}
-            <div className='input_wrapper'>
-              <label for='supplier_contactno' className='label'>
-                Contact No:
-              </label>
-
-              <Input
-                className='input_number'
-                id='supplier_contactno'
-                name='supplier_contactno'
-                placeholder='Enter Contact No'
-                onChange={this.handleChange}
-                value={this.state.supplier_contactno}
-              />
-              {errors.contactno.length > 0 && (
-                <div style={error}>{errors.contactno}</div>
-              )}
-              <div style={{ height: "12px" }}></div>
-            </div>
-
-            {/* Description  */}
-            <div className='input_wrapper'>
-              <label for='supplier_email' className='label'>
-                Email:
-              </label>
-
-              <Input
-                id='supplier_email'
-                name='supplier_email'
-                placeholder='Enter the Email'
-                onChange={this.handleChange}
-                value={this.state.supplier_email}
-              />
-              {errors.email.length > 0 && (
-                <div style={error}>{errors.email}</div>
-              )}
-              <div style={{ height: "12px" }}></div>
-            </div>
-
-            {/* Date */}
-            {/* <div className="input_wrapper">
-              <label for="date" className="label">
-                Date
-              </label>
-              <DatePicker id="date" name="date" placeholder="" />
-            </div> */}
-
-            {/* <PrimaryButton
-              type="primary"
-              style={{ background: "#001328", color: "white", border: "none" }}
-            >
-              Submit
-            </PrimaryButton> */}
-            {/* <PrimaryButton>Clear</PrimaryButton> */}
           </MasterLevelForm>
         </Modal>
       </div>

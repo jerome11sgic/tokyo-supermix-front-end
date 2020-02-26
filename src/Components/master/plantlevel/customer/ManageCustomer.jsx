@@ -5,7 +5,8 @@ import CustomerMasterTitle from "../titles/CustomerMasterTitle";
 import { AntTable } from "../../../styledcomponents/table/AntTabl";
 import { connect } from "react-redux";
 import { SWITCH_TO_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
-
+import Notification from "../../../Constant/Notification";
+import { api } from "../../../services/AxiosService";
 let customers = [
   {
     id: 0,
@@ -24,7 +25,8 @@ class ManageCustomer extends Component {
       sortedInfo: null,
       searchText: "",
       visible: false,
-      size: "small"
+      size: "small",
+      datalist: ""
     };
   }
 
@@ -88,32 +90,37 @@ class ManageCustomer extends Component {
       }
     });
   };
+  componentDidMount() {
+    this.getallCustomer();
+  }
 
+  getallCustomer = () => {
+    api("GET", "supermix", "/customers", "", "", "").then(res => {
+      console.log(res.data);
+
+      this.setState({
+        datalist: res.data.results.customers
+      });
+    });
+  };
   onChange(pageNumber) {
     console.log("Page: ", pageNumber);
   }
-
+  onConfirmdelete(id) {
+    console.log(id);
+    console.log("ddddd");
+    api("DELETE", "supermix", "/customer", "", "", id).then(res => {
+      console.log(res.data);
+      this.getallCustomer();
+      Notification("success", res.data.message);
+    });
+    console.log(this.state.id);
+  }
   render() {
     let { sortedInfo, filteredInfo } = this.state;
     sortedInfo = sortedInfo || {};
     filteredInfo = filteredInfo || {};
     const columns = [
-      // {
-      //   title: "ID",
-      //   dataIndex: "id",
-      //   width: "7%",
-      //   key: "id",
-      //   sorter: (a, b) => a.id - b.id,
-      //   sortOrder: sortedInfo.columnKey === "id" && sortedInfo.order
-      // },
-      // {
-      //   title: "Date",
-      //   dataIndex: "date",
-      //   width: "10%",
-      //   key: "id",
-      //   sorter: (a, b) => a.id - b.id,
-      //   sortOrder: sortedInfo.columnKey === "id" && sortedInfo.order
-      // },
       {
         title: "Customer Name",
         dataIndex: "name",
@@ -121,8 +128,8 @@ class ManageCustomer extends Component {
         width: "16%"
       },
       {
-        title: "Contact No",
-        dataIndex: "contactno",
+        title: "phoneNumber",
+        dataIndex: "phoneNumber",
         key: "contactno",
         width: "15%"
       },
@@ -158,7 +165,11 @@ class ManageCustomer extends Component {
               <Popconfirm
                 title="Are you sure you want to Delete this?"
                 icon={
-                  <Icon type="question-circle-o" style={{ color: "red" }} />
+                  <Icon
+                    type="question-circle-o"
+                    style={{ color: "red" }}
+                    onConfirm={this.onConfirmdelete.bind(this, record.id)}
+                  />
                 }
               >
                 <a href="#">
