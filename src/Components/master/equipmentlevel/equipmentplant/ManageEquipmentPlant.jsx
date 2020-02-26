@@ -57,9 +57,9 @@ export default class ManageEquipmentPlant extends Component {
   render() {
     const columns = [
       {
-        title: "Code",
-        dataIndex: "code",
-        key: "code"
+        title: "Serial No",
+        dataIndex: "serialNo",
+        key: "serialNo"
         // width: "4%",
       },
       {
@@ -73,6 +73,18 @@ export default class ManageEquipmentPlant extends Component {
         title: "Plant",
         dataIndex: "plant",
         key: "plant"
+        // width: "6%",
+      },
+      {
+        title: "Brand Name",
+        dataIndex: "brandName",
+        key: "brandName"
+        // width: "6%",
+      },
+      {
+        title: "Model Name",
+        dataIndex: "modelName",
+        key: "modelName"
         // width: "6%",
       },
       {

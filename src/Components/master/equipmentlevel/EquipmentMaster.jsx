@@ -21,7 +21,6 @@ export default class EquipmentMaster extends Component {
     return (
       <FlexContainer leveltileareafixed>
         <EquipmentTitleArea type={this.typechange} />
-
         {this.state.type === "equipment" ? (
           <ManageEquipment />
         ) : this.state.type === "equipmentplant" ? (

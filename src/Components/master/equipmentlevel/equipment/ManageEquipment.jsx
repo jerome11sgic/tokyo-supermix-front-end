@@ -71,18 +71,6 @@ export default class ManageNature extends Component {
       },
 
       {
-        title: "Brand Name",
-        dataIndex: "brand_name",
-        key: "brand_name"
-        // width: "6%",
-      },
-      {
-        title: "Model Name",
-        dataIndex: "model_name",
-        key: "model_name"
-        // width: "6%",
-      },
-      {
         title: " Description",
         dataIndex: " description",
         key: "description"

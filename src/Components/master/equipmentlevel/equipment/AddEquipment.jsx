@@ -9,39 +9,140 @@ import {
 } from "../../../styledcomponents/form/MasterLevelForms";
 import TextArea from "antd/lib/input/TextArea";
 
+const error = {
+  color: "red",
+  fontSize: "12px",
+  width: "160px",
+  height: "0.2px"
+};
+
 class AddEquipment extends Component {
   state = {
     loading: false,
     visible: false,
+    formValid: false,
+    errorCount: 0,
+    errormgs: "",
+    errors: {
+      name: ""
+      // description: ""
+    },
+    equipment_name: "",
+    equipment_description: "",
     type: "add"
   };
   showModal = () => {
     this.setState({
-      visible: true
+      visible: true,
+      errors: {
+        name: ""
+      },
+      equipment_name: ""
     });
+  };
+
+  // validate when submit
+  validateForm = errors => {
+    let valid;
+    Object.values(errors).forEach(
+      val => val.length > 0 && (valid = false),
+      (valid = true)
+    );
+    return valid;
+  };
+
+  countErrors = errors => {
+    let count = 0;
+    Object.values(errors).forEach(val => val.length > 0 && (count = count + 1));
+    return count;
   };
 
   handleCancel = () => {
-    this.setState({ visible: false });
-  };
-
-  handleSubmit = e => {
-    console.log(e);
-
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log("Received values of form: ", values);
-        this.setState({ loading: true });
-        setTimeout(() => {
-          this.setState({ loading: false, visible: false });
-        }, 3000);
-      }
+    this.setState({
+      visible: false,
+      errors: {
+        name: ""
+      },
+      equipment_name: ""
     });
   };
 
+  handleChange = (event, field) => {
+    this.setState({ [field]: event.target.value });
+    this.setState({ errormgs: "" });
+    event.preventDefault();
+    const { name, value } = event.target;
+    let errors = this.state.errors;
+    // console.log(name + " is \t" + value);
+    switch (name) {
+      case "equipment_name":
+        errors.name =
+          value.length === 0
+            ? "Name can't be empty"
+            : value.length < 3
+            ? "Name \n must be 3 characters long!"
+            : "";
+        break;
+      case "equipment_description":
+        errors.description =
+          value.length === 0
+            ? "Description can't be empty"
+            : value.length < 3
+            ? "Description must be 3 characters long!"
+            : "";
+        break;
+
+      default:
+        break;
+    }
+
+    this.setState({ errors, [name]: value });
+  };
+  handleSubmit = e => {
+    e.preventDefault();
+    if (this.state.equipment_name.length === 0) {
+      this.setState({
+        errors: {
+          name: "Name can't be empty"
+        },
+        formValid: this.validateForm(this.state.errors),
+        errorCount: this.countErrors(this.state.errors)
+      });
+    } else if (
+      this.state.equipment_name.length === 0 &&
+      this.state.errors.name.length === 0
+    ) {
+      this.setState({
+        errors: {
+          name: this.state.errors.name || "Name can't be empty"
+        },
+        formValid: this.validateForm(this.state.errors),
+        errorCount: this.countErrors(this.state.errors)
+      });
+    } else if (this.state.errors.name.length === 0) {
+      console.log("form is valid");
+      const data = {
+        equipment_name: this.state.equipment_name,
+        equipment_description: this.state.equipment_description
+      };
+      console.log(data);
+
+      this.setState({
+        loading: true,
+        errors: {
+          name: ""
+        },
+        equipment_name: "",
+        equipment_description: ""
+      });
+      setTimeout(() => {
+        this.setState({ loading: false, visible: false });
+      }, 1500);
+    }
+  };
+
   render() {
-    const { visible, loading } = this.state;
+    const { visible, loading, errors } = this.state;
 
     return (
       <div>
@@ -124,19 +225,29 @@ class AddEquipment extends Component {
                 id='equipment_name'
                 name='equipment_name'
                 placeholder='Enter Equipment Name'
+                value={this.state.equipment_name}
+                onChange={this.handleChange}
               />
+              {errors.name.length > 0 && <div style={error}>{errors.name}</div>}
+              <div style={{ height: "12.5px" }}></div>
             </div>
 
             <div className='input_wrapper'>
-              <label for='user_role' className='label'>
+              <label for='equipment_description' className='label'>
                 Description:
               </label>
               <TextArea
-                id='user_role'
-                name='user_role'
+                id='equipment_description'
+                name='equipment_description'
                 placeholder='Enter Description '
                 style={{ width: "180px" }}
+                value={this.state.equipment_description}
+                onChange={this.handleChange}
               />
+              {/* {errors.description.length > 0 && (
+                <div style={error}>{errors.description}</div>
+              )} */}
+              <div style={{ height: "12px" }}></div>
             </div>
           </MasterLevelForm>
         </Modal>
