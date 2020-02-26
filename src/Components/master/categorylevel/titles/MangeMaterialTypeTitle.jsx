@@ -13,11 +13,14 @@ const style = {
 };
 
 export default class ManageMaterialTypeTitle extends Component {
+  getallcategory = () => {
+    this.props.reload();
+  };
   render() {
     return (
       <FlexContainer titles leveltitles>
         <Paragraph style={style}>Material Category Master</Paragraph>
-        <AddType />
+        <AddType reload={this.getallcategory} />
       </FlexContainer>
     );
   }

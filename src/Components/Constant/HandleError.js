@@ -116,6 +116,12 @@ export default error => {
     case "44009":
       // do something when your server exploded
       return "employee Code Empty";
+    case "48001":
+      // do something when your server exploded
+      return "Category is Exist ";
+    case "49001":
+      // do something when your server exploded
+      return "SubCategory is Exist ";
 
     default:
     // handle normal errors with some alert or whatever

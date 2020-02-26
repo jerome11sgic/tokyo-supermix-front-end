@@ -7,6 +7,11 @@ import {
   MasterLevelFormTitle,
   MasterLevelForm
 } from "../../../styledcomponents/form/MasterLevelForms";
+import { api } from "../../../services/AxiosService";
+import Notification from "../../../Constant/Notification";
+import HandelError from "../../../Constant/HandleError";
+import { connect } from "react-redux";
+import { DISABLE_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
 
 const error = {
   color: "red",
@@ -28,7 +33,8 @@ class AddType extends Component {
     // input fields
     category_code: "",
     category_name: "",
-    type: "add"
+    type: "add",
+    errormgs: ""
   };
   showModal = () => {
     this.setState({
@@ -52,11 +58,34 @@ class AddType extends Component {
   };
 
   handleCancel = () => {
-    this.setState({ visible: false });
+    if (this.state.type === "edit") {
+      this.props.setCategoryVisibility();
+    }
+    this.setState({
+      visible: false,
+      errors: {
+        name: ""
+      },
+      // input fields
+      category_code: "",
+      category_name: "",
+      type: "",
+      errormgs: ""
+    });
   };
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      visible: nextProps.visible,
+      category_code: nextProps.editPlantData.id,
+      category_name: nextProps.editPlantData.name,
+
+      type: nextProps.type
+    });
+  }
 
   handleChange = (event, field) => {
     this.setState({ [field]: event.target.value });
+    this.setState({ errormgs: "" });
     event.preventDefault();
     const { name, value } = event.target;
     let errors = this.state.errors;
@@ -88,6 +117,69 @@ class AddType extends Component {
         }
       });
     }
+
+    if (this.state.type === "add") {
+      console.log("add part");
+      let data = {
+        name: this.state.category_name
+      };
+
+      api("POST", "supermix", "/material-category", "", data, "").then(
+        res => {
+          console.log(res.data);
+
+          Notification("success", res.data.message);
+          this.props.reload();
+          this.setState({ loading: true });
+          this.setState({
+            category_name: "",
+
+            errormgs: ""
+          });
+          setTimeout(() => {
+            this.setState({ loading: false, visible: false });
+          }, 3000);
+        },
+        error => {
+          this.setState({
+            errormgs: error.validationFailures[0]
+          });
+          console.log("DEBUG34: ", error);
+          console.log(HandelError(error.validationFailures[0]));
+        }
+      );
+    } else {
+      const data = {
+        id: this.state.category_code,
+        name: this.state.category_name
+      };
+      api("PUT", "supermix", "/material-category", "", data, "").then(
+        res => {
+          console.log(res.data);
+
+          Notification("success", res.data.message);
+          this.props.reload();
+          this.setState({ loading: true });
+          this.setState({
+            category_code: "",
+            category_name: "",
+            errormgs: ""
+          });
+          setTimeout(() => {
+            this.setState({ loading: false, visible: false });
+          }, 3000);
+        },
+        error => {
+          this.setState({
+            errormgs: error.validationFailures[0]
+          });
+          console.log("DEBUG34: ", error);
+          console.log(HandelError(error.validationFailures[0]));
+        }
+      );
+    }
+
+    console.log("form is valid");
   };
 
   render() {
@@ -109,16 +201,16 @@ class AddType extends Component {
           Add Material Category
         </PrimaryButton>
         <Modal
-          width='350px'
+          width="350px"
           visible={visible}
           closable={false}
           onCancel={this.handleCancel}
           footer={[
-            <Button key='back' onClick={this.handleCancel}>
+            <Button key="back" onClick={this.handleCancel}>
               Cancel
             </Button>,
             <PrimaryButton
-              key='submit'
+              key="submit"
               loading={loading}
               onClick={e => this.handleSubmit(e)}
               style={{ background: "#001328", color: "white", border: "none" }}
@@ -138,7 +230,7 @@ class AddType extends Component {
                   : "Add Material Category"}
               </p>
               <Icon
-                type='close-circle'
+                type="close-circle"
                 onClick={this.handleCancel}
                 style={{
                   color: "white"
@@ -150,13 +242,13 @@ class AddType extends Component {
           <MasterLevelForm>
             {/* Code */}
             {this.state.type === "edit" ? (
-              <div className='input_wrapper'>
-                <label for='category_code' className='label'>
+              <div className="input_wrapper">
+                <label for="category_code" className="label">
                   Code:
                 </label>
                 <Input
-                  id='category_code'
-                  name='category_code'
+                  id="category_code"
+                  name="category_code"
                   value={this.state.category_code}
                   disabled
                 />
@@ -166,19 +258,24 @@ class AddType extends Component {
             )}
 
             {/* Category Name */}
-            <div className='input_wrapper'>
-              <label for='category_name' className='label'>
-                Category Name:
+            <div className="input_wrapper">
+              <label for="category_name" className="label">
+                Name:
               </label>
 
               <Input
-                id='category_name'
-                name='category_name'
-                placeholder='Enter Category Name '
+                id="category_name"
+                name="category_name"
+                placeholder="Enter Category Name "
                 value={this.state.category_name}
                 onChange={this.handleChange}
               />
               {errors.name.length > 0 && <div style={error}>{errors.name}</div>}
+              {this.state.errormgs.message == "name" ? (
+                <div style={error}>{HandelError(this.state.errormgs)}</div>
+              ) : (
+                ""
+              )}
               <div style={{ height: "12px" }} />
             </div>
           </MasterLevelForm>
@@ -187,5 +284,22 @@ class AddType extends Component {
     );
   }
 }
+const mapStateToProps = state => {
+  //getting the global redux state to get the data from the EditPlantReducer.js
+  return {
+    visible: state.plantLevelReducers.EditPlantReducer.visible,
+    type: state.plantLevelReducers.EditPlantReducer.type,
+    editPlantData: state.plantLevelReducers.EditPlantReducer.editPlantData
+  };
+};
 
-export default AddType;
+const mapDispatchToProps = dispatch => {
+  return {
+    setCategoryVisibility: () => {
+      dispatch({ type: DISABLE_EDIT_MODE });
+      console.log("edit modal closed");
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddType);

@@ -4,14 +4,19 @@ import { Popconfirm, Divider, Icon } from "antd";
 import "./styleType.css";
 import MangeMaterialTypeTitle from "../titles/MangeMaterialTypeTitle";
 import { AntTable } from "../../../styledcomponents/table/AntTabl";
+import Notification from "../../../Constant/Notification";
+import { api } from "../../../services/AxiosService";
+import { SWITCH_TO_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
+import { connect } from "react-redux";
 
-export default class ManageType extends Component {
+class ManageType extends Component {
   state = {
     filteredInfo: null,
     sortedInfo: null,
     searchText: "",
     visible: false,
-    size: "small"
+    size: "small",
+    datalist: ""
   };
   componentWillMount() {
     if (window.screen.width > 1900) {
@@ -70,55 +75,72 @@ export default class ManageType extends Component {
   onChange(pageNumber) {
     console.log("Page: ", pageNumber);
   }
+  componentDidMount() {
+    this.getallcategory();
+  }
+  getallcategory = () => {
+    api("GET", "supermix", "/material-categories", "", "", "").then(res => {
+      console.log(res.data);
 
+      this.setState({
+        datalist: res.data.results.materialCategories
+      });
+    });
+  };
+  onConfirmdelete(id) {
+    console.log("ddddd");
+    console.log(id);
+    console.log("ddddd");
+    api("DELETE", "supermix", "/material-category", "", "", id).then(res => {
+      console.log(res.data);
+      this.getallcategory();
+      Notification("success", res.data.message);
+    });
+    console.log(this.state.id);
+  }
   render() {
     let { sortedInfo, filteredInfo } = this.state;
     sortedInfo = sortedInfo || {};
     filteredInfo = filteredInfo || {};
     const columns = [
       {
-        title: "Code",
-        dataIndex: "code",
-        key: "code",
-        width: "4%",
-        filters: [
-          { text: "Joe", value: "Joe" },
-          { text: "Jim", value: "Jim" }
-        ],
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.code - b.code,
-        sortOrder: sortedInfo.columnKey === "code" && sortedInfo.order
+        title: "",
+
+        key: "categoryName",
+        width: "6%"
       },
       {
         title: " Category Name",
-        dataIndex: "categoryName",
+        dataIndex: "name",
         key: "categoryName",
-        width: "16%",
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        width: "16%"
       },
       {
         title: "Edit & Delete",
         key: "action",
         width: "7%",
-        render: (text, record) => (
+        render: (text, record = this.state.datalist) => (
           <span>
             <a>
-              <Icon type='edit' />
+              <Icon
+                type="edit"
+                onClick={this.props.passEditManageCategoryToModal.bind(
+                  this,
+                  record
+                )}
+              />
             </a>
-            <Divider type='vertical' />
+            <Divider type="vertical" />
             <a>
               <Popconfirm
-                title='Are you sure you want to Delete this?'
+                title="Are you sure you want to Delete this?"
                 icon={
-                  <Icon type='question-circle-o' style={{ color: "red" }} />
+                  <Icon type="question-circle-o" style={{ color: "red" }} />
                 }
+                onConfirm={this.onConfirmdelete.bind(this, record.id)}
               >
-                <a href='#'>
-                  <Icon type='delete'></Icon>
+                <a href="#">
+                  <Icon type="delete" style={{ color: "red" }}></Icon>
                 </a>
               </Popconfirm>
             </a>
@@ -129,9 +151,9 @@ export default class ManageType extends Component {
 
     return (
       <AntTable
-        title={() => <MangeMaterialTypeTitle />}
+        title={() => <MangeMaterialTypeTitle reload={this.getallcategory} />}
         columns={columns}
-        // dataSource={data}
+        dataSource={this.state.datalist}
         onChange={this.handleChange}
         pagination={{ defaultPageSize: 3 }}
         size={this.state.size}
@@ -139,3 +161,15 @@ export default class ManageType extends Component {
     );
   }
 }
+const mapDispatchToProps = dispatch => {
+  return {
+    // if this function dispatches modal will be shown and the data will be drawn :)
+    passEditManageCategoryToModal: record => {
+      //this payload is the data we pass into redux which is in the row which we clicked
+      dispatch({ type: SWITCH_TO_EDIT_MODE, payload: record });
+      console.log(record);
+    }
+  };
+};
+
+export default connect(null, mapDispatchToProps)(ManageType);

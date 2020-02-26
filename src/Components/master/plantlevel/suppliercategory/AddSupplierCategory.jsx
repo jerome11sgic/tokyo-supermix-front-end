@@ -92,14 +92,6 @@ class AddSupplierCategory extends Component {
     let errors = this.state.errors;
     console.log(name + " is \t" + value);
     switch (name) {
-      // case "supllierCategory_code":
-      //   errors.code =
-      //     value.length === 0
-      //       ? "Code can't be empty"
-      //       : value.length < 3
-      //       ? "Code must be 3 characters long!"
-      //       : "";
-      //   break;
       case "supplier_category":
         errors.category =
           value.length === 0
