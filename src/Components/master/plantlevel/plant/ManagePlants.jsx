@@ -10,8 +10,6 @@ import { SWITCH_TO_EDIT_MODE } from "../../../../redux/action/master/plantlevel/
 
 class ManagePlants extends Component {
   state = {
-    filteredInfo: null,
-    sortedInfo: null,
     searchText: "",
     visible: false,
     size: "small",
@@ -112,9 +110,6 @@ class ManagePlants extends Component {
   }
 
   render() {
-    let { sortedInfo, filteredInfo } = this.state;
-    sortedInfo = sortedInfo || {};
-    filteredInfo = filteredInfo || {};
     const columns = [
       {
         title: "Code",

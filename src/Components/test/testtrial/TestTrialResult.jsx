@@ -132,20 +132,15 @@ export default class TestTrialResult extends Component {
           {/* Code */}
           <div className='input_wrapper'>
             <label for='id' className='label'>
-              Test Code
+              Test
             </label>
-            <Input
-              id='id'
-              name='id'
-              placeholder=''
-              defaultValue={`T001${this.props.samId}`}
-            />
+            <Input id='id' name='id' placeholder='' defaultValue={`T001`} />
           </div>
 
           {/* Plant Name */}
           <div className='input_wrapper'>
             <label for='customer_name' className='label'>
-              Grade
+              Incoming Sample
             </label>
             <Input id='customer_name' name='customer_name' placeholder='' />
           </div>
@@ -153,13 +148,12 @@ export default class TestTrialResult extends Component {
           {/* Place */}
           <div className='input_wrapper'>
             <label for='address' className='label'>
-              Incoming Sample
+              Material
             </label>
             <Input id='address' name='address' placeholder='' />
           </div>
 
           {/* T.P No */}
-
           <div className='input_wrapper'>
             <label for='address' className='label'>
               Plant
