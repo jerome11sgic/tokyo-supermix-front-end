@@ -122,16 +122,16 @@ class UnitAddForm extends Component {
               this.responeserror(res.data.results.name.message);
             } else {
               Notificationfuc("success", res.data.message);
-              this.props.reload();
-              this.setState({ loading: true });
+              // this.props.reload();
               this.setState({
+                loading: true,
                 unit_code: "",
                 unit_name: "",
                 errormgs: ""
               });
               setTimeout(() => {
                 this.setState({ loading: false, visible: false });
-              }, 3000);
+              }, 1500);
             }
           })
           .catch(error => {
@@ -141,26 +141,27 @@ class UnitAddForm extends Component {
             // console.log(error.response.data);
           });
       } else {
+        console.log(this.state.type);
         api("PUT", "supermix", "/unit", "", data, "")
           .then(res => {
             console.log(res.data);
 
-            if (res.data.status == "VALIDATION_FAILURE") {
+            if (res.data.status === "VALIDATION_FAILURE") {
               console.log("update");
               this.responeserror(res.data.results.name.message);
             } else {
               Notificationfuc("success", res.data.message);
-              this.props.reload();
-              this.setState({ loading: true });
+              // this.props.reload();
+
               this.setState({
                 unit_code: "",
                 unit_name: "",
-
+                loading: true,
                 errormgs: ""
               });
               setTimeout(() => {
                 this.setState({ loading: false, visible: false });
-              }, 3000);
+              }, 1500);
             }
           })
           .catch(error => {
@@ -207,7 +208,7 @@ class UnitAddForm extends Component {
     this.setState({
       visible: nextProps.visible,
       unit_code: nextProps.editPlantData.id,
-      unit_name: nextProps.editPlantData.name,
+      unit_name: nextProps.editPlantData.unit,
 
       type: nextProps.type
     });

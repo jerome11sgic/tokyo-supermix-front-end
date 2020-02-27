@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Input, Modal, Button, Icon, Select, Form } from "antd";
-
+import Notification from "../../../Constant/Notification";
+import HandelError from "../../../Constant/HandleError";
 import { PrimaryButton } from "../../../styledcomponents/button/button";
 import {
   MasterLevelFormTitle,
@@ -8,6 +9,7 @@ import {
 } from "../../../styledcomponents/form/MasterLevelForms";
 import { connect } from "react-redux";
 import { DISABLE_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
+import { api } from "../../../services/AxiosService";
 
 const error = {
   color: "red",
@@ -33,7 +35,9 @@ class MaterialMasterAddForm extends Component {
     sub_category: "",
     material_name: "",
     errormgs: "",
-    type: "add"
+    type: "add",
+    subCategoryList: [],
+    categoryList: []
   };
   showModal = () => {
     this.setState({
@@ -125,7 +129,57 @@ class MaterialMasterAddForm extends Component {
     }
   };
 
+  //filling dripdown
+  //get all
+  getallMaterialCategory = () => {
+    console.log("api");
+    api("GET", "supermix", "/material-categories", "", "", "").then(res => {
+      console.log(res);
+      let categoryselect = res.data.results.materialCategories.map(
+        (post, index) => {
+          return (
+            <Option value={post.id} key={index}>
+              {post.name}
+            </Option>
+          );
+        }
+      );
+      this.setState({
+        categoryselect
+      });
+    });
+  };
+
+  //get all
+  getallMaterialSubCategory = () => {
+    console.log("api");
+    api("GET", "supermix", "/material-sub-categories", "", "", "").then(res => {
+      console.log(res);
+      let subCategorySelect = res.data.results.materialSubCategories.map(
+        (post, index) => {
+          return (
+            <Option value={post.id} key={index}>
+              {post.name}
+            </Option>
+          );
+        }
+      );
+      this.setState({
+        subCategorySelect
+      });
+    });
+  };
+
+  componentDidMount() {
+    this.getallMaterialSubCategory();
+    this.getallMaterialCategory();
+  }
+
   handleCancel = () => {
+    if (this.state.type === "edit") {
+      // we call the redux function to dispatch and delete all the global redux state to close the modal
+      this.props.setMaterialMasterVisiblity();
+    }
     this.setState({
       visible: false,
       errors: {
@@ -209,6 +263,107 @@ class MaterialMasterAddForm extends Component {
       errors.material_name.length === 0
     ) {
       console.log("form is valid");
+      const data = {
+        materialCategory: material_category,
+        subCategory: sub_category,
+        materialName: material_name
+      };
+      console.log(data);
+      console.log(this.state.type);
+      if (this.state.type === "add") {
+        api("POST", "supermix", "/raw-material", "", data, "")
+          .then(
+            res => {
+              console.log(res.data);
+              if (res.data.status === "VALIDATION_FAILURE") {
+                console.log("add");
+                this.responeserror(res.data.results.name.message);
+              } else {
+                Notification("success", res.data.message);
+                // this.props.reload();
+                this.setState({
+                  loading: true,
+                  errormgs: "",
+                  errors: {
+                    material_category: "",
+                    sub_category: "",
+                    material_name: ""
+                  },
+                  code: "",
+                  material_category: "",
+                  sub_category: "",
+                  material_name: ""
+                });
+                setTimeout(() => {
+                  this.setState({ loading: false, visible: false });
+                }, 1500);
+              }
+            },
+            error => {
+              this.setState({
+                errormgs: error.validationFailures[0]
+              });
+              console.log("DEBUG34: ", error);
+              console.log(HandelError(error.validationFailures[0]));
+            }
+          )
+          .catch(error => {
+            this.setState({
+              // errormgs: "Plant Name Exist"
+            });
+            console.log(error);
+          });
+      } else {
+        const data = {
+          materialCategory: material_category,
+          subCategory: sub_category,
+          materialName: material_name
+        };
+        console.log(this.state.type);
+        api("PUT", "supermix", "/raw-material", "", data, "")
+          .then(
+            res => {
+              console.log(res.data);
+
+              if (res.data.status === "VALIDATION_FAILURE") {
+                console.log("update");
+                this.responeserror(res.data.results.name.message);
+              } else {
+                Notification("success", res.data.message);
+                // this.props.reload();
+                this.setState({
+                  loading: true,
+                  errormgs: "",
+                  errors: {
+                    material_category: "",
+                    sub_category: "",
+                    material_name: ""
+                  },
+                  code: "",
+                  material_category: "",
+                  sub_category: "",
+                  material_name: ""
+                });
+                setTimeout(() => {
+                  this.setState({ loading: false, visible: false });
+                }, 1500);
+              }
+            },
+            error => {
+              this.setState({
+                errormgs: error.validationFailures[0]
+              });
+              console.log("DEBUG34: ", error);
+              console.log(HandelError(error.validationFailures[0]));
+            }
+          )
+          .catch(error => {
+            // this.setState({
+            //   errormgs: "Plant Name Exist"
+            // });
+            // console.log(error.response.data);
+          });
+      }
     }
   };
 
@@ -326,8 +481,9 @@ class MaterialMasterAddForm extends Component {
                 }
                 style={{ width: 170 }}
               >
-                <Option value='mc01'>M C 01</Option>
-                <Option value='mc02'>M C 02</Option>
+                {this.state.categoryselect}
+                {/* <Option value='mc01'>M C 01</Option>
+                <Option value='mc02'>M C 02</Option> */}
               </Select>
               {errors.material_category.length > 0 && (
                 <div style={error}>{errors.material_category}</div>
@@ -349,8 +505,9 @@ class MaterialMasterAddForm extends Component {
                 value={sub_category}
                 onChange={value => this.handleSelect("sub_category", value)}
               >
-                <Option value='sc01'>Sub C 01</Option>
-                <Option value='sc02'>Sub C 02</Option>
+                {this.state.subCategorySelect}
+                {/* <Option value='sc01'>Sub C 01</Option>
+                <Option value='sc02'>Sub C 02</Option> */}
               </Select>
               {errors.sub_category.length > 0 && (
                 <div style={error}>{errors.sub_category}</div>
@@ -394,7 +551,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     // setting visible to false if we close the modal .. and all state data will be deleted if this function is dispatched
-    setEquipmentPlantVisiblity: () => {
+    setMaterialMasterVisiblity: () => {
       dispatch({ type: DISABLE_EDIT_MODE });
       console.log("edit modal closed");
     }

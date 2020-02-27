@@ -510,21 +510,19 @@ class AddCalibrationForm extends Component {
     api("GET", "supermix", "/plantequipments", "", "", "").then(res => {
       console.log(res.data);
 
-      if (res.data.results.Plantequipment.length > 0) {
-        console.log("kkkkkkkkkk");
-        let equipmantplantselect = res.data.results.materialCategories.map(
-          (post, index) => {
-            return (
-              <Option value={post.id} key={index}>
-                {post.name}
-              </Option>
-            );
-          }
-        );
-        this.setState({
-          equipmantplantselect
-        });
-      }
+      console.log("kkkkkkkkkk");
+      let equipmantplantselect = res.data.results.Plantequipments.map(
+        (post, index) => {
+          return (
+            <Option value={post.id} key={index}>
+              {post.name}
+            </Option>
+          );
+        }
+      );
+      this.setState({
+        equipmantplantselect
+      });
     });
   };
 

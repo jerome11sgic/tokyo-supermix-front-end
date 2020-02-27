@@ -23,7 +23,8 @@ class ManageMaterial extends Component {
     sortedInfo: null,
     searchText: "",
     visible: false,
-    size: "small"
+    size: "small",
+    data: ""
   };
 
   componentWillMount() {
@@ -37,6 +38,10 @@ class ManageMaterial extends Component {
         size: "small"
       });
     }
+  }
+
+  componentDidMount() {
+    this.getallMaterial();
   }
 
   showModal = () => {
@@ -56,6 +61,17 @@ class ManageMaterial extends Component {
     console.log(e);
     this.setState({
       visible: false
+    });
+  };
+
+  //get all
+  getallMaterial = () => {
+    console.log("api");
+    api("GET", "supermix", "/raw-materials", "", "", "").then(res => {
+      console.log(res);
+      this.setState({
+        data: res.data.results.rawMaterial
+      });
     });
   };
 
@@ -161,7 +177,7 @@ class ManageMaterial extends Component {
         title={() => <MaterialMasterTitle />}
         maxlength
         columns={columns}
-        dataSource={data}
+        dataSource={this.state.data}
         onChange={this.handleChange}
         pagination={{ defaultPageSize: 4 }}
         size={this.state.size}
