@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Input, Modal, Button, Icon, Select, Form } from "antd";
-
+import Notification from "../../../Constant/Notification";
+import HandelError from "../../../Constant/HandleError";
 import { PrimaryButton } from "../../../styledcomponents/button/button";
 import {
   MasterLevelFormTitle,
@@ -8,6 +9,7 @@ import {
 } from "../../../styledcomponents/form/MasterLevelForms";
 import { connect } from "react-redux";
 import { DISABLE_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
+import { api } from "../../../services/AxiosService";
 
 const error = {
   color: "red",
@@ -126,6 +128,10 @@ class MaterialMasterAddForm extends Component {
   };
 
   handleCancel = () => {
+    if (this.state.type === "edit") {
+      // we call the redux function to dispatch and delete all the global redux state to close the modal
+      this.props.setMaterialMasterVisiblity();
+    }
     this.setState({
       visible: false,
       errors: {
@@ -209,6 +215,107 @@ class MaterialMasterAddForm extends Component {
       errors.material_name.length === 0
     ) {
       console.log("form is valid");
+      const data = {
+        materialCategory: material_category,
+        subCategory: sub_category,
+        materialName: material_name
+      };
+      console.log(data);
+      console.log(this.state.type);
+      if (this.state.type === "add") {
+        api("POST", "supermix", "/raw-material", "", data, "")
+          .then(
+            res => {
+              console.log(res.data);
+              if (res.data.status === "VALIDATION_FAILURE") {
+                console.log("add");
+                this.responeserror(res.data.results.name.message);
+              } else {
+                Notification("success", res.data.message);
+                // this.props.reload();
+                this.setState({
+                  loading: true,
+                  errormgs: "",
+                  errors: {
+                    material_category: "",
+                    sub_category: "",
+                    material_name: ""
+                  },
+                  code: "",
+                  material_category: "",
+                  sub_category: "",
+                  material_name: ""
+                });
+                setTimeout(() => {
+                  this.setState({ loading: false, visible: false });
+                }, 1500);
+              }
+            },
+            error => {
+              this.setState({
+                errormgs: error.validationFailures[0]
+              });
+              console.log("DEBUG34: ", error);
+              console.log(HandelError(error.validationFailures[0]));
+            }
+          )
+          .catch(error => {
+            this.setState({
+              // errormgs: "Plant Name Exist"
+            });
+            console.log(error);
+          });
+      } else {
+        const data = {
+          materialCategory: material_category,
+          subCategory: sub_category,
+          materialName: material_name
+        };
+        console.log(this.state.type);
+        api("PUT", "supermix", "/raw-material", "", data, "")
+          .then(
+            res => {
+              console.log(res.data);
+
+              if (res.data.status === "VALIDATION_FAILURE") {
+                console.log("update");
+                this.responeserror(res.data.results.name.message);
+              } else {
+                Notification("success", res.data.message);
+                // this.props.reload();
+                this.setState({
+                  loading: true,
+                  errormgs: "",
+                  errors: {
+                    material_category: "",
+                    sub_category: "",
+                    material_name: ""
+                  },
+                  code: "",
+                  material_category: "",
+                  sub_category: "",
+                  material_name: ""
+                });
+                setTimeout(() => {
+                  this.setState({ loading: false, visible: false });
+                }, 1500);
+              }
+            },
+            error => {
+              this.setState({
+                errormgs: error.validationFailures[0]
+              });
+              console.log("DEBUG34: ", error);
+              console.log(HandelError(error.validationFailures[0]));
+            }
+          )
+          .catch(error => {
+            // this.setState({
+            //   errormgs: "Plant Name Exist"
+            // });
+            // console.log(error.response.data);
+          });
+      }
     }
   };
 
@@ -394,7 +501,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     // setting visible to false if we close the modal .. and all state data will be deleted if this function is dispatched
-    setEquipmentPlantVisiblity: () => {
+    setMaterialMasterVisiblity: () => {
       dispatch({ type: DISABLE_EDIT_MODE });
       console.log("edit modal closed");
     }

@@ -3,12 +3,17 @@ import React, { Component } from "react";
 import { Table, Popconfirm, Divider, Icon } from "antd";
 import NatureTitle from "../titles/MaterialNatureTitle";
 import { AntTable } from "../../../styledcomponents/table/AntTabl";
+import { SWITCH_TO_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
+import { connect } from "react-redux";
+import { api } from "../../../services/AxiosService";
+import Notification from "../../../Constant/Notification";
 
-export default class ManageNature extends Component {
+class ManageNature extends Component {
   state = {
     visible: false,
     size: "small",
-    type: "add"
+    type: "add",
+    data: []
   };
   componentWillMount() {
     if (window.screen.width > 1900) {
@@ -60,28 +65,62 @@ export default class ManageNature extends Component {
     console.log("Page: ", pageNumber);
   }
 
+  componentDidMount() {
+    this.getallMaterialStates();
+  }
+
+  //get all
+  getallMaterialStates = () => {
+    console.log("api");
+    api("GET", "supermix", "/material-states", "", "", "").then(res => {
+      console.log(res);
+      this.setState({
+        data: res.data.results.materialState
+      });
+    });
+  };
+
+  //delete
+  onConfirmdelete(code) {
+    console.log("delete");
+    console.log(code);
+    let mesg = "equipmentplant delete";
+
+    api("DELETE", "supermix", "/material-state", "", "", code).then(res => {
+      console.log(res.data);
+      this.getallMaterialStates();
+      Notification("success", res.data.message);
+    });
+    console.log(this.state.id);
+  }
   render() {
     const columns = [
+      // {
+      //   title: "Code",
+      //   dataIndex: "code",
+      //   key: "code"
+      //   // width: "10%"
+      // },
       {
-        title: "Code",
-        dataIndex: "code",
-        key: "code",
-        width: "10%"
-      },
-      {
-        title: "Nature",
-        dataIndex: "nature",
-        key: "user",
-        width: "20%"
+        title: "Material State",
+        dataIndex: "materialState",
+        key: "materialState"
+        // width: "20%"
       },
       {
         title: "Edit & Delete",
         key: "action",
-        width: "7%",
-        render: (text, record) => (
+        width: "17%",
+        render: (text, record = this.state.data) => (
           <span>
             <a>
-              <Icon type='edit' />
+              <Icon
+                type='edit'
+                onClick={this.props.passEditMaterialStateRecordtoModal.bind(
+                  this,
+                  record
+                )}
+              />
             </a>
             <Divider type='vertical' />
             <a>
@@ -90,9 +129,10 @@ export default class ManageNature extends Component {
                 icon={
                   <Icon type='question-circle-o' style={{ color: "red" }} />
                 }
+                onConfirm={this.onConfirmdelete.bind(this, record.id)}
               >
                 <a href='#'>
-                  <Icon type='delete'></Icon>
+                  <Icon type='delete' style={{ color: "red" }}></Icon>
                 </a>
               </Popconfirm>
             </a>
@@ -106,7 +146,7 @@ export default class ManageNature extends Component {
         length
         title={() => <NatureTitle />}
         columns={columns}
-        // dataSource={data}
+        dataSource={this.state.data}
         onChange={this.handleChange}
         pagination={{ defaultPageSize: 3 }}
         size={this.state.size}
@@ -114,3 +154,18 @@ export default class ManageNature extends Component {
     );
   }
 }
+
+const mapStateToProps = state => null;
+
+const mapDispatchToProps = dispatch => {
+  return {
+    // if this function dispatches modal will be shown and the data will be drawn :)
+    passEditMaterialStateRecordtoModal: record => {
+      //this payload is the data we pass into redux which is in the row which we clicked
+      dispatch({ type: SWITCH_TO_EDIT_MODE, payload: record });
+      console.log(record);
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ManageNature);
