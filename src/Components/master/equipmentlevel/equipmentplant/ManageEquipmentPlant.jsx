@@ -7,6 +7,17 @@ import EquipmentPlantTitle from "../title/EquipmentPlantTitle";
 import { SWITCH_TO_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
 import { connect } from "react-redux";
 import { api } from "../../../services/AxiosService";
+import Notification from "../../../Constant/Notification";
+
+// const ep = [
+//   {
+//     serialNo: "SN001",
+//     equipment: "Pan",
+//     plant: "Peliyagoda",
+//     modelName: "DU 1504552",
+//     brandName: "HP"
+//   }
+// ];
 
 class ManageEquipmentPlant extends Component {
   state = {
@@ -38,13 +49,28 @@ class ManageEquipmentPlant extends Component {
 
   //get all
   getallEquipmentPlant = () => {
-    api("GET", "supermix", "/plantequipment", "", "", "").then(res => {
+    console.log("api");
+    api("GET", "supermix", "/plantequipments", "", "", "").then(res => {
       console.log(res);
-      // this.setState({
-      //   data: res.data.results
-      // });
+      this.setState({
+        data: res.data.results.Plantequipments
+      });
     });
   };
+
+  //delete
+  onConfirmdelete(serialNo) {
+    console.log("delete");
+    console.log(serialNo);
+    let mesg = "equipmentplant delete";
+
+    api("DELETE", "supermix", "/plantequipment", "", "", serialNo).then(res => {
+      console.log(res.data);
+      this.getallEquipmentPlant();
+      Notification("success", res.data.message);
+    });
+    console.log(this.state.id);
+  }
 
   handleOk = e => {
     console.log(e);
@@ -82,15 +108,15 @@ class ManageEquipmentPlant extends Component {
       },
       {
         title: "Equipment",
-        dataIndex: "equipment",
-        key: "equipment"
+        dataIndex: "equipmentName",
+        key: "equipmentName"
         // width: "6%",
       },
 
       {
         title: "Plant",
-        dataIndex: "plant",
-        key: "plant"
+        dataIndex: "plantName",
+        key: "plantName"
         // width: "6%",
       },
       {
@@ -103,6 +129,12 @@ class ManageEquipmentPlant extends Component {
         title: "Model Name",
         dataIndex: "modelName",
         key: "modelName"
+        // width: "6%",
+      },
+      {
+        title: "Description",
+        dataIndex: "description",
+        key: "description"
         // width: "6%",
       },
       {
@@ -124,12 +156,11 @@ class ManageEquipmentPlant extends Component {
             <a>
               <Popconfirm
                 title='Are you sure you want to Delete this?'
-                icon={
-                  <Icon type='question-circle-o' style={{ color: "red" }} />
-                }
+                icon={<Icon type='question-circle-o' />}
+                onConfirm={this.onConfirmdelete.bind(this, record.serialNo)}
               >
                 <a href='#'>
-                  <Icon type='delete'></Icon>
+                  <Icon type='delete' style={{ color: "red" }}></Icon>
                 </a>
               </Popconfirm>
             </a>
@@ -143,7 +174,7 @@ class ManageEquipmentPlant extends Component {
         length
         title={() => <EquipmentPlantTitle reload={this.getallEquipmentPlant} />}
         columns={columns}
-        // dataSource={data}
+        // dataSource={ep}
         dataSource={this.state.data}
         onChange={this.handleChange}
         pagination={{ defaultPageSize: 3 }}

@@ -6,6 +6,12 @@ import {
   MasterLevelFormTitle,
   MasterLevelForm
 } from "../../../styledcomponents/form/MasterLevelForms";
+import { connect } from "react-redux";
+import { DISABLE_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
+import Notification from "../../../Constant/Notification";
+import HandelError from "../../../Constant/HandleError";
+import { api } from "../../../services/AxiosService";
+import TextArea from "antd/lib/input/TextArea";
 
 const error = {
   color: "red",
@@ -34,13 +40,31 @@ class AddEquipmentPlant extends Component {
     plant: "",
     brand_name: "",
     model_name: "",
+    description: "",
     errormgs: "",
     type: "add"
   };
 
   showModal = () => {
     this.setState({
-      visible: true
+      visible: true,
+      formValid: false,
+      errorCount: 0,
+      errors: {
+        serial: "",
+        equipment: "",
+        plant: "",
+        brand: "",
+        model: ""
+      },
+      serial_no: "",
+      equipment: "",
+      plant: "",
+      brand_name: "",
+      model_name: "",
+      description: "",
+      errormgs: "",
+      type: "add"
     });
   };
 
@@ -159,7 +183,8 @@ class AddEquipmentPlant extends Component {
       equipment,
       plant,
       model_name,
-      brand_name
+      brand_name,
+      description
     } = this.state;
     e.preventDefault();
     if (
@@ -247,50 +272,226 @@ class AddEquipmentPlant extends Component {
       errors.brand.length === 0 &&
       errors.model.length === 0
     ) {
+      this.setState({ formValid: this.validateForm(this.state.errors) });
+      this.setState({ errorCount: this.countErrors(this.state.errors) });
       console.log("form is valid");
       const data = {
-        serial_no: serial_no,
-        equipment: equipment,
-        plant: plant,
-        brand_name: brand_name,
-        model_name: model_name
+        serialNo: serial_no,
+        equipmentId: equipment,
+        plantCode: plant,
+        brandName: brand_name,
+        modelName: model_name,
+        description: description
       };
       console.log(data);
-      this.setState({
-        loading: true,
-        serial_no: "",
-        equipment: "",
-        plant: "",
-        brand_name: "",
-        model_name: "",
-        errors: {
-          serial: "",
-          equipment: "",
-          plant: "",
-          brand: "",
-          model: ""
-        }
-      });
-      setTimeout(() => {
-        this.setState({ loading: false, visible: false });
-      }, 1500);
+      console.log(this.state.type);
+      if (this.state.type === "add") {
+        api("POST", "supermix", "/plantequipment", "", data, "")
+          .then(
+            res => {
+              console.log(res.data);
+              if (res.data.status === "VALIDATION_FAILURE") {
+                console.log("add");
+                this.responeserror(res.data.results.name.message);
+              } else {
+                Notification("success", res.data.message);
+                this.props.reload();
+                this.setState({ loading: true });
+                this.setState({
+                  errormgs: "",
+                  serial_no: "",
+                  equipment: "",
+                  plant: "",
+                  brand_name: "",
+                  model_name: "",
+                  description: "",
+                  errors: {
+                    serial: "",
+                    equipment: "",
+                    plant: "",
+                    brand: "",
+                    model: ""
+                  }
+                });
+                setTimeout(() => {
+                  this.setState({ loading: false, visible: false });
+                }, 3000);
+              }
+            },
+            error => {
+              this.setState({
+                errormgs: error.validationFailures[0]
+              });
+              console.log("DEBUG34: ", error);
+              console.log(HandelError(error.validationFailures[0]));
+            }
+          )
+          .catch(error => {
+            this.setState({
+              // errormgs: "Plant Name Exist"
+            });
+            console.log(error);
+          });
+      } else {
+        const data = {
+          serialNo: serial_no,
+          equipmentId: equipment,
+          plantCode: plant,
+          brandName: brand_name,
+          modelName: model_name,
+          description: description
+        };
+        console.log(this.state.type);
+        api("PUT", "supermix", "/plantequipment", "", data, "")
+          .then(
+            res => {
+              console.log(res.data);
+
+              if (res.data.status === "VALIDATION_FAILURE") {
+                console.log("update");
+                this.responeserror(res.data.results.name.message);
+              } else {
+                Notification("success", res.data.message);
+                // this.props.reload();
+
+                this.setState({
+                  loading: true,
+                  errormgs: "",
+                  serial_no: "",
+                  equipment: "",
+                  plant: "",
+                  brand_name: "",
+                  model_name: "",
+                  description: "",
+                  errors: {
+                    serial: "",
+                    equipment: "",
+                    plant: "",
+                    brand: "",
+                    model: ""
+                  }
+                });
+                setTimeout(() => {
+                  this.setState({ loading: false, visible: false });
+                }, 3000);
+              }
+            },
+            error => {
+              this.setState({
+                errormgs: error.validationFailures[0]
+              });
+              console.log("DEBUG34: ", error);
+              console.log(HandelError(error.validationFailures[0]));
+            }
+          )
+          .catch(error => {
+            // this.setState({
+            //   errormgs: "Plant Name Exist"
+            // });
+            // console.log(error.response.data);
+          });
+      }
+      // this.setState({
+      //   loading: true,
+      //   serial_no: "",
+      //   equipment: "",
+      //   plant: "",
+      //   brand_name: "",
+      //   model_name: "",
+      //   errors: {
+      //     serial: "",
+      //     equipment: "",
+      //     plant: "",
+      //     brand: "",
+      //     model: ""
+      //   }
+      // });
+      // setTimeout(() => {
+      //   this.setState({ loading: false, visible: false });
+      // }, 1500);
     }
   };
 
   componentWillReceiveProps(nextProps) {
     this.setState({
       visible: nextProps.visible,
-      serial_no: nextProps.editPlantData.serial_no,
-      equipment: nextProps.editPlantData.equipment,
-      plant: nextProps.editPlantData.plant,
-      model_name: nextProps.editPlantData.model_name,
-      brand_name: nextProps.editPlantData.brand_name,
+      serial_no: nextProps.editPlantData.serialNo,
+      equipment: nextProps.editPlantData.equipmentName,
+      plant: nextProps.editPlantData.plantName,
+      model_name: nextProps.editPlantData.modelName,
+      brand_name: nextProps.editPlantData.brandName,
+      description: nextProps.editPlantData.description,
       type: nextProps.type
     });
   }
 
+  componentDidMount() {
+    this.getAllEquipments();
+    this.getAllPlants();
+  }
+
+  //dropdown data for plant
+  getAllPlants() {
+    api("GET", "supermix", "/plants", "", "", "").then(res => {
+      console.log(res.data.results.plants.length);
+      if (res.data.results.plants.length > 0) {
+        console.log("ggg");
+        let SelectPlants = res.data.results.plants.map((post, index) => {
+          return (
+            <Option value={post.code} key={index}>
+              {post.name}
+            </Option>
+          );
+        });
+        this.setState({
+          SelectPlants
+        });
+      }
+    });
+  }
+
+  //dropdown data for plant
+  getAllEquipments() {
+    api("GET", "supermix", "/equipments", "", "", "").then(res => {
+      console.log(res.data.results);
+      if (res.data.results.plants.length > 0) {
+        console.log("ggg");
+        let SelectPlants = res.data.results.plants.map((post, index) => {
+          return (
+            <Option value={post.code} key={index}>
+              {post.name}
+            </Option>
+          );
+        });
+        this.setState({
+          SelectPlants
+        });
+      }
+    });
+  }
+
   handleCancel = () => {
-    this.setState({ visible: false });
+    if (this.state.type === "edit") {
+      // we call the redux function to dispatch and delete all the global redux state to close the modal
+      this.props.setEquipmentPlantVisiblity();
+    }
+    this.setState({
+      visible: false,
+      errormgs: "",
+      serial_no: "",
+      equipment: "",
+      plant: "",
+      brand_name: "",
+      model_name: "",
+      description: "",
+      errors: {
+        serial: "",
+        equipment: "",
+        plant: "",
+        brand: "",
+        model: ""
+      }
+    });
   };
 
   render() {
@@ -302,6 +503,7 @@ class AddEquipmentPlant extends Component {
       brand_name,
       serial_no,
       equipment,
+      description,
       errors
     } = this.state;
 
@@ -334,7 +536,7 @@ class AddEquipmentPlant extends Component {
               onClick={e => this.handleSubmit(e)}
               style={{ background: "#001328", color: "white", border: "none" }}
             >
-              Save
+              {this.state.type === "edit" ? "Edit" : "Save"}
             </PrimaryButton>
           ]}
           title={
@@ -344,7 +546,9 @@ class AddEquipmentPlant extends Component {
                   color: "white"
                 }}
               >
-                Add Equipment Plant
+                {this.state.type === "edit"
+                  ? "Edit Equipment Plant"
+                  : "Add Equipment Plant"}
               </p>
               <Icon
                 type='close-circle'
@@ -392,8 +596,8 @@ class AddEquipmentPlant extends Component {
                 value={equipment}
                 onChange={value => this.handleSelect("equipment", value)}
               >
-                <Option value='eq01'>Equipment 01</Option>
-                <Option value='eq02'>Equipment 02</Option>
+                <Option value={1}>Equipment 01</Option>
+                <Option value={2}>Equipment 02</Option>
               </Select>
               {errors.equipment.length > 0 && (
                 <div style={error}>{errors.equipment}</div>
@@ -414,8 +618,8 @@ class AddEquipmentPlant extends Component {
                 value={plant}
                 onChange={value => this.handleSelect("plant", value)}
               >
-                <Option value='pl01'>Plant 01</Option>
-                <Option value='pl02'>Plant 02</Option>
+                <Option value='p01'>Plant 01</Option>
+                <Option value='p02'>Plant 02</Option>
               </Select>
               {errors.plant.length > 0 && (
                 <div style={error}>{errors.plant}</div>
@@ -457,6 +661,21 @@ class AddEquipmentPlant extends Component {
               )}
               <div style={{ height: "10px" }}></div>
             </div>
+
+            {/* Description */}
+            <div className='input_wrapper'>
+              <label for='description' className='label'>
+                Description:
+              </label>
+              <TextArea
+                id='description'
+                name='description'
+                placeholder='Enter Description'
+                value={description}
+                onChange={this.handleChange}
+                style={{ width: "170px" }}
+              />
+            </div>
           </MasterLevelForm>
         </Modal>
       </div>
@@ -464,4 +683,23 @@ class AddEquipmentPlant extends Component {
   }
 }
 
-export default AddEquipmentPlant;
+const mapStateToProps = state => {
+  //getting the global redux state to get the data from the EditPlantReducer.js
+  return {
+    visible: state.plantLevelReducers.EditPlantReducer.visible,
+    type: state.plantLevelReducers.EditPlantReducer.type,
+    editPlantData: state.plantLevelReducers.EditPlantReducer.editPlantData
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    // setting visible to false if we close the modal .. and all state data will be deleted if this function is dispatched
+    setEquipmentPlantVisiblity: () => {
+      dispatch({ type: DISABLE_EDIT_MODE });
+      console.log("edit modal closed");
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddEquipmentPlant);
