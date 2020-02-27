@@ -4,6 +4,8 @@ import { Icon, Popconfirm, Divider } from "antd";
 import MaterialParameterTitle from "../titles/MaterialParameterTitle";
 import { AntTable } from "../../../styledcomponents/table/AntTabl";
 
+const data = [];
+
 export default class ManageMaterialParameter extends Component {
   state = {
     filteredInfo: null,
