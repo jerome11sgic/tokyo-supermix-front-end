@@ -5,8 +5,17 @@ import "./styleequipmentmaster.css";
 
 import { AntTable } from "../../../styledcomponents/table/AntTabl";
 import EquipmentTitle from "../title/EquipmentTitle";
+import { SWITCH_TO_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
+import { connect } from "react-redux";
 
-export default class ManageNature extends Component {
+const eq = [
+  {
+    equipmentName: "Pan",
+    description: "lorem ipsum"
+  }
+];
+
+class ManageNature extends Component {
   state = {
     filteredInfo: null,
     sortedInfo: null,
@@ -65,14 +74,14 @@ export default class ManageNature extends Component {
       // },
       {
         title: "Equipment Name",
-        dataIndex: "equipment_name",
-        key: "equipment_name"
+        dataIndex: "equipmentName",
+        key: "equipmentName"
         // width: "6%",
       },
 
       {
         title: " Description",
-        dataIndex: " description",
+        dataIndex: "description",
         key: "description"
         // width: "6%",
       },
@@ -84,7 +93,7 @@ export default class ManageNature extends Component {
         render: (text, record) => (
           <span>
             <a>
-              <Icon type='edit' />
+              <Icon type='edit' style={{ color: "red" }} />
             </a>
             <Divider type='vertical' />
             <a>
@@ -109,7 +118,7 @@ export default class ManageNature extends Component {
         length
         title={() => <EquipmentTitle />}
         columns={columns}
-        // dataSource={data}
+        dataSource={eq}
         onChange={this.handleChange}
         pagination={{ defaultPageSize: 3 }}
         size={this.state.size}
@@ -117,3 +126,16 @@ export default class ManageNature extends Component {
     );
   }
 }
+
+const mapStateToProps = state => null;
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setEmployeeVisibility: () => {
+      dispatch({ type: SWITCH_TO_EDIT_MODE });
+      console.log("edit modal opened");
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ManageNature);

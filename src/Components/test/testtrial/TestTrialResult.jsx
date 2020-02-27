@@ -14,7 +14,16 @@ import { PrimaryButton } from "../../styledcomponents/button/button";
 import { TestResultInput } from "./inputs/TestResultInput";
 import Test from "./Test";
 import { SmallInput } from "../../styledcomponents/input/CustomInput";
+import theme from "../../../theme";
 const Option = Select;
+
+const tableStyle = {
+  background: theme.colors.primary,
+  borderRadius: "20px",
+  color: theme.colors.white,
+  height: "auto",
+  margin: "-10px"
+};
 
 const data1 = [
   {
@@ -144,7 +153,7 @@ export default class TestTrialResult extends Component {
           {/* Place */}
           <div className='input_wrapper'>
             <label for='address' className='label'>
-              Mix Design
+              Incoming Sample
             </label>
             <Input id='address' name='address' placeholder='' />
           </div>
@@ -198,7 +207,9 @@ export default class TestTrialResult extends Component {
                   pagination={false}
                   //   scroll={{ y: 100 | true }}
                   size='small'
-                  title={() => <h4>Material Related Parameter</h4>}
+                  title={() => (
+                    <h4 style={tableStyle}>Material Related Parameter</h4>
+                  )}
                 />
 
                 <AntTable
@@ -209,7 +220,9 @@ export default class TestTrialResult extends Component {
                   onChange={this.handleChange}
                   pagination={false}
                   size='small'
-                  title={() => <h4>Additional Parameter With Value</h4>}
+                  title={() => (
+                    <h4 style={tableStyle}>Additional Parameter With Value</h4>
+                  )}
                 />
 
                 <AntTable
@@ -220,7 +233,9 @@ export default class TestTrialResult extends Component {
                   onChange={this.handleChange}
                   pagination={false}
                   size='small'
-                  title={() => <h4>Equipment Related Parameter</h4>}
+                  title={() => (
+                    <h4 style={tableStyle}>Equipment Related Parameter</h4>
+                  )}
                 />
 
                 <AntTable
@@ -231,7 +246,9 @@ export default class TestTrialResult extends Component {
                   size='small'
                   dataSource={data3}
                   pagination={false}
-                  title={() => <h4>Test Related Parameter</h4>}
+                  title={() => (
+                    <h4 style={tableStyle}>Test Related Parameter</h4>
+                  )}
                 />
               </MasterLevelForm>
             </div>

@@ -25,7 +25,7 @@ export const TestPage = ({ match, location }) => {
 const testData = [
   {
     id: "1",
-    name: "Sieve Test",
+    name: "75% Micron Test",
     testtype: "materialtype",
     data: [
       {
@@ -93,7 +93,7 @@ const testData = [
   },
   {
     id: "2",
-    name: "Strength Test",
+    name: "Gravity Test",
     testtype: "materialtype",
     typeData: [
       {
@@ -104,7 +104,7 @@ const testData = [
   },
   {
     id: "3",
-    name: "pH Test",
+    name: "Moisture Test",
     testtype: "finishproducttype",
     typeData: [
       {
@@ -145,12 +145,12 @@ const testData = [
   },
   {
     id: "6",
-    name: "Gravity Test",
+    name: "Strength Test",
     testtype: "finishproducttype"
   },
   {
-    id: "7",
-    name: "75% Micron Test",
+    id: "Sieve Test",
+    name: "Sieve Test",
     testtype: "finishproducttype"
   },
   {

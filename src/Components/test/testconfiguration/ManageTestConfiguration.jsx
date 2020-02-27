@@ -36,7 +36,7 @@ export default class ManageTestConfiguration extends Component {
         key: "id"
       },
       {
-        title: <p style={{ color: "black" }}>Material </p>,
+        title: <p style={{ color: "black" }}>Sub Category </p>,
         dataIndex: "name",
         key: "name"
         // width: "16%"

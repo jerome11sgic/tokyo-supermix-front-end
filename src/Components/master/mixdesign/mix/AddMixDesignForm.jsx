@@ -49,6 +49,7 @@ class AddMixDesignForm extends Component {
 
   handleSubmit = e => {
     console.log(e);
+    console.log(this.props.form);
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
@@ -61,35 +62,39 @@ class AddMixDesignForm extends Component {
     });
   };
 
+  componentDidMount() {
+    console.log(this.props.screen);
+  }
   render() {
     const { visible, loading } = this.state;
+    const { getFieldDecorator } = this.props.form;
 
-    // const columns = [
-    //   { title: "RawMaterial", dataIndex: "rawmaterial", key: "rawmaterial" },
-    //   {
-    //     title: "Reliable",
-    //     dataIndex: "reliable",
-    //     key: "reliable",
-    //     render: () => <Checkbox onClick={this.toggle} />
-    //   },
-    //   {
-    //     title: "Quantity",
-    //     dataIndex: "quantity",
-    //     key: "quantity",
-    //     render: () => (
-    //       <Input style={{ width: "50px" }} disabled={this.state.disabled} />
-    //     )
-    //   },
-    //   {
-    //     title: "Unit",
-    //     dataIndex: "unit",
-    //     key: "unit",
-    //     render: () => (
-    //       <Input style={{ width: "50px" }} disabled={this.state.disabled} />
-    //     )
-    //   }
-    // ];
-    // const data = [];
+    const columns = [
+      { title: "RawMaterial", dataIndex: "rawmaterial", key: "rawmaterial" },
+      {
+        title: "Reliable",
+        dataIndex: "reliable",
+        key: "reliable",
+        render: () => <Checkbox onClick={this.toggle} />
+      },
+      {
+        title: "Quantity",
+        dataIndex: "quantity",
+        key: "quantity",
+        render: () => (
+          <Input style={{ width: "50px" }} disabled={this.state.disabled} />
+        )
+      },
+      {
+        title: "Unit",
+        dataIndex: "unit",
+        key: "unit",
+        render: () => (
+          <Input style={{ width: "50px" }} disabled={this.state.disabled} />
+        )
+      }
+    ];
+    const data = [];
     return (
       <div>
         <PrimaryButton
@@ -105,7 +110,7 @@ class AddMixDesignForm extends Component {
           Add Mix Design
         </PrimaryButton>
         <Modal
-          width='500px'
+          width='1100px'
           visible={visible}
           closable={false}
           onOk={this.handleOk}
@@ -144,74 +149,89 @@ class AddMixDesignForm extends Component {
         >
           <MasterLevelForm>
             {/* Form Area */}
-            {/* <div
+            <div
               style={{
                 display: "flex",
                 flexBasis: "500px",
                 flexWrap: "wrap",
                 justifyContent: "flex-start"
               }}
-            > */}
+            >
+              {/* Code */}
+              <div className='input_wrapper'>
+                <label for='code' className='label'>
+                  Code:
+                </label>
+                <Form.Item>
+                  {getFieldDecorator("code", {
+                    // rules: [{ required: true, message: "Please enter a code!" }]
+                  })(
+                    <Input
+                      id='code'
+                      name='code'
+                      // placeholder='Enter the Code '
+                      disabled
+                    />
+                  )}
+                </Form.Item>
+              </div>
+              {/* Plant Name */}
 
-            {/* Code */}
-            <div className='input_wrapper'>
-              <label for='code' className='label'>
-                Code:
-              </label>
-              <Input id='code' name='code' placeholder='Enter the Code ' />
+              {/* Place */}
+              <div className='input_wrapper'>
+                <label for='plant' className='label'>
+                  Plant
+                </label>
+                <Form.Item>
+                  {getFieldDecorator("plant", {
+                    rules: [{ required: true, message: "Please Select Plant!" }]
+                  })(
+                    <Select
+                      placeholder=' Plant'
+                      id='plant'
+                      name='plant '
+                      style={{ width: "180px" }}
+                    ></Select>
+                  )}
+                </Form.Item>
+              </div>
+              <div className='input_wrapper'>
+                <label for='grade' className='label'>
+                  Grade
+                </label>
+                <Form.Item>
+                  {getFieldDecorator("grade", {
+                    rules: [{ required: true, message: "Please Select Grade!" }]
+                  })(
+                    <Select
+                      id='grade'
+                      name='grade '
+                      placeholder='Enter Grade'
+                      style={{ width: "180px" }}
+                    ></Select>
+                  )}
+                </Form.Item>
+              </div>
+              {/* Place */}
+              <div className='input_wrapper'>
+                <label for='date' className='label'>
+                  Date
+                </label>
+                <Form.Item>
+                  {getFieldDecorator("date", {
+                    rules: [{ required: true, message: "Please Select date !" }]
+                  })(
+                    <DatePicker
+                      id='date'
+                      name='date'
+                      placeholder='Select Date'
+                    />
+                  )}
+                </Form.Item>
+              </div>
             </div>
 
-            {/* Plant */}
-            <div className='input_wrapper'>
-              <label for='plant' className='label'>
-                Plant
-              </label>
-
-              <Select
-                placeholder=' Plant'
-                id='plant'
-                name='plant '
-                style={{ width: "180px" }}
-              ></Select>
-            </div>
-
-            {/* Grade */}
-            <div className='input_wrapper'>
-              <label for='grade' className='label'>
-                Grade
-              </label>
-
-              <Select
-                id='grade'
-                name='grade '
-                placeholder='Enter Grade'
-                style={{ width: "180px" }}
-              ></Select>
-            </div>
-
-            {/* Grade */}
-            <div className='input_wrapper'>
-              <label for='material' className='label'>
-                Material
-              </label>
-
-              <Select
-                id='material'
-                name='material'
-                placeholder='Select Material'
-                style={{ width: 170 }}
-              ></Select>
-            </div>
-
-            {/* Data */}
-            <div className='input_wrapper'>
-              <label for='date' className='label'>
-                Date
-              </label>
-              <DatePicker id='date' name='date' placeholder='Select Date' />
-            </div>
-
-            {/* <div
+            <div
               style={{
                 display: "flex",
                 flexBasis: "500px",
@@ -225,8 +245,7 @@ class AddMixDesignForm extends Component {
                 dataSource={data}
                 size='small'
               />
-              */}
-            {/* </div>  */}
+            </div>
           </MasterLevelForm>
         </Modal>
       </div>
@@ -234,4 +253,5 @@ class AddMixDesignForm extends Component {
   }
 }
 
-export default AddMixDesignForm;
+const MixDesignForm = Form.create({ name: "add_mixdesign" })(AddMixDesignForm);
+export default MixDesignForm;
