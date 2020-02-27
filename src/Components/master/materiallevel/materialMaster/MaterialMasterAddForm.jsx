@@ -6,6 +6,8 @@ import {
   MasterLevelFormTitle,
   MasterLevelForm
 } from "../../../styledcomponents/form/MasterLevelForms";
+import { connect } from "react-redux";
+import { DISABLE_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
 
 const error = {
   color: "red",
@@ -26,6 +28,7 @@ class MaterialMasterAddForm extends Component {
       sub_category: "",
       material_name: ""
     },
+    code: "",
     material_category: "",
     sub_category: "",
     material_name: "",
@@ -209,12 +212,24 @@ class MaterialMasterAddForm extends Component {
     }
   };
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      visible: nextProps.visible,
+      code: nextProps.editPlantData.code,
+      material_category: nextProps.editPlantData.materialCategory,
+      sub_category: nextProps.editPlantData.subCategory,
+      material_name: nextProps.editPlantData.materialName,
+      type: nextProps.type
+    });
+  }
+
   render() {
     const {
       visible,
       loading,
       type,
       errors,
+      code,
       material_category,
       sub_category,
       material_name
@@ -280,7 +295,14 @@ class MaterialMasterAddForm extends Component {
                   Code:
                 </label>
 
-                <Input id='code' name='code' placeholder='Enter the Code ' />
+                <Input
+                  id='code'
+                  name='code'
+                  placeholder='Enter the Code '
+                  value={code}
+                  disabled
+                />
+                <div style={{ height: "12px" }}></div>
               </div>
             ) : (
               ""
@@ -310,6 +332,7 @@ class MaterialMasterAddForm extends Component {
               {errors.material_category.length > 0 && (
                 <div style={error}>{errors.material_category}</div>
               )}
+              <div style={{ height: "12px" }}></div>
             </div>
 
             {/* T.P No */}
@@ -332,6 +355,7 @@ class MaterialMasterAddForm extends Component {
               {errors.sub_category.length > 0 && (
                 <div style={error}>{errors.sub_category}</div>
               )}
+              <div style={{ height: "12px" }}></div>
             </div>
 
             <div className='input_wrapper'>
@@ -358,4 +382,26 @@ class MaterialMasterAddForm extends Component {
   }
 }
 
-export default MaterialMasterAddForm;
+const mapStateToProps = state => {
+  //getting the global redux state to get the data from the EditPlantReducer.js
+  return {
+    visible: state.plantLevelReducers.EditPlantReducer.visible,
+    type: state.plantLevelReducers.EditPlantReducer.type,
+    editPlantData: state.plantLevelReducers.EditPlantReducer.editPlantData
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    // setting visible to false if we close the modal .. and all state data will be deleted if this function is dispatched
+    setEquipmentPlantVisiblity: () => {
+      dispatch({ type: DISABLE_EDIT_MODE });
+      console.log("edit modal closed");
+    }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MaterialMasterAddForm);
