@@ -55,7 +55,8 @@ class AddCalibrationForm extends Component {
     description: "",
     status: "",
     errormgs: "",
-    type: "add"
+    type: "add",
+    supplier: ""
   };
 
   showModal = () => {
@@ -511,7 +512,7 @@ class AddCalibrationForm extends Component {
 
       if (res.data.results.Plantequipment.length > 0) {
         console.log("kkkkkkkkkk");
-        let equipmantplant = res.data.results.materialCategories.map(
+        let equipmantplantselect = res.data.results.materialCategories.map(
           (post, index) => {
             return (
               <Option value={post.id} key={index}>
@@ -521,7 +522,7 @@ class AddCalibrationForm extends Component {
           }
         );
         this.setState({
-          equipmantplant
+          equipmantplantselect
         });
       }
     });
@@ -532,8 +533,9 @@ class AddCalibrationForm extends Component {
       console.log(res.data);
 
       if (res.data.results.Supplier.length > 0) {
-        console.log("kkkkkkkkkk");
-        let supplier = res.data.results.Supplier.map((post, index) => {
+        let supplierselect = res.data.results.Supplier.map((post, index) => {
+          console.log(post.name);
+          console.log("kkkkkkkkkk");
           return (
             <Option value={post.id} key={index}>
               {post.name}
@@ -541,7 +543,7 @@ class AddCalibrationForm extends Component {
           );
         });
         this.setState({
-          supplier
+          supplierselect
         });
       }
     });
@@ -655,7 +657,7 @@ class AddCalibrationForm extends Component {
               >
                 {/* <Option value="eq01">Equipment 01</Option>
                 <Option value="eq02">Equipment 02</Option> */}
-                {this.state.Selectequipmantplant}
+                {this.state.equipmantplantselect}
               </Select>
               {errors.equipment_plant.length > 0 && (
                 <div style={error}>{errors.equipment_plant}</div>
@@ -731,7 +733,7 @@ class AddCalibrationForm extends Component {
               >
                 {/* <Option value="s01">Supplier 01</Option>
                 <Option value="s02">Supplier 02</Option> */}
-                {this.state.supplier}
+                {this.state.supplierselect}
               </Select>
               {errors.supplier.length > 0 && (
                 <div style={error}>{errors.supplier}</div>

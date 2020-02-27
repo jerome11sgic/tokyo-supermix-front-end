@@ -112,12 +112,6 @@ class ManageCalibration extends Component {
     filteredInfo = filteredInfo || {};
     const columns = [
       {
-        title: "Code",
-        dataIndex: "code",
-        key: "code"
-      },
-
-      {
         title: "Equipment Name",
         dataIndex: "plantEquipmentEquipmentName",
         key: "calibrated_date"
@@ -140,7 +134,7 @@ class ManageCalibration extends Component {
         key: "calibrated_by"
       },
       {
-        title: "Company",
+        title: "Supplier",
         dataIndex: "supplierName",
         key: "company"
       },
