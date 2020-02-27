@@ -3,11 +3,21 @@ import React, { Component } from "react";
 import { Table, Icon, Popconfirm, Divider } from "antd";
 import MaterialMasterTitle from "../titles/MaterialMasterTitle";
 import { AntTable } from "../../../styledcomponents/table/AntTabl";
+import { SWITCH_TO_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
+import { connect } from "react-redux";
+import { api } from "../../../services/AxiosService";
 
 // const Search = Input.Search;
-const data = [];
+const data = [
+  {
+    code: 1,
+    materialName: "Sand",
+    materialCategory: "Aggregate",
+    subCategory: "Fine"
+  }
+];
 
-export default class ManageMaterial extends Component {
+class ManageMaterial extends Component {
   state = {
     filteredInfo: null,
     sortedInfo: null,
@@ -49,6 +59,20 @@ export default class ManageMaterial extends Component {
     });
   };
 
+  //delete
+  onConfirmdelete(code) {
+    console.log("delete");
+    console.log(code);
+    let mesg = "equipmentplant delete";
+
+    api("DELETE", "supermix", "/material", "", "", code).then(res => {
+      console.log(res.data);
+      this.getallEquipmentPlant();
+      Notification("success", res.data.message);
+    });
+    console.log(this.state.id);
+  }
+
   handleChange = (pagination, filters, sorter) => {
     console.log("Various parameters", pagination, filters, sorter);
     this.setState({
@@ -68,84 +92,50 @@ export default class ManageMaterial extends Component {
     });
   };
 
-  setAgeSort = () => {
-    this.setState({
-      sortedInfo: {
-        order: "descend",
-        columnKey: "age"
-      }
-    });
-  };
-
   onChange(pageNumber) {
     console.log("Page: ", pageNumber);
   }
 
   render() {
-    let { sortedInfo, filteredInfo } = this.state;
-    sortedInfo = sortedInfo || {};
-    filteredInfo = filteredInfo || {};
     const columns = [
-      {
-        title: "Code",
-        dataIndex: "code",
-        key: "id"
-        // width: "5%",
-      },
+      // {
+      //   title: "Code",
+      //   dataIndex: "code",
+      //   key: "code"
+      //   // width: "5%",
+      // },
       {
         title: "Material Name",
-        dataIndex: "plantname",
-        key: "name"
+        dataIndex: "materialName",
+        key: "materialName"
         // width: "6%",
-        // filters: [
-        //   { text: "Joe", value: "Joe" },
-        //   { text: "Jim", value: "Jim" }
-        // ],
-        // filteredValue: filteredInfo.name || null,
-        // onFilter: (value, record) => record.name.includes(value),
-        // sorter: (a, b) => a.name.length - b.name.length,
-        // sortOrder: sortedInfo.columnKey === "name" && sortedInfo.order
       },
       {
-        title: "Main Category",
-        dataIndex: "place",
-        key: "place"
+        title: "Material Category",
+        dataIndex: "materialCategory",
+        key: "materialCategory"
         // width: "7%",
-        // filters: [
-        //   { text: "Vechical1", value: "Vechical1" },
-        //   { text: "Vechical2", value: " Vechical2" },
-        //   { text: "Vechical3", value: "Vechical3" },
-        //   { text: "Vechical4", value: "Vechical4" }
-        // ],
-        // filteredValue: filteredInfo.role || null,
-        // onFilter: (value, record) => record.role.includes(value),
-        // sorter: (a, b) => a.role.length - b.role.length,
-        // sortOrder: sortedInfo.columnKey === "role" && sortedInfo.order
       },
       {
         title: "Sub Category",
-        dataIndex: "place",
-        key: "place"
+        dataIndex: "subCategory",
+        key: "subCategory"
         // width: "7%",
-        // filters: [
-        //   { text: "Vechical1", value: "Vechical1" },
-        //   { text: "Vechical2", value: " Vechical2" },
-        //   { text: "Vechical3", value: "Vechical3" },
-        //   { text: "Vechical4", value: "Vechical4" }
-        // ],
-        // filteredValue: filteredInfo.role || null,
-        // onFilter: (value, record) => record.role.includes(value),
-        // sorter: (a, b) => a.role.length - b.role.length,
-        // sortOrder: sortedInfo.columnKey === "role" && sortedInfo.order
       },
       {
         title: "Edit & Delete",
         key: "action",
         width: "10%",
-        render: (text, record) => (
+        render: (text, record = this.state.data) => (
           <span>
             <a>
-              <Icon type='edit' />
+              <Icon
+                type='edit'
+                onClick={this.props.passEditMaterialRecordtoModal.bind(
+                  this,
+                  record
+                )}
+              />
             </a>
             <Divider type='vertical' />
             <a>
@@ -154,9 +144,10 @@ export default class ManageMaterial extends Component {
                 icon={
                   <Icon type='question-circle-o' style={{ color: "red" }} />
                 }
+                onConfirm={this.onConfirmdelete.bind(this, record.code)}
               >
                 <a href='#'>
-                  <Icon type='delete'></Icon>
+                  <Icon type='delete' style={{ color: "red" }}></Icon>
                 </a>
               </Popconfirm>
             </a>
@@ -178,3 +169,18 @@ export default class ManageMaterial extends Component {
     );
   }
 }
+
+const mapStateToProps = state => null;
+
+const mapDispatchToProps = dispatch => {
+  return {
+    // if this function dispatches modal will be shown and the data will be drawn :)
+    passEditMaterialRecordtoModal: record => {
+      //this payload is the data we pass into redux which is in the row which we clicked
+      dispatch({ type: SWITCH_TO_EDIT_MODE, payload: record });
+      console.log(record);
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ManageMaterial);
