@@ -66,17 +66,17 @@ class MaterialNatureAddForm extends Component {
           Add State
         </PrimaryButton>
         <Modal
-          width='330px'
+          width="330px"
           visible={visible}
           closable={false}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[
-            <Button key='back' onClick={this.handleCancel}>
+            <Button key="back" onClick={this.handleCancel}>
               Cancel
             </Button>,
             <PrimaryButton
-              key='submit'
+              key="submit"
               loading={loading}
               onClick={e => this.handleSubmit(e)}
               style={{ background: "#001328", color: "white", border: "none" }}
@@ -94,7 +94,7 @@ class MaterialNatureAddForm extends Component {
                 Add State
               </p>
               <Icon
-                type='close-circle'
+                type="close-circle"
                 onClick={this.handleCancel}
                 style={{
                   color: "white"
@@ -106,14 +106,14 @@ class MaterialNatureAddForm extends Component {
           <MasterLevelForm>
             {/* Code */}
             {this.state.type === "edit" ? (
-              <div className='input_wrapper'>
-                <label for='code' className='label'>
+              <div className="input_wrapper">
+                <label for="code" className="label">
                   Code:
                 </label>
 
                 <Input
-                  id='code'
-                  name='code'
+                  id="code"
+                  name="code"
                   // placeholder='Enter the Code '
                   disabled
                 />
@@ -122,12 +122,12 @@ class MaterialNatureAddForm extends Component {
               ""
             )}
             {/* User Role */}
-            <div className='input_wrapper'>
-              <label for='nature' className='label'>
+            <div className="input_wrapper">
+              <label for="nature" className="label">
                 State:
               </label>
 
-              <Input id='nature' name='nature' placeholder='Enter Nature' />
+              <Input id="nature" name="nature" placeholder="Enter Nature" />
             </div>
           </MasterLevelForm>
         </Modal>

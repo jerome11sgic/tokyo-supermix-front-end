@@ -4,6 +4,10 @@ import { Popconfirm, Divider, Icon } from "antd";
 
 import CalibrationTitle from "../title/CalibrationTitle";
 import { AntTable } from "../../../styledcomponents/table/AntTabl";
+import Notification from "../../../Constant/Notification";
+import { api } from "../../../services/AxiosService";
+import { SWITCH_TO_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
+import { connect } from "react-redux";
 
 export default class ManageCalibration extends Component {
   state = {
@@ -11,7 +15,8 @@ export default class ManageCalibration extends Component {
     sortedInfo: null,
     searchText: "",
     visible: false,
-    size: "small"
+    size: "small",
+    datalist: ""
   };
 
   componentWillMount() {
@@ -27,6 +32,10 @@ export default class ManageCalibration extends Component {
     }
   }
 
+  componentDidMount() {
+    console.log("ffhfhhfh");
+    this.getallplantCalibration();
+  }
   handleOk = e => {
     console.log(e);
     this.setState({
@@ -49,6 +58,17 @@ export default class ManageCalibration extends Component {
     });
   };
 
+  getallplantCalibration() {
+    api("GET", "supermix", "/plant-equipment-calibrations", "", "", "").then(
+      res => {
+        console.log(res.data);
+
+        this.setState({
+          datalist: res.data.results.equipmentPlantCalibrations
+        });
+      }
+    );
+  }
   clearFilters = () => {
     this.setState({ filteredInfo: null });
   };
@@ -72,6 +92,19 @@ export default class ManageCalibration extends Component {
   onChange(pageNumber) {
     console.log("Page: ", pageNumber);
   }
+  onConfirmdelete(id) {
+    console.log("ddddd");
+    console.log(id);
+    console.log("ddddd");
+    api("DELETE", "supermix", "/plant-equipment-calibration", "", "", id).then(
+      res => {
+        console.log(res.data);
+        this.getallplantCalibration();
+        Notification("success", res.data.message);
+      }
+    );
+    console.log(this.state.id);
+  }
 
   render() {
     let { sortedInfo, filteredInfo } = this.state;
@@ -81,109 +114,77 @@ export default class ManageCalibration extends Component {
       {
         title: "Code",
         dataIndex: "code",
-        key: "code",
-
-        filters: [
-          { text: "Joe", value: "Joe" },
-          { text: "Jim", value: "Jim" }
-        ],
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.code - b.code,
-        sortOrder: sortedInfo.columnKey === "code" && sortedInfo.order
+        key: "code"
       },
 
       {
         title: "Equipment Name",
-        dataIndex: "calibrated_date",
-        key: "calibrated_date",
-
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        dataIndex: "plantEquipmentEquipmentName",
+        key: "calibrated_date"
       },
 
       {
         title: "Calibrated Date",
-        dataIndex: "calibrated_date",
-        key: "calibrated_date",
-
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        dataIndex: "calibratedDate",
+        key: "calibrated_date"
       },
 
       {
         title: "Due Date",
-        dataIndex: "due_date",
-        key: "due_date",
-
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        dataIndex: "dueDate",
+        key: "due_date"
       },
       {
         title: "Calibrated By",
-        dataIndex: "calibrated_by",
-        key: "calibrated_by",
-
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        dataIndex: "userUsername",
+        key: "calibrated_by"
       },
       {
         title: "Company",
-        dataIndex: "company",
-        key: "company",
-
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        dataIndex: "supplierName",
+        key: "company"
       },
       {
         title: "Tester",
-        dataIndex: "tester",
-        key: "tester",
-
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        dataIndex: "userUsername",
+        key: "tester"
       },
       {
         title: "Description",
         dataIndex: "description",
-        key: "description",
-
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        key: "description"
+      },
+      {
+        title: "Status",
+        dataIndex: "status",
+        key: "description"
       },
       {
         title: "Edit & Delete",
         key: "action",
-        width: "10%",
-        render: (text, record) => (
+        width: "7%",
+        render: (text, record = this.state.datalist) => (
           <span>
             <a>
-              <Icon type='edit' />
+              <Icon
+                type="edit"
+                // onClick={this.props.passEditManageCategoryToModal.bind(
+                //   this,
+                //   record
+                // )}
+              />
             </a>
-            <Divider type='vertical' />
+            <Divider type="vertical" />
             <a>
               <Popconfirm
-                title='Are you sure you want to Delete this?'
+                title="Are you sure you want to Delete this?"
                 icon={
-                  <Icon type='question-circle-o' style={{ color: "red" }} />
+                  <Icon type="question-circle-o" style={{ color: "red" }} />
                 }
+                onConfirm={this.onConfirmdelete.bind(this, record.id)}
               >
-                <a href='#'>
-                  <Icon type='delete'></Icon>
+                <a href="#">
+                  <Icon type="delete" style={{ color: "red" }}></Icon>
                 </a>
               </Popconfirm>
             </a>
@@ -197,7 +198,7 @@ export default class ManageCalibration extends Component {
         title={() => <CalibrationTitle />}
         columns={columns}
         maxlength
-        // dataSource={data}
+        dataSource={this.state.datalist}
         onChange={this.handleChange}
         pagination={{ defaultPageSize: 3 }}
         size={this.state.size}
@@ -205,3 +206,15 @@ export default class ManageCalibration extends Component {
     );
   }
 }
+const mapDispatchToProps = dispatch => {
+  return {
+    // if this function dispatches modal will be shown and the data will be drawn :)
+    passEditManageCategoryToModal: record => {
+      //this payload is the data we pass into redux which is in the row which we clicked
+      dispatch({ type: SWITCH_TO_EDIT_MODE, payload: record });
+      console.log(record);
+    }
+  };
+};
+
+export default connect(null, mapDispatchToProps)(ManageCalibration);

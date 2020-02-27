@@ -10,12 +10,17 @@ import {
   Select
 } from "antd";
 import TextArea from "antd/lib/input/TextArea";
-
+import moment from "moment";
 import { PrimaryButton } from "../../../styledcomponents/button/button";
 import {
   MasterLevelFormTitle,
   MasterLevelForm
 } from "../../../styledcomponents/form/MasterLevelForms";
+import { api } from "../../../services/AxiosService";
+import Notification from "../../../Constant/Notification";
+import HandelError from "../../../Constant/HandleError";
+import { connect } from "react-redux";
+import { DISABLE_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
 
 const error = {
   color: "red",
@@ -218,6 +223,8 @@ class AddCalibrationForm extends Component {
     console.log(name);
     console.log(dateString);
     console.log(field);
+    let convertedDate = moment(dateString).format("DD-MM-YYYY");
+    console.log(convertedDate);
     if (name === "due_date") {
       this.setState({
         due_date: dateString
@@ -231,9 +238,48 @@ class AddCalibrationForm extends Component {
   }
 
   handleCancel = () => {
-    this.setState({ visible: false });
+    this.setState({
+      visible: false,
+      errors: {
+        equipment_plant: "",
+        // calibrated_date: "",
+        // due_date: "",
+        calibrated_by: "",
+        supplier: "",
+        tester: "",
+        status: ""
+      },
+      equipment_plant: "",
+      calibrated_date: "",
+      due_date: "",
+      calibrated_by: "",
+      supplier: "",
+      tester: "",
+      description: "",
+      status: "",
+      errormgs: "",
+      type: ""
+    });
   };
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      visible: nextProps.visible,
+      equipment_plant: nextProps.editPlantData.plantEquipmentEquipmentName,
+      calibrated_date: nextProps.editPlantData.calibratedDate,
+      due_date: nextProps.editPlantData.dueDate,
+      calibrated_by: nextProps.editPlantData.calibrationType,
+      supplier: nextProps.editPlantData.supplierName,
+      tester: nextProps.editPlantData.userUsername,
+      description: nextProps.editPlantData.description,
+      status: nextProps.editPlantData.status,
+      type: nextProps.type
+    });
+  }
+  componentDidMount() {
+    this.Selectequipmantplant();
+    this.Selectsupplier();
+  }
   handleSubmit = e => {
     e.preventDefault();
     const {
@@ -356,17 +402,93 @@ class AddCalibrationForm extends Component {
       errors.tester.length === 0
     ) {
       console.log("form is valid");
-      const data = {
-        equipment_plant: equipment_plant,
-        calibrated_date: calibrated_date,
-        due_date: due_date,
-        calibrated_by: calibrated_by,
-        supplier: supplier,
-        tester: tester,
-        description: description,
-        status: status
-      };
-      console.log(data);
+
+      if (this.state.type === "edit") {
+        console.log("edit part");
+        const data = {
+          plantEquipmentId: equipment_plant,
+          calibratedDate: moment(calibrated_date).format("DD-MM-YYYY"),
+          dueDate: moment(due_date).format("DD-MM-YYYY"),
+          calibrationType: calibrated_by,
+          supplierId: supplier,
+          userId: tester,
+          description: description,
+          status: status
+        };
+
+        // api("PUT", "supermix", "/equipment", "", data, "").then(
+        //   res => {
+        //     console.log(res.data);
+
+        //     Notification("success", res.data.message);
+        //     this.props.reload();
+        //     this.setState({ loading: true });
+        //     this.setState({
+        //       category_code: "",
+        //       category_name: "",
+        //       errormgs: ""
+        //     });
+        //     setTimeout(() => {
+        //       this.setState({ loading: false, visible: false });
+        //     }, 3000);
+        //   },
+        //   error => {
+        //     this.setState({
+        //       errormgs: error.validationFailures[0]
+        //     });
+        //     console.log("DEBUG34: ", error);
+        //     console.log(HandelError(error.validationFailures[0]));
+        //   }
+        // );
+      } else {
+        const data = {
+          plantEquipmentId: equipment_plant,
+          calibratedDate: moment(calibrated_date).format("DD-MM-YYYY"),
+          dueDate: moment(due_date).format("DD-MM-YYYY"),
+          calibrationType: calibrated_by,
+          supplierId: supplier,
+          userId: tester,
+          description: description,
+          status: status
+        };
+        api(
+          "POST",
+          "supermix",
+          "/plant-equipment-calibration",
+          "",
+          data,
+          ""
+        ).then(
+          res => {
+            console.log(res.data);
+
+            Notification("success", res.data.message);
+            this.props.reload();
+            this.setState({ loading: true });
+            this.setState({
+              equipment_plant: "",
+              calibrated_date: "",
+              due_date: "",
+              calibrated_by: "",
+              supplier: "",
+              tester: "",
+              description: "",
+              status: "",
+              errormgs: ""
+            });
+            setTimeout(() => {
+              this.setState({ loading: false, visible: false });
+            }, 3000);
+          },
+          error => {
+            this.setState({
+              errormgs: error.validationFailures[0]
+            });
+            console.log("DEBUG34: ", error);
+            console.log(HandelError(error.validationFailures[0]));
+          }
+        );
+      }
     }
   };
 
@@ -374,6 +496,48 @@ class AddCalibrationForm extends Component {
   disabledDate = current => {
     // Can not select days before today and today
     return current && current.valueOf() < Date.now();
+  };
+
+  Selectequipmantplant = () => {
+    api("GET", "supermix", "/plantequipments", "", "", "").then(res => {
+      console.log(res.data);
+
+      if (res.data.results.Plantequipment.length > 0) {
+        console.log("kkkkkkkkkk");
+        let equipmantplant = res.data.results.materialCategories.map(
+          (post, index) => {
+            return (
+              <Option value={post.id} key={index}>
+                {post.name}
+              </Option>
+            );
+          }
+        );
+        this.setState({
+          equipmantplant
+        });
+      }
+    });
+  };
+
+  Selectsupplier = () => {
+    api("GET", "supermix", "/suppliers", "", "", "").then(res => {
+      console.log(res.data);
+
+      if (res.data.results.materialCategories.length > 0) {
+        console.log("kkkkkkkkkk");
+        let supplier = res.data.results.Supplier.map((post, index) => {
+          return (
+            <Option value={post.id} key={index}>
+              {post.name}
+            </Option>
+          );
+        });
+        this.setState({
+          supplier
+        });
+      }
+    });
   };
 
   render() {
@@ -408,17 +572,17 @@ class AddCalibrationForm extends Component {
           Add Calibration
         </PrimaryButton>
         <Modal
-          width='800px'
+          width="800px"
           visible={visible}
           closable={false}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[
-            <Button key='back' onClick={this.handleCancel}>
+            <Button key="back" onClick={this.handleCancel}>
               Cancel
             </Button>,
             <PrimaryButton
-              key='submit'
+              key="submit"
               loading={loading}
               onClick={e => this.handleSubmit(e)}
               style={{ background: "#001328", color: "white", border: "none" }}
@@ -436,7 +600,7 @@ class AddCalibrationForm extends Component {
                 Add Equipment Calibration
               </p>
               <Icon
-                type='close-circle'
+                type="close-circle"
                 onClick={this.handleCancel}
                 style={{
                   color: "white"
@@ -450,15 +614,15 @@ class AddCalibrationForm extends Component {
 
             {/* Code */}
             {this.state.type === "edit" ? (
-              <div className='input_wrapper'>
-                <label for='code' className='label'>
+              <div className="input_wrapper">
+                <label for="code" className="label">
                   Code:
                 </label>
                 <Input
-                  id='code'
-                  name='code'
+                  id="code"
+                  name="code"
                   // value={}
-                  placeholder='Enter the Code '
+                  placeholder="Enter the Code "
                 />
                 <div style={{ height: "12px" }}></div>
               </div>
@@ -467,21 +631,22 @@ class AddCalibrationForm extends Component {
             )}
 
             {/* User Role */}
-            <div className='input_wrapper'>
-              <label for='equipment_plant' className='label'>
+            <div className="input_wrapper">
+              <label for="equipment_plant" className="label">
                 Equipment Plant:
               </label>
 
               <Select
-                id='equipment_plant'
-                name='equipment_plant'
-                placeholder='Select Equipment Plant'
+                id="equipment_plant"
+                name="equipment_plant"
+                placeholder="Select Equipment Plant"
                 style={{ width: 170 }}
                 value={equipment_plant}
                 onChange={value => this.handleSelect("equipment_plant", value)}
               >
-                <Option value='eq01'>Equipment 01</Option>
-                <Option value='eq02'>Equipment 02</Option>
+                {/* <Option value="eq01">Equipment 01</Option>
+                <Option value="eq02">Equipment 02</Option> */}
+                {this.state.Selectequipmantplant}
               </Select>
               {errors.equipment_plant.length > 0 && (
                 <div style={error}>{errors.equipment_plant}</div>
@@ -489,13 +654,13 @@ class AddCalibrationForm extends Component {
               <div style={{ height: "12px" }}></div>
             </div>
 
-            <div className='input_wrapper'>
-              <label for='calibrated_date' className='label'>
+            <div className="input_wrapper">
+              <label for="calibrated_date" className="label">
                 Calibrated Date:
               </label>
               <DatePicker
-                id='calibrated_date'
-                name='calibrated_date'
+                id="calibrated_date"
+                name="calibrated_date"
                 format={"DD-MM-YYYY"}
                 showToday
                 disabledDate={this.disabledDate()}
@@ -507,13 +672,13 @@ class AddCalibrationForm extends Component {
               />
               <div style={{ height: "12px" }}></div>
             </div>
-            <div className='input_wrapper'>
-              <label for='due_date' className='label'>
+            <div className="input_wrapper">
+              <label for="due_date" className="label">
                 Due Date:
               </label>
               <DatePicker
-                id='due_date'
-                name='due_date'
+                id="due_date"
+                name="due_date"
                 format={"DD-MM-YYYY"}
                 value={due_date}
                 onChange={(dateString, field) =>
@@ -524,39 +689,40 @@ class AddCalibrationForm extends Component {
 
               <div style={{ height: "12px" }}></div>
             </div>
-            <div className='input_wrapper'>
-              <label for='calibrated_by' className='label'>
+            <div className="input_wrapper">
+              <label for="calibrated_by" className="label">
                 Calibrated By:
               </label>
               <Radio.Group
-                id='calibrated_by'
-                name='calibrated_by'
+                id="calibrated_by"
+                name="calibrated_by"
                 checked={calibrated_by}
                 onChange={value => this.handleSelect("calibrated_by", value)}
               >
-                <Radio value='internal'>Internal </Radio>
-                <Radio value='external'>External</Radio>
+                <Radio value="internal">Internal </Radio>
+                <Radio value="external">External</Radio>
               </Radio.Group>
               {errors.calibrated_by.length > 0 && (
                 <div style={error}>{errors.calibrated_by}</div>
               )}
               <div style={{ height: "12px" }}></div>
             </div>
-            <div className='input_wrapper'>
-              <label for='supplier' className='label' style={{ left: "20px" }}>
+            <div className="input_wrapper">
+              <label for="supplier" className="label" style={{ left: "20px" }}>
                 Supplier:
               </label>
 
               <Select
-                id='supplier'
-                name='supplier'
-                placeholder='Select Supplier'
+                id="supplier"
+                name="supplier"
+                placeholder="Select Supplier"
                 style={{ width: 170 }}
                 value={supplier}
                 onChange={value => this.handleSelect("supplier", value)}
               >
-                <Option value='s01'>Supplier 01</Option>
-                <Option value='s02'>Supplier 02</Option>
+                {/* <Option value="s01">Supplier 01</Option>
+                <Option value="s02">Supplier 02</Option> */}
+                {this.state.supplier}
               </Select>
               {errors.supplier.length > 0 && (
                 <div style={error}>{errors.supplier}</div>
@@ -564,14 +730,14 @@ class AddCalibrationForm extends Component {
               <div style={{ height: "12px" }}></div>
             </div>
 
-            <div className='input_wrapper'>
-              <label for='tester' className='label'>
+            <div className="input_wrapper">
+              <label for="tester" className="label">
                 Tester:
               </label>
               <Input
-                id='tester'
-                name='tester'
-                placeholder='Enter Tester'
+                id="tester"
+                name="tester"
+                placeholder="Enter Tester"
                 value={tester}
                 onChange={this.handleChange}
               />
@@ -581,32 +747,35 @@ class AddCalibrationForm extends Component {
               <div style={{ height: "12px" }}></div>
             </div>
 
-            <div className='input_wrapper'>
-              <label for='description' className='label'>
+            <div className="input_wrapper">
+              <label for="description" className="label">
                 Description:
               </label>
               <TextArea
-                id='description'
-                name='description'
-                placeholder='Enter Description'
+                id="description"
+                name="description"
+                placeholder="Enter Description"
                 style={{ width: "400px" }}
+                value={this.state.description}
+                onChange={this.handleChange}
               />
             </div>
 
-            <div className='input_wrapper'>
-              <label for='status' className='label'>
+            <div className="input_wrapper">
+              <label for="status" className="label">
                 Status:
               </label>
               <Select
-                id='status'
-                name='status'
-                placeholder='Select Status'
+                id="status"
+                name="status"
+                placeholder="Select Status"
                 style={{ width: 170 }}
                 value={status}
                 onChange={value => this.handleSelect("status", value)}
               >
-                <Option value='st01'>Status 01</Option>
-                <Option value='st02'>Status 02</Option>
+                <Option value="pass">pass</Option>
+                <Option value="fail">fail</Option>
+                <Option value="pending">pending</Option>
               </Select>
               {errors.status.length > 0 && (
                 <div style={error}>{errors.status}</div>
@@ -620,4 +789,22 @@ class AddCalibrationForm extends Component {
   }
 }
 
-export default AddCalibrationForm;
+const mapStateToProps = state => {
+  //getting the global redux state to get the data from the EditPlantReducer.js
+  return {
+    visible: state.plantLevelReducers.EditPlantReducer.visible,
+    type: state.plantLevelReducers.EditPlantReducer.type,
+    editPlantData: state.plantLevelReducers.EditPlantReducer.editPlantData
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setCalibrationVisibility: () => {
+      dispatch({ type: DISABLE_EDIT_MODE });
+      console.log("edit modal closed");
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddCalibrationForm);
