@@ -167,24 +167,24 @@ class ManageCalibration extends Component {
           <span>
             <a>
               <Icon
-                type='edit'
-                // onClick={this.props.passEditManageCategoryToModal.bind(
-                //   this,
-                //   record
-                // )}
+                type="edit"
+                onClick={this.props.passEditManageCategoryToModal.bind(
+                  this,
+                  record
+                )}
               />
             </a>
-            <Divider type='vertical' />
+            <Divider type="vertical" />
             <a>
               <Popconfirm
-                title='Are you sure you want to Delete this?'
+                title="Are you sure you want to Delete this?"
                 icon={
-                  <Icon type='question-circle-o' style={{ color: "red" }} />
+                  <Icon type="question-circle-o" style={{ color: "red" }} />
                 }
                 onConfirm={this.onConfirmdelete.bind(this, record.id)}
               >
-                <a href='#'>
-                  <Icon type='delete' style={{ color: "red" }}></Icon>
+                <a href="#">
+                  <Icon type="delete" style={{ color: "red" }}></Icon>
                 </a>
               </Popconfirm>
             </a>
@@ -200,7 +200,7 @@ class ManageCalibration extends Component {
         maxlength
         dataSource={this.state.datalist}
         onChange={this.handleChange}
-        pagination={{ defaultPageSize: 3 }}
+        pagination={{ defaultPageSize: 8 }}
         size={this.state.size}
       />
     );
