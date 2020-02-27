@@ -9,7 +9,7 @@ import { api } from "../../../services/AxiosService";
 import { SWITCH_TO_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
 import { connect } from "react-redux";
 
-export default class ManageCalibration extends Component {
+class ManageCalibration extends Component {
   state = {
     filteredInfo: null,
     sortedInfo: null,
@@ -168,10 +168,10 @@ export default class ManageCalibration extends Component {
             <a>
               <Icon
                 type="edit"
-                // onClick={this.props.passEditManageCategoryToModal.bind(
-                //   this,
-                //   record
-                // )}
+                onClick={this.props.passEditManageCategoryToModal.bind(
+                  this,
+                  record
+                )}
               />
             </a>
             <Divider type="vertical" />
@@ -200,7 +200,7 @@ export default class ManageCalibration extends Component {
         maxlength
         dataSource={this.state.datalist}
         onChange={this.handleChange}
-        pagination={{ defaultPageSize: 3 }}
+        pagination={{ defaultPageSize: 8 }}
         size={this.state.size}
       />
     );

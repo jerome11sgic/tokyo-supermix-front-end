@@ -238,6 +238,9 @@ class AddCalibrationForm extends Component {
   }
 
   handleCancel = () => {
+    if (this.state.type === "edit") {
+      this.props.setCalibrationVisibility();
+    }
     this.setState({
       visible: false,
       errors: {
@@ -266,8 +269,12 @@ class AddCalibrationForm extends Component {
     this.setState({
       visible: nextProps.visible,
       equipment_plant: nextProps.editPlantData.plantEquipmentEquipmentName,
-      calibrated_date: nextProps.editPlantData.calibratedDate,
-      due_date: nextProps.editPlantData.dueDate,
+      calibrated_date: moment(
+        nextProps.editPlantData.calibratedDate,
+        "DD-MM-YYYY"
+      ),
+
+      due_date: moment(nextProps.editPlantData.dueDate, "DD-MM-YYYY"),
       calibrated_by: nextProps.editPlantData.calibrationType,
       supplier: nextProps.editPlantData.supplierName,
       tester: nextProps.editPlantData.userUsername,
@@ -524,7 +531,7 @@ class AddCalibrationForm extends Component {
     api("GET", "supermix", "/suppliers", "", "", "").then(res => {
       console.log(res.data);
 
-      if (res.data.results.materialCategories.length > 0) {
+      if (res.data.results.Supplier.length > 0) {
         console.log("kkkkkkkkkk");
         let supplier = res.data.results.Supplier.map((post, index) => {
           return (
@@ -597,7 +604,9 @@ class AddCalibrationForm extends Component {
                   color: "white"
                 }}
               >
-                Add Equipment Calibration
+                {this.state.type === "edit"
+                  ? "Edit Equipment Calibration"
+                  : " Add Equipment Calibration"}
               </p>
               <Icon
                 type="close-circle"
