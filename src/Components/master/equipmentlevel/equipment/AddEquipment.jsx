@@ -8,6 +8,11 @@ import {
   MasterLevelForm
 } from "../../../styledcomponents/form/MasterLevelForms";
 import TextArea from "antd/lib/input/TextArea";
+import { api } from "../../../services/AxiosService";
+import Notification from "../../../Constant/Notification";
+import HandelError from "../../../Constant/HandleError";
+import { connect } from "react-redux";
+import { DISABLE_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
 
 const error = {
   color: "red",
@@ -27,9 +32,10 @@ class AddEquipment extends Component {
       name: ""
       // description: ""
     },
+    equipment_code: "",
     equipment_name: "",
     equipment_description: "",
-    type: "add"
+    type: ""
   };
   showModal = () => {
     this.setState({
@@ -51,6 +57,16 @@ class AddEquipment extends Component {
     return valid;
   };
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      visible: nextProps.visible,
+      equipment_code: nextProps.editPlantData.id,
+      equipment_name: nextProps.editPlantData.name,
+      equipment_description: nextProps.editPlantData.description,
+      type: nextProps.type
+    });
+  }
+
   countErrors = errors => {
     let count = 0;
     Object.values(errors).forEach(val => val.length > 0 && (count = count + 1));
@@ -58,12 +74,19 @@ class AddEquipment extends Component {
   };
 
   handleCancel = () => {
+    if (this.state.type === "edit") {
+      this.props.setEquipmentVisibility();
+    }
     this.setState({
       visible: false,
       errors: {
         name: ""
       },
-      equipment_name: ""
+      equipment_name: "",
+      equipment_description: "",
+      equipment_code: "",
+      errormgs: "",
+      type: ""
     });
   };
 
@@ -121,23 +144,86 @@ class AddEquipment extends Component {
       });
     } else if (this.state.errors.name.length === 0) {
       console.log("form is valid");
-      const data = {
-        equipment_name: this.state.equipment_name,
-        equipment_description: this.state.equipment_description
-      };
-      console.log(data);
+      // const data = {
+      //   equipment_name: this.state.equipment_name,
+      //   equipment_description: this.state.equipment_description
+      // };
+      // console.log(data);
 
-      this.setState({
-        loading: true,
-        errors: {
-          name: ""
-        },
-        equipment_name: "",
-        equipment_description: ""
-      });
+      // this.setState({
+      //   loading: true,
+      //   errors: {
+      //     name: ""
+      //   },
+      //   equipment_name: "",
+      //   equipment_description: ""
+      // });
       setTimeout(() => {
         this.setState({ loading: false, visible: false });
       }, 1500);
+    }
+
+    if (this.state.type === "edit") {
+      console.log("add part");
+      const data = {
+        id: this.state.equipment_code,
+        name: this.state.equipment_name,
+        description: this.state.equipment_description
+      };
+
+      api("PUT", "supermix", "/equipment", "", data, "").then(
+        res => {
+          console.log(res.data);
+
+          Notification("success", res.data.message);
+          this.props.reload();
+          this.setState({ loading: true });
+          this.setState({
+            category_code: "",
+            category_name: "",
+            errormgs: ""
+          });
+          setTimeout(() => {
+            this.setState({ loading: false, visible: false });
+          }, 3000);
+        },
+        error => {
+          this.setState({
+            errormgs: error.validationFailures[0]
+          });
+          console.log("DEBUG34: ", error);
+          console.log(HandelError(error.validationFailures[0]));
+        }
+      );
+    } else {
+      let data = {
+        name: this.state.equipment_name,
+        description: this.state.equipment_description
+      };
+      api("POST", "supermix", "/equipment", "", data, "").then(
+        res => {
+          console.log(res.data);
+
+          Notification("success", res.data.message);
+          this.props.reload();
+          this.setState({ loading: true });
+          this.setState({
+            equipment_name: "",
+            equipment_description: "",
+            errormgs: ""
+          });
+          setTimeout(() => {
+            this.setState({ loading: false, visible: false });
+          }, 3000);
+        },
+        error => {
+          this.setState({
+            errormgs: error.validationFailures[0]
+          });
+          console.log("DEBUG34: ", error);
+          console.log(HandelError(error.validationFailures[0]));
+        }
+      );
     }
   };
 
@@ -159,16 +245,16 @@ class AddEquipment extends Component {
           Add Equipment
         </PrimaryButton>
         <Modal
-          width='480px'
+          width="480px"
           visible={visible}
           closable={false}
           onCancel={this.handleCancel}
           footer={[
-            <Button key='back' onClick={this.handleCancel}>
+            <Button key="back" onClick={this.handleCancel}>
               Cancel
             </Button>,
             <PrimaryButton
-              key='submit'
+              key="submit"
               loading={loading}
               onClick={e => this.handleSubmit(e)}
               style={{ background: "#001328", color: "white", border: "none" }}
@@ -183,10 +269,12 @@ class AddEquipment extends Component {
                   color: "white"
                 }}
               >
-                Add Equipments
+                {this.state.type === "edit"
+                  ? " Edit Equipments"
+                  : " Add Equipments"}
               </p>
               <Icon
-                type='close-circle'
+                type="close-circle"
                 onClick={this.handleCancel}
                 style={{
                   color: "white"
@@ -200,14 +288,15 @@ class AddEquipment extends Component {
 
             {/* Code */}
             {this.state.type === "edit" ? (
-              <div className='input_wrapper'>
-                <label for='code' className='label'>
+              <div className="input_wrapper">
+                <label for="code" className="label">
                   Code:
                 </label>
                 <Input
-                  id='code'
-                  name='code'
+                  id="code"
+                  name="code"
                   // placeholder='Enter the Code '
+                  value={this.state.equipment_code}
                   disabled
                 />
               </div>
@@ -216,30 +305,35 @@ class AddEquipment extends Component {
             )}
 
             {/* User Role */}
-            <div className='input_wrapper'>
-              <label for='equipment_name' className='label'>
+            <div className="input_wrapper">
+              <label for="equipment_name" className="label">
                 Equipment Name:
               </label>
 
               <Input
-                id='equipment_name'
-                name='equipment_name'
-                placeholder='Enter Equipment Name'
+                id="equipment_name"
+                name="equipment_name"
+                placeholder="Enter Equipment Name"
                 value={this.state.equipment_name}
                 onChange={this.handleChange}
               />
               {errors.name.length > 0 && <div style={error}>{errors.name}</div>}
+              {this.state.errormgs.message == "name" ? (
+                <div style={error}>{HandelError(this.state.errormgs)}</div>
+              ) : (
+                ""
+              )}
               <div style={{ height: "12.5px" }}></div>
             </div>
 
-            <div className='input_wrapper'>
-              <label for='equipment_description' className='label'>
+            <div className="input_wrapper">
+              <label for="equipment_description" className="label">
                 Description:
               </label>
               <TextArea
-                id='equipment_description'
-                name='equipment_description'
-                placeholder='Enter Description '
+                id="equipment_description"
+                name="equipment_description"
+                placeholder="Enter Description "
                 style={{ width: "180px" }}
                 value={this.state.equipment_description}
                 onChange={this.handleChange}
@@ -256,4 +350,22 @@ class AddEquipment extends Component {
   }
 }
 
-export default AddEquipment;
+const mapStateToProps = state => {
+  //getting the global redux state to get the data from the EditPlantReducer.js
+  return {
+    visible: state.plantLevelReducers.EditPlantReducer.visible,
+    type: state.plantLevelReducers.EditPlantReducer.type,
+    editPlantData: state.plantLevelReducers.EditPlantReducer.editPlantData
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setEquipmentVisibility: () => {
+      dispatch({ type: DISABLE_EDIT_MODE });
+      console.log("edit modal closed");
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddEquipment);

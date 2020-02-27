@@ -12,11 +12,14 @@ const style = {
 };
 
 export default class EquipmentTitle extends Component {
+  getallequpiment = () => {
+    this.props.reload();
+  };
   render() {
     return (
       <FlexContainer titles leveltitles>
         <Paragraph style={style}>Equipment Master</Paragraph>
-        <AddEquipment />
+        <AddEquipment reload={this.getallequpiment} />
       </FlexContainer>
     );
   }
