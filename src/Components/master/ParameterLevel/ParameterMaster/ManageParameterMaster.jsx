@@ -4,14 +4,39 @@ import { Popconfirm, Divider, Icon } from "antd";
 
 import { AntTable } from "../../../styledcomponents/table/AntTabl";
 import ParameterTitle from "../titles/ParameterTitle";
+import { api } from "../../../services/AxiosService";
+import { SWITCH_TO_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
+import { connect } from "react-redux";
 
-export default class ManageParameterMaster extends Component {
+// const data = [
+//   {
+//     key: "1",
+//     code: "Mike",
+//     name: 32,
+//     abbrivation: "10 Downing Street"
+//   },
+//   {
+//     key: "2",
+//     code: "John",
+//     name: "dfsdfgf",
+//     abbrivation: "10 Downing Street"
+//   },
+//   {
+//     key: "3",
+//     code: "John",
+//     name: "dfsdfgf",
+//     abbrivation: "10 Downing Street"
+//   }
+// ];
+class ManageParameterMaster extends Component {
   state = {
     filteredInfo: null,
     sortedInfo: null,
     searchText: "",
     visible: false,
-    size: "small"
+    size: "small",
+    data: "",
+    id: ""
   };
 
   componentWillMount() {
@@ -25,6 +50,31 @@ export default class ManageParameterMaster extends Component {
         size: "small"
       });
     }
+  }
+
+  componentDidMount() {
+    this.getallParameter();
+  }
+
+  getallParameter = () => {
+    api("GET", "supermix", "/parameters", "", "", "").then(res => {
+      console.log(res.data);
+      this.setState({
+        data: res.data.results.parameter
+      });
+    });
+  };
+
+  onConfirmdelete(code) {
+    console.log(code);
+    let mesg = "Parameter delete";
+
+    api("DELETE", "supermix", "/parameter", "", "", code).then(res => {
+      console.log(res.data);
+      this.getallParameter();
+      Notification("success", res.data.message);
+    });
+    console.log(this.state.id);
   }
 
   handleOk = e => {
@@ -81,12 +131,9 @@ export default class ManageParameterMaster extends Component {
       {
         title: "Code",
         dataIndex: "code",
-        key: "code",
+        key: "id",
         width: "4%",
-        filters: [
-          { text: "Joe", value: "Joe" },
-          { text: "Jim", value: "Jim" }
-        ],
+
         filteredValue: filteredInfo.name || null,
         onFilter: (value, record) => record.name.includes(value),
         sorter: (a, b) => a.code - b.code,
@@ -94,22 +141,39 @@ export default class ManageParameterMaster extends Component {
       },
       {
         title: " Parameter Name",
-        dataIndex: "Name",
-        key: "user",
+        dataIndex: "name",
+        key: "name",
         width: "6%",
         filteredValue: filteredInfo.name || null,
         onFilter: (value, record) => record.name.includes(value),
         sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        sortOrder: sortedInfo.columnKey === "name" && sortedInfo.order
+      },
+      {
+        title: " Abbrivation",
+        dataIndex: "abbrivation",
+        key: "abbrivation",
+        width: "6%",
+        filteredValue: filteredInfo.name || null,
+        onFilter: (value, record) => record.name.includes(value),
+        sorter: (a, b) => a.user - b.user,
+        sortOrder: sortedInfo.columnKey === "abbrivation" && sortedInfo.order
       },
       {
         title: "Edit & Delete",
         key: "action",
         width: "7%",
-        render: (text, record) => (
+        render: (text, record = this.state.data) => (
           <span>
             <a>
-              <Icon type='edit' />
+              <Icon
+                type='edit'
+                style={{ fontSize: "1.2em" }}
+                onClick={this.props.passEditPlantRecordtoModal.bind(
+                  this,
+                  record
+                )}
+              />
             </a>
             <Divider type='vertical' />
             <a>
@@ -118,9 +182,13 @@ export default class ManageParameterMaster extends Component {
                 icon={
                   <Icon type='question-circle-o' style={{ color: "red" }} />
                 }
+                onConfirm={this.onConfirmdelete.bind(this, record.code)}
               >
                 <a href='#'>
-                  <Icon type='delete'></Icon>
+                  <Icon
+                    type='delete'
+                    style={{ color: "red", fontSize: "1.2em" }}
+                  />
                 </a>
               </Popconfirm>
             </a>
@@ -132,12 +200,31 @@ export default class ManageParameterMaster extends Component {
     return (
       <AntTable
         length
-        title={() => <ParameterTitle />}
+        title={() => <ParameterTitle reload={this.getallParameter} />}
         columns={columns}
         onChange={this.handleChange}
-        pagination={{ defaultPageSize: 3 }}
+        dataSource={this.state.data}
+        pagination={{ defaultPageSize: 7 }}
         size={this.state.size}
       />
     );
   }
 }
+
+const mapStateToProps = state => null;
+
+const mapDispatchToProps = dispatch => {
+  return {
+    // if this function dispatches modal will be shown and the data will be drawn :)
+    passEditPlantRecordtoModal: record => {
+      //this payload is the data we pass into redux which is in the row which we clicked
+      dispatch({ type: SWITCH_TO_EDIT_MODE, payload: record });
+      console.log(record);
+    }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ManageParameterMaster);
