@@ -5,6 +5,7 @@ import MaterialMasterTitle from "../titles/MaterialMasterTitle";
 import { AntTable } from "../../../styledcomponents/table/AntTabl";
 import { SWITCH_TO_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
 import { connect } from "react-redux";
+import { api } from "../../../services/AxiosService";
 
 // const Search = Input.Search;
 const data = [
@@ -57,6 +58,20 @@ class ManageMaterial extends Component {
       visible: false
     });
   };
+
+  //delete
+  onConfirmdelete(code) {
+    console.log("delete");
+    console.log(code);
+    let mesg = "equipmentplant delete";
+
+    api("DELETE", "supermix", "/material", "", "", code).then(res => {
+      console.log(res.data);
+      this.getallEquipmentPlant();
+      Notification("success", res.data.message);
+    });
+    console.log(this.state.id);
+  }
 
   handleChange = (pagination, filters, sorter) => {
     console.log("Various parameters", pagination, filters, sorter);
@@ -111,7 +126,7 @@ class ManageMaterial extends Component {
         title: "Edit & Delete",
         key: "action",
         width: "10%",
-        render: (text, record) => (
+        render: (text, record = this.state.data) => (
           <span>
             <a>
               <Icon
@@ -129,6 +144,7 @@ class ManageMaterial extends Component {
                 icon={
                   <Icon type='question-circle-o' style={{ color: "red" }} />
                 }
+                onConfirm={this.onConfirmdelete.bind(this, record.code)}
               >
                 <a href='#'>
                   <Icon type='delete' style={{ color: "red" }}></Icon>
