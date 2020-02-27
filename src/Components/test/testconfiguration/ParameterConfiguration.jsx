@@ -116,27 +116,26 @@ export default class ParameterConfiguration extends Component {
     return (
       <FlexContainer style={{ justifyContent: "center" }}>
         <AntTable
-          style={{ width: "1200px" }}
-          length
+          maxlength
           size={this.state.size}
           columns={columns2}
           dataSource={data2}
           title={() => <AdditionalParameterTitle />}
         />
         <AntTable
-          style={{ width: "600px" }}
+          maxlength
           size={this.state.size}
           columns={columns3}
           dataSource={data1}
           title={() => <h3>Equipment Parameter</h3>}
         />
-        <AntTable
+        {/* <AntTable
           style={{ width: "600px", height: "200px" }}
           size={this.state.size}
           // columns={columns1}
           // dataSource={data}
           title={() => <h3>Parameter Configuration</h3>}
-        />
+        /> */}
       </FlexContainer>
     );
   }

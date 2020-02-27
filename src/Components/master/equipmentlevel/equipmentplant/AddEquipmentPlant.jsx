@@ -277,6 +277,18 @@ class AddEquipmentPlant extends Component {
     }
   };
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      visible: nextProps.visible,
+      serial_no: nextProps.editPlantData.serial_no,
+      equipment: nextProps.editPlantData.equipment,
+      plant: nextProps.editPlantData.plant,
+      model_name: nextProps.editPlantData.model_name,
+      brand_name: nextProps.editPlantData.brand_name,
+      type: nextProps.type
+    });
+  }
+
   handleCancel = () => {
     this.setState({ visible: false });
   };

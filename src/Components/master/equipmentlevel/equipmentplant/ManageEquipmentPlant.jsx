@@ -4,15 +4,19 @@ import { Popconfirm, Divider, Icon } from "antd";
 
 import { AntTable } from "../../../styledcomponents/table/AntTabl";
 import EquipmentPlantTitle from "../title/EquipmentPlantTitle";
+import { SWITCH_TO_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
+import { connect } from "react-redux";
+import { api } from "../../../services/AxiosService";
 
-export default class ManageEquipmentPlant extends Component {
+class ManageEquipmentPlant extends Component {
   state = {
     filteredInfo: null,
     sortedInfo: null,
     searchText: "",
     visible: false,
     size: "small",
-    type: "add"
+    type: "add",
+    data: ""
   };
 
   componentWillMount() {
@@ -27,6 +31,20 @@ export default class ManageEquipmentPlant extends Component {
       });
     }
   }
+
+  componentDidMount() {
+    this.getallEquipmentPlant();
+  }
+
+  //get all
+  getallEquipmentPlant = () => {
+    api("GET", "supermix", "/plantequipment", "", "", "").then(res => {
+      console.log(res);
+      // this.setState({
+      //   data: res.data.results
+      // });
+    });
+  };
 
   handleOk = e => {
     console.log(e);
@@ -94,7 +112,13 @@ export default class ManageEquipmentPlant extends Component {
         render: (text, record) => (
           <span>
             <a>
-              <Icon type='edit' />
+              <Icon
+                type='edit'
+                onClick={this.props.passEditEquipmentPlantRecordtoModal.bind(
+                  this,
+                  record
+                )}
+              />
             </a>
             <Divider type='vertical' />
             <a>
@@ -117,9 +141,10 @@ export default class ManageEquipmentPlant extends Component {
     return (
       <AntTable
         length
-        title={() => <EquipmentPlantTitle />}
+        title={() => <EquipmentPlantTitle reload={this.getallEquipmentPlant} />}
         columns={columns}
         // dataSource={data}
+        dataSource={this.state.data}
         onChange={this.handleChange}
         pagination={{ defaultPageSize: 3 }}
         size={this.state.size}
@@ -127,3 +152,21 @@ export default class ManageEquipmentPlant extends Component {
     );
   }
 }
+
+const mapStateToProps = state => null;
+
+const mapDispatchToProps = dispatch => {
+  return {
+    // if this function dispatches modal will be shown and the data will be drawn :)
+    passEditEquipmentPlantRecordtoModal: record => {
+      //this payload is the data we pass into redux which is in the row which we clicked
+      dispatch({ type: SWITCH_TO_EDIT_MODE, payload: record });
+      console.log(record);
+    }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ManageEquipmentPlant);

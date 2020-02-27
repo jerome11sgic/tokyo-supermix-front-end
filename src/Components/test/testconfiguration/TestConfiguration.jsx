@@ -49,7 +49,7 @@ export default class TestConfiguration extends Component {
               />
             </div>
             {/* First Name */}
-            <div className='input_wrapper'>
+            {/* <div className='input_wrapper'>
               <label for='firstname' className='label'>
                 PreFix
               </label>
@@ -59,7 +59,7 @@ export default class TestConfiguration extends Component {
                 placeholder='Enter Prefix'
                 className='input_Field'
               />
-            </div>
+            </div> */}
             {/* Last Name */}
             <div className='input_wrapper'>
               <label for='lastname' className='label'>
