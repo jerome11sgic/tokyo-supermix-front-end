@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "c8ddf89d5721dac70feedc2c1af6b192",
+    "revision": "18c092312e99978a5300f6770bc22128",
     "url": "/tokyo-supermix-front-end/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/tokyo-supermix-front-end/static/css/2.21f2965d.chunk.css"
   },
   {
-    "revision": "c43849bc4ad50bbe2ee4",
+    "revision": "46b476401d4485a86c58",
     "url": "/tokyo-supermix-front-end/static/css/main.e45d53a6.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/tokyo-supermix-front-end/static/js/2.cd003753.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "c43849bc4ad50bbe2ee4",
-    "url": "/tokyo-supermix-front-end/static/js/main.d9c1f4c6.chunk.js"
+    "revision": "46b476401d4485a86c58",
+    "url": "/tokyo-supermix-front-end/static/js/main.6dc8b795.chunk.js"
   },
   {
     "revision": "fc78949a24b306440b3b",
