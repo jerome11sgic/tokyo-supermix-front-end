@@ -55,7 +55,8 @@ class AddCalibrationForm extends Component {
     description: "",
     status: "",
     errormgs: "",
-    type: "add"
+    type: "add",
+    supplier: ""
   };
 
   showModal = () => {
@@ -509,21 +510,19 @@ class AddCalibrationForm extends Component {
     api("GET", "supermix", "/plantequipments", "", "", "").then(res => {
       console.log(res.data);
 
-      if (res.data.results.Plantequipment.length > 0) {
-        console.log("kkkkkkkkkk");
-        let equipmantplant = res.data.results.materialCategories.map(
-          (post, index) => {
-            return (
-              <Option value={post.id} key={index}>
-                {post.name}
-              </Option>
-            );
-          }
-        );
-        this.setState({
-          equipmantplant
-        });
-      }
+      console.log("kkkkkkkkkk");
+      let equipmantplantselect = res.data.results.Plantequipments.map(
+        (post, index) => {
+          return (
+            <Option value={post.id} key={index}>
+              {post.name}
+            </Option>
+          );
+        }
+      );
+      this.setState({
+        equipmantplantselect
+      });
     });
   };
 
@@ -532,8 +531,9 @@ class AddCalibrationForm extends Component {
       console.log(res.data);
 
       if (res.data.results.Supplier.length > 0) {
-        console.log("kkkkkkkkkk");
-        let supplier = res.data.results.Supplier.map((post, index) => {
+        let supplierselect = res.data.results.Supplier.map((post, index) => {
+          console.log(post.name);
+          console.log("kkkkkkkkkk");
           return (
             <Option value={post.id} key={index}>
               {post.name}
@@ -541,7 +541,7 @@ class AddCalibrationForm extends Component {
           );
         });
         this.setState({
-          supplier
+          supplierselect
         });
       }
     });
@@ -579,17 +579,17 @@ class AddCalibrationForm extends Component {
           Add Calibration
         </PrimaryButton>
         <Modal
-          width="800px"
+          width='800px'
           visible={visible}
           closable={false}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[
-            <Button key="back" onClick={this.handleCancel}>
+            <Button key='back' onClick={this.handleCancel}>
               Cancel
             </Button>,
             <PrimaryButton
-              key="submit"
+              key='submit'
               loading={loading}
               onClick={e => this.handleSubmit(e)}
               style={{ background: "#001328", color: "white", border: "none" }}
@@ -609,7 +609,7 @@ class AddCalibrationForm extends Component {
                   : " Add Equipment Calibration"}
               </p>
               <Icon
-                type="close-circle"
+                type='close-circle'
                 onClick={this.handleCancel}
                 style={{
                   color: "white"
@@ -623,15 +623,15 @@ class AddCalibrationForm extends Component {
 
             {/* Code */}
             {this.state.type === "edit" ? (
-              <div className="input_wrapper">
-                <label for="code" className="label">
+              <div className='input_wrapper'>
+                <label for='code' className='label'>
                   Code:
                 </label>
                 <Input
-                  id="code"
-                  name="code"
+                  id='code'
+                  name='code'
                   // value={}
-                  placeholder="Enter the Code "
+                  placeholder='Enter the Code '
                 />
                 <div style={{ height: "12px" }}></div>
               </div>
@@ -640,22 +640,22 @@ class AddCalibrationForm extends Component {
             )}
 
             {/* User Role */}
-            <div className="input_wrapper">
-              <label for="equipment_plant" className="label">
+            <div className='input_wrapper'>
+              <label for='equipment_plant' className='label'>
                 Equipment Plant:
               </label>
 
               <Select
-                id="equipment_plant"
-                name="equipment_plant"
-                placeholder="Select Equipment Plant"
+                id='equipment_plant'
+                name='equipment_plant'
+                placeholder='Select Equipment Plant'
                 style={{ width: 170 }}
                 value={equipment_plant}
                 onChange={value => this.handleSelect("equipment_plant", value)}
               >
                 {/* <Option value="eq01">Equipment 01</Option>
                 <Option value="eq02">Equipment 02</Option> */}
-                {this.state.Selectequipmantplant}
+                {this.state.equipmantplantselect}
               </Select>
               {errors.equipment_plant.length > 0 && (
                 <div style={error}>{errors.equipment_plant}</div>
@@ -663,13 +663,13 @@ class AddCalibrationForm extends Component {
               <div style={{ height: "12px" }}></div>
             </div>
 
-            <div className="input_wrapper">
-              <label for="calibrated_date" className="label">
+            <div className='input_wrapper'>
+              <label for='calibrated_date' className='label'>
                 Calibrated Date:
               </label>
               <DatePicker
-                id="calibrated_date"
-                name="calibrated_date"
+                id='calibrated_date'
+                name='calibrated_date'
                 format={"DD-MM-YYYY"}
                 showToday
                 disabledDate={this.disabledDate()}
@@ -681,13 +681,13 @@ class AddCalibrationForm extends Component {
               />
               <div style={{ height: "12px" }}></div>
             </div>
-            <div className="input_wrapper">
-              <label for="due_date" className="label">
+            <div className='input_wrapper'>
+              <label for='due_date' className='label'>
                 Due Date:
               </label>
               <DatePicker
-                id="due_date"
-                name="due_date"
+                id='due_date'
+                name='due_date'
                 format={"DD-MM-YYYY"}
                 value={due_date}
                 onChange={(dateString, field) =>
@@ -698,40 +698,40 @@ class AddCalibrationForm extends Component {
 
               <div style={{ height: "12px" }}></div>
             </div>
-            <div className="input_wrapper">
-              <label for="calibrated_by" className="label">
+            <div className='input_wrapper'>
+              <label for='calibrated_by' className='label'>
                 Calibrated By:
               </label>
               <Radio.Group
-                id="calibrated_by"
-                name="calibrated_by"
+                id='calibrated_by'
+                name='calibrated_by'
                 checked={calibrated_by}
                 onChange={value => this.handleSelect("calibrated_by", value)}
               >
-                <Radio value="internal">Internal </Radio>
-                <Radio value="external">External</Radio>
+                <Radio value='internal'>Internal </Radio>
+                <Radio value='external'>External</Radio>
               </Radio.Group>
               {errors.calibrated_by.length > 0 && (
                 <div style={error}>{errors.calibrated_by}</div>
               )}
               <div style={{ height: "12px" }}></div>
             </div>
-            <div className="input_wrapper">
-              <label for="supplier" className="label" style={{ left: "20px" }}>
+            <div className='input_wrapper'>
+              <label for='supplier' className='label' style={{ left: "20px" }}>
                 Supplier:
               </label>
 
               <Select
-                id="supplier"
-                name="supplier"
-                placeholder="Select Supplier"
+                id='supplier'
+                name='supplier'
+                placeholder='Select Supplier'
                 style={{ width: 170 }}
                 value={supplier}
                 onChange={value => this.handleSelect("supplier", value)}
               >
                 {/* <Option value="s01">Supplier 01</Option>
                 <Option value="s02">Supplier 02</Option> */}
-                {this.state.supplier}
+                {this.state.supplierselect}
               </Select>
               {errors.supplier.length > 0 && (
                 <div style={error}>{errors.supplier}</div>
@@ -739,14 +739,14 @@ class AddCalibrationForm extends Component {
               <div style={{ height: "12px" }}></div>
             </div>
 
-            <div className="input_wrapper">
-              <label for="tester" className="label">
+            <div className='input_wrapper'>
+              <label for='tester' className='label'>
                 Tester:
               </label>
               <Input
-                id="tester"
-                name="tester"
-                placeholder="Enter Tester"
+                id='tester'
+                name='tester'
+                placeholder='Enter Tester'
                 value={tester}
                 onChange={this.handleChange}
               />
@@ -756,35 +756,35 @@ class AddCalibrationForm extends Component {
               <div style={{ height: "12px" }}></div>
             </div>
 
-            <div className="input_wrapper">
-              <label for="description" className="label">
+            <div className='input_wrapper'>
+              <label for='description' className='label'>
                 Description:
               </label>
               <TextArea
-                id="description"
-                name="description"
-                placeholder="Enter Description"
+                id='description'
+                name='description'
+                placeholder='Enter Description'
                 style={{ width: "400px" }}
                 value={this.state.description}
                 onChange={this.handleChange}
               />
             </div>
 
-            <div className="input_wrapper">
-              <label for="status" className="label">
+            <div className='input_wrapper'>
+              <label for='status' className='label'>
                 Status:
               </label>
               <Select
-                id="status"
-                name="status"
-                placeholder="Select Status"
+                id='status'
+                name='status'
+                placeholder='Select Status'
                 style={{ width: 170 }}
                 value={status}
                 onChange={value => this.handleSelect("status", value)}
               >
-                <Option value="pass">pass</Option>
-                <Option value="fail">fail</Option>
-                <Option value="pending">pending</Option>
+                <Option value='pass'>pass</Option>
+                <Option value='fail'>fail</Option>
+                <Option value='pending'>pending</Option>
               </Select>
               {errors.status.length > 0 && (
                 <div style={error}>{errors.status}</div>

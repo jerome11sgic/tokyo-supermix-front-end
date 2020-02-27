@@ -35,7 +35,9 @@ class MaterialMasterAddForm extends Component {
     sub_category: "",
     material_name: "",
     errormgs: "",
-    type: "add"
+    type: "add",
+    subCategoryList: [],
+    categoryList: []
   };
   showModal = () => {
     this.setState({
@@ -126,6 +128,52 @@ class MaterialMasterAddForm extends Component {
       }
     }
   };
+
+  //filling dripdown
+  //get all
+  getallMaterialCategory = () => {
+    console.log("api");
+    api("GET", "supermix", "/material-categories", "", "", "").then(res => {
+      console.log(res);
+      let categoryselect = res.data.results.materialCategories.map(
+        (post, index) => {
+          return (
+            <Option value={post.id} key={index}>
+              {post.name}
+            </Option>
+          );
+        }
+      );
+      this.setState({
+        categoryselect
+      });
+    });
+  };
+
+  //get all
+  getallMaterialSubCategory = () => {
+    console.log("api");
+    api("GET", "supermix", "/material-sub-categories", "", "", "").then(res => {
+      console.log(res);
+      let subCategorySelect = res.data.results.materialSubCategories.map(
+        (post, index) => {
+          return (
+            <Option value={post.id} key={index}>
+              {post.name}
+            </Option>
+          );
+        }
+      );
+      this.setState({
+        subCategorySelect
+      });
+    });
+  };
+
+  componentDidMount() {
+    this.getallMaterialSubCategory();
+    this.getallMaterialCategory();
+  }
 
   handleCancel = () => {
     if (this.state.type === "edit") {
@@ -433,8 +481,9 @@ class MaterialMasterAddForm extends Component {
                 }
                 style={{ width: 170 }}
               >
-                <Option value='mc01'>M C 01</Option>
-                <Option value='mc02'>M C 02</Option>
+                {this.state.categoryselect}
+                {/* <Option value='mc01'>M C 01</Option>
+                <Option value='mc02'>M C 02</Option> */}
               </Select>
               {errors.material_category.length > 0 && (
                 <div style={error}>{errors.material_category}</div>
@@ -456,8 +505,9 @@ class MaterialMasterAddForm extends Component {
                 value={sub_category}
                 onChange={value => this.handleSelect("sub_category", value)}
               >
-                <Option value='sc01'>Sub C 01</Option>
-                <Option value='sc02'>Sub C 02</Option>
+                {this.state.subCategorySelect}
+                {/* <Option value='sc01'>Sub C 01</Option>
+                <Option value='sc02'>Sub C 02</Option> */}
               </Select>
               {errors.sub_category.length > 0 && (
                 <div style={error}>{errors.sub_category}</div>

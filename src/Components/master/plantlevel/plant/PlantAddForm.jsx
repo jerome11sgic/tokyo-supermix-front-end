@@ -30,6 +30,7 @@ class PlantAddForm extends Component {
       formValid: false,
       errorCount: 0,
       errors: {
+        code: "",
         plant: "",
         address: "",
         phoneNumber: ""

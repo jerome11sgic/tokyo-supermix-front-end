@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import { SWITCH_TO_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
 import Notification from "../../../Constant/Notification";
 import { api } from "../../../services/AxiosService";
+
 let customers = [
   {
     id: 0,
@@ -153,27 +154,24 @@ class ManageCustomer extends Component {
           <span>
             <a>
               <Icon
-                type="edit"
+                type='edit'
                 onClick={this.props.passEditManageCustomerToModal.bind(
                   this,
                   record
                 )}
               />
             </a>
-            <Divider type="vertical" />
+            <Divider type='vertical' />
             <a>
               <Popconfirm
-                title="Are you sure you want to Delete this?"
+                title='Are you sure you want to Delete this?'
                 icon={
-                  <Icon
-                    type="question-circle-o"
-                    style={{ color: "red" }}
-                    onConfirm={this.onConfirmdelete.bind(this, record.id)}
-                  />
+                  <Icon type='question-circle-o' style={{ color: "red" }} />
                 }
+                onConfirm={this.onConfirmdelete.bind(this, record.id)}
               >
-                <a href="#">
-                  <Icon type="delete" style={{ color: "red" }}></Icon>
+                <a href='#'>
+                  <Icon type='delete' style={{ color: "red" }}></Icon>
                 </a>
               </Popconfirm>
             </a>
@@ -185,9 +183,9 @@ class ManageCustomer extends Component {
       <AntTable
         length
         title={() => <CustomerMasterTitle />}
-        className="plantManageTable"
+        className='plantManageTable'
         columns={columns}
-        dataSource={customers}
+        dataSource={this.state.datalist}
         onChange={this.handleChange}
         pagination={{ defaultPageSize: 4 }}
         size={this.state.size}

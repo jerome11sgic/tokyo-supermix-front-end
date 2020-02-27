@@ -76,7 +76,7 @@ class CustomerAddForm extends Component {
       customer_code: nextProps.editPlantData.id,
       customer_name: nextProps.editPlantData.name,
       customer_address: nextProps.editPlantData.address,
-      customer_contactno: nextProps.editPlantData.contactno,
+      customer_contactno: nextProps.editPlantData.phoneNumber,
       customer_email: nextProps.editPlantData.email,
       type: nextProps.type
     });
@@ -276,7 +276,7 @@ class CustomerAddForm extends Component {
             console.log(res.data);
 
             Notification("success", res.data.message);
-            this.props.reload();
+            // this.props.reload();
             this.setState({ loading: true });
             this.setState({
               customer_code: "",
@@ -310,7 +310,7 @@ class CustomerAddForm extends Component {
           console.log(res.data);
 
           Notification("success", res.data.message);
-          this.props.reload();
+          // this.props.reload();
           this.setState({ loading: true });
           this.setState({
             customer_code: "",
@@ -352,16 +352,16 @@ class CustomerAddForm extends Component {
           Add Customer
         </PrimaryButton>
         <Modal
-          width="500px"
+          width='500px'
           visible={visible}
           closable={false}
           onCancel={this.handleCancel}
           footer={[
-            <Button key="back" onClick={this.handleCancel}>
+            <Button key='back' onClick={this.handleCancel}>
               Cancel
             </Button>,
             <PrimaryButton
-              key="submit"
+              key='submit'
               loading={loading}
               onClick={this.handleSubmit}
               style={{ background: "#001328", color: "white", border: "none" }}
@@ -379,7 +379,7 @@ class CustomerAddForm extends Component {
                 {this.state.type === "edit" ? "Edit Customer" : "Add Customer"}
               </p>
               <Icon
-                type="close-circle"
+                type='close-circle'
                 onClick={this.handleCancel}
                 style={{
                   color: "white"
@@ -391,13 +391,13 @@ class CustomerAddForm extends Component {
           <MasterLevelForm>
             {/* Code */}
             {this.state.type === "edit" ? (
-              <div className="input_wrapper">
-                <label for="customer_code" className="label">
+              <div className='input_wrapper'>
+                <label for='customer_code' className='label'>
                   Code:
                 </label>
                 <Input
-                  id="customer_code"
-                  name="customer_code"
+                  id='customer_code'
+                  name='customer_code'
                   value={this.state.customer_code}
                   disabled
                 />
@@ -408,15 +408,15 @@ class CustomerAddForm extends Component {
             )}
 
             {/* Plant Name */}
-            <div className="input_wrapper">
-              <label for="customer_name" className="label">
+            <div className='input_wrapper'>
+              <label for='customer_name' className='label'>
                 Customer Name:
               </label>
 
               <Input
-                id="customer_name"
-                name="customer_name"
-                placeholder="Enter the Customer "
+                id='customer_name'
+                name='customer_name'
+                placeholder='Enter the Customer '
                 value={this.state.customer_name}
                 onChange={this.handleChange}
               />
@@ -425,15 +425,15 @@ class CustomerAddForm extends Component {
             </div>
 
             {/* Place */}
-            <div className="input_wrapper">
-              <label for="customer_address" className="label">
+            <div className='input_wrapper'>
+              <label for='customer_address' className='label'>
                 Address:
               </label>
 
               <Input
-                id="customer_address"
-                name="customer_address"
-                placeholder="Enter the Address"
+                id='customer_address'
+                name='customer_address'
+                placeholder='Enter the Address'
                 value={this.state.customer_address}
                 onChange={this.handleChange}
               />
@@ -444,16 +444,16 @@ class CustomerAddForm extends Component {
             </div>
 
             {/* T.P No */}
-            <div className="input_wrapper">
-              <label for="customer_contactno" className="label">
+            <div className='input_wrapper'>
+              <label for='customer_contactno' className='label'>
                 Contact No:
               </label>
 
               <Input
-                className="input_number"
-                id="customer_contactno"
-                name="customer_contactno"
-                placeholder="Enter the Contact No"
+                className='input_number'
+                id='customer_contactno'
+                name='customer_contactno'
+                placeholder='Enter the Contact No'
                 value={this.state.customer_contactno}
                 onChange={this.handleChange}
               />
@@ -464,14 +464,14 @@ class CustomerAddForm extends Component {
             </div>
 
             {/* Description  */}
-            <div className="input_wrapper">
-              <label for="customer_email" className="label">
+            <div className='input_wrapper'>
+              <label for='customer_email' className='label'>
                 Email:
               </label>
               <Input
-                id="customer_email"
-                name="customer_email"
-                placeholder="Enter the Email"
+                id='customer_email'
+                name='customer_email'
+                placeholder='Enter the Email'
                 value={this.state.customer_email}
                 onChange={this.handleChange}
               />

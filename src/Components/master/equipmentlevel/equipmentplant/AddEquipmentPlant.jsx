@@ -295,9 +295,10 @@ class AddEquipmentPlant extends Component {
                 this.responeserror(res.data.results.name.message);
               } else {
                 Notification("success", res.data.message);
-                this.props.reload();
-                this.setState({ loading: true });
+                // this.props.reload();
+
                 this.setState({
+                  loading: true,
                   errormgs: "",
                   serial_no: "",
                   equipment: "",
@@ -454,17 +455,19 @@ class AddEquipmentPlant extends Component {
   getAllEquipments() {
     api("GET", "supermix", "/equipments", "", "", "").then(res => {
       console.log(res.data.results);
-      if (res.data.results.plants.length > 0) {
+      if (res.data.results.equipments.length > 0) {
         console.log("ggg");
-        let SelectPlants = res.data.results.plants.map((post, index) => {
-          return (
-            <Option value={post.code} key={index}>
-              {post.name}
-            </Option>
-          );
-        });
+        let SelectEquipments = res.data.results.equipments.map(
+          (post, index) => {
+            return (
+              <Option value={post.id} key={index}>
+                {post.name}
+              </Option>
+            );
+          }
+        );
         this.setState({
-          SelectPlants
+          SelectEquipments
         });
       }
     });
@@ -596,8 +599,9 @@ class AddEquipmentPlant extends Component {
                 value={equipment}
                 onChange={value => this.handleSelect("equipment", value)}
               >
-                <Option value={1}>Equipment 01</Option>
-                <Option value={2}>Equipment 02</Option>
+                {this.state.SelectEquipments}
+                {/* <Option value={1}>Equipment 01</Option>
+                <Option value={2}>Equipment 02</Option> */}
               </Select>
               {errors.equipment.length > 0 && (
                 <div style={error}>{errors.equipment}</div>
@@ -618,8 +622,9 @@ class AddEquipmentPlant extends Component {
                 value={plant}
                 onChange={value => this.handleSelect("plant", value)}
               >
-                <Option value='p01'>Plant 01</Option>
-                <Option value='p02'>Plant 02</Option>
+                {this.state.SelectPlants}
+                {/* <Option value='p01'>Plant 01</Option>
+                <Option value='p02'>Plant 02</Option> */}
               </Select>
               {errors.plant.length > 0 && (
                 <div style={error}>{errors.plant}</div>
