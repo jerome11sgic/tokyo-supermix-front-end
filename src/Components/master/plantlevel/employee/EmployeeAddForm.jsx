@@ -883,7 +883,7 @@ class EmployeeAddForm extends Component {
               {errors.email.length > 0 && (
                 <div style={error}>{errors.email}</div>
               )}
-              {this.state.errorvalmegss.message == "email" ? (
+              {this.state.errorvalmegss.message === "email" ? (
                 <div style={error}>{HandelError(this.state.errorvalmegss)}</div>
               ) : (
                 ""
