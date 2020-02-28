@@ -12,7 +12,7 @@ import { api } from "../../services/AxiosService";
 import Notification from "../../Constant/Notification";
 import HandelError from "../../Constant/HandleError";
 import { connect } from "react-redux";
-// import { DISABLE_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
+import { DISABLE_EDIT_MODE } from "../../../redux/action/master/plantlevel/PlantLevel";
 
 const { Option } = Select;
 class Addincoming extends Component {
@@ -105,21 +105,22 @@ class Addincoming extends Component {
     if (name === "plant") {
       console.log(value);
       this.setState({
-        plantCode: value
-        // edit_equipment_plant: value
+        plantCode: value,
+        edit_plantName: value
       });
     }
     // handle select for  supplier
     if (name === "supplier") {
       this.setState({
-        supplierId: value
-        // edit_supplier: value
+        supplierId: value,
+        edit_supplier: value
       });
     }
     // handle select for  status
     if (name === "rawMaterial") {
       this.setState({
-        rawMaterialId: value
+        rawMaterialId: value,
+        edit_rawMaterialName: value
       });
     }
     // handle select for  radio group
@@ -188,55 +189,48 @@ class Addincoming extends Component {
   };
 
   handleSubmit = e => {
-    const data = {
-      code: this.state.code,
-      date: moment(this.state.date).format("YYYY-MM-DD"),
-      status: false,
-      supplierId: this.state.supplierId,
-      plantCode: this.state.plantCode,
-      vehicleNo: this.state.vehicleNo,
-      rawMaterialId: this.state.rawMaterialId
-    };
-    console.log(data);
     if (this.state.type === "edit") {
+      const data = {
+        code: this.state.code,
+        date: this.state.date,
+        status: false,
+        supplierId: this.state.supplierId,
+        plantCode: this.state.plantCode,
+        vehicleNo: this.state.vehicleNo,
+        rawMaterialId: this.state.rawMaterialId
+      };
       console.log("edit part");
-      // api(
-      //   "PUT",
-      //   "supermix",
-      //   "/plant-equipment-calibration",
-      //   "",
-      //   data,
-      //   ""
-      // ).then(
-      //   res => {
-      //     console.log(res.data);
+      console.log(data);
+      api("PUT", "supermix", "/incoming-sample", "", data, "").then(
+        res => {
+          console.log(res.data);
 
-      //     Notification("success", res.data.message);
-      //     this.props.reload();
-      //     this.setState({ loading: true });
-      //     this.setState({
-      //       equipment_plant: "",
-      //       calibrated_date: "",
-      //       due_date: "",
-      //       calibrated_by: "",
-      //       supplier: "",
-      //       tester: "",
-      //       description: "",
-      //       status: "",
-      //       errormgs: ""
-      //     });
-      //     setTimeout(() => {
-      //       this.setState({ loading: false, visible: false });
-      //     }, 3000);
-      //   },
-      //   error => {
-      //     // this.setState({
-      //     //   errormgs: error.validationFailures[0]
-      //     // });
-      //     console.log("DEBUG34: ", error);
-      //     // console.log(HandelError(error.validationFailures[0]));
-      //   }
-      // );
+          Notification("success", res.data.message);
+          this.props.reload();
+          this.setState({ loading: true });
+          this.setState({
+            equipment_plant: "",
+            calibrated_date: "",
+            due_date: "",
+            calibrated_by: "",
+            supplier: "",
+            tester: "",
+            description: "",
+            status: "",
+            errormgs: ""
+          });
+          setTimeout(() => {
+            this.setState({ loading: false, visible: false });
+          }, 3000);
+        },
+        error => {
+          // this.setState({
+          //   errormgs: error.validationFailures[0]
+          // });
+          console.log("DEBUG34: ", error);
+          // console.log(HandelError(error.validationFailures[0]));
+        }
+      );
     } else {
       const data = {
         code: this.state.code,
@@ -293,12 +287,12 @@ class Addincoming extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("gggg" + nextProps.visible);
+    console.log("gggg" + nextProps);
     this.setState({
-      visible: true,
+      visible: nextProps.visible,
       code: nextProps.editPlantData.code,
       vehicleNo: nextProps.editPlantData.vehicleNo,
-      date: nextProps.editPlantData.date,
+      date: moment(nextProps.editPlantData.date, "DD-MM-YYYY"),
       status: nextProps.editPlantData.status,
       rawMaterialId: nextProps.editPlantData.rawMaterialId,
       rawMaterialName: nextProps.editPlantData.rawMaterialName,
@@ -386,7 +380,7 @@ class Addincoming extends Component {
                 name="code"
                 value={this.state.code}
                 onChange={this.handleChange}
-
+                disabled={this.state.type === "edit" ? true : false}
                 // placeholder='Enter the Code '
                 // disabled
               />
@@ -498,4 +492,22 @@ class Addincoming extends Component {
   }
 }
 
-export default Addincoming;
+const mapStateToProps = state => {
+  //getting the global redux state to get the data from the EditPlantReducer.js
+  return {
+    visible: state.plantLevelReducers.EditPlantReducer.visible,
+    type: state.plantLevelReducers.EditPlantReducer.type,
+    editPlantData: state.plantLevelReducers.EditPlantReducer.editPlantData
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setincomingVisibility: () => {
+      dispatch({ type: DISABLE_EDIT_MODE });
+      console.log("edit modal closed");
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Addincoming);

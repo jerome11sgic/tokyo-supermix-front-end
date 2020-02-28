@@ -186,19 +186,19 @@ class ManageIncoming extends Component {
         sorter: (a, b) => a.role.length - b.role.length,
         sortOrder: sortedInfo.columnKey === "role" && sortedInfo.order
       },
-      {
-        title: "Status",
-        dataIndex: "status",
-        key: "deliveryreport"
+      // {
+      //   title: "Status",
+      //   dataIndex: "status",
+      //   key: "deliveryreport"
 
-        // render: (text, record) => (
-        //   <Icon
-        //     type="carry-out"
-        //     style={{ color: "green" }}
-        //     onClick={this.showModal}
-        //   />
-        // )
-      },
+      //   // render: (text, record) => (
+      //   //   <Icon
+      //   //     type="carry-out"
+      //   //     style={{ color: "green" }}
+      //   //     onClick={this.showModal}
+      //   //   />
+      //   // )
+      // },
       {
         title: "Vechical No",
         dataIndex: "vehicleNo",
