@@ -58,7 +58,7 @@ class ManageCalibration extends Component {
     });
   };
 
-  getallplantCalibration() {
+  getallplantCalibration = () => {
     api("GET", "supermix", "/plant-equipment-calibrations", "", "", "").then(
       res => {
         console.log(res.data);
@@ -68,7 +68,7 @@ class ManageCalibration extends Component {
         });
       }
     );
-  }
+  };
   clearFilters = () => {
     this.setState({ filteredInfo: null });
   };
@@ -112,12 +112,6 @@ class ManageCalibration extends Component {
     filteredInfo = filteredInfo || {};
     const columns = [
       {
-        title: "Code",
-        dataIndex: "code",
-        key: "code"
-      },
-
-      {
         title: "Equipment Name",
         dataIndex: "plantEquipmentEquipmentName",
         key: "calibrated_date"
@@ -140,7 +134,7 @@ class ManageCalibration extends Component {
         key: "calibrated_by"
       },
       {
-        title: "Company",
+        title: "Supplier",
         dataIndex: "supplierName",
         key: "company"
       },
@@ -195,7 +189,7 @@ class ManageCalibration extends Component {
 
     return (
       <AntTable
-        title={() => <CalibrationTitle />}
+        title={() => <CalibrationTitle reload={this.getallplantCalibration} />}
         columns={columns}
         maxlength
         dataSource={this.state.datalist}

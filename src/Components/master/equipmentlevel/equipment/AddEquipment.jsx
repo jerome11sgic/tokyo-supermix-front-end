@@ -164,7 +164,7 @@ class AddEquipment extends Component {
     }
 
     if (this.state.type === "edit") {
-      console.log("add part");
+      console.log("edit part");
       const data = {
         id: this.state.equipment_code,
         name: this.state.equipment_name,

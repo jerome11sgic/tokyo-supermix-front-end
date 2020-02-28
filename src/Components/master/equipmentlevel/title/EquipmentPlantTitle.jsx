@@ -16,7 +16,7 @@ export default class EquipmentPlantTitle extends Component {
     return (
       <FlexContainer titles leveltitles>
         <Paragraph style={style}>Equipment Plant Master</Paragraph>
-        <AddEquipmentPlant />
+        <AddEquipmentPlant reload={this.props.reload} />
       </FlexContainer>
     );
   }

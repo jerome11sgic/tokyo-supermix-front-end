@@ -6,6 +6,7 @@ import { AntTable } from "../../../styledcomponents/table/AntTabl";
 import { SWITCH_TO_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
 import { connect } from "react-redux";
 import { api } from "../../../services/AxiosService";
+import Notification from "../../../Constant/Notification";
 
 // const Search = Input.Search;
 const data = [
@@ -67,10 +68,23 @@ class ManageMaterial extends Component {
   //get all
   getallMaterial = () => {
     console.log("api");
+    const datalist = [];
     api("GET", "supermix", "/raw-materials", "", "", "").then(res => {
       console.log(res);
+      res.data.results.rawMaterial.map((post, index) => {
+        console.log(post);
+        datalist.push({
+          id: post.id,
+          name: post.name,
+          nature: post.nature,
+          materialCategory: post.materialSubCategory.materialCategoryName,
+          subCategory: post.materialSubCategory.name,
+          subCategory_Id: post.materialSubCategory.id
+        });
+        console.log(datalist);
+      });
       this.setState({
-        data: res.data.results.rawMaterial
+        datalist
       });
     });
   };
@@ -81,9 +95,9 @@ class ManageMaterial extends Component {
     console.log(code);
     let mesg = "equipmentplant delete";
 
-    api("DELETE", "supermix", "/material", "", "", code).then(res => {
+    api("DELETE", "supermix", "/raw-material", "", "", code).then(res => {
       console.log(res.data);
-      this.getallEquipmentPlant();
+      this.getallMaterial();
       Notification("success", res.data.message);
     });
     console.log(this.state.id);
@@ -122,7 +136,7 @@ class ManageMaterial extends Component {
       // },
       {
         title: "Material Name",
-        dataIndex: "materialName",
+        dataIndex: "name",
         key: "materialName"
         // width: "6%",
       },
@@ -139,31 +153,37 @@ class ManageMaterial extends Component {
         // width: "7%",
       },
       {
+        title: "Nature",
+        dataIndex: "nature",
+        key: "subCategory"
+        // width: "7%",
+      },
+      {
         title: "Edit & Delete",
         key: "action",
         width: "10%",
-        render: (text, record = this.state.data) => (
+        render: (text, record = this.state.datalist) => (
           <span>
             <a>
               <Icon
-                type='edit'
+                type="edit"
                 onClick={this.props.passEditMaterialRecordtoModal.bind(
                   this,
                   record
                 )}
               />
             </a>
-            <Divider type='vertical' />
+            <Divider type="vertical" />
             <a>
               <Popconfirm
-                title='Are you sure you want to Delete this?'
+                title="Are you sure you want to Delete this?"
                 icon={
-                  <Icon type='question-circle-o' style={{ color: "red" }} />
+                  <Icon type="question-circle-o" style={{ color: "red" }} />
                 }
-                onConfirm={this.onConfirmdelete.bind(this, record.code)}
+                onConfirm={this.onConfirmdelete.bind(this, record.id)}
               >
-                <a href='#'>
-                  <Icon type='delete' style={{ color: "red" }}></Icon>
+                <a href="#">
+                  <Icon type="delete" style={{ color: "red" }}></Icon>
                 </a>
               </Popconfirm>
             </a>
@@ -174,10 +194,10 @@ class ManageMaterial extends Component {
 
     return (
       <AntTable
-        title={() => <MaterialMasterTitle />}
+        title={() => <MaterialMasterTitle reload={this.getallMaterial} />}
         maxlength
         columns={columns}
-        dataSource={this.state.data}
+        dataSource={this.state.datalist}
         onChange={this.handleChange}
         pagination={{ defaultPageSize: 4 }}
         size={this.state.size}

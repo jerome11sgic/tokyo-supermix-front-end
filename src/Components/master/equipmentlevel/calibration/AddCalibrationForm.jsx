@@ -55,8 +55,9 @@ class AddCalibrationForm extends Component {
     description: "",
     status: "",
     errormgs: "",
-    type: "add",
-    supplier: ""
+    edit_equipment_plant: "",
+    edit_supplier: "",
+    type: "add"
   };
 
   showModal = () => {
@@ -69,10 +70,11 @@ class AddCalibrationForm extends Component {
         calibrated_date: "",
         due_date: "",
         calibrated_by: "",
-        supplier: "",
-        tester: "",
+        // supplier: "",
+        // tester: "",
         status: ""
       },
+      id: "",
       equipment_plant: "",
       calibrated_date: "",
       due_date: "",
@@ -110,16 +112,16 @@ class AddCalibrationForm extends Component {
     let errors = this.state.errors;
     // console.log(name + " is \t" + value);
     switch (name) {
-      case "tester":
-        errors.tester =
-          value.length === 0
-            ? "Tester can't be empty"
-            : value.length < 3
-            ? "Tester \n must be 3 characters long!"
-            : !isNaN(value)
-            ? "Tester Plant won't allow only letters"
-            : "";
-        break;
+      // case "tester":
+      //   errors.tester =
+      //     value.length === 0
+      //       ? "Tester can't be empty"
+      //       : value.length < 3
+      //       ? "Tester \n must be 3 characters long!"
+      //       : !isNaN(value)
+      //       ? "Tester Plant won't allow only letters"
+      //       : "";
+      //   break;
 
       default:
         break;
@@ -136,8 +138,10 @@ class AddCalibrationForm extends Component {
     const { errors } = this.state;
     // handle select for  equipment_plant
     if (name === "equipment_plant") {
+      console.log(value);
       this.setState({
-        equipment_plant: value
+        equipment_plant: value,
+        edit_equipment_plant: value
       });
       if (value.length !== 0) {
         this.setState({
@@ -146,8 +150,8 @@ class AddCalibrationForm extends Component {
             // calibrated_date: errors.calibrated_date,
             // due_date: errors.due_date,
             calibrated_by: errors.calibrated_by,
-            supplier: errors.supplier,
-            tester: errors.tester,
+            // supplier: errors.supplier
+            // tester: errors.tester,
             status: errors.status
           },
           formValid: this.validateForm(errors),
@@ -158,23 +162,24 @@ class AddCalibrationForm extends Component {
     // handle select for  supplier
     if (name === "supplier") {
       this.setState({
-        supplier: value
+        supplier: value,
+        edit_supplier: value
       });
-      if (value.length !== 0) {
-        this.setState({
-          errors: {
-            equipment_plant: errors.equipment_plant,
-            // calibrated_date: errors.calibrated_date,
-            // due_date: errors.due_date,
-            calibrated_by: errors.calibrated_by,
-            supplier: "",
-            tester: errors.tester,
-            status: errors.status
-          },
-          formValid: this.validateForm(errors),
-          errorCount: this.countErrors(errors)
-        });
-      }
+      // if (value.length !== 0) {
+      //   this.setState({
+      //     errors: {
+      //       equipment_plant: errors.equipment_plant,
+      //       // calibrated_date: errors.calibrated_date,
+      //       // due_date: errors.due_date,
+      //       calibrated_by: errors.calibrated_by,
+      //       supplier: "",
+      //       tester: errors.tester,
+      //       status: errors.status
+      //     },
+      //     formValid: this.validateForm(errors),
+      //     errorCount: this.countErrors(errors)
+      //   });
+      // }
     }
     // handle select for  status
     if (name === "status") {
@@ -188,8 +193,8 @@ class AddCalibrationForm extends Component {
             // calibrated_date: errors.calibrated_date,
             // due_date: errors.due_date,
             calibrated_by: errors.calibrated_by,
-            supplier: errors.supplier,
-            tester: errors.tester,
+            // supplier: errors.supplier,
+            // tester: errors.tester,
             status: ""
           },
           formValid: this.validateForm(errors),
@@ -209,8 +214,8 @@ class AddCalibrationForm extends Component {
             // calibrated_date: errors.calibrated_date,
             // due_date: errors.due_date,
             calibrated_by: "",
-            supplier: errors.supplier,
-            tester: errors.tester,
+            // supplier: errors.supplier,
+            // tester: errors.tester,
             status: errors.status
           },
           formValid: this.validateForm(errors),
@@ -249,8 +254,8 @@ class AddCalibrationForm extends Component {
         // calibrated_date: "",
         // due_date: "",
         calibrated_by: "",
-        supplier: "",
-        tester: "",
+        // supplier: "",
+        // tester: "",
         status: ""
       },
       equipment_plant: "",
@@ -274,13 +279,16 @@ class AddCalibrationForm extends Component {
         nextProps.editPlantData.calibratedDate,
         "DD-MM-YYYY"
       ),
-
+      id: nextProps.editPlantData.id,
       due_date: moment(nextProps.editPlantData.dueDate, "DD-MM-YYYY"),
       calibrated_by: nextProps.editPlantData.calibrationType,
-      supplier: nextProps.editPlantData.supplierName,
-      tester: nextProps.editPlantData.userUsername,
+      edit_supplier: nextProps.editPlantData.supplierName,
+      tester: nextProps.editPlantData.userId,
       description: nextProps.editPlantData.description,
       status: nextProps.editPlantData.status,
+      equipment_plant: nextProps.editPlantData.plantEquipmentSerialNo,
+      edit_equipment_plant: nextProps.editPlantData.plantEquipmentEquipmentName,
+      supplier: nextProps.editPlantData.supplierId,
       type: nextProps.type
     });
   }
@@ -308,9 +316,9 @@ class AddCalibrationForm extends Component {
     if (
       equipment_plant.length === 0 &&
       calibrated_by.length === 0 &&
-      status.length === 0 &&
-      supplier.length === 0 &&
-      tester.length === 0
+      status.length === 0
+      // supplier.length === 0 &&
+      // tester.length === 0
     ) {
       this.setState({
         errors: {
@@ -318,8 +326,8 @@ class AddCalibrationForm extends Component {
           // calibrated_date: errors.calibrated_date,
           // due_date: errors.due_date,
           calibrated_by: "Calibrated By can't be empty",
-          supplier: "Supplier can't be empty",
-          tester: "Tester can't be empty",
+          // supplier: "Supplier can't be empty",
+          // tester: "Tester can't be empty",
           status: "Status can't be empty"
         },
         formValid: this.validateForm(errors),
@@ -336,8 +344,8 @@ class AddCalibrationForm extends Component {
           // calibrated_date: errors.calibrated_date,
           // due_date: errors.due_date,
           calibrated_by: errors.calibrated_by,
-          supplier: errors.supplier,
-          tester: errors.tester,
+          // supplier: errors.supplier,
+          // tester: errors.tester,
           status: errors.status
         },
         formValid: this.validateForm(errors),
@@ -353,50 +361,52 @@ class AddCalibrationForm extends Component {
           // calibrated_date: errors.calibrated_date,
           // due_date: errors.due_date,
           calibrated_by: errors.calibrated_by || "Calibrated By can't be empty",
-          supplier: errors.supplier,
-          tester: errors.tester,
+          // supplier: errors.supplier,
+          // tester: errors.tester,
           status: errors.status
         },
         formValid: this.validateForm(errors),
         errorCount: this.countErrors(errors)
       });
-    } else if (supplier.length === 0 && errors.supplier.length === 0) {
+    }
+    // else if (supplier.length === 0 && errors.supplier.length === 0) {
+    //   this.setState({
+    //     errors: {
+    //       equipment_plant: errors.equipment_plant,
+    //       // calibrated_date: errors.calibrated_date,
+    //       // due_date: errors.due_date,
+    //       calibrated_by: errors.calibrated_by,
+    //       supplier: errors.supplier || "Supplier can't be empty",
+    //       tester: errors.tester,
+    //       status: errors.status
+    //     },
+    //     formValid: this.validateForm(errors),
+    //     errorCount: this.countErrors(errors)
+    //   });
+    // } else if (tester.length === 0 && errors.tester.length === 0) {
+    //   this.setState({
+    //     errors: {
+    //       equipment_plant: errors.equipment_plant,
+    //       // calibrated_date: errors.calibrated_date,
+    //       // due_date: errors.due_date,
+    //       calibrated_by: errors.calibrated_by,
+    //       supplier: errors.supplier,
+    //       tester: errors.tester || "Tester can't be empty",
+    //       status: errors.status
+    //     },
+    //     formValid: this.validateForm(errors),
+    //     errorCount: this.countErrors(errors)
+    //   });
+    // }
+    else if (status.length === 0 && errors.status.length === 0) {
       this.setState({
         errors: {
           equipment_plant: errors.equipment_plant,
           // calibrated_date: errors.calibrated_date,
           // due_date: errors.due_date,
           calibrated_by: errors.calibrated_by,
-          supplier: errors.supplier || "Supplier can't be empty",
-          tester: errors.tester,
-          status: errors.status
-        },
-        formValid: this.validateForm(errors),
-        errorCount: this.countErrors(errors)
-      });
-    } else if (tester.length === 0 && errors.tester.length === 0) {
-      this.setState({
-        errors: {
-          equipment_plant: errors.equipment_plant,
-          // calibrated_date: errors.calibrated_date,
-          // due_date: errors.due_date,
-          calibrated_by: errors.calibrated_by,
-          supplier: errors.supplier,
-          tester: errors.tester || "Tester can't be empty",
-          status: errors.status
-        },
-        formValid: this.validateForm(errors),
-        errorCount: this.countErrors(errors)
-      });
-    } else if (status.length === 0 && errors.status.length === 0) {
-      this.setState({
-        errors: {
-          equipment_plant: errors.equipment_plant,
-          // calibrated_date: errors.calibrated_date,
-          // due_date: errors.due_date,
-          calibrated_by: errors.calibrated_by,
-          supplier: errors.supplier,
-          tester: errors.tester,
+          // supplier: errors.supplier,
+          // tester: errors.tester,
           status: errors.status || "Status can't be empty"
         },
         formValid: this.validateForm(errors),
@@ -405,60 +415,75 @@ class AddCalibrationForm extends Component {
     } else if (
       errors.equipment_plant.length === 0 &&
       errors.calibrated_by.length === 0 &&
-      errors.status.length === 0 &&
-      errors.supplier.length === 0 &&
-      errors.tester.length === 0
+      errors.status.length === 0
     ) {
       console.log("form is valid");
 
       if (this.state.type === "edit") {
         console.log("edit part");
         const data = {
-          plantEquipmentId: equipment_plant,
-          calibratedDate: moment(calibrated_date).format("DD-MM-YYYY"),
-          dueDate: moment(due_date).format("DD-MM-YYYY"),
+          id: this.state.id,
+          plantEquipmentSerialNo: equipment_plant,
+          calibratedDate: moment(calibrated_date).format("YYYY-MM-DD"),
+          dueDate: moment(due_date).format("YYYY-MM-DD"),
           calibrationType: calibrated_by,
           supplierId: supplier,
           userId: tester,
           description: description,
           status: status
         };
+        console.log(data);
+        api(
+          "PUT",
+          "supermix",
+          "/plant-equipment-calibration",
+          "",
+          data,
+          ""
+        ).then(
+          res => {
+            console.log(res.data);
 
-        // api("PUT", "supermix", "/equipment", "", data, "").then(
-        //   res => {
-        //     console.log(res.data);
-
-        //     Notification("success", res.data.message);
-        //     this.props.reload();
-        //     this.setState({ loading: true });
-        //     this.setState({
-        //       category_code: "",
-        //       category_name: "",
-        //       errormgs: ""
-        //     });
-        //     setTimeout(() => {
-        //       this.setState({ loading: false, visible: false });
-        //     }, 3000);
-        //   },
-        //   error => {
-        //     this.setState({
-        //       errormgs: error.validationFailures[0]
-        //     });
-        //     console.log("DEBUG34: ", error);
-        //     console.log(HandelError(error.validationFailures[0]));
-        //   }
-        // );
+            Notification("success", res.data.message);
+            this.props.reload();
+            this.setState({ loading: true });
+            this.setState({
+              equipment_plant: "",
+              calibrated_date: "",
+              due_date: "",
+              calibrated_by: "",
+              supplier: "",
+              tester: "",
+              description: "",
+              status: "",
+              errormgs: ""
+            });
+            setTimeout(() => {
+              this.setState({ loading: false, visible: false });
+            }, 3000);
+          },
+          error => {
+            // this.setState({
+            //   errormgs: error.validationFailures[0]
+            // });
+            console.log("DEBUG34: ", error);
+            // console.log(HandelError(error.validationFailures[0]));
+          }
+        );
       } else {
         const data = {
-          plantEquipmentId: equipment_plant,
-          calibratedDate: moment(calibrated_date).format("DD-MM-YYYY"),
-          dueDate: moment(due_date).format("DD-MM-YYYY"),
+          plantEquipmentSerialNo: equipment_plant,
+          calibratedDate: moment(calibrated_date).format("YYYY-MM-DD"),
+          dueDate: moment(due_date).format("YYYY-MM-DD"),
           calibrationType: calibrated_by,
           supplierId: supplier,
-          userId: tester,
+          userId: 1,
           description: description,
           status: status
         };
+        console.log("hhhhhhhhhhhhhhh");
+
+        console.log(data);
         api(
           "POST",
           "supermix",
@@ -489,11 +514,11 @@ class AddCalibrationForm extends Component {
             }, 3000);
           },
           error => {
-            this.setState({
-              errormgs: error.validationFailures[0]
-            });
+            // this.setState({
+            //   errormgs: error.validationFailures[0]
+            // });
             console.log("DEBUG34: ", error);
-            console.log(HandelError(error.validationFailures[0]));
+            // console.log(HandelError(error.validationFailures[0]));
           }
         );
       }
@@ -514,8 +539,8 @@ class AddCalibrationForm extends Component {
       let equipmantplantselect = res.data.results.Plantequipments.map(
         (post, index) => {
           return (
-            <Option value={post.id} key={index}>
-              {post.name}
+            <Option value={post.serialNo} key={index}>
+              {post.serialNo}
             </Option>
           );
         }
@@ -554,6 +579,8 @@ class AddCalibrationForm extends Component {
       errors,
       errorCount,
       equipment_plant,
+      edit_equipment_plant,
+      edit_supplier,
       calibrated_by,
       calibrated_date,
       description,
@@ -579,17 +606,17 @@ class AddCalibrationForm extends Component {
           Add Calibration
         </PrimaryButton>
         <Modal
-          width='800px'
+          width="800px"
           visible={visible}
           closable={false}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[
-            <Button key='back' onClick={this.handleCancel}>
+            <Button key="back" onClick={this.handleCancel}>
               Cancel
             </Button>,
             <PrimaryButton
-              key='submit'
+              key="submit"
               loading={loading}
               onClick={e => this.handleSubmit(e)}
               style={{ background: "#001328", color: "white", border: "none" }}
@@ -609,7 +636,7 @@ class AddCalibrationForm extends Component {
                   : " Add Equipment Calibration"}
               </p>
               <Icon
-                type='close-circle'
+                type="close-circle"
                 onClick={this.handleCancel}
                 style={{
                   color: "white"
@@ -623,15 +650,16 @@ class AddCalibrationForm extends Component {
 
             {/* Code */}
             {this.state.type === "edit" ? (
-              <div className='input_wrapper'>
-                <label for='code' className='label'>
+              <div className="input_wrapper">
+                <label for="code" className="label">
                   Code:
                 </label>
                 <Input
-                  id='code'
-                  name='code'
-                  // value={}
-                  placeholder='Enter the Code '
+                  id="code"
+                  name="code"
+                  value={this.state.id}
+                  disabled
+                  placeholder="Enter the Code "
                 />
                 <div style={{ height: "12px" }}></div>
               </div>
@@ -640,17 +668,17 @@ class AddCalibrationForm extends Component {
             )}
 
             {/* User Role */}
-            <div className='input_wrapper'>
-              <label for='equipment_plant' className='label'>
+            <div className="input_wrapper">
+              <label for="equipment_plant" className="label">
                 Equipment Plant:
               </label>
 
               <Select
-                id='equipment_plant'
-                name='equipment_plant'
-                placeholder='Select Equipment Plant'
+                id="equipment_plant"
+                name="equipment_plant"
+                placeholder="Select Equipment Plant"
                 style={{ width: 170 }}
-                value={equipment_plant}
+                value={edit_equipment_plant}
                 onChange={value => this.handleSelect("equipment_plant", value)}
               >
                 {/* <Option value="eq01">Equipment 01</Option>
@@ -663,13 +691,13 @@ class AddCalibrationForm extends Component {
               <div style={{ height: "12px" }}></div>
             </div>
 
-            <div className='input_wrapper'>
-              <label for='calibrated_date' className='label'>
+            <div className="input_wrapper">
+              <label for="calibrated_date" className="label">
                 Calibrated Date:
               </label>
               <DatePicker
-                id='calibrated_date'
-                name='calibrated_date'
+                id="calibrated_date"
+                name="calibrated_date"
                 format={"DD-MM-YYYY"}
                 showToday
                 disabledDate={this.disabledDate()}
@@ -681,13 +709,13 @@ class AddCalibrationForm extends Component {
               />
               <div style={{ height: "12px" }}></div>
             </div>
-            <div className='input_wrapper'>
-              <label for='due_date' className='label'>
+            <div className="input_wrapper">
+              <label for="due_date" className="label">
                 Due Date:
               </label>
               <DatePicker
-                id='due_date'
-                name='due_date'
+                id="due_date"
+                name="due_date"
                 format={"DD-MM-YYYY"}
                 value={due_date}
                 onChange={(dateString, field) =>
@@ -698,93 +726,103 @@ class AddCalibrationForm extends Component {
 
               <div style={{ height: "12px" }}></div>
             </div>
-            <div className='input_wrapper'>
-              <label for='calibrated_by' className='label'>
+            <div className="input_wrapper">
+              <label for="calibrated_by" className="label">
                 Calibrated By:
               </label>
               <Radio.Group
-                id='calibrated_by'
-                name='calibrated_by'
+                id="calibrated_by"
+                name="calibrated_by"
+                value={calibrated_by}
                 checked={calibrated_by}
                 onChange={value => this.handleSelect("calibrated_by", value)}
               >
-                <Radio value='internal'>Internal </Radio>
-                <Radio value='external'>External</Radio>
+                <Radio value="INTERNAL">Internal </Radio>
+                <Radio value="EXTERNAL">External</Radio>
               </Radio.Group>
               {errors.calibrated_by.length > 0 && (
                 <div style={error}>{errors.calibrated_by}</div>
               )}
               <div style={{ height: "12px" }}></div>
             </div>
-            <div className='input_wrapper'>
-              <label for='supplier' className='label' style={{ left: "20px" }}>
-                Supplier:
-              </label>
+            {this.state.calibrated_by === "EXTERNAL" ? (
+              <div className="input_wrapper">
+                <label
+                  for="supplier"
+                  className="label"
+                  style={{ left: "20px" }}
+                >
+                  Supplier:
+                </label>
 
-              <Select
-                id='supplier'
-                name='supplier'
-                placeholder='Select Supplier'
-                style={{ width: 170 }}
-                value={supplier}
-                onChange={value => this.handleSelect("supplier", value)}
-              >
-                {/* <Option value="s01">Supplier 01</Option>
+                <Select
+                  id="supplier"
+                  name="supplier"
+                  placeholder="Select Supplier"
+                  style={{ width: 170 }}
+                  value={edit_supplier}
+                  onChange={value => this.handleSelect("supplier", value)}
+                >
+                  {/* <Option value="s01">Supplier 01</Option>
                 <Option value="s02">Supplier 02</Option> */}
-                {this.state.supplierselect}
-              </Select>
-              {errors.supplier.length > 0 && (
-                <div style={error}>{errors.supplier}</div>
-              )}
-              <div style={{ height: "12px" }}></div>
-            </div>
-
-            <div className='input_wrapper'>
-              <label for='tester' className='label'>
-                Tester:
-              </label>
-              <Input
-                id='tester'
-                name='tester'
-                placeholder='Enter Tester'
-                value={tester}
-                onChange={this.handleChange}
-              />
-              {errors.tester.length > 0 && (
-                <div style={error}>{errors.tester}</div>
-              )}
-              <div style={{ height: "12px" }}></div>
-            </div>
-
-            <div className='input_wrapper'>
-              <label for='description' className='label'>
+                  {this.state.supplierselect}
+                </Select>
+                {/* {errors.supplier.length > 0 && (
+                  <div style={error}>{errors.supplier}</div>
+                )} */}
+                <div style={{ height: "12px" }}></div>
+              </div>
+            ) : (
+              ""
+            )}
+            {this.state.calibrated_by === "INTERNAL" ? (
+              <div className="input_wrapper">
+                <label for="tester" className="label">
+                  Tester:
+                </label>
+                <Input
+                  id="tester"
+                  name="tester"
+                  placeholder="Enter Tester"
+                  value={tester}
+                  onChange={this.handleChange}
+                />
+                {/* {errors.tester.length > 0 && (
+                  <div style={error}>{errors.tester}</div>
+                )} */}
+                <div style={{ height: "12px" }}></div>
+              </div>
+            ) : (
+              ""
+            )}
+            <div className="input_wrapper">
+              <label for="description" className="label">
                 Description:
               </label>
               <TextArea
-                id='description'
-                name='description'
-                placeholder='Enter Description'
+                id="description"
+                name="description"
+                placeholder="Enter Description"
                 style={{ width: "400px" }}
                 value={this.state.description}
                 onChange={this.handleChange}
               />
             </div>
-
-            <div className='input_wrapper'>
-              <label for='status' className='label'>
+            <div className="input_wrapper">
+              <label for="status" className="label">
                 Status:
               </label>
               <Select
-                id='status'
-                name='status'
-                placeholder='Select Status'
+                id="status"
+                name="status"
+                placeholder="Select Status"
                 style={{ width: 170 }}
                 value={status}
                 onChange={value => this.handleSelect("status", value)}
               >
-                <Option value='pass'>pass</Option>
-                <Option value='fail'>fail</Option>
-                <Option value='pending'>pending</Option>
+                <Option value="pass">pass</Option>
+                <Option value="fail">fail</Option>
+                <Option value="pending">pending</Option>
               </Select>
               {errors.status.length > 0 && (
                 <div style={error}>{errors.status}</div>

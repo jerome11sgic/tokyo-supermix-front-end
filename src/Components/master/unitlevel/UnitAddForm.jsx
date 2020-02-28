@@ -9,6 +9,7 @@ import {
 import Notificationfuc from "../../Constant/Notification";
 import { connect } from "react-redux";
 import { DISABLE_EDIT_MODE } from "../../../redux/action/master/plantlevel/PlantLevel";
+import HandelError from "../../Constant/HandleError";
 
 // function onChange(date, dateString) {
 //   console.log(date, dateString);
@@ -110,68 +111,90 @@ class UnitAddForm extends Component {
       console.log(this.state.formValid);
       console.log(this.state.errorCount);
 
-      const data = {
-        unit: this.state.unit_name
-      };
-      if (this.state.type === "add") {
-        api("POST", "supermix", "/unit", "", data, "")
-          .then(res => {
-            console.log(res.data);
-            if (res.data.status === "VALIDATION_FAILURE") {
-              console.log("add");
-              this.responeserror(res.data.results.name.message);
-            } else {
-              Notificationfuc("success", res.data.message);
-              // this.props.reload();
-              this.setState({
-                loading: true,
-                unit_code: "",
-                unit_name: "",
-                errormgs: ""
-              });
-              setTimeout(() => {
-                this.setState({ loading: false, visible: false });
-              }, 1500);
-            }
-          })
-          .catch(error => {
-            this.setState({
-              // errormgs: "Plant Name Exist"
-            });
-            // console.log(error.response.data);
-          });
-      } else {
+      if (this.state.type === "edit") {
+        const data = {
+          id: this.state.unit_code,
+          unit: this.state.unit_name
+        };
         console.log(this.state.type);
         api("PUT", "supermix", "/unit", "", data, "")
-          .then(res => {
-            console.log(res.data);
+          .then(
+            res => {
+              console.log(res.data);
 
-            if (res.data.status === "VALIDATION_FAILURE") {
-              console.log("update");
-              this.responeserror(res.data.results.name.message);
-            } else {
-              Notificationfuc("success", res.data.message);
-              // this.props.reload();
+              if (res.data.status === "VALIDATION_FAILURE") {
+                console.log("update");
+                this.responeserror(res.data.results.name.message);
+              } else {
+                Notificationfuc("success", res.data.message);
+                this.props.reload();
 
+                this.setState({
+                  unit_code: "",
+                  unit_name: "",
+                  loading: true,
+                  errormgs: ""
+                });
+                setTimeout(() => {
+                  this.setState({ loading: false, visible: false });
+                }, 1500);
+              }
+            },
+            error => {
               this.setState({
-                unit_code: "",
-                unit_name: "",
-                loading: true,
-                errormgs: ""
+                errormgs: error.validationFailures[0]
               });
-              setTimeout(() => {
-                this.setState({ loading: false, visible: false });
-              }, 1500);
+              console.log("DEBUG34: ", error);
+              console.log(HandelError(error.validationFailures[0]));
             }
-          })
+          )
           .catch(error => {
             // this.setState({
             //   errormgs: "Plant Name Exist"
             // });
             // console.log(error.response.data);
           });
+      } else {
+        const data = {
+          unit: this.state.unit_name
+        };
+        api("POST", "supermix", "/unit", "", data, "")
+          .then(
+            res => {
+              console.log(res.data);
+              if (res.data.status === "VALIDATION_FAILURE") {
+                console.log("add");
+                this.responeserror(res.data.results.name.message);
+              } else {
+                Notificationfuc("success", res.data.message);
+                this.props.reload();
+                this.setState({
+                  loading: true,
+                  unit_code: "",
+                  unit_name: "",
+                  errormgs: ""
+                });
+                setTimeout(() => {
+                  this.setState({ loading: false, visible: false });
+                }, 1500);
+              }
+            },
+            error => {
+              this.setState({
+                errormgs: error.validationFailures[0]
+              });
+              console.log("DEBUG34: ", error);
+              console.log(HandelError(error.validationFailures[0]));
+            }
+          )
+          .catch(error => {
+            this.setState({
+              // errormgs: "Plant Name Exist"
+            });
+            // console.log(error.response.data);
+          });
       }
-      console.log(data);
+      // console.log(data);
       console.log("form is valid");
     }
   };
@@ -193,7 +216,7 @@ class UnitAddForm extends Component {
   handleCancel = () => {
     this.setState({ visible: false });
     // we call the redux function to dispatch and delete all the global redux state to close the modal
-    this.props.setPlantVisiblity();
+    this.props.setUnitVisiblity();
     this.setState({
       errormgs: "",
       errors: {
@@ -209,7 +232,6 @@ class UnitAddForm extends Component {
       visible: nextProps.visible,
       unit_code: nextProps.editPlantData.id,
       unit_name: nextProps.editPlantData.unit,
-
       type: nextProps.type
     });
   }
@@ -248,7 +270,7 @@ class UnitAddForm extends Component {
                 {this.state.type === "edit" ? "Edit Unit" : "Add Unit"}
               </p>
               <Icon
-                type='close-circle'
+                type="close-circle"
                 onClick={this.handleCancel}
                 style={{
                   color: "white"
@@ -257,11 +279,11 @@ class UnitAddForm extends Component {
             </MasterLevelFormTitle>
           }
           footer={[
-            <Button key='back' onClick={this.handleCancel}>
+            <Button key="back" onClick={this.handleCancel}>
               Cancel
             </Button>,
             <PrimaryButton
-              key='submit'
+              key="submit"
               loading={loading}
               onClick={e => this.handleSubmit(e)}
               style={{ background: "#001328", color: "white", border: "none" }}
@@ -269,24 +291,29 @@ class UnitAddForm extends Component {
               {this.state.type === "edit" ? "Edit" : "Save"}
             </PrimaryButton>
           ]}
-          width='400px'
+          width="400px"
         >
           <MasterLevelForm style={{ justifyContent: "space-evenly" }}>
             {/* Code */}
-            <div className='input_wrapper'>
-              <label for='plant_code' className='label'>
+            <div className="input_wrapper">
+              <label for="plant_code" className="label">
                 Unit:
               </label>
               <Input
-                id='unit_name'
-                name='unit_name'
-                placeholder='Enter the Unit '
+                id="unit_name"
+                name="unit_name"
+                placeholder="Enter the Unit "
                 onChange={this.handleChange}
                 value={this.state.unit_name}
                 // disabled={this.state.type === "edit" ? true : false}
               />
 
               {errors.unit.length > 0 && <div style={error}>{errors.unit}</div>}
+              {this.state.errormgs.message == "unit" ? (
+                <div style={error}>{HandelError(this.state.errormgs)}</div>
+              ) : (
+                ""
+              )}
               <div style={{ height: "12px" }}></div>
             </div>
           </MasterLevelForm>
@@ -308,7 +335,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     // setting visible to false if we close the modal .. and all state data will be deleted if this function is dispatched
-    setPlantVisiblity: () => {
+    setUnitVisiblity: () => {
       dispatch({ type: DISABLE_EDIT_MODE });
       console.log("edit modal closed");
     }

@@ -263,11 +263,11 @@ class AddMainCategoryForm extends Component {
           }, 3000);
         },
         error => {
-          this.setState({
-            errormgs: error.validationFailures[0]
-          });
+          // this.setState({
+          //   errormgs: error.validationFailures[0]
+          // });
           console.log("DEBUG34: ", error);
-          console.log(HandelError(error.validationFailures[0]));
+          // console.log(HandelError(error.validationFailures[0]));
         }
       );
 
@@ -354,7 +354,7 @@ class AddMainCategoryForm extends Component {
             {/* Sub Category Name */}
             <div className="input_wrapper">
               <label for="subcategory_name" className="label">
-                Name:kk
+                Name:
               </label>
 
               <Input
@@ -385,7 +385,7 @@ class AddMainCategoryForm extends Component {
                 placeholder="Select Material Category"
                 id="material_category"
                 name="material_category"
-                onChange={value => this.handleSelect("plant", value)}
+                onChange={this.handleSelect}
                 value={this.state.material_category_edit}
                 style={{ width: "180px" }}
               >

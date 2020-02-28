@@ -391,13 +391,12 @@ class EmployeeAddForm extends Component {
         errors: {
           // code: this.state.errors.code,
           firstName: this.state.errors.firstName || "First Name can't be empty",
-          lastName: this.state.errors.lastName || "Last Name can't be empty",
-          plant: this.state.errors.plant || "Plant can't be empty",
-          desigination:
-            this.state.errors.desigination || "Designation can't be empty",
-          address: this.state.errors.address || "Address can't be empty",
-          phoneno: this.state.errors.phoneno || "Phone Number can't be empty",
-          email: this.state.errors.email || "Email can't be empty"
+          lastName: this.state.errors.lastName,
+          plant: this.state.errors.plant,
+          desigination: this.state.errors.desigination,
+          address: this.state.errors.address,
+          phoneno: this.state.errors.phoneno,
+          email: this.state.errors.email
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
@@ -410,14 +409,13 @@ class EmployeeAddForm extends Component {
         errors: {
           // code: this.state.errors.code,
           // username: this.state.errors.username,
-          firstName: this.state.errors.firstName || "First Name can't be empty",
+          firstName: this.state.errors.firstName,
           lastName: this.state.errors.lastName || "Last Name can't be empty",
-          plant: this.state.errors.plant || "Plant can't be empty",
-          desigination:
-            this.state.errors.desigination || "Designation can't be empty",
-          address: this.state.errors.address || "Address can't be empty",
-          phoneno: this.state.errors.phoneno || "Phone Number can't be empty",
-          email: this.state.errors.email || "Email can't be empty"
+          plant: this.state.errors.plant,
+          desigination: this.state.errors.desigination,
+          address: this.state.errors.address,
+          phoneno: this.state.errors.phoneno,
+          email: this.state.errors.email
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
@@ -430,14 +428,13 @@ class EmployeeAddForm extends Component {
         errors: {
           // code: this.state.errors.code,
           // username: this.state.errors.username,
-          firstName: this.state.errors.firstName || "First Name can't be empty",
-          lastName: this.state.errors.lastName || "Last Name can't be empty",
+          firstName: this.state.errors.firstName,
+          lastName: this.state.errors.lastName,
           plant: this.state.errors.plant || "Plant can't be empty",
-          desigination:
-            this.state.errors.desigination || "Designation can't be empty",
-          address: this.state.errors.address || "Address can't be empty",
-          phoneno: this.state.errors.phoneno || "Phone Number can't be empty",
-          email: this.state.errors.email || "Email can't be empty"
+          desigination: this.state.errors.desigination,
+          address: this.state.errors.address,
+          phoneno: this.state.errors.phoneno,
+          email: this.state.errors.email
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
@@ -450,14 +447,14 @@ class EmployeeAddForm extends Component {
         errors: {
           // code: this.state.errors.code,
           // username: this.state.errors.username,
-          firstName: this.state.errors.firstName || "First Name can't be empty",
-          lastName: this.state.errors.lastName || "Last Name can't be empty",
-          plant: this.state.errors.plant || "Plant can't be empty",
+          firstName: this.state.errors.firstName,
+          lastName: this.state.errors.lastName,
+          plant: this.state.errors.plant,
           desigination:
             this.state.errors.desigination || "Designation can't be empty",
-          address: this.state.errors.address || "Address can't be empty",
-          phoneno: this.state.errors.phoneno || "Phone Number can't be empty",
-          email: this.state.errors.email || "Email can't be empty"
+          address: this.state.errors.address,
+          phoneno: this.state.errors.phoneno,
+          email: this.state.errors.email
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
@@ -470,14 +467,13 @@ class EmployeeAddForm extends Component {
         errors: {
           // code: this.state.errors.code,
           // username: this.state.errors.username,
-          firstName: this.state.errors.firstName || "First Name can't be empty",
-          lastName: this.state.errors.lastName || "Last Name can't be empty",
-          plant: this.state.errors.plant || "Plant can't be empty",
-          desigination:
-            this.state.errors.desigination || "Designation can't be empty",
+          firstName: this.state.errors.firstName,
+          lastName: this.state.errors.lastName,
+          plant: this.state.errors.plant,
+          desigination: this.state.errors.desigination,
           address: this.state.errors.address || "Address can't be empty",
-          phoneno: this.state.errors.phoneno || "Phone Number can't be empty",
-          email: this.state.errors.email || "Email can't be empty"
+          phoneno: this.state.errors.phoneno,
+          email: this.state.errors.email
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
@@ -490,14 +486,13 @@ class EmployeeAddForm extends Component {
         errors: {
           // code: this.state.errors.code,
           // username: this.state.errors.username,
-          firstName: this.state.errors.firstName || "First Name can't be empty",
-          lastName: this.state.errors.lastName || "Last Name can't be empty",
-          plant: this.state.errors.plant || "Plant can't be empty",
-          desigination:
-            this.state.errors.desigination || "Designation can't be empty",
-          address: this.state.errors.address || "Address can't be empty",
+          firstName: this.state.errors.firstName,
+          lastName: this.state.errors.lastName,
+          plant: this.state.errors.plant,
+          desigination: this.state.errors.desigination,
+          address: this.state.errors.address,
           phoneno: this.state.errors.phoneno || "Phone Number can't be empty",
-          email: this.state.errors.email || "Email can't be empty"
+          email: this.state.errors.email
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
@@ -510,13 +505,12 @@ class EmployeeAddForm extends Component {
         errors: {
           // code: this.state.errors.code,
           // username: this.state.errors.username,
-          firstName: this.state.errors.firstName || "First Name can't be empty",
-          lastName: this.state.errors.lastName || "Last Name can't be empty",
-          plant: this.state.errors.plant || "Plant can't be empty",
-          desigination:
-            this.state.errors.desigination || "Designation can't be empty",
-          address: this.state.errors.address || "Address can't be empty",
-          phoneno: this.state.errors.phoneno || "Phone Number can't be empty",
+          firstName: this.state.errors.firstName,
+          lastName: this.state.errors.lastName,
+          plant: this.state.errors.plant,
+          desigination: this.state.errors.desigination,
+          address: this.state.errors.address,
+          phoneno: this.state.errors.phoneno,
           email: this.state.errors.email || "Email can't be empty"
         },
         formValid: this.validateForm(this.state.errors),
@@ -782,6 +776,7 @@ class EmployeeAddForm extends Component {
                 id='plant'
                 name='plant'
                 placeholder='Select a Plant'
+                optionFilterProp='children'
                 onChange={value => this.handleSelect("plant", value)}
                 onFocus={onFocus}
                 value={this.state.plantEdit}
@@ -808,6 +803,7 @@ class EmployeeAddForm extends Component {
                 name='desigination'
                 style={{ width: 170 }}
                 placeholder='Select the Desigination'
+                optionFilterProp='children'
                 onChange={value => this.handleSelect("designation", value)}
                 onFocus={onFocus}
                 onBlur={onBlur}

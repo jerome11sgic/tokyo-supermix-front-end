@@ -16,7 +16,7 @@ export default class CalibrationTitle extends Component {
     return (
       <FlexContainer titles leveltitles>
         <Paragraph style={style}>Equipment Calibration Master</Paragraph>
-        <AddCalibrationForm />
+        <AddCalibrationForm reload={this.props.reload} />
       </FlexContainer>
     );
   }
