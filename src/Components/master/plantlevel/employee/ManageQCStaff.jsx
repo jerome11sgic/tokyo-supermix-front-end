@@ -195,7 +195,7 @@ class ManageQCStaff extends Component {
           <span>
             <a>
               <Icon
-                type="edit"
+                type='edit'
                 style={{ fontSize: "1.2em" }}
                 onClick={this.props.passEditQCStaffRecordToModal.bind(
                   this,
@@ -203,18 +203,18 @@ class ManageQCStaff extends Component {
                 )}
               />
             </a>
-            <Divider type="vertical" />
+            <Divider type='vertical' />
             <a>
               <Popconfirm
-                title="Are you sure you want to Delete this?"
+                title='Are you sure you want to Delete this?'
                 icon={
-                  <Icon type="question-circle-o" style={{ color: "red" }} />
+                  <Icon type='question-circle-o' style={{ color: "red" }} />
                 }
                 onConfirm={this.onConfirmdelete.bind(this, record.id)}
               >
-                <a href="#">
+                <a href='#'>
                   <Icon
-                    type="delete"
+                    type='delete'
                     style={{ color: "red", fontSize: "1.2em" }}
                   />
                 </a>
@@ -229,7 +229,7 @@ class ManageQCStaff extends Component {
       <AntTable
         maxlength
         title={() => <EmployeeMasterTitle reload={this.getallEmployee} />}
-        className="plantManageTable"
+        className='plantManageTable'
         columns={columns}
         dataSource={this.state.data}
         onChange={this.handleChange}

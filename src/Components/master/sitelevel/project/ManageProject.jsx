@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { Popconfirm, Divider, Icon } from "antd";
 import ManageProjectMasterTitle from "../title/ManageProjectMasterTitle";
 import { AntTable } from "../../../styledcomponents/table/AntTabl";
+import { api } from "../../../services/AxiosService";
 
 const data = [];
 
@@ -26,6 +27,31 @@ export default class ManageProject extends Component {
         size: "small"
       });
     }
+  }
+
+  componentDidMount() {
+    this.getAllProject();
+  }
+
+  getAllProject = () => {
+    api("GET", "supermix", "/projects", "", "", "").then(res => {
+      console.log(res.data);
+      this.setState({
+        data: res.data.results.pour
+      });
+    });
+  };
+
+  onConfirmdelete(id) {
+    console.log(id);
+    let mesg = "employee delete";
+
+    api("DELETE", "supermix", "/project", "", "", id).then(res => {
+      console.log(res.data);
+      this.getallPour();
+      Notification("success", res.data.message);
+    });
+    console.log(this.state.id);
   }
 
   showModal = () => {
