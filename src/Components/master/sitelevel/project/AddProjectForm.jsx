@@ -188,92 +188,26 @@ class AddProjectForm extends Component {
       contact_no,
       plant
     } = this.state;
-    if (
-      code.length === 0 &&
-      project_name.length === 0 &&
-      start_date.length === 0 &&
-      customer.length === 0 &&
-      contact_person.length === 0 &&
-      contact_no.length === 0 &&
-      plant.length === 0
-    ) {
-      console.log("form is valid");
-      if (this.state.type === "edit") {
-        const data = {
-          code: "",
-          start_date: "",
-          project_name: "",
-          customer: "",
-          contact_person: "",
-          contact_no: "",
-          plant: ""
-        };
-        console.log(data);
-        api("PUT", "supermix", "/project", "", data, "")
-          .then(
-            res => {
-              console.log(res.data);
 
-              if (res.data.status === "VALIDATION_FAILURE") {
-                console.log("update");
-                this.responeserror(res.data.results.name.message);
-              } else {
-                Notification("success", res.data.message);
-                // this.props.reload();
-                this.setState({
-                  loading: true,
-                  code: "",
-                  start_date: "",
-                  project_name: "",
-                  customer: "",
-                  contact_person: "",
-                  contact_no: "",
-                  plant: ""
-                });
-                setTimeout(() => {
-                  this.setState({ loading: false, visible: false });
-                }, 1500);
-              }
-            },
-            error => {
-              this.setState({
-                errorvalmegss: error.validationFailures[0]
-              });
-              console.log("DEBUG34: ", error);
-              console.log(HandelError(error.validationFailures[0]));
-            }
-          )
-          .catch(error => {
-            // this.setState({
-            //   errormgs: "Plant Name Exist"
-            // });
-            console.log(error);
-          });
-      } else {
-        //         code: "pr01"
-        // name: "yifuf"
-        // contactNumber: "12456494"
-        // contactPerson: "uhguhfuf"
-        // startDate: "2020-02-20"
-        // customerId: 1
-        // plantCode: "p01"
-        // plantName: "jaffna"
-        // customerName: "kiri"
-        const data = {
-          code: code,
-          name: project_name,
-          contactNumber: contact_no,
-          startDate: start_date,
-          customerId: customer,
-          plantCode: plant,
-          contactPerson: contact_person
-        };
-        console.log(data);
-        api("POST", "supermix", "/project", "", data, "").then(
+    console.log("form is valid");
+    if (this.state.type === "edit") {
+      const data = {
+        code: code,
+        name: project_name,
+        contactNumber: contact_no,
+        startDate: start_date,
+        customerId: customer,
+        plantCode: plant,
+        contactPerson: contact_person
+      };
+      console.log(data);
+      api("PUT", "supermix", "/project", "", data, "")
+        .then(
           res => {
             console.log(res.data);
+
             if (res.data.status === "VALIDATION_FAILURE") {
-              console.log("add");
+              console.log("update");
               this.responeserror(res.data.results.name.message);
             } else {
               Notification("success", res.data.message);
@@ -300,10 +234,65 @@ class AddProjectForm extends Component {
             console.log("DEBUG34: ", error);
             console.log(HandelError(error.validationFailures[0]));
           }
-        );
-      }
+        )
+        .catch(error => {
+          // this.setState({
+          //   errormgs: "Plant Name Exist"
+          // });
+          console.log(error);
+        });
     } else {
-      console.log("form is not valid");
+      //         code: "pr01"
+      // name: "yifuf"
+      // contactNumber: "12456494"
+      // contactPerson: "uhguhfuf"
+      // startDate: "2020-02-20"
+      // customerId: 1
+      // plantCode: "p01"
+      // plantName: "jaffna"
+      // customerName: "kiri"
+      const data = {
+        code: code,
+        name: project_name,
+        contactNumber: contact_no,
+        startDate: start_date,
+        customerId: customer,
+        plantCode: plant,
+        contactPerson: contact_person
+      };
+      console.log(data);
+      api("POST", "supermix", "/project", "", data, "").then(
+        res => {
+          console.log(res.data);
+          if (res.data.status === "VALIDATION_FAILURE") {
+            console.log("add");
+            this.responeserror(res.data.results.name.message);
+          } else {
+            Notification("success", res.data.message);
+            // this.props.reload();
+            this.setState({
+              loading: true,
+              code: "",
+              start_date: "",
+              project_name: "",
+              customer: "",
+              contact_person: "",
+              contact_no: "",
+              plant: ""
+            });
+            setTimeout(() => {
+              this.setState({ loading: false, visible: false });
+            }, 1500);
+          }
+        },
+        error => {
+          this.setState({
+            errorvalmegss: error.validationFailures[0]
+          });
+          console.log("DEBUG34: ", error);
+          console.log(HandelError(error.validationFailures[0]));
+        }
+      );
     }
   };
 
