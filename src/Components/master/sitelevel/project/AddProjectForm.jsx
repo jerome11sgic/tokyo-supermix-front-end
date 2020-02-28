@@ -10,6 +10,7 @@ import { api } from "../../../services/AxiosService";
 import { connect } from "react-redux";
 import Notification from "../../../Constant/Notification";
 import HandelError from "../../../Constant/HandleError";
+import { DISABLE_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
 
 const Option = Select;
 
@@ -48,6 +49,51 @@ class AddProjectForm extends Component {
       errors: {}
     });
   };
+
+  componentDidMount() {
+    this.getAllplant();
+    this.getAllCustomers();
+  }
+
+  //dropdown data for plant
+  getAllplant() {
+    api("GET", "supermix", "/plants", "", "", "").then(res => {
+      console.log(res.data.results.plants.length);
+      if (res.data.results.plants.length > 0) {
+        console.log("ggg");
+        let SelectPlants = res.data.results.plants.map((post, index) => {
+          return (
+            <Option value={post.code} key={index}>
+              {post.name}
+            </Option>
+          );
+        });
+        this.setState({
+          SelectPlants
+        });
+      }
+    });
+  }
+
+  //dropdown data for plant
+  getAllCustomers() {
+    api("GET", "supermix", "/customers", "", "", "").then(res => {
+      console.log(res.data.results);
+      if (res.data.results.customers.length > 0) {
+        console.log("ggg");
+        let SelectCustomers = res.data.results.customers.map((post, index) => {
+          return (
+            <Option value={post.id} key={index}>
+              {post.name}
+            </Option>
+          );
+        });
+        this.setState({
+          SelectCustomers
+        });
+      }
+    });
+  }
 
   handleChange = (event, field) => {
     this.setState({ [field]: event.target.value });
@@ -89,14 +135,6 @@ class AddProjectForm extends Component {
       });
     }
 
-    // handle select for  contact_person
-    if (name === "contact_person") {
-      this.setState({
-        contact_person: value,
-        contact_person_edit: value
-      });
-    }
-
     // handle select for  plant
     if (name === "plant") {
       this.setState({
@@ -129,7 +167,7 @@ class AddProjectForm extends Component {
     console.log(name);
     console.log(dateString);
     console.log(field);
-    let convertedDate = moment(dateString).format("DD-MM-YYYY");
+    let convertedDate = moment(dateString).format("YYYY-MM-DD");
     console.log(convertedDate);
     if (name === "start_date") {
       this.setState({
@@ -212,15 +250,25 @@ class AddProjectForm extends Component {
             console.log(error);
           });
       } else {
+        //         code: "pr01"
+        // name: "yifuf"
+        // contactNumber: "12456494"
+        // contactPerson: "uhguhfuf"
+        // startDate: "2020-02-20"
+        // customerId: 1
+        // plantCode: "p01"
+        // plantName: "jaffna"
+        // customerName: "kiri"
         const data = {
           code: code,
-          start_date: start_date,
-          project_name: project_name,
-          customer: customer,
-          contact_person: contact_person,
-          contact_no: contact_no,
-          plant: plant
+          name: project_name,
+          contactNumber: contact_no,
+          startDate: start_date,
+          customerId: customer,
+          plantCode: plant,
+          contactPerson: contact_person
         };
+        console.log(data);
         api("POST", "supermix", "/project", "", data, "").then(
           res => {
             console.log(res.data);
@@ -259,9 +307,33 @@ class AddProjectForm extends Component {
     }
   };
 
-  componentDidMount() {
-    console.log(this.props.screen);
+  //   code: "pr01"
+  // name: "yifuf"
+  // contactNumber: "12456494"
+  // contactPerson: "uhguhfuf"
+  // startDate: "2020-02-20"
+  // customerId: 1
+  // plantCode: "p01"
+  // plantName: "jaffna"
+  // customerName: "kiri"
+
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps.type);
+    this.setState({
+      visible: nextProps.visible,
+      code: nextProps.editPlantData.code,
+      start_date: moment(nextProps.editPlantData.start_date, "YYYY-MM-DD"),
+      project_name: nextProps.editPlantData.name,
+      customer: nextProps.editPlantData.customerName,
+      customer_edit: nextProps.editPlantData.customerId,
+      contact_person: nextProps.editPlantData.contactPerson,
+      contact_no: nextProps.editPlantData.contactNumber,
+      plant: nextProps.editPlantData.plantName,
+      plant_edit: nextProps.editPlantData.plantCode,
+      type: nextProps.type
+    });
   }
+
   render() {
     const {
       visible,
@@ -361,7 +433,7 @@ class AddProjectForm extends Component {
 
             <div className='input_wrapper'>
               <label for='start_date' className='label'>
-                Calibrated Date:
+                Start Date:
               </label>
               <DatePicker
                 id='start_date'
@@ -390,7 +462,9 @@ class AddProjectForm extends Component {
                 style={{ width: "180px" }}
                 value={customer}
                 onChange={value => this.handleSelect("customer", value)}
-              ></Select>
+              >
+                {this.state.SelectCustomers}
+              </Select>
               <div style={{ height: "8px" }}></div>
             </div>
 
@@ -399,25 +473,25 @@ class AddProjectForm extends Component {
                 Contact Person
               </label>
 
-              <Select
+              <Input
                 id='contact_person'
                 placeholder='Select Contact Person'
-                name='contact_person '
+                name='contact_person'
                 style={{ width: "180px" }}
                 value={contact_person}
-                onChange={value => this.handleSelect("contact_person", value)}
-              ></Select>
+                onChange={this.handleChange}
+              />
               <div style={{ height: "8px" }}></div>
             </div>
             <div className='input_wrapper'>
-              <label for='Contact_No ' className='label'>
+              <label for='contact_no' className='label'>
                 Contact No
               </label>
 
               <Input
-                id='Contact_No'
+                id='contact_no'
                 placeholder='Select Contact No'
-                name='Contact_No '
+                name='contact_no'
                 style={{ width: "180px" }}
                 value={contact_no}
                 onChange={this.handleChange}
@@ -437,7 +511,9 @@ class AddProjectForm extends Component {
                 style={{ width: "180px" }}
                 value={plant}
                 onChange={value => this.handleSelect("plant", value)}
-              ></Select>
+              >
+                {this.state.SelectPlants}
+              </Select>
               <div style={{ height: "8px" }}></div>
             </div>
           </MasterLevelForm>
@@ -447,4 +523,22 @@ class AddProjectForm extends Component {
   }
 }
 
-export default AddProjectForm;
+const mapStateToProps = state => {
+  //getting the global redux state to get the data from the EditPlantReducer.js
+  return {
+    visible: state.plantLevelReducers.EditPlantReducer.visible,
+    type: state.plantLevelReducers.EditPlantReducer.type,
+    editPlantData: state.plantLevelReducers.EditPlantReducer.editPlantData
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setPourVisibility: () => {
+      dispatch({ type: DISABLE_EDIT_MODE });
+      console.log("edit modal closed");
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddProjectForm);

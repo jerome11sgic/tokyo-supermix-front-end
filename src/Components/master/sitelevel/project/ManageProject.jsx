@@ -4,16 +4,19 @@ import { Popconfirm, Divider, Icon } from "antd";
 import ManageProjectMasterTitle from "../title/ManageProjectMasterTitle";
 import { AntTable } from "../../../styledcomponents/table/AntTabl";
 import { api } from "../../../services/AxiosService";
+import { SWITCH_TO_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
+import { connect } from "react-redux";
 
 const data = [];
 
-export default class ManageProject extends Component {
+class ManageProject extends Component {
   state = {
     filteredInfo: null,
     sortedInfo: null,
     searchText: "",
     visible: false,
-    size: "small"
+    size: "small",
+    projectsList: []
   };
 
   componentWillMount() {
@@ -35,9 +38,9 @@ export default class ManageProject extends Component {
 
   getAllProject = () => {
     api("GET", "supermix", "/projects", "", "", "").then(res => {
-      console.log(res.data);
+      console.log(res.data.results);
       this.setState({
-        data: res.data.results.pour
+        projectsList: res.data.results.projects
       });
     });
   };
@@ -57,13 +60,6 @@ export default class ManageProject extends Component {
   showModal = () => {
     this.setState({
       visible: true
-    });
-  };
-
-  handleOk = e => {
-    console.log(e);
-    this.setState({
-      visible: false
     });
   };
 
@@ -111,95 +107,75 @@ export default class ManageProject extends Component {
     sortedInfo = sortedInfo || {};
     filteredInfo = filteredInfo || {};
     const columns = [
+      /* 
+  code: "pr01"
+  name: "yifuf"
+  contactNumber: "12456494"
+  contactPerson: "uhguhfuf"
+  startDate: "2020-02-20"
+  customerId: 1
+  plantCode: "p01"
+  plantName: "jaffna"
+  customerName: "kiri"
+  */
       {
         title: "Code",
         dataIndex: "code",
-        key: "code",
+        key: "code"
         // width: "3%",
-
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.code - b.code,
-        sortOrder: sortedInfo.columnKey === "code" && sortedInfo.order
       },
       {
         title: "Project Name",
-        dataIndex: "project_name",
-        key: "project_name",
+        dataIndex: "name",
+        key: "name"
         // width: "6.5%",
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
       },
+
       {
-        title: "Mix Design",
-        dataIndex: "mix_design",
-        key: "mix_design",
+        title: "Start Date",
+        dataIndex: "startDate",
+        key: "startDate"
         // width: "6%",
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
       },
-      {
-        title: "Grade",
-        dataIndex: "grade",
-        key: "grade",
-        // width: "4%",
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
-      },
+
       {
         title: "Customer",
-        dataIndex: "customer",
-        key: "customer",
+        dataIndex: "customerName",
+        key: "customerName"
         // width: "5%",
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
       },
       {
         title: "Contact Person",
-        dataIndex: "contact_person",
-        key: "contact_person",
+        dataIndex: "contactPerson",
+        key: "contactPerson"
         // width: "7%",
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
       },
       {
         title: "Contact Number",
-        dataIndex: "contact_number",
-        key: "contact_number",
+        dataIndex: "contactNumber",
+        key: "contactNumber"
         // width: "8%",
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
       },
       {
         title: "Plant",
-        dataIndex: "plant",
-        key: "plant",
+        dataIndex: "plantName",
+        key: "plantName"
         // width: "4%",
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
       },
       {
         title: "Edit & Delete",
         key: "action",
         width: "7%",
-        render: (text, record) => (
+        render: (text, record = this.state.projectsList) => (
           <span>
             <a>
-              <Icon type='edit' />
+              <Icon
+                type='edit'
+                onClick={this.props.passEditProjectRecordToModal.bind(
+                  this,
+                  record
+                )}
+              />
             </a>
             <Divider type='vertical' />
             <a>
@@ -210,7 +186,7 @@ export default class ManageProject extends Component {
                 }
               >
                 <a href='#'>
-                  <Icon type='delete'></Icon>
+                  <Icon type='delete' style={{ color: "red" }}></Icon>
                 </a>
               </Popconfirm>
             </a>
@@ -224,7 +200,7 @@ export default class ManageProject extends Component {
         maxlength
         title={() => <ManageProjectMasterTitle />}
         columns={columns}
-        dataSource={data}
+        dataSource={this.state.projectsList}
         onChange={this.handleChange}
         pagination={{ defaultPageSize: 3 }}
         size={this.state.size}
@@ -232,3 +208,17 @@ export default class ManageProject extends Component {
     );
   }
 }
+
+const mapStateToProps = state => null;
+
+const mapDispatchToProps = dispatch => {
+  return {
+    passEditProjectRecordToModal: record => {
+      //this payload is the data we pass into redux which is in the row which we clicked
+      dispatch({ type: SWITCH_TO_EDIT_MODE, payload: record });
+      console.log(record);
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ManageProject);
