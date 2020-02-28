@@ -210,7 +210,7 @@ class AddMainCategoryForm extends Component {
       const data = {
         id: this.state.subcategory_code,
         name: this.state.subcategory_name,
-        materialCategoryId: 1
+        materialCategoryId: this.state.material_category
       };
       api("PUT", "supermix", "/material-sub-category", "", data, "").then(
         res => {
@@ -241,7 +241,7 @@ class AddMainCategoryForm extends Component {
     } else {
       const data = {
         name: this.state.subcategory_name,
-        materialCategoryId: 1
+        materialCategoryId: this.state.material_category
       };
       console.log(data);
       api("POST", "supermix", "/material-sub-category", "", data, "").then(
