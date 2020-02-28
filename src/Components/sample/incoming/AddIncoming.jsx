@@ -29,6 +29,13 @@ class Addincoming extends Component {
     supplierselect: "",
     SelectPlants: "",
     SelectRaw: "",
+    plantName: "",
+    supplierName: "",
+    rawMaterialName: "",
+    edit_plantName: "",
+    edit_supplierName: "",
+    edit_rawMaterialName: "",
+
     type: "add"
   };
   showModal = () => {
@@ -284,6 +291,27 @@ class Addincoming extends Component {
       date: dateString
     });
   }
+
+  componentWillReceiveProps(nextProps) {
+    console.log("gggg" + nextProps.visible);
+    this.setState({
+      visible: true,
+      code: nextProps.editPlantData.code,
+      vehicleNo: nextProps.editPlantData.vehicleNo,
+      date: nextProps.editPlantData.date,
+      status: nextProps.editPlantData.status,
+      rawMaterialId: nextProps.editPlantData.rawMaterialId,
+      rawMaterialName: nextProps.editPlantData.rawMaterialName,
+      plantCode: nextProps.editPlantData.plantCode,
+      plantName: nextProps.editPlantData.plantName,
+      supplierId: nextProps.editPlantData.supplierId,
+      supplierName: nextProps.editPlantData.supplierName,
+      edit_plantName: nextProps.editPlantData.plantName,
+      edit_supplierName: nextProps.editPlantData.supplierName,
+      edit_rawMaterialName: nextProps.editPlantData.rawMaterialName,
+      type: nextProps.type
+    });
+  }
   componentDidMount() {
     this.Selectsupplier();
     this.getAllplant();
@@ -376,7 +404,7 @@ class Addincoming extends Component {
                 name="supplierId"
                 placeholder="Enter Supplier Name"
                 style={{ width: "180px" }}
-                value={this.state.supplierId}
+                value={this.state.edit_supplierName}
                 onChange={value => this.handleSelect("supplier", value)}
               >
                 {this.state.supplierselect}
@@ -394,7 +422,7 @@ class Addincoming extends Component {
                 name="rawMaterialId"
                 placeholder=" Raw Material"
                 style={{ width: "180px" }}
-                value={this.state.rawMaterialId}
+                value={this.state.edit_rawMaterialName}
                 onChange={value => this.handleSelect("rawMaterial", value)}
               >
                 {this.state.SelectRaw}
@@ -442,7 +470,7 @@ class Addincoming extends Component {
                 id="plant"
                 name="plant"
                 placeholder="plant"
-                value={this.state.plantCode}
+                value={this.state.edit_plantName}
                 onChange={value => this.handleSelect("plant", value)}
                 style={{ width: "200px" }}
               >

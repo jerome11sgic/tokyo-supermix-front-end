@@ -22,7 +22,7 @@ const data = [
   }
 ];
 
-export default class ManageIncoming extends Component {
+class ManageIncoming extends Component {
   state = {
     filteredInfo: null,
     sortedInfo: null,
@@ -215,10 +215,10 @@ export default class ManageIncoming extends Component {
               <Icon
                 type="edit"
                 style={{ fontSize: "1.2em" }}
-                // onClick={this.props.passEditPlantRecordtoModal.bind(
-                //   this,
-                //   record
-                // )}
+                onClick={this.props.passEditincomingRecordToModal.bind(
+                  this,
+                  record
+                )}
               />
             </a>
             <Divider type="vertical" />
@@ -289,3 +289,16 @@ export default class ManageIncoming extends Component {
     );
   }
 }
+const mapStateToProps = state => null;
+
+const mapDispatchToProps = dispatch => {
+  return {
+    passEditincomingRecordToModal: record => {
+      //this payload is the data we pass into redux which is in the row which we clicked
+      dispatch({ type: SWITCH_TO_EDIT_MODE, payload: record });
+      console.log(record);
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ManageIncoming);
