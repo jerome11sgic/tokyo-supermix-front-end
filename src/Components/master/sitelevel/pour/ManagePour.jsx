@@ -3,15 +3,20 @@ import React, { Component } from "react";
 import { Popconfirm, Divider, Icon } from "antd";
 import ManagePourMasterTitle from "../title/ManagePourMasterTitle";
 import { AntTable } from "../../../styledcomponents/table/AntTabl";
+import { connect } from "react-redux";
+import { SWITCH_TO_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
+import { api } from "../../../services/AxiosService";
+import Notification from "../../../Constant/Notification";
 const data = [];
 
-export default class ManagePour extends Component {
+class ManagePour extends Component {
   state = {
     filteredInfo: null,
     sortedInfo: null,
     searchText: "",
     visible: false,
-    size: "small"
+    size: "small",
+    poursList: []
   };
 
   componentWillMount() {
@@ -25,6 +30,31 @@ export default class ManagePour extends Component {
         size: "small"
       });
     }
+  }
+
+  componentDidMount() {
+    this.getAllPour();
+  }
+
+  getAllPour = () => {
+    api("GET", "supermix", "/pours", "", "", "").then(res => {
+      console.log(res.data.results);
+      this.setState({
+        poursList: res.data.results.Pour
+      });
+    });
+  };
+
+  onConfirmdelete(id) {
+    console.log(id);
+    let mesg = "pour delete";
+
+    api("DELETE", "supermix", "/pour", "", "", id).then(res => {
+      console.log(res.data);
+      this.getAllPour();
+      Notification("success", res.data.message);
+    });
+    console.log(this.state.id);
   }
 
   showModal = () => {
@@ -80,63 +110,42 @@ export default class ManagePour extends Component {
   }
 
   render() {
-    let { sortedInfo, filteredInfo } = this.state;
-    sortedInfo = sortedInfo || {};
-    filteredInfo = filteredInfo || {};
     const columns = [
+      // {
+      //   title: "Code",
+      //   dataIndex: "id",
+      //   key: "id"
+      // },
       {
-        title: "Code",
-        dataIndex: "code",
-        key: "code",
-
-        filters: [
-          { text: "Joe", value: "Joe" },
-          { text: "Jim", value: "Jim" }
-        ],
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.code - b.code,
-        sortOrder: sortedInfo.columnKey === "code" && sortedInfo.order
-      },
-      {
-        title: "Pour No",
-        dataIndex: "pourNo",
-        key: "pourNo",
-
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        title: "Pour Name",
+        dataIndex: "name",
+        key: "name"
       },
       {
         title: "Project",
-        dataIndex: "pourNo",
-        key: "pourNo",
-
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        dataIndex: "projectName",
+        key: "projectName"
       },
       {
         title: "Description",
-        dataIndex: "pourNo",
-        key: "pourNo",
-
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        dataIndex: "description",
+        key: "description"
       },
 
       {
         title: "Edit & Delete",
         key: "action",
         width: "7%",
-        render: (text, record) => (
+        render: (text, record = this.state.poursList) => (
           <span>
             <a>
-              <Icon type='edit' />
+              <Icon
+                type='edit'
+                onClick={this.props.passEditPourRecordToModal.bind(
+                  this,
+                  record
+                )}
+              />
             </a>
             <Divider type='vertical' />
             <a>
@@ -145,9 +154,10 @@ export default class ManagePour extends Component {
                 icon={
                   <Icon type='question-circle-o' style={{ color: "red" }} />
                 }
+                onConfirm={this.onConfirmdelete.bind(this, record.id)}
               >
                 <a href='#'>
-                  <Icon type='delete'></Icon>
+                  <Icon type='delete' style={{ color: "red" }}></Icon>
                 </a>
               </Popconfirm>
             </a>
@@ -161,7 +171,7 @@ export default class ManagePour extends Component {
         maxlength
         title={() => <ManagePourMasterTitle />}
         columns={columns}
-        dataSource={data}
+        dataSource={this.state.poursList}
         onChange={this.handleChange}
         pagination={{ defaultPageSize: 3 }}
         size={this.state.size}
@@ -169,3 +179,17 @@ export default class ManagePour extends Component {
     );
   }
 }
+
+const mapStateToProps = state => null;
+
+const mapDispatchToProps = dispatch => {
+  return {
+    passEditPourRecordToModal: record => {
+      //this payload is the data we pass into redux which is in the row which we clicked
+      dispatch({ type: SWITCH_TO_EDIT_MODE, payload: record });
+      console.log(record);
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ManagePour);
