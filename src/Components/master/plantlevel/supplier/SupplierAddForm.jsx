@@ -97,15 +97,16 @@ class SupplierAddForm extends Component {
   handleSelect = value => {
     this.setState({
       supplier_category: value,
-      errors: {
-        code: "",
-        name: this.state.errors.name,
-        companyName: this.state.errors.companyName,
-        category: "",
-        address: this.state.errors.address,
-        contactno: this.state.errors.contactno,
-        email: this.state.errors.email
-      }
+      edit_supplier_category: value
+      // errors: {
+      //   code: "",
+      //   name: this.state.errors.name,
+      //   companyName: this.state.errors.companyName,
+      //   category: "",
+      //   address: this.state.errors.address,
+      //   contactno: this.state.errors.contactno,
+      //   email: this.state.errors.email
+      // }
     });
   };
   componentWillReceiveProps(nextProps) {
@@ -639,7 +640,7 @@ class SupplierAddForm extends Component {
                   placeholder="Select Category "
                   optionFilterProp="children"
                   onChange={this.handleSelect}
-                  defaultValue={this.state.supplier_category}
+                  // defaultValue={this.state.supplier_category}
                   value={this.state.edit_supplier_category}
                   onFocus={onFocus}
                   onBlur={onBlur}

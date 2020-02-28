@@ -16,7 +16,7 @@ export default class MaterialNatureTitle extends Component {
     return (
       <FlexContainer titles leveltitles>
         <Paragraph style={style}>Material State</Paragraph>
-        <MaterialNatureAddForm />
+        <MaterialNatureAddForm reload={this.props.reload} />
       </FlexContainer>
     );
   }

@@ -58,7 +58,7 @@ class ManageCalibration extends Component {
     });
   };
 
-  getallplantCalibration() {
+  getallplantCalibration = () => {
     api("GET", "supermix", "/plant-equipment-calibrations", "", "", "").then(
       res => {
         console.log(res.data);
@@ -68,7 +68,7 @@ class ManageCalibration extends Component {
         });
       }
     );
-  }
+  };
   clearFilters = () => {
     this.setState({ filteredInfo: null });
   };
@@ -189,7 +189,7 @@ class ManageCalibration extends Component {
 
     return (
       <AntTable
-        title={() => <CalibrationTitle />}
+        title={() => <CalibrationTitle reload={this.getallplantCalibration} />}
         columns={columns}
         maxlength
         dataSource={this.state.datalist}

@@ -25,7 +25,6 @@ class AddParameter extends Component {
       formValid: false,
       errorCount: 0,
       errors: {
-        code: "",
         name: "",
         abbrivation: ""
       },
@@ -126,13 +125,11 @@ class AddParameter extends Component {
   handleSubmit = event => {
     event.preventDefault();
     if (
-      this.state.parameter_code.length === 0 &&
       this.state.parameter_name.length === 0 &&
       this.state.parameter_abbrivation.length === 0
     ) {
       this.setState({
         errors: {
-          code: "Code can't be empty",
           name: "Parameter Name can't be empty",
           abbrivation: "Abbrivation can't be empty"
         },
@@ -158,7 +155,6 @@ class AddParameter extends Component {
     ) {
       this.setState({
         errors: {
-          code: this.state.errors.code,
           name: this.state.errors.name || "Parameter Name can't be empty",
           abbrivation: this.state.errors.abbrivation
         },
@@ -171,7 +167,6 @@ class AddParameter extends Component {
     ) {
       this.setState({
         errors: {
-          code: this.state.errors.code,
           name: this.state.errors.name,
           abbrivation:
             this.state.errors.abbrivation || "Abbrivation can't be empty"
@@ -180,7 +175,6 @@ class AddParameter extends Component {
         errorCount: this.countErrors(this.state.errors)
       });
     } else if (
-      this.state.errors.code.length === 0 &&
       this.state.errors.name.length === 0 &&
       this.state.errors.abbrivation.length === 0
     ) {
@@ -191,11 +185,16 @@ class AddParameter extends Component {
       console.log(this.state.errorCount);
 
       const data = {
-        code: this.state.parameter_code,
+        // code: this.state.parameter_code,
         name: this.state.parameter_name,
-        abbrivation: this.state.parameter_abbrivation
+        abbreviation: this.state.parameter_abbrivation
       };
       if (this.state.type === "add") {
+        const data = {
+          // code: this.state.parameter_code,
+          name: this.state.parameter_name,
+          abbreviation: this.state.parameter_abbrivation
+        };
         api("POST", "supermix", "/parameter", "", data, "")
           .then(
             res => {
@@ -234,33 +233,29 @@ class AddParameter extends Component {
           });
       } else {
         const data = {
-          code: this.state.parameter_code,
+          id: this.state.parameter_code,
           name: this.state.parameter_name,
-          abbrivation: this.state.parameter_abbrivation
+          abbreviation: this.state.parameter_abbrivation
         };
+        console.log(data);
         api("PUT", "supermix", "/parameter", "", data, "")
           .then(
             res => {
               console.log(res.data);
 
-              if (res.data.status == "VALIDATION_FAILURE") {
-                console.log("update");
-                this.responeserror(res.data.results.name.message);
-              } else {
-                Notificationfuc("success", res.data.message);
-                this.props.reload();
-                this.setState({ loading: true });
-                this.setState({
-                  parameter_code: "",
-                  parameter_name: "",
-                  parameter_abbrivation: "",
-
-                  errormgs: ""
-                });
-                setTimeout(() => {
-                  this.setState({ loading: false, visible: false });
-                }, 3000);
-              }
+              Notificationfuc("success", res.data.message);
+              this.props.reload();
+              this.setState({ loading: true });
+              this.setState({
+                parameter_code: "",
+                parameter_name: "",
+                parameter_abbrivation: "",
+                visible: false,
+                errormgs: ""
+              });
+              setTimeout(() => {
+                this.setState({ loading: false, visible: false });
+              }, 3000);
             },
             error => {
               this.setState({
@@ -323,9 +318,9 @@ class AddParameter extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       visible: nextProps.visible,
-      parameter_code: nextProps.editPlantData.code,
+      parameter_code: nextProps.editPlantData.id,
       parameter_name: nextProps.editPlantData.name,
-      parameter_abbrivation: nextProps.editPlantData.abbrivation,
+      parameter_abbrivation: nextProps.editPlantData.abbreviation,
       type: nextProps.type
     });
   }
@@ -351,18 +346,18 @@ class AddParameter extends Component {
           Add Parameter
         </PrimaryButton>
         <Modal
-          width='260px'
-          className='addsubcategorymodal'
+          width="260px"
+          className="addsubcategorymodal"
           visible={visible}
           closable={false}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[
-            <Button key='back' onClick={this.handleCancel}>
+            <Button key="back" onClick={this.handleCancel}>
               Return
             </Button>,
             <PrimaryButton
-              key='submit'
+              key="submit"
               loading={loading}
               onClick={this.handleSubmit}
               style={{ background: "#001328", color: "white", border: "none" }}
@@ -382,7 +377,7 @@ class AddParameter extends Component {
                   : "Add Parameter"}
               </p>
               <Icon
-                type='close-circle'
+                type="close-circle"
                 onClick={this.handleCancel}
                 style={{
                   color: "white"
@@ -393,38 +388,32 @@ class AddParameter extends Component {
         >
           <MasterLevelForm>
             {/* Code */}
-            <div className='input_wrapper'>
-              <label for='parameter_code' className='label'>
+            <div className="input_wrapper">
+              <label for="parameter_code" className="label">
                 Code:
               </label>
               <Input
-                id='parameter_code'
-                name='parameter_code'
-                placeholder='Enter the Code '
+                id="parameter_code"
+                name="parameter_code"
+                placeholder="Enter the Code "
                 onChange={this.handleChange}
                 value={this.state.parameter_code}
                 disabled={this.state.type === "edit" ? true : false}
                 // disabled
               />
 
-              {errors.code.length > 0 && <div style={error}>{errors.code}</div>}
-              {this.state.errormgs.message === "code" ? (
-                <div style={error}>{HandelError(this.state.errormgs)}</div>
-              ) : (
-                ""
-              )}
               <div style={{ height: "12px" }}></div>
             </div>
             {/* Paramter Name */}
-            <div className='input_wrapper'>
-              <label for='parameter_name' className='label'>
+            <div className="input_wrapper">
+              <label for="parameter_name" className="label">
                 Parameter Name:
               </label>
 
               <Input
-                id='parameter_name'
-                name='parameter_name'
-                placeholder='Enter Parameter Name'
+                id="parameter_name"
+                name="parameter_name"
+                placeholder="Enter Parameter Name"
                 onChange={this.handleChange}
                 value={this.state.parameter_name}
               />
@@ -438,15 +427,15 @@ class AddParameter extends Component {
             </div>
 
             {/* Abbrivation */}
-            <div className='input_wrapper'>
-              <label for='parameter_abbrivation' className='label'>
+            <div className="input_wrapper">
+              <label for="parameter_abbrivation" className="label">
                 Abbrivation:
               </label>
 
               <Input
-                id='parameter_abbrivation'
-                name='parameter_abbrivation'
-                placeholder='Enter Abbrivation'
+                id="parameter_abbrivation"
+                name="parameter_abbrivation"
+                placeholder="Enter Abbrivation"
                 onChange={this.handleChange}
                 value={this.state.parameter_abbrivation}
               />

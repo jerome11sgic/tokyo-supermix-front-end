@@ -16,7 +16,7 @@ export default class MaterialMasterTitle extends Component {
     return (
       <FlexContainer titles leveltitles>
         <Paragraph style={style}>Materials</Paragraph>
-        <MaterialMasterAddForm />
+        <MaterialMasterAddForm reload={this.props.reload} />
       </FlexContainer>
     );
   }

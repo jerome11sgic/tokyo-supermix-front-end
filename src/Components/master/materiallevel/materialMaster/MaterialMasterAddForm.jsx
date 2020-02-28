@@ -26,16 +26,19 @@ class MaterialMasterAddForm extends Component {
     formValid: false,
     errorCount: 0,
     errors: {
-      material_category: "",
       sub_category: "",
-      material_name: ""
+      material_name: "",
+      material_nature: ""
     },
     code: "",
-    material_category: "",
+    // material_category: "",
+    material_nature: "",
     sub_category: "",
     material_name: "",
     errormgs: "",
     type: "add",
+    edit_material_nature: "",
+    edit_sub_category: "",
     subCategoryList: [],
     categoryList: []
   };
@@ -94,33 +97,54 @@ class MaterialMasterAddForm extends Component {
 
     const { errors } = this.state;
     // handle select for material_category
-    if (name === "material_category") {
+    // if (name === "material_category") {
+    //   this.setState({
+    //     material_category: value
+    //   });
+    //   if (value.length !== 0) {
+    //     this.setState({
+    //       errors: {
+    //         material_category: "",
+    //         sub_category: errors.sub_category,
+    //         material_name: errors.material_name,
+    //         material_nature: errors.material_nature
+    //       },
+    //       formValid: this.validateForm(errors),
+    //       errorCount: this.countErrors(errors)
+    //     });
+    //   }
+    // }
+    // handle select for sub_category
+    if (name === "sub_category") {
       this.setState({
-        material_category: value
+        sub_category: value,
+        edit_sub_category: value
       });
       if (value.length !== 0) {
         this.setState({
           errors: {
-            material_category: "",
-            sub_category: errors.sub_category,
-            material_name: errors.material_name
+            // material_category: errors.material_category,
+            sub_category: "",
+            material_name: errors.material_name,
+            material_nature: errors.material_nature
           },
           formValid: this.validateForm(errors),
           errorCount: this.countErrors(errors)
         });
       }
     }
-    // handle select for sub_category
-    if (name === "sub_category") {
+
+    if (name === "material_nature") {
       this.setState({
-        sub_category: value
+        material_nature: value
       });
       if (value.length !== 0) {
         this.setState({
           errors: {
-            material_category: errors.material_category,
-            sub_category: "",
-            material_name: errors.material_name
+            // material_category: errors.material_category,
+            sub_category: errors.sub_category,
+            material_name: errors.material_name,
+            material_nature: ""
           },
           formValid: this.validateForm(errors),
           errorCount: this.countErrors(errors)
@@ -172,7 +196,7 @@ class MaterialMasterAddForm extends Component {
 
   componentDidMount() {
     this.getallMaterialSubCategory();
-    this.getallMaterialCategory();
+    // this.getallMaterialCategory();
   }
 
   handleCancel = () => {
@@ -183,15 +207,17 @@ class MaterialMasterAddForm extends Component {
     this.setState({
       visible: false,
       errors: {
-        material_category: "",
+        // material_category: "",
         sub_category: "",
-        material_name: ""
+        material_name: "",
+        material_nature: ""
       },
       material_category: "",
       sub_category: "",
       material_name: "",
       errormgs: "",
-      type: "add"
+      material_nature: "",
+      type: ""
     });
   };
 
@@ -204,42 +230,50 @@ class MaterialMasterAddForm extends Component {
       errors,
       material_category,
       sub_category,
-      material_name
+      material_name,
+      code,
+      material_nature
     } = this.state;
     if (
-      material_category.length === 0 &&
+      // material_category.length === 0 &&
       sub_category.length === 0 &&
-      material_name.length === 0
+      material_name.length === 0 &&
+      material_nature.length === 0
     ) {
       this.setState({
         errors: {
-          material_category: "Material Category can't be empty",
+          // material_category: "Material Category can't be empty",
           sub_category: "Sub Category can't be empty",
-          material_name: "Name can't be empty"
+          material_name: "Name can't be empty",
+          material_nature: "Material Nature can't be empty"
         },
         formValid: this.validateForm(errors),
         errorCount: this.countErrors(errors)
       });
-    } else if (
-      material_category.length === 0 &&
-      errors.material_category.length === 0
-    ) {
+    }
+    // else if (
+    //   material_category.length === 0 &&
+    //   errors.material_category.length === 0
+    // ) {
+    //   this.setState({
+    //     errors: {
+    //       material_category:
+    //         errors.material_category || "Material Category can't be empty",
+    //       sub_category: errors.sub_category,
+    //       material_name: errors.material_name,
+    //       material_nature: errors.material_nature
+    //     },
+    //     formValid: this.validateForm(errors),
+    //     errorCount: this.countErrors(errors)
+    //   });
+    // }
+    else if (sub_category.length === 0 && errors.sub_category.length === 0) {
       this.setState({
         errors: {
-          material_category:
-            errors.material_category || "Material Category can't be empty",
-          sub_category: errors.sub_category,
-          material_name: errors.material_name
-        },
-        formValid: this.validateForm(errors),
-        errorCount: this.countErrors(errors)
-      });
-    } else if (sub_category.length === 0 && errors.sub_category.length === 0) {
-      this.setState({
-        errors: {
-          material_category: errors.material_category,
+          // material_category: errors.material_category,
           sub_category: errors.sub_category || "Sub Category can't be empty",
-          material_name: errors.material_name
+          material_name: errors.material_name,
+          material_nature: errors.material_nature
         },
         formValid: this.validateForm(errors),
         errorCount: this.countErrors(errors)
@@ -250,27 +284,45 @@ class MaterialMasterAddForm extends Component {
     ) {
       this.setState({
         errors: {
-          material_category: errors.material_category,
+          // material_category: errors.material_category,
           sub_category: errors.sub_category,
-          material_name: errors.material_name || "Name can't be empty"
+          material_name: errors.material_name || "Name can't be empty",
+          material_nature: errors.material_nature
         },
         formValid: this.validateForm(errors),
         errorCount: this.countErrors(errors)
       });
     } else if (
-      errors.material_category.length === 0 &&
+      material_nature.length === 0 &&
+      errors.material_nature.length === 0
+    ) {
+      this.setState({
+        errors: {
+          // material_category: errors.material_category,
+          sub_category: errors.sub_category,
+          material_name: errors.material_name,
+          material_nature:
+            errors.material_nature || "Material Nature can't be empty"
+        },
+        formValid: this.validateForm(errors),
+        errorCount: this.countErrors(errors)
+      });
+    } else if (
+      // errors.material_category.length === 0 &&
       errors.sub_category.length === 0 &&
       errors.material_name.length === 0
     ) {
       console.log("form is valid");
-      const data = {
-        materialCategory: material_category,
-        subCategory: sub_category,
-        materialName: material_name
-      };
-      console.log(data);
+
       console.log(this.state.type);
       if (this.state.type === "add") {
+        const data = {
+          // materialCategory: material_category,
+          materialSubCategoryId: sub_category,
+          name: material_name,
+          nature: material_nature
+        };
+        console.log(data);
         api("POST", "supermix", "/raw-material", "", data, "")
           .then(
             res => {
@@ -280,19 +332,21 @@ class MaterialMasterAddForm extends Component {
                 this.responeserror(res.data.results.name.message);
               } else {
                 Notification("success", res.data.message);
-                // this.props.reload();
+                this.props.reload();
                 this.setState({
                   loading: true,
                   errormgs: "",
                   errors: {
                     material_category: "",
                     sub_category: "",
-                    material_name: ""
+                    material_name: "",
+                    material_nature: ""
                   },
                   code: "",
                   material_category: "",
                   sub_category: "",
-                  material_name: ""
+                  material_name: "",
+                  material_nature: ""
                 });
                 setTimeout(() => {
                   this.setState({ loading: false, visible: false });
@@ -315,11 +369,13 @@ class MaterialMasterAddForm extends Component {
           });
       } else {
         const data = {
-          materialCategory: material_category,
-          subCategory: sub_category,
-          materialName: material_name
+          // materialCategory: material_category,
+          id: code,
+          materialSubCategoryId: sub_category,
+          name: material_name,
+          nature: material_nature
         };
-        console.log(this.state.type);
+        console.log(data);
         api("PUT", "supermix", "/raw-material", "", data, "")
           .then(
             res => {
@@ -330,7 +386,7 @@ class MaterialMasterAddForm extends Component {
                 this.responeserror(res.data.results.name.message);
               } else {
                 Notification("success", res.data.message);
-                // this.props.reload();
+                this.props.reload();
                 this.setState({
                   loading: true,
                   errormgs: "",
@@ -370,10 +426,13 @@ class MaterialMasterAddForm extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       visible: nextProps.visible,
-      code: nextProps.editPlantData.code,
+      code: nextProps.editPlantData.id,
       material_category: nextProps.editPlantData.materialCategory,
-      sub_category: nextProps.editPlantData.subCategory,
-      material_name: nextProps.editPlantData.materialName,
+      sub_category: nextProps.editPlantData.subCategory_Id,
+      material_name: nextProps.editPlantData.name,
+      material_nature: nextProps.editPlantData.nature,
+      edit_material_nature: nextProps.editPlantData.nature,
+      edit_sub_category: nextProps.editPlantData.subCategory,
       type: nextProps.type
     });
   }
@@ -385,9 +444,10 @@ class MaterialMasterAddForm extends Component {
       type,
       errors,
       code,
-      material_category,
+      edit_sub_category,
       sub_category,
-      material_name
+      material_name,
+      material_nature
     } = this.state;
 
     return (
@@ -405,17 +465,17 @@ class MaterialMasterAddForm extends Component {
           Add Material
         </PrimaryButton>
         <Modal
-          width='500px'
+          width="500px"
           visible={visible}
           closable={false}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[
-            <Button key='back' onClick={this.handleCancel}>
+            <Button key="back" onClick={this.handleCancel}>
               Cancel
             </Button>,
             <PrimaryButton
-              key='submit'
+              key="submit"
               loading={loading}
               onClick={e => this.handleSubmit(e)}
               style={{ background: "#001328", color: "white", border: "none" }}
@@ -433,7 +493,7 @@ class MaterialMasterAddForm extends Component {
                 {this.state.type === "edit" ? "Edit Material" : "Add Material"}
               </p>
               <Icon
-                type='close-circle'
+                type="close-circle"
                 onClick={this.handleCancel}
                 style={{
                   color: "white"
@@ -445,15 +505,15 @@ class MaterialMasterAddForm extends Component {
           <MasterLevelForm>
             {/* Code */}
             {type === "edit" ? (
-              <div className='input_wrapper'>
-                <label for='code' className='label'>
+              <div className="input_wrapper">
+                <label for="code" className="label">
                   Code:
                 </label>
 
                 <Input
-                  id='code'
-                  name='code'
-                  placeholder='Enter the Code '
+                  id="code"
+                  name="code"
+                  placeholder="Enter the Code "
                   value={code}
                   disabled
                 />
@@ -466,15 +526,15 @@ class MaterialMasterAddForm extends Component {
             {/* Plant Name */}
 
             {/* Place */}
-            <div className='input_wrapper'>
-              <label for='material_category' className='label'>
+            {/* <div className="input_wrapper">
+              <label for="material_category" className="label">
                 Material Category:
               </label>
 
               <Select
-                placeholder='Select material Category'
-                id='material_category'
-                name='material_category '
+                placeholder="Select material Category"
+                id="material_category"
+                name="material_category "
                 value={material_category}
                 onChange={value =>
                   this.handleSelect("material_category", value)
@@ -484,25 +544,25 @@ class MaterialMasterAddForm extends Component {
                 {this.state.categoryselect}
                 {/* <Option value='mc01'>M C 01</Option>
                 <Option value='mc02'>M C 02</Option> */}
-              </Select>
+            {/* </Select>
               {errors.material_category.length > 0 && (
                 <div style={error}>{errors.material_category}</div>
               )}
               <div style={{ height: "12px" }}></div>
-            </div>
+            </div>  */}
 
             {/* T.P No */}
-            <div className='input_wrapper'>
-              <label for='sub_category' className='label'>
+            <div className="input_wrapper">
+              <label for="sub_category" className="label">
                 Sub Category:
               </label>
 
               <Select
-                placeholder='Select Sub Category'
-                id='sub_category'
-                name='sub_category '
+                placeholder="Select Sub Category"
+                id="sub_category"
+                name="sub_category "
                 style={{ width: 170 }}
-                value={sub_category}
+                value={edit_sub_category}
                 onChange={value => this.handleSelect("sub_category", value)}
               >
                 {this.state.subCategorySelect}
@@ -515,20 +575,48 @@ class MaterialMasterAddForm extends Component {
               <div style={{ height: "12px" }}></div>
             </div>
 
-            <div className='input_wrapper'>
-              <label for='material_name' className='label'>
+            <div className="input_wrapper">
+              <label for="sub_category" className="label">
+                Material Nature :
+              </label>
+
+              <Select
+                placeholder="Select Sub Category"
+                id="material_nature"
+                name="material_nature"
+                style={{ width: 170 }}
+                value={material_nature}
+                onChange={value => this.handleSelect("material_nature", value)}
+              >
+                <Option value="SOLID">SOLID</Option>
+                <Option value="LIQUID">LIQUID</Option>
+                <Option value="GAS">GAS</Option>
+              </Select>
+              {/* {errors.material_nature.length > 0 && (
+                <div style={error}>{errors.material_nature}</div>
+              )} */}
+              <div style={{ height: "12px" }}></div>
+            </div>
+
+            <div className="input_wrapper">
+              <label for="material_name" className="label">
                 Material Name:
               </label>
 
               <Input
-                id='material_name'
-                name='material_name'
-                placeholder='Enter Material Name'
+                id="material_name"
+                name="material_name"
+                placeholder="Enter Material Name"
                 value={material_name}
                 onChange={this.handleChange}
               />
               {errors.material_name.length > 0 && (
                 <div style={error}>{errors.material_name}</div>
+              )}
+              {this.state.errormgs.message == "name" ? (
+                <div style={error}>{HandelError(this.state.errormgs)}</div>
+              ) : (
+                ""
               )}
               <div style={{ height: "12px" }}></div>
             </div>

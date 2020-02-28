@@ -145,22 +145,22 @@ class ManageEquipmentPlant extends Component {
           <span>
             <a>
               <Icon
-                type='edit'
+                type="edit"
                 onClick={this.props.passEditEquipmentPlantRecordtoModal.bind(
                   this,
                   record
                 )}
               />
             </a>
-            <Divider type='vertical' />
+            <Divider type="vertical" />
             <a>
               <Popconfirm
-                title='Are you sure you want to Delete this?'
-                icon={<Icon type='question-circle-o' />}
+                title="Are you sure you want to Delete this?"
+                icon={<Icon type="question-circle-o" />}
                 onConfirm={this.onConfirmdelete.bind(this, record.serialNo)}
               >
-                <a href='#'>
-                  <Icon type='delete' style={{ color: "red" }}></Icon>
+                <a href="#">
+                  <Icon type="delete" style={{ color: "red" }}></Icon>
                 </a>
               </Popconfirm>
             </a>
@@ -177,7 +177,7 @@ class ManageEquipmentPlant extends Component {
         // dataSource={ep}
         dataSource={this.state.data}
         onChange={this.handleChange}
-        pagination={{ defaultPageSize: 3 }}
+        pagination={{ defaultPageSize: 8 }}
         size={this.state.size}
       />
     );

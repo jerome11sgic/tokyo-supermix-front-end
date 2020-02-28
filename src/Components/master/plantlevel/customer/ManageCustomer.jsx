@@ -154,24 +154,24 @@ class ManageCustomer extends Component {
           <span>
             <a>
               <Icon
-                type='edit'
+                type="edit"
                 onClick={this.props.passEditManageCustomerToModal.bind(
                   this,
                   record
                 )}
               />
             </a>
-            <Divider type='vertical' />
+            <Divider type="vertical" />
             <a>
               <Popconfirm
-                title='Are you sure you want to Delete this?'
+                title="Are you sure you want to Delete this?"
                 icon={
-                  <Icon type='question-circle-o' style={{ color: "red" }} />
+                  <Icon type="question-circle-o" style={{ color: "red" }} />
                 }
                 onConfirm={this.onConfirmdelete.bind(this, record.id)}
               >
-                <a href='#'>
-                  <Icon type='delete' style={{ color: "red" }}></Icon>
+                <a href="#">
+                  <Icon type="delete" style={{ color: "red" }}></Icon>
                 </a>
               </Popconfirm>
             </a>
@@ -182,8 +182,8 @@ class ManageCustomer extends Component {
     return (
       <AntTable
         length
-        title={() => <CustomerMasterTitle />}
-        className='plantManageTable'
+        title={() => <CustomerMasterTitle reload={this.getallCustomer} />}
+        className="plantManageTable"
         columns={columns}
         dataSource={this.state.datalist}
         onChange={this.handleChange}

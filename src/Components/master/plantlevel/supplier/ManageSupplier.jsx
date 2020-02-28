@@ -7,7 +7,7 @@ import { api } from "../../../services/AxiosService";
 import { connect } from "react-redux";
 import { SWITCH_TO_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
 import Notification from "../../../Constant/Notification";
-const datalist = [];
+
 class ManageSupplier extends Component {
   state = {
     filteredInfo: null,
@@ -88,6 +88,7 @@ class ManageSupplier extends Component {
   }
 
   getallSupplier = () => {
+    const datalist = [];
     api("GET", "supermix", "/suppliers", "", "", "").then(res => {
       console.log(res.data);
 

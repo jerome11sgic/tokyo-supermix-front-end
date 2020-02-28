@@ -389,13 +389,12 @@ class EmployeeAddForm extends Component {
         errors: {
           // code: this.state.errors.code,
           firstName: this.state.errors.firstName || "First Name can't be empty",
-          lastName: this.state.errors.lastName || "Last Name can't be empty",
-          plant: this.state.errors.plant || "Plant can't be empty",
-          desigination:
-            this.state.errors.desigination || "Designation can't be empty",
-          address: this.state.errors.address || "Address can't be empty",
-          phoneno: this.state.errors.phoneno || "Phone Number can't be empty",
-          email: this.state.errors.email || "Email can't be empty"
+          lastName: this.state.errors.lastName,
+          plant: this.state.errors.plant,
+          desigination: this.state.errors.desigination,
+          address: this.state.errors.address,
+          phoneno: this.state.errors.phoneno,
+          email: this.state.errors.email
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
@@ -408,14 +407,13 @@ class EmployeeAddForm extends Component {
         errors: {
           // code: this.state.errors.code,
           // username: this.state.errors.username,
-          firstName: this.state.errors.firstName || "First Name can't be empty",
+          firstName: this.state.errors.firstName,
           lastName: this.state.errors.lastName || "Last Name can't be empty",
-          plant: this.state.errors.plant || "Plant can't be empty",
-          desigination:
-            this.state.errors.desigination || "Designation can't be empty",
-          address: this.state.errors.address || "Address can't be empty",
-          phoneno: this.state.errors.phoneno || "Phone Number can't be empty",
-          email: this.state.errors.email || "Email can't be empty"
+          plant: this.state.errors.plant,
+          desigination: this.state.errors.desigination,
+          address: this.state.errors.address,
+          phoneno: this.state.errors.phoneno,
+          email: this.state.errors.email
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
@@ -428,14 +426,13 @@ class EmployeeAddForm extends Component {
         errors: {
           // code: this.state.errors.code,
           // username: this.state.errors.username,
-          firstName: this.state.errors.firstName || "First Name can't be empty",
-          lastName: this.state.errors.lastName || "Last Name can't be empty",
+          firstName: this.state.errors.firstName,
+          lastName: this.state.errors.lastName,
           plant: this.state.errors.plant || "Plant can't be empty",
-          desigination:
-            this.state.errors.desigination || "Designation can't be empty",
-          address: this.state.errors.address || "Address can't be empty",
-          phoneno: this.state.errors.phoneno || "Phone Number can't be empty",
-          email: this.state.errors.email || "Email can't be empty"
+          desigination: this.state.errors.desigination,
+          address: this.state.errors.address,
+          phoneno: this.state.errors.phoneno,
+          email: this.state.errors.email
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
@@ -448,14 +445,14 @@ class EmployeeAddForm extends Component {
         errors: {
           // code: this.state.errors.code,
           // username: this.state.errors.username,
-          firstName: this.state.errors.firstName || "First Name can't be empty",
-          lastName: this.state.errors.lastName || "Last Name can't be empty",
-          plant: this.state.errors.plant || "Plant can't be empty",
+          firstName: this.state.errors.firstName,
+          lastName: this.state.errors.lastName,
+          plant: this.state.errors.plant,
           desigination:
             this.state.errors.desigination || "Designation can't be empty",
-          address: this.state.errors.address || "Address can't be empty",
-          phoneno: this.state.errors.phoneno || "Phone Number can't be empty",
-          email: this.state.errors.email || "Email can't be empty"
+          address: this.state.errors.address,
+          phoneno: this.state.errors.phoneno,
+          email: this.state.errors.email
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
@@ -468,14 +465,13 @@ class EmployeeAddForm extends Component {
         errors: {
           // code: this.state.errors.code,
           // username: this.state.errors.username,
-          firstName: this.state.errors.firstName || "First Name can't be empty",
-          lastName: this.state.errors.lastName || "Last Name can't be empty",
-          plant: this.state.errors.plant || "Plant can't be empty",
-          desigination:
-            this.state.errors.desigination || "Designation can't be empty",
+          firstName: this.state.errors.firstName,
+          lastName: this.state.errors.lastName,
+          plant: this.state.errors.plant,
+          desigination: this.state.errors.desigination,
           address: this.state.errors.address || "Address can't be empty",
-          phoneno: this.state.errors.phoneno || "Phone Number can't be empty",
-          email: this.state.errors.email || "Email can't be empty"
+          phoneno: this.state.errors.phoneno,
+          email: this.state.errors.email
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
@@ -488,14 +484,13 @@ class EmployeeAddForm extends Component {
         errors: {
           // code: this.state.errors.code,
           // username: this.state.errors.username,
-          firstName: this.state.errors.firstName || "First Name can't be empty",
-          lastName: this.state.errors.lastName || "Last Name can't be empty",
-          plant: this.state.errors.plant || "Plant can't be empty",
-          desigination:
-            this.state.errors.desigination || "Designation can't be empty",
-          address: this.state.errors.address || "Address can't be empty",
+          firstName: this.state.errors.firstName,
+          lastName: this.state.errors.lastName,
+          plant: this.state.errors.plant,
+          desigination: this.state.errors.desigination,
+          address: this.state.errors.address,
           phoneno: this.state.errors.phoneno || "Phone Number can't be empty",
-          email: this.state.errors.email || "Email can't be empty"
+          email: this.state.errors.email
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
@@ -508,13 +503,12 @@ class EmployeeAddForm extends Component {
         errors: {
           // code: this.state.errors.code,
           // username: this.state.errors.username,
-          firstName: this.state.errors.firstName || "First Name can't be empty",
-          lastName: this.state.errors.lastName || "Last Name can't be empty",
-          plant: this.state.errors.plant || "Plant can't be empty",
-          desigination:
-            this.state.errors.desigination || "Designation can't be empty",
-          address: this.state.errors.address || "Address can't be empty",
-          phoneno: this.state.errors.phoneno || "Phone Number can't be empty",
+          firstName: this.state.errors.firstName,
+          lastName: this.state.errors.lastName,
+          plant: this.state.errors.plant,
+          desigination: this.state.errors.desigination,
+          address: this.state.errors.address,
+          phoneno: this.state.errors.phoneno,
           email: this.state.errors.email || "Email can't be empty"
         },
         formValid: this.validateForm(this.state.errors),
@@ -672,7 +666,7 @@ class EmployeeAddForm extends Component {
           Add Employee
         </PrimaryButton>
         <Modal
-          width='850px'
+          width="850px"
           visible={visible}
           closable={false}
           onOk={this.handleOk}
@@ -687,7 +681,7 @@ class EmployeeAddForm extends Component {
                 {this.state.type === "edit" ? "Edit Employee" : "Add Employee"}
               </p>
               <Icon
-                type='close-circle'
+                type="close-circle"
                 onClick={this.handleCancel}
                 style={{
                   color: "white"
@@ -696,11 +690,11 @@ class EmployeeAddForm extends Component {
             </MasterLevelFormTitle>
           }
           footer={[
-            <Button key='back' onClick={this.handleCancel}>
+            <Button key="back" onClick={this.handleCancel}>
               Cancel
             </Button>,
             <PrimaryButton
-              key='submit'
+              key="submit"
               loading={loading}
               onClick={e => this.handleSubmit(e)}
               style={{ background: "#001328", color: "white", border: "none" }}
@@ -711,15 +705,15 @@ class EmployeeAddForm extends Component {
         >
           <MasterLevelForm>
             {/* Code */}
-            <div className='input_wrapper'>
-              <label for='employee_code' className='label'>
+            <div className="input_wrapper">
+              <label for="employee_code" className="label">
                 Code:
               </label>
 
               <Input
-                id='employee_code'
-                name='employee_code'
-                placeholder='Enter the Code '
+                id="employee_code"
+                name="employee_code"
+                placeholder="Enter the Code "
                 onChange={this.handleChange}
                 value={this.state.employee_code}
                 disabled={this.props.type === "edit" ? true : true}
@@ -729,15 +723,15 @@ class EmployeeAddForm extends Component {
             </div>
 
             {/* Plant Name */}
-            <div className='input_wrapper'>
-              <label for='first_name' className='label'>
+            <div className="input_wrapper">
+              <label for="first_name" className="label">
                 First Name:
               </label>
 
               <Input
-                id='first_name'
-                name='first_name'
-                placeholder='Enter the First Name'
+                id="first_name"
+                name="first_name"
+                placeholder="Enter the First Name"
                 onChange={this.handleChange}
                 value={this.state.first_name}
               />
@@ -749,15 +743,15 @@ class EmployeeAddForm extends Component {
             </div>
 
             {/* Place */}
-            <div className='input_wrapper'>
-              <label for='last_name' className='label'>
+            <div className="input_wrapper">
+              <label for="last_name" className="label">
                 Last Name:
               </label>
 
               <Input
-                id='last_name'
-                name='last_name'
-                placeholder='Enter the Last Name'
+                id="last_name"
+                name="last_name"
+                placeholder="Enter the Last Name"
                 onChange={this.handleChange}
                 value={this.state.last_name}
               />
@@ -769,18 +763,18 @@ class EmployeeAddForm extends Component {
             </div>
 
             {/* T.P No */}
-            <div className='input_wrapper'>
-              <label for='plant' className='label'>
+            <div className="input_wrapper">
+              <label for="plant" className="label">
                 Plant:
               </label>
 
               <Select
                 showSearch
                 style={{ width: 180 }}
-                id='plant'
-                name='plant'
-                placeholder='Select a Plant'
-                optionFilterProp='children'
+                id="plant"
+                name="plant"
+                placeholder="Select a Plant"
+                optionFilterProp="children"
                 onChange={value => this.handleSelect("plant", value)}
                 onFocus={onFocus}
                 value={this.state.plantEdit}
@@ -801,18 +795,18 @@ class EmployeeAddForm extends Component {
               <div style={{ height: "12px" }}></div>
             </div>
 
-            <div className='input_wrapper'>
-              <label for='desigination' className='label'>
+            <div className="input_wrapper">
+              <label for="desigination" className="label">
                 Desigination:
               </label>
 
               <Select
                 showSearch
-                id='desigination'
-                name='desigination'
+                id="desigination"
+                name="desigination"
                 style={{ width: 170 }}
-                placeholder='Select the Desigination'
-                optionFilterProp='children'
+                placeholder="Select the Desigination"
+                optionFilterProp="children"
                 onChange={value => this.handleSelect("designation", value)}
                 onFocus={onFocus}
                 onBlur={onBlur}
@@ -832,15 +826,15 @@ class EmployeeAddForm extends Component {
               <div style={error}>{this.state.errormgs}</div>
               <div style={{ height: "12px" }}></div>
             </div>
-            <div className='input_wrapper'>
-              <label for='address' className='label'>
+            <div className="input_wrapper">
+              <label for="address" className="label">
                 Address:
               </label>
 
               <Input
-                id='address'
-                name='address'
-                placeholder='Enter the Address'
+                id="address"
+                name="address"
+                placeholder="Enter the Address"
                 onChange={this.handleChange}
                 value={this.state.address}
               />
@@ -850,15 +844,15 @@ class EmployeeAddForm extends Component {
               <div style={error}>{this.state.errormgs}</div>
               <div style={{ height: "12px" }}></div>
             </div>
-            <div className='input_wrapper'>
-              <label for='phoneno' className='label'>
+            <div className="input_wrapper">
+              <label for="phoneno" className="label">
                 Contact No:
               </label>
 
               <Input
-                id='phoneno'
-                name='phoneno'
-                placeholder='Enter the Contact No'
+                id="phoneno"
+                name="phoneno"
+                placeholder="Enter the Contact No"
                 onChange={this.handleChange}
                 value={this.state.phoneno}
               />
@@ -869,14 +863,14 @@ class EmployeeAddForm extends Component {
               <div style={{ height: "12px" }}></div>
             </div>
 
-            <div className='input_wrapper'>
-              <label for='email' className='label'>
+            <div className="input_wrapper">
+              <label for="email" className="label">
                 Email:
               </label>{" "}
               <Input
-                id='email'
-                name='email'
-                placeholder='Enter the Email'
+                id="email"
+                name="email"
+                placeholder="Enter the Email"
                 onChange={this.handleChange}
                 value={this.state.email}
               />

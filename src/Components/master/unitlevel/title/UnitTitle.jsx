@@ -16,7 +16,7 @@ export default class ManageSampleCategoryMasterTitle extends Component {
     return (
       <FlexContainer titles leveltitles>
         <Paragraph style={style}>Unit Master</Paragraph>
-        <UnitAddForm />
+        <UnitAddForm reload={this.props.reload} />
       </FlexContainer>
     );
   }

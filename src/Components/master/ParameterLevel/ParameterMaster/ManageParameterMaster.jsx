@@ -7,27 +7,8 @@ import ParameterTitle from "../titles/ParameterTitle";
 import { api } from "../../../services/AxiosService";
 import { SWITCH_TO_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
 import { connect } from "react-redux";
+import Notification from "../../../Constant/Notification";
 
-// const data = [
-//   {
-//     key: "1",
-//     code: "Mike",
-//     name: 32,
-//     abbrivation: "10 Downing Street"
-//   },
-//   {
-//     key: "2",
-//     code: "John",
-//     name: "dfsdfgf",
-//     abbrivation: "10 Downing Street"
-//   },
-//   {
-//     key: "3",
-//     code: "John",
-//     name: "dfsdfgf",
-//     abbrivation: "10 Downing Street"
-//   }
-// ];
 class ManageParameterMaster extends Component {
   state = {
     filteredInfo: null,
@@ -60,7 +41,7 @@ class ManageParameterMaster extends Component {
     api("GET", "supermix", "/parameters", "", "", "").then(res => {
       console.log(res.data);
       this.setState({
-        data: res.data.results.parameter
+        data: res.data.results.parameters
       });
     });
   };
@@ -129,35 +110,16 @@ class ManageParameterMaster extends Component {
     filteredInfo = filteredInfo || {};
     const columns = [
       {
-        title: "Code",
-        dataIndex: "code",
-        key: "id",
-        width: "4%",
-
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.code - b.code,
-        sortOrder: sortedInfo.columnKey === "code" && sortedInfo.order
-      },
-      {
         title: " Parameter Name",
         dataIndex: "name",
         key: "name",
-        width: "6%",
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "name" && sortedInfo.order
+        width: "6%"
       },
       {
         title: " Abbrivation",
-        dataIndex: "abbrivation",
+        dataIndex: "abbreviation",
         key: "abbrivation",
-        width: "6%",
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "abbrivation" && sortedInfo.order
+        width: "6%"
       },
       {
         title: "Edit & Delete",
@@ -167,7 +129,7 @@ class ManageParameterMaster extends Component {
           <span>
             <a>
               <Icon
-                type='edit'
+                type="edit"
                 style={{ fontSize: "1.2em" }}
                 onClick={this.props.passEditPlantRecordtoModal.bind(
                   this,
@@ -175,18 +137,18 @@ class ManageParameterMaster extends Component {
                 )}
               />
             </a>
-            <Divider type='vertical' />
+            <Divider type="vertical" />
             <a>
               <Popconfirm
-                title='Are you sure you want to Delete this?'
+                title="Are you sure you want to Delete this?"
                 icon={
-                  <Icon type='question-circle-o' style={{ color: "red" }} />
+                  <Icon type="question-circle-o" style={{ color: "red" }} />
                 }
-                onConfirm={this.onConfirmdelete.bind(this, record.code)}
+                onConfirm={this.onConfirmdelete.bind(this, record.id)}
               >
-                <a href='#'>
+                <a href="#">
                   <Icon
-                    type='delete'
+                    type="delete"
                     style={{ color: "red", fontSize: "1.2em" }}
                   />
                 </a>
