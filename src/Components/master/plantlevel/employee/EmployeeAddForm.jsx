@@ -171,7 +171,8 @@ class EmployeeAddForm extends Component {
     // handle select for  plant
     if (name === "plant") {
       this.setState({
-        plant: value
+        plant: value,
+        plantEdit: value
       });
 
       if (value.length !== 0) {
@@ -193,7 +194,8 @@ class EmployeeAddForm extends Component {
     //handle select for designation
     if (name === "designation") {
       this.setState({
-        desigination: value
+        desigination: value,
+        desiginationEdit: value
       });
 
       if (value.length !== 0) {
@@ -780,17 +782,11 @@ class EmployeeAddForm extends Component {
                 id='plant'
                 name='plant'
                 placeholder='Select a Plant'
-                optionFilterProp='children'
                 onChange={value => this.handleSelect("plant", value)}
                 onFocus={onFocus}
                 value={this.state.plantEdit}
                 onBlur={onBlur}
                 onSearch={onSearch}
-                filterOption={(input, option) =>
-                  option.props.children
-                    .toLowerCase()
-                    .indexOf(input.toLowerCase()) >= 0
-                }
               >
                 {this.state.SelectPlants}
               </Select>
@@ -812,17 +808,11 @@ class EmployeeAddForm extends Component {
                 name='desigination'
                 style={{ width: 170 }}
                 placeholder='Select the Desigination'
-                optionFilterProp='children'
                 onChange={value => this.handleSelect("designation", value)}
                 onFocus={onFocus}
                 onBlur={onBlur}
                 onSearch={onSearch}
                 value={this.state.desiginationEdit}
-                filterOption={(input, option) =>
-                  option.props.children
-                    .toLowerCase()
-                    .indexOf(input.toLowerCase()) >= 0
-                }
               >
                 {this.state.SelectDesignation}
               </Select>

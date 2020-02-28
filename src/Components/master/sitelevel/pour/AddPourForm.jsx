@@ -10,22 +10,83 @@ import { PrimaryButton } from "../../../styledcomponents/button/button";
 import TextArea from "antd/lib/input/TextArea";
 
 const Option = Select;
+
+const error = {
+  color: "red",
+  fontSize: "12px",
+  width: "160px",
+  height: "0.2px"
+};
+
 class AddPourForm extends Component {
   state = {
     loading: false,
-    visible: false
+    visible: false,
+    type: "add",
+    errors: {
+      pour_no: "",
+      project: ""
+    },
+    code: "",
+    pour_no: "",
+    project: "",
+    description: "",
+    projectEdit: ""
   };
+
   showModal = () => {
     this.setState({
       visible: true
     });
   };
 
-  handleOk = () => {
-    this.setState({ loading: true });
-    setTimeout(() => {
-      this.setState({ loading: false, visible: false });
-    }, 3000);
+  handleChange = (event, field) => {
+    this.setState({ [field]: event.target.value });
+    this.setState({ errormgs: "" });
+    event.preventDefault();
+    const { name, value } = event.target;
+    let errors = this.state.errors;
+    // console.log(name + " is \t" + value);
+    switch (name) {
+      case "pour_no":
+        errors.pour_no =
+          value.length === 0
+            ? "Pour No can't be empty"
+            : value.length < 3
+            ? "Pour No \n must be 3 characters long!"
+            : // : !isNaN(value)
+              // ? "Pour No won't allow only letters"
+              "";
+        break;
+
+      default:
+        break;
+    }
+
+    this.setState({ errors, [name]: value });
+  };
+
+  // handling for select or dropdown
+  handleSelect = (name, value) => {
+    console.log(name);
+    console.log(value);
+
+    const { errors } = this.state;
+    // handle select for  plant
+    if (name === "project") {
+      this.setState({
+        project: value
+      });
+
+      if (value.length !== 0) {
+        this.setState({
+          errors: {
+            pour_no: errors.pour_no,
+            project: ""
+          }
+        });
+      }
+    }
   };
 
   handleCancel = () => {
@@ -33,25 +94,45 @@ class AddPourForm extends Component {
   };
 
   handleSubmit = e => {
-    console.log(e);
-    console.log(this.props.form);
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log("Received values of form: ", values);
-        this.setState({ loading: true });
-        setTimeout(() => {
-          this.setState({ loading: false, visible: false });
-        }, 3000);
-      }
-    });
+    const { errors, pour_no, project } = this.state;
+    if (pour_no.length === 0 && project.length === 0) {
+      this.setState({
+        errors: {
+          pour_no: "Pour No can't be empty",
+          project: "Project can't be empty"
+        }
+      });
+    } else if (pour_no.length === 0 && errors.pour_no.length === 0) {
+      this.setState({
+        errors: {
+          pour_no: errors.pour_no || "Pour No can't be empty",
+          project: errors.project
+        }
+      });
+    } else if (project.length === 0 && errors.project.length === 0) {
+      this.setState({
+        errors: {
+          pour_no: errors.pour_no,
+          project: errors.project || "Project can't be empty"
+        }
+      });
+    } else if (errors.pour_no.length === 0 && errors.project.length === 0) {
+      console.log("form is valid");
+    }
   };
-  componentDidMount() {
-    console.log(this.props.screen);
-  }
+
   render() {
-    const { visible, loading } = this.state;
-    const { getFieldDecorator } = this.props.form;
+    const {
+      visible,
+      loading,
+      type,
+      pour_no,
+      project,
+      description,
+      errors
+    } = this.state;
+
     return (
       <div>
         <PrimaryButton
@@ -91,7 +172,7 @@ class AddPourForm extends Component {
                   color: "white"
                 }}
               >
-                Add Pour{" "}
+                Add Pour
               </p>
               <Icon
                 type='close-circle'
@@ -105,60 +186,73 @@ class AddPourForm extends Component {
         >
           <MasterLevelForm>
             {/* Code */}
+            {type === "edit" ? (
+              <div className='input_wrapper'>
+                <label for='code' className='label'>
+                  Code:
+                </label>
+
+                <Input
+                  id='code'
+                  name='code'
+                  // placeholder='Enter the Code '
+                  disabled
+                />
+              </div>
+            ) : (
+              ""
+            )}
 
             <div className='input_wrapper'>
-              <label for='code' className='label'>
-                Code:
-              </label>
-              <Form.Item>
-                {getFieldDecorator("code", {
-                  // rules: [{ required: true, message: "Please enter a code!" }]
-                })(
-                  <Input
-                    id='code'
-                    name='code'
-                    // placeholder='Enter the Code '
-                    disabled
-                  />
-                )}
-              </Form.Item>
-            </div>
-
-            <div className='input_wrapper'>
-              <label for='pour' className='label'>
+              <label for='pour_no' className='label'>
                 Pour No:
               </label>
-              <Form.Item>
-                {getFieldDecorator("pour", {
-                  rules: [{ required: true, message: "Please enter Pour No!" }]
-                })(
-                  <Input id='pour' name='pour' placeholder=' Enter Pour No' />
-                )}
-              </Form.Item>
+
+              <Input
+                id='pour_no'
+                name='pour_no'
+                placeholder=' Enter Pour No'
+                value={pour_no}
+                onChange={this.handleChange}
+              />
+              {errors.pour_no.length > 0 && (
+                <div style={error}>{errors.pour_no}</div>
+              )}
+              <div style={{ height: "8px" }}></div>
             </div>
 
             <div className='input_wrapper' style={{ width: "200px" }}>
               <label for='project' className='label'>
                 Project:
               </label>
-
-              <Form.Item>
-                {getFieldDecorator("project", {
-                  rules: [{ required: true, message: "Please Select Project!" }]
-                })(
-                  <Select
-                    id='project'
-                    name='project'
-                    placeholder=' Select Project'
-                  ></Select>
-                )}
-              </Form.Item>
+              <Select
+                id='project'
+                name='project'
+                placeholder=' Select Project'
+                value={project}
+                onChange={value => this.handleSelect("project", value)}
+              >
+                <Option value='p01'>Project 01</Option>
+                <Option value='p02'>Project 02</Option>
+              </Select>
+              {errors.project.length > 0 && (
+                <div style={error}>{errors.project}</div>
+              )}
+              <div style={{ height: "8px" }}></div>
             </div>
             <div className='input_wrapper'>
-              <label for='code' className='label'>
+              <label for='description' className='label'>
                 Description:
               </label>
-              <TextArea id='code' name='code' placeholder='Enter Description' />
+              <TextArea
+                id='description'
+                name='description'
+                placeholder='Enter Description'
+                value={description}
+                onChange={this.handleChange}
+                style={{ width: "410px" }}
+              />
+              <div style={{ height: "8px" }}></div>
             </div>
           </MasterLevelForm>
         </Modal>
@@ -167,5 +261,4 @@ class AddPourForm extends Component {
   }
 }
 
-const PourForm = Form.create({ name: "add_pour" })(AddPourForm);
-export default PourForm;
+export default AddPourForm;
