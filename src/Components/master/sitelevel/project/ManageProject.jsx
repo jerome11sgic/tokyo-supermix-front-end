@@ -6,6 +6,7 @@ import { AntTable } from "../../../styledcomponents/table/AntTabl";
 import { api } from "../../../services/AxiosService";
 import { SWITCH_TO_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
 import { connect } from "react-redux";
+import Notification from "../../../Constant/Notification";
 
 const data = [];
 
@@ -45,16 +46,16 @@ class ManageProject extends Component {
     });
   };
 
-  onConfirmdelete(id) {
-    console.log(id);
-    let mesg = "employee delete";
+  onConfirmdelete(code) {
+    console.log(code);
+    let mesg = "project delete";
 
-    api("DELETE", "supermix", "/project", "", "", id).then(res => {
+    api("DELETE", "supermix", "/project", "", "", code).then(res => {
       console.log(res.data);
-      this.getallPour();
+      this.getAllProject();
       Notification("success", res.data.message);
     });
-    console.log(this.state.id);
+    console.log(this.state.code);
   }
 
   showModal = () => {
@@ -103,9 +104,6 @@ class ManageProject extends Component {
   }
 
   render() {
-    let { sortedInfo, filteredInfo } = this.state;
-    sortedInfo = sortedInfo || {};
-    filteredInfo = filteredInfo || {};
     const columns = [
       /* 
   code: "pr01"
@@ -184,6 +182,7 @@ class ManageProject extends Component {
                 icon={
                   <Icon type='question-circle-o' style={{ color: "red" }} />
                 }
+                onConfirm={this.onConfirmdelete.bind(this, record.code)}
               >
                 <a href='#'>
                   <Icon type='delete' style={{ color: "red" }}></Icon>

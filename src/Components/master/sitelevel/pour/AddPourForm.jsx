@@ -36,7 +36,8 @@ class AddPourForm extends Component {
     project: "",
     description: "",
     projectEdit: "",
-    project_code: ""
+    project_code: "",
+    projectsList: []
   };
 
   showModal = () => {
@@ -80,7 +81,8 @@ class AddPourForm extends Component {
     // handle select for  plant
     if (name === "project") {
       this.setState({
-        project: value
+        project: value,
+        projectEdit: value
       });
 
       if (value.length !== 0) {
@@ -196,11 +198,11 @@ class AddPourForm extends Component {
           });
       } else {
         const data = {
-          id: code,
           name: pour_name,
           description: description,
           projectCode: project
         };
+        console.log(data);
         api("POST", "supermix", "/pour", "", data, "").then(
           res => {
             console.log(res.data);
@@ -236,6 +238,30 @@ class AddPourForm extends Component {
     }
   };
 
+  componentDidMount() {
+    this.getAllProjects();
+  }
+
+  getAllProjects = () => {
+    api("GET", "supermix", "/projects", "", "", "").then(res => {
+      console.log(res.data);
+
+      if (res.data.results.projects.length > 0) {
+        let projectsList = res.data.results.projects.map((post, index) => {
+          console.log(post.name);
+          console.log("kkkkkkkkkk");
+          return (
+            <Option value={post.code} key={index}>
+              {post.name}
+            </Option>
+          );
+        });
+        this.setState({
+          projectsList
+        });
+      }
+    });
+  };
   componentWillReceiveProps(nextProps) {
     console.log(nextProps.type);
     this.setState({
@@ -363,8 +389,7 @@ class AddPourForm extends Component {
                 value={project}
                 onChange={value => this.handleSelect("project", value)}
               >
-                <Option value='1'>Project 01</Option>
-                <Option value='2'>Project 02</Option>
+                {this.state.projectsList}
               </Select>
               {errors.project.length > 0 && (
                 <div style={error}>{errors.project}</div>

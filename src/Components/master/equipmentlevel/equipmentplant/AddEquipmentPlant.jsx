@@ -59,7 +59,9 @@ class AddEquipmentPlant extends Component {
       },
       serial_no: "",
       equipment: "",
+      equipmentEdit: "",
       plant: "",
+      plantEdit: "",
       brand_name: "",
       model_name: "",
       description: "",
@@ -138,7 +140,8 @@ class AddEquipmentPlant extends Component {
     // handle select for  plant
     if (name === "plant") {
       this.setState({
-        plant: value
+        plant: value,
+        plantEdit: value
       });
 
       if (value.length !== 0) {
@@ -158,7 +161,8 @@ class AddEquipmentPlant extends Component {
 
     if (name === "equipment") {
       this.setState({
-        equipment: value
+        equipment: value,
+        equipmentEdit: value
       });
 
       if (value.length !== 0) {
@@ -185,7 +189,9 @@ class AddEquipmentPlant extends Component {
       plant,
       model_name,
       brand_name,
-      description
+      description,
+      plantEdit,
+      equipmentEdit
     } = this.state;
     e.preventDefault();
     if (
@@ -338,8 +344,8 @@ class AddEquipmentPlant extends Component {
       } else {
         const data = {
           serialNo: serial_no,
-          equipmentId: equipment,
-          plantCode: plant,
+          equipmentId: equipmentEdit,
+          plantCode: plantEdit,
           brandName: brand_name,
           modelName: model_name,
           description: description
@@ -421,7 +427,9 @@ class AddEquipmentPlant extends Component {
       visible: nextProps.visible,
       serial_no: nextProps.editPlantData.serialNo,
       equipment: nextProps.editPlantData.equipmentName,
+      equipmentEdit: nextProps.editPlantData.equipmentId,
       plant: nextProps.editPlantData.plantName,
+      plantEdit: nextProps.editPlantData.plantCode,
       model_name: nextProps.editPlantData.modelName,
       brand_name: nextProps.editPlantData.brandName,
       description: nextProps.editPlantData.description,
@@ -528,16 +536,16 @@ class AddEquipmentPlant extends Component {
           Add Equipment Plant
         </PrimaryButton>
         <Modal
-          width="480px"
+          width='480px'
           visible={visible}
           closable={false}
           onCancel={this.handleCancel}
           footer={[
-            <Button key="back" onClick={this.handleCancel}>
+            <Button key='back' onClick={this.handleCancel}>
               Cancel
             </Button>,
             <PrimaryButton
-              key="submit"
+              key='submit'
               loading={loading}
               onClick={e => this.handleSubmit(e)}
               style={{ background: "#001328", color: "white", border: "none" }}
@@ -557,7 +565,7 @@ class AddEquipmentPlant extends Component {
                   : "Add Equipment Plant"}
               </p>
               <Icon
-                type="close-circle"
+                type='close-circle'
                 onClick={this.handleCancel}
                 style={{
                   color: "white"
@@ -571,14 +579,14 @@ class AddEquipmentPlant extends Component {
 
             {/* Code */}
 
-            <div className="input_wrapper">
-              <label for="serial_no" className="label">
+            <div className='input_wrapper'>
+              <label for='serial_no' className='label'>
                 Serial No:
               </label>
               <Input
-                id="serial_no"
-                name="serial_no"
-                placeholder="Enter Serial No "
+                id='serial_no'
+                name='serial_no'
+                placeholder='Enter Serial No '
                 value={serial_no}
                 onChange={this.handleChange}
               />
@@ -594,15 +602,15 @@ class AddEquipmentPlant extends Component {
             </div>
 
             {/* User Role */}
-            <div className="input_wrapper">
-              <label for="equipment" className="label">
+            <div className='input_wrapper'>
+              <label for='equipment' className='label'>
                 Equipment :
               </label>
 
               <Select
-                id="equipment"
-                name="equipment"
-                placeholder="Select Equipment"
+                id='equipment'
+                name='equipment'
+                placeholder='Select Equipment'
                 style={{ width: 170 }}
                 value={equipment}
                 onChange={value => this.handleSelect("equipment", value)}
@@ -617,15 +625,15 @@ class AddEquipmentPlant extends Component {
               <div style={{ height: "8px" }}></div>
             </div>
 
-            <div className="input_wrapper">
-              <label for="plant" className="label">
+            <div className='input_wrapper'>
+              <label for='plant' className='label'>
                 Plant :
               </label>
 
               <Select
-                id="plant"
-                name="plant"
-                placeholder="Select Plant"
+                id='plant'
+                name='plant'
+                placeholder='Select Plant'
                 style={{ width: 170 }}
                 value={plant}
                 onChange={value => this.handleSelect("plant", value)}
@@ -640,15 +648,15 @@ class AddEquipmentPlant extends Component {
               <div style={{ height: "8px" }}></div>
             </div>
 
-            <div className="input_wrapper">
-              <label for="brand_name" className="label">
+            <div className='input_wrapper'>
+              <label for='brand_name' className='label'>
                 Brand Name:
               </label>
 
               <Input
-                id="brand_name"
-                name="brand_name"
-                placeholder="Enter Brand Name"
+                id='brand_name'
+                name='brand_name'
+                placeholder='Enter Brand Name'
                 value={brand_name}
                 onChange={this.handleChange}
               />
@@ -657,15 +665,15 @@ class AddEquipmentPlant extends Component {
               )}
               <div style={{ height: "2px" }}></div>
             </div>
-            <div className="input_wrapper">
-              <label for="model_name" className="label">
+            <div className='input_wrapper'>
+              <label for='model_name' className='label'>
                 Model Name:
               </label>
 
               <Input
-                id="model_name"
-                name="model_name"
-                placeholder="Enter Model Name"
+                id='model_name'
+                name='model_name'
+                placeholder='Enter Model Name'
                 value={model_name}
                 onChange={this.handleChange}
               />
@@ -676,14 +684,14 @@ class AddEquipmentPlant extends Component {
             </div>
 
             {/* Description */}
-            <div className="input_wrapper">
-              <label for="description" className="label">
+            <div className='input_wrapper'>
+              <label for='description' className='label'>
                 Description:
               </label>
               <TextArea
-                id="description"
-                name="description"
-                placeholder="Enter Description"
+                id='description'
+                name='description'
+                placeholder='Enter Description'
                 value={description}
                 onChange={this.handleChange}
                 style={{ width: "170px" }}

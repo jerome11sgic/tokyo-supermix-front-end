@@ -29,7 +29,8 @@ class AddProjectForm extends Component {
     plant: "",
     plant_edit: "",
     type: "add",
-    errors: {}
+    errors: {},
+    errorvalmegss: ""
   };
 
   showModal = () => {
@@ -145,6 +146,9 @@ class AddProjectForm extends Component {
   };
 
   handleCancel = () => {
+    if (this.state.type === "edit") {
+      this.props.setProjectVisibility();
+    }
     this.setState({
       loading: false,
       visible: false,
@@ -184,9 +188,11 @@ class AddProjectForm extends Component {
       project_name,
       start_date,
       customer,
+      customer_edit,
       contact_person,
       contact_no,
-      plant
+      plant,
+      plant_edit
     } = this.state;
 
     console.log("form is valid");
@@ -195,9 +201,9 @@ class AddProjectForm extends Component {
         code: code,
         name: project_name,
         contactNumber: contact_no,
-        startDate: start_date,
-        customerId: customer,
-        plantCode: plant,
+        startDate: moment(start_date).format("YYYY-MM-DD"),
+        customerId: customer_edit,
+        plantCode: plant_edit,
         contactPerson: contact_person
       };
       console.log(data);
@@ -255,7 +261,7 @@ class AddProjectForm extends Component {
         code: code,
         name: project_name,
         contactNumber: contact_no,
-        startDate: start_date,
+        startDate: moment(start_date).format("YYYY-MM-DD"),
         customerId: customer,
         plantCode: plant,
         contactPerson: contact_person
@@ -333,7 +339,8 @@ class AddProjectForm extends Component {
       customer,
       contact_person,
       contact_no,
-      plant
+      plant,
+      type
     } = this.state;
 
     return (
@@ -401,6 +408,7 @@ class AddProjectForm extends Component {
                 placeholder='Enter the Code '
                 value={code}
                 onChange={this.handleChange}
+                disabled={type === "edit" ? true : false}
               />
               <div style={{ height: "8px" }}></div>
             </div>
@@ -523,7 +531,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    setPourVisibility: () => {
+    setProjectVisibility: () => {
       dispatch({ type: DISABLE_EDIT_MODE });
       console.log("edit modal closed");
     }
