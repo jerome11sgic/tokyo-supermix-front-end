@@ -1,5 +1,14 @@
 import React, { Component } from "react";
-import { Input, Modal, Icon, Button, Form, TextArea, DatePicker } from "antd";
+import {
+  Input,
+  Modal,
+  Icon,
+  Button,
+  Form,
+  TextArea,
+  DatePicker,
+  Select
+} from "antd";
 
 import { PrimaryButton } from "../../../styledcomponents/button/button";
 import {
@@ -33,15 +42,6 @@ class Addincoming extends Component {
     console.log(e);
     console.log(this.props.form);
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log("Received values of form: ", values);
-        this.setState({ loading: true });
-        setTimeout(() => {
-          this.setState({ loading: false, visible: false });
-        }, 3000);
-      }
-    });
   };
 
   componentDidMount() {
@@ -62,21 +62,21 @@ class Addincoming extends Component {
             marginLeft: "-10px"
           }}
         >
-          Add Incoming Sample
+          Add Incoming Samplenhhh
         </PrimaryButton>
         <Modal
-          width='260px'
-          className='addsubcategorymodal'
+          width="260px"
+          className="addsubcategorymodal"
           visible={visible}
           closable={false}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[
-            <Button key='back' onClick={this.handleCancel}>
+            <Button key="back" onClick={this.handleCancel}>
               Return
             </Button>,
             <PrimaryButton
-              key='submit'
+              key="submit"
               loading={loading}
               onClick={e => this.handleSubmit(e)}
               style={{ background: "#001328", color: "white", border: "none" }}
@@ -94,7 +94,7 @@ class Addincoming extends Component {
                 Add Incoming Sample
               </p>
               <Icon
-                type='close-circle'
+                type="close-circle"
                 onClick={this.handleCancel}
                 style={{
                   color: "white"
@@ -105,113 +105,94 @@ class Addincoming extends Component {
         >
           <MasterLevelForm>
             {/* Code */}
-            <div className='input_wrapper'>
-              <label for='code' className='label'>
+            <div className="input_wrapper">
+              <label for="code" className="label">
                 Code:
               </label>
-              <Form.Item>
-                {getFieldDecorator("code", {
-                  // rules: [{ required: true, message: "Please enter a code!" }]
-                })(
-                  <Input
-                    id='code'
-                    name='code'
-                    // placeholder='Enter the Code '
-                    disabled
-                  />
-                )}
-              </Form.Item>
+
+              <Input
+                id="code"
+                name="code"
+                // placeholder='Enter the Code '
+                disabled
+              />
             </div>
 
             {/* Plant Name */}
-            <div className='input_wrapper'>
-              <label for='supplier_name' className='label'>
-                Supplier Name:
+            <div className="input_wrapper">
+              <label for="supplier_name" className="label">
+                Supplier Name:kkkk
               </label>
-              <Form.Item>
-                {getFieldDecorator("supplier_name", {
-                  rules: [
-                    { required: true, message: "Please enter Supplier Name!" }
-                  ]
-                })(
-                  <Select
-                    className='inputfield'
-                    id='supplier_name'
-                    name='supplier_name'
-                    placeholder='Enter Supplier Name'
-                    style={{ width: "180px" }}
-                  />
-                )}
-              </Form.Item>
+
+              <Select
+                className="inputfield"
+                id="supplier_name"
+                name="supplier_name"
+                placeholder="Enter Supplier Name"
+                style={{ width: "180px" }}
+              ></Select>
             </div>
 
             {/* Place */}
-            <div className='input_wrapper'>
-              <label for='raw_material' className='label'>
+            <div className="input_wrapper">
+              <label for="raw_material" className="label">
                 Raw Material
               </label>
-              <Form.Item>
-                {getFieldDecorator("raw_material", {
-                  rules: [
-                    { required: true, message: "Please enter Raw Material!" }
-                  ]
-                })(
-                  <Select
-                    id='raw_material'
-                    name='raw_material'
-                    placeholder=' Raw Material'
-                    style={{ width: "180px" }}
-                  />
-                )}
-              </Form.Item>
+
+              <Select
+                id="raw_material"
+                name="raw_material"
+                placeholder=" Raw Material"
+                style={{ width: "180px" }}
+              ></Select>
             </div>
 
             {/* T.P No */}
-            <div className='input_wrapper'>
-              <label for=' delivered_date' className='label'>
+            <div className="input_wrapper">
+              <label for=" delivered_date" className="label">
                 Delivered Date
               </label>
-              <Form.Item>
-                {getFieldDecorator("delivered_date", {
-                  rules: [{ required: true, message: "Please Select Date!" }]
-                })(
-                  <DatePicker
-                  //   onChange={onChange}
-                  />
-                )}
-              </Form.Item>
+
+              <DatePicker
+              //   onChange={onChange}
+              />
             </div>
 
             {/* Description  */}
-            <div className='input_wrapper'>
-              <label for='vechical_no' className='label'>
+            <div className="input_wrapper">
+              <label for="vechical_no" className="label">
                 Vechical No
               </label>
-              <Form.Item>
-                {getFieldDecorator("vechical_no", {
-                  rules: [
-                    { required: true, message: "Please enter Vechical No!" }
-                  ]
-                })(
-                  <Input
-                    id='vechical_no'
-                    name='vechical_no'
-                    placeholder='Vechical No'
-                  />
-                )}
-              </Form.Item>
+
+              <Input
+                id="vechical_no"
+                name="vechical_no"
+                placeholder="Vechical No"
+              />
             </div>
 
-            <div className='input_wrapper'>
-              <label for='description' className='label'>
-                Description
+            <div className="input_wrapper">
+              <label for="description" className="label">
+                Plant
               </label>
-              <TextArea
-                id='description'
-                name='description'
-                placeholder='Description'
+              <Select
+                id="plant"
+                name="plant"
+                placeholder="plant"
                 style={{ width: "410px" }}
-              />
+              ></Select>
+            </div>
+
+            <div className="input_wrapper">
+              <label for="description" className="label">
+                Status
+              </label>
+              <Select
+                id="status"
+                name="status"
+                placeholder="status"
+                style={{ width: "410px" }}
+              ></Select>
             </div>
           </MasterLevelForm>
         </Modal>
@@ -220,5 +201,4 @@ class Addincoming extends Component {
   }
 }
 
-const IncomingForm = Form.create({ name: "add_incoming" })(Addincoming);
-export default IncomingForm;
+export default Addincoming;

@@ -28,11 +28,11 @@ class ManageIncomingSampleTitle extends Component {
             color: "white",
             border: "none"
           }}
-          href='#/samples/viewincomingstatus'
+          href="#/samples/viewincomingstatus"
         >
           View Test
         </PrimaryButton>
-        <AddIncoming />
+        <AddIncoming reload={this.props.reload} />
       </FlexContainer>
     );
   }
