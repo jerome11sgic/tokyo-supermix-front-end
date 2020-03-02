@@ -112,11 +112,11 @@ class HeaderComponent extends React.Component {
             </NavigationLink>
           </Menu.Item>
 
-          {/* <Menu.Item key='testlevel' style={{}}>
+          <Menu.Item key='testlevel' style={{}}>
             <NavigationLink to='/master/testlevel'>
               <Icon type='dropbox' /> <span>Test</span>
             </NavigationLink>
-          </Menu.Item> */}
+          </Menu.Item>
 
           <Menu.Item key='parameterlevel' style={{}}>
             <NavigationLink to='/master/parameterlevel'>

@@ -1,35 +1,23 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from "react";
-import { Icon, Popconfirm, Divider } from "antd";
-import CustomerMasterTitle from "../titles/CustomerMasterTitle";
+import { Popconfirm, Divider, Icon } from "antd";
+
+import "./styleStatus.css";
 import { AntTable } from "../../../styledcomponents/table/AntTabl";
+import TestLevelTitle from "../title/TestLevelTitle";
 import { connect } from "react-redux";
 import { SWITCH_TO_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
-import Notification from "../../../Constant/Notification";
 import { api } from "../../../services/AxiosService";
+import Notification from "../../../Constant/Notification";
 
-let customers = [
-  {
-    id: 0,
-    name: "Kishanth",
-    address: "Jaffna",
-    contactno: "0766713231",
-    email: "kishanth001@gmail.com"
-  }
-];
+// const data = [{ id: "QC/MA", type: "QC Manager" }];
 
-class ManageCustomer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      filteredInfo: null,
-      sortedInfo: null,
-      searchText: "",
-      visible: false,
-      size: "small",
-      datalist: ""
-    };
-  }
+class ManageTestType extends Component {
+  state = {
+    visible: false,
+    size: "small",
+    testTypeList: []
+  };
 
   componentWillMount() {
     if (window.screen.width > 1900) {
@@ -50,13 +38,6 @@ class ManageCustomer extends Component {
     });
   };
 
-  handleOk = e => {
-    console.log(e);
-    this.setState({
-      visible: false
-    });
-  };
-
   handleCancel = e => {
     console.log(e);
     this.setState({
@@ -72,90 +53,59 @@ class ManageCustomer extends Component {
     });
   };
 
-  clearFilters = () => {
-    this.setState({ filteredInfo: null });
-  };
-
-  clearAll = () => {
-    this.setState({
-      filteredInfo: null,
-      sortedInfo: null
-    });
-  };
-
-  setAgeSort = () => {
-    this.setState({
-      sortedInfo: {
-        order: "descend",
-        columnKey: "age"
-      }
-    });
-  };
-  componentDidMount() {
-    this.getallCustomer();
-  }
-
-  getallCustomer = () => {
-    api("GET", "supermix", "/customers", "", "", "").then(res => {
-      console.log(res.data);
-
-      this.setState({
-        datalist: res.data.results.customers
-      });
-    });
-  };
   onChange(pageNumber) {
     console.log("Page: ", pageNumber);
   }
+
+  componentDidMount() {
+    this.getAllTestType();
+  }
+
+  getAllTestType = () => {
+    api("GET", "supermix", "/test-types", "", "", "").then(res => {
+      console.log(res.data.results);
+      this.setState({
+        testTypeList: res.data.results.testTypes
+      });
+    });
+  };
+
   onConfirmdelete(id) {
     console.log(id);
-    console.log("ddddd");
-    api("DELETE", "supermix", "/customer", "", "", id).then(res => {
+    let mesg = "pour delete";
+
+    api("DELETE", "supermix", "/test-type", "", "", id).then(res => {
       console.log(res.data);
-      this.getallCustomer();
+      this.getAllTestType();
       Notification("success", res.data.message);
     });
-    console.log(this.state.id);
   }
+
   render() {
-    let { sortedInfo, filteredInfo } = this.state;
-    sortedInfo = sortedInfo || {};
-    filteredInfo = filteredInfo || {};
     const columns = [
       {
-        title: "Customer Name",
-        dataIndex: "name",
-        key: "name",
-        width: "16%"
+        title: "Code",
+        dataIndex: "id",
+        key: "id"
+        // width: "4%",
       },
       {
-        title: "Phone Number",
-        dataIndex: "phoneNumber",
-        key: "phoneNumber",
-        width: "15%"
+        title: "Type",
+        dataIndex: "type",
+        key: "type"
+        // width: "6%",
       },
-      {
-        title: "Email",
-        dataIndex: "email",
-        key: "email",
-        width: "14%"
-      },
-      {
-        title: "Address",
-        dataIndex: "address",
-        key: "address",
-        width: "10%"
-      },
+
       {
         title: "Edit & Delete",
         key: "action",
-        width: "7%",
-        render: (text, record) => (
+        width: "17%",
+        render: (text, record = this.state.testTypeList) => (
           <span>
             <a>
               <Icon
                 type='edit'
-                onClick={this.props.passEditManageCustomerToModal.bind(
+                onClick={this.props.passEditTestTypeRecordToModal.bind(
                   this,
                   record
                 )}
@@ -179,15 +129,15 @@ class ManageCustomer extends Component {
         )
       }
     ];
+
     return (
       <AntTable
         length
-        title={() => <CustomerMasterTitle reload={this.getallCustomer} />}
-        className='plantManageTable'
+        title={() => <TestLevelTitle reload={this.getAllTestType} />}
         columns={columns}
-        dataSource={this.state.datalist}
+        dataSource={this.state.testTypeList}
         onChange={this.handleChange}
-        pagination={{ defaultPageSize: 4 }}
+        pagination={{ defaultPageSize: 7 }}
         size={this.state.size}
       />
     );
@@ -198,7 +148,7 @@ const mapStateToProps = state => null;
 
 const mapDispatchToProps = dispatch => {
   return {
-    passEditManageCustomerToModal: record => {
+    passEditTestTypeRecordToModal: record => {
       //this payload is the data we pass into redux which is in the row which we clicked
       dispatch({ type: SWITCH_TO_EDIT_MODE, payload: record });
       console.log(record);
@@ -206,4 +156,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ManageCustomer);
+export default connect(mapStateToProps, mapDispatchToProps)(ManageTestType);

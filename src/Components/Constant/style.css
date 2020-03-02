@@ -13,7 +13,8 @@
 }
 
 .master_logo_gap {
-  margin-left: 63px;
+  margin-left: -10px;
+  /* width: 269px; */
 }
 .homescreen_logo_gap {
   width: 920px;
@@ -75,7 +76,7 @@
     width: 1480px;
   }
   .master_logo_gap {
-    width: 561px;
+    width: 469px;
   }
   .samples_logo_gap {
     width: 1600px;

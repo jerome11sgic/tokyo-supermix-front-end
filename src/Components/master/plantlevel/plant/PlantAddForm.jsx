@@ -220,7 +220,7 @@ class PlantAddForm extends Component {
           .then(
             res => {
               console.log(res.data);
-              if (res.data.status == "VALIDATION_FAILURE") {
+              if (res.data.status === "VALIDATION_FAILURE") {
                 console.log("add");
                 this.responeserror(res.data.results.name.message);
               } else {
