@@ -7,36 +7,14 @@ import {
   MasterLevelForm
 } from "../../styledcomponents/form/MasterLevelForms";
 import TextArea from "antd/lib/input/TextArea";
-import moment from "moment";
-import { api } from "../../services/AxiosService";
-import Notification from "../../Constant/Notification";
-import HandelError from "../../Constant/HandleError";
-import { connect } from "react-redux";
 import { DISABLE_EDIT_MODE } from "../../../redux/action/master/plantlevel/PlantLevel";
+import { connect } from "react-redux";
 
 const { Option } = Select;
 class Addincoming extends Component {
   state = {
     loading: false,
-    visible: false,
-    code: "",
-    date: "",
-    status: "",
-    supplierId: "",
-    plantCode: "",
-    vehicleNo: "",
-    rawMaterialId: "",
-    supplierselect: "",
-    SelectPlants: "",
-    SelectRaw: "",
-    plantName: "",
-    supplierName: "",
-    rawMaterialName: "",
-    edit_plantName: "",
-    edit_supplierName: "",
-    edit_rawMaterialName: "",
-
-    type: "add"
+    visible: false
   };
   showModal = () => {
     this.setState({
@@ -54,267 +32,28 @@ class Addincoming extends Component {
   handleCancel = () => {
     this.setState({ visible: false });
   };
-  handleChange = (event, field) => {
-    this.setState({ [field]: event.target.value });
-    this.setState({ errormgs: "" });
-    event.preventDefault();
-    const { name, value } = event.target;
-    let errors = this.state.errors;
-
-    // switch (name) {
-    //   // case "parameter_code":
-    //   //   errors.code =
-    //   //     value.length === 0
-    //   //       ? "Code can't be empty"
-    //   //       : value.length < 3
-    //   //       ? "Code \n must be 3 characters long!"
-    //   //       : "";
-    //   //   break;
-    //   case "parameter_name":
-    //     errors.name =
-    //       value.length === 0
-    //         ? "Parameter Name can't be empty"
-    //         : value.length < 3
-    //         ? "Parameter Name \n must be 3 characters long!"
-    //         : value.replace(/^[a-zA-Z-,]+(\s{0,1}[a-zA-Z-, ])*$/, "")
-    //         ? "Parameter Name allow only letters"
-    //         : "";
-    //     break;
-    //   case "parameter_abbrivation":
-    //     errors.abbrivation =
-    //       value.length === 0
-    //         ? "Abbrivation can't be empty"
-    //         : value.length < 3
-    //         ? "Abbrivation \n must be 3 characters long!"
-    //         : "";
-    //     break;
-
-    //   default:
-    //     break;
-    // }
-
-    this.setState({ errors, [name]: value });
-  };
-
-  handleSelect = (name, value) => {
-    console.log(name);
-    console.log(value);
-
-    const { errors } = this.state;
-    // handle select for  equipment_plant
-    if (name === "plant") {
-      console.log(value);
-      this.setState({
-        plantCode: value,
-        edit_plantName: value
-      });
-    }
-    // handle select for  supplier
-    if (name === "supplier") {
-      this.setState({
-        supplierId: value,
-        edit_supplier: value
-      });
-    }
-    // handle select for  status
-    if (name === "rawMaterial") {
-      this.setState({
-        rawMaterialId: value,
-        edit_rawMaterialName: value
-      });
-    }
-    // handle select for  radio group
-  };
-
-  Selectsupplier = () => {
-    api("GET", "supermix", "/suppliers", "", "", "").then(res => {
-      console.log(res.data);
-
-      if (res.data.results.Supplier.length > 0) {
-        let supplierselect = res.data.results.Supplier.map((post, index) => {
-          console.log(post.name);
-          console.log("kkkkkkkkkk");
-          return (
-            <Option value={post.id} key={index}>
-              {post.name}
-            </Option>
-          );
-        });
-        this.setState({
-          supplierselect
-        });
-      }
-    });
-  };
-
-  getAllplant = () => {
-    api("GET", "supermix", "/plants", "", "", "").then(res => {
-      console.log(res.data.results.plants.length);
-      if (res.data.results.plants.length > 0) {
-        console.log("ggg");
-        let SelectPlants = res.data.results.plants.map((post, index) => {
-          return (
-            <Option value={post.code} key={index}>
-              {post.name}
-            </Option>
-          );
-        });
-        this.setState({
-          SelectPlants
-        });
-      }
-    });
-  };
-
-  getallMaterial = () => {
-    console.log("api");
-    const datalist = [];
-    api("GET", "supermix", "/raw-materials", "", "", "").then(res => {
-      console.log(res);
-
-      if (res.data.results.rawMaterial.length > 0) {
-        console.log("ggg");
-        let SelectRaw = res.data.results.rawMaterial.map((post, index) => {
-          return (
-            <Option value={post.id} key={index}>
-              {post.name}
-            </Option>
-          );
-        });
-        this.setState({
-          SelectRaw
-        });
-      }
-    });
-  };
 
   handleSubmit = e => {
-    if (this.state.type === "edit") {
-      const data = {
-        code: this.state.code,
-        date: this.state.date,
-        status: false,
-        supplierId: this.state.supplierId,
-        plantCode: this.state.plantCode,
-        vehicleNo: this.state.vehicleNo,
-        rawMaterialId: this.state.rawMaterialId
-      };
-      console.log("edit part");
-      console.log(data);
-      api("PUT", "supermix", "/incoming-sample", "", data, "").then(
-        res => {
-          console.log(res.data);
-
-          Notification("success", res.data.message);
-          this.props.reload();
-          this.setState({ loading: true });
-          this.setState({
-            equipment_plant: "",
-            calibrated_date: "",
-            due_date: "",
-            calibrated_by: "",
-            supplier: "",
-            tester: "",
-            description: "",
-            status: "",
-            errormgs: ""
-          });
-          setTimeout(() => {
-            this.setState({ loading: false, visible: false });
-          }, 3000);
-        },
-        error => {
-          // this.setState({
-          //   errormgs: error.validationFailures[0]
-          // });
-          console.log("DEBUG34: ", error);
-          // console.log(HandelError(error.validationFailures[0]));
-        }
-      );
-    } else {
-      const data = {
-        code: this.state.code,
-        date: moment(this.state.date).format("YYYY-MM-DD"),
-        status: this.state.status,
-        supplierId: this.state.supplierId,
-        plantCode: this.state.plantCode,
-        vehicleNo: this.state.vehicleNo,
-        rawMaterialId: this.state.rawMaterialId
-      };
-      console.log("hhhhhhhhhhhhhhh");
-
-      console.log(data);
-      api("POST", "supermix", "/incoming-sample", "", data, "").then(
-        res => {
-          console.log(res.data);
-
-          Notification("success", res.data.message);
-          this.props.reload();
-          this.setState({ loading: true });
-          this.setState({
-            code: "",
-            date: "",
-            status: "",
-            supplierId: "",
-            plantCode: "",
-            vehicleNo: "",
-            rawMaterialId: ""
-          });
-          setTimeout(() => {
-            this.setState({ loading: false, visible: false });
-          }, 3000);
-        },
-        error => {
-          // this.setState({
-          //   errormgs: error.validationFailures[0]
-          // });
-          console.log("DEBUG34: ", error);
-          // console.log(HandelError(error.validationFailures[0]));
-        }
-      );
-    }
+    console.log(e);
+    console.log(this.props.form);
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log("Received values of form: ", values);
+        this.setState({ loading: true });
+        setTimeout(() => {
+          this.setState({ loading: false, visible: false });
+        }, 3000);
+      }
+    });
   };
-  handleDates(name, dateString, field) {
-    console.log(name);
-    console.log(dateString);
-    console.log(field);
-    let convertedDate = moment(dateString).format("DD-MM-YYYY");
-    console.log(convertedDate);
 
-    this.setState({
-      date: dateString
-    });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    console.log("gggg" + nextProps);
-    this.setState({
-      visible: nextProps.visible,
-      code: nextProps.editPlantData.code,
-      vehicleNo: nextProps.editPlantData.vehicleNo,
-      date: moment(nextProps.editPlantData.date, "DD-MM-YYYY"),
-      status: nextProps.editPlantData.status,
-      rawMaterialId: nextProps.editPlantData.rawMaterialId,
-      rawMaterialName: nextProps.editPlantData.rawMaterialName,
-      plantCode: nextProps.editPlantData.plantCode,
-      plantName: nextProps.editPlantData.plantName,
-      supplierId: nextProps.editPlantData.supplierId,
-      supplierName: nextProps.editPlantData.supplierName,
-      edit_plantName: nextProps.editPlantData.plantName,
-      edit_supplierName: nextProps.editPlantData.supplierName,
-      edit_rawMaterialName: nextProps.editPlantData.rawMaterialName,
-      type: nextProps.type
-    });
-  }
   componentDidMount() {
-    this.Selectsupplier();
-    this.getAllplant();
-    this.getallMaterial();
     console.log(this.props.screen);
   }
   render() {
     const { visible, loading } = this.state;
-
+    // const { getFieldDecorator } = this.props.form;
     return (
       <div>
         <PrimaryButton
@@ -330,18 +69,18 @@ class Addincoming extends Component {
           Add Incoming Sample
         </PrimaryButton>
         <Modal
-          width="500px"
-          className="addsubcategorymodal"
+          width='500px'
+          className='addsubcategorymodal'
           visible={visible}
           closable={false}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[
-            <Button key="back" onClick={this.handleCancel}>
+            <Button key='back' onClick={this.handleCancel}>
               Return
             </Button>,
             <PrimaryButton
-              key="submit"
+              key='submit'
               loading={loading}
               onClick={e => this.handleSubmit(e)}
               style={{ background: "#001328", color: "white", border: "none" }}
@@ -359,7 +98,7 @@ class Addincoming extends Component {
                 Add Incoming Sample
               </p>
               <Icon
-                type="close-circle"
+                type='close-circle'
                 onClick={this.handleCancel}
                 style={{
                   color: "white"
@@ -370,119 +109,83 @@ class Addincoming extends Component {
         >
           <MasterLevelForm>
             {/* Code */}
-            <div className="input_wrapper">
-              <label for="code" className="label">
+            <div className='input_wrapper'>
+              <label for='code' className='label'>
                 Code:
               </label>
 
               <Input
-                id="code"
-                name="code"
-                value={this.state.code}
-                onChange={this.handleChange}
-                disabled={this.state.type === "edit" ? true : false}
-                // placeholder='Enter the Code '
-                // disabled
+                id='code'
+                name='code'
+                placeholder='Enter the Code '
+                disabled
               />
             </div>
 
             {/* Plant Name */}
-            <div className="input_wrapper">
-              <label for="supplier_name" className="label">
-                Supplier Name:
+            <div className='input_wrapper'>
+              <label for='supplier_name' className='label'>
+                Date:
               </label>
-
-              <Select
-                className="inputfield"
-                id="supplierId"
-                name="supplierId"
-                placeholder="Enter Supplier Name"
-                style={{ width: "180px" }}
-                value={this.state.edit_supplierName}
-                onChange={value => this.handleSelect("supplier", value)}
-              >
-                {this.state.supplierselect}
-              </Select>
+              <DatePicker placeholder='Enter the Date' />
             </div>
 
             {/* Place */}
-            <div className="input_wrapper">
-              <label for="raw_material" className="label">
-                Raw Material
+            <div className='input_wrapper'>
+              <label for='raw_material' className='label'>
+                Vechicle No
               </label>
-
-              <Select
-                id="rawMaterialId"
-                name="rawMaterialId"
-                placeholder=" Raw Material"
-                style={{ width: "180px" }}
-                value={this.state.edit_rawMaterialName}
-                onChange={value => this.handleSelect("rawMaterial", value)}
-              >
-                {this.state.SelectRaw}
-              </Select>
+              <Input placeholder='Enter the Vechicle NO' />
             </div>
 
             {/* T.P No */}
-            <div className="input_wrapper">
-              <label for=" delivered_date" className="label">
-                Delivered Date
+            <div className='input_wrapper'>
+              <label for=' delivered_date' className='label'>
+                Material
               </label>
 
-              <DatePicker
-                id="date"
-                name="date"
-                format={"DD-MM-YYYY"}
-                value={this.state.date}
-                onChange={(dateString, field) =>
-                  this.handleDates("due_date", dateString, field)
-                }
-                showToday
+              <Select
+                id='raw_material'
+                name='raw_material'
+                style={{ width: "180px" }}
+                placeholder='Select the Material'
               />
             </div>
 
             {/* Description  */}
-            <div className="input_wrapper">
-              <label for="vechical_no" className="label">
-                Vechical No
+            <div className='input_wrapper'>
+              <label for='vechical_no' className='label'>
+                Plant
               </label>
 
-              <Input
-                id="vehicleNo"
-                name="vehicleNo"
-                placeholder="Vechical No"
-                value={this.state.vehicleNo}
-                onChange={this.handleChange}
+              <Select
+                id='raw_material'
+                name='raw_material'
+                placeholder='Select the Plant'
+                style={{ width: "180px" }}
               />
             </div>
 
-            <div className="input_wrapper">
-              <label for="description" className="label">
-                Plant
+            <div className='input_wrapper'>
+              <label for='description' className='label'>
+                Supplier
               </label>
               <Select
-                id="plant"
-                name="plant"
-                placeholder="plant"
-                value={this.state.edit_plantName}
-                onChange={value => this.handleSelect("plant", value)}
-                style={{ width: "200px" }}
-              >
-                {this.state.SelectPlants}
-              </Select>
+                id='raw_material'
+                name='raw_material'
+                placeholder='Select the Suppplier'
+                style={{ width: "180px" }}
+              />
             </div>
-            <div className="input_wrapper">
-              <label for="vechical_no" className="label">
+            <div className='input_wrapper'>
+              <label for='description' className='label'>
                 Status
               </label>
-
               <Input
-                id="status"
-                name="status"
-                placeholder="status"
-                value={this.state.status}
-                onChange={this.handleChange}
-                disabled
+                id='description'
+                name='description'
+                placeholder='Enter the Status'
+                style={{ width: "200px" }}
               />
             </div>
           </MasterLevelForm>
@@ -503,7 +206,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    setincomingVisibility: () => {
+    // setting visible to false if we close the modal .. and all state data will be deleted if this function is dispatched
+    setPlantVisiblity: () => {
       dispatch({ type: DISABLE_EDIT_MODE });
       console.log("edit modal closed");
     }

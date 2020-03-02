@@ -92,7 +92,7 @@ export default class ManageProcessSample extends Component {
         sortOrder: sortedInfo.columnKey === "id" && sortedInfo.order
       },
       {
-        title: "Process Name",
+        title: "Incoming Sample",
         dataIndex: "date",
         width: "12%",
         key: "id",
@@ -100,7 +100,7 @@ export default class ManageProcessSample extends Component {
         sortOrder: sortedInfo.columnKey === "id" && sortedInfo.order
       },
       {
-        title: "  Raw Material",
+        title: "  Material",
         dataIndex: "name",
         key: "name",
         width: "12%",
@@ -114,7 +114,7 @@ export default class ManageProcessSample extends Component {
         sortOrder: sortedInfo.columnKey === "name" && sortedInfo.order
       },
       {
-        title: "Plant",
+        title: "Quantity",
         dataIndex: "role",
         key: "role",
         width: "12%",
@@ -131,7 +131,7 @@ export default class ManageProcessSample extends Component {
       },
 
       {
-        title: "Date/Time",
+        title: "Remain Quantity",
         dataIndex: "date",
         width: "12%",
         key: "id",

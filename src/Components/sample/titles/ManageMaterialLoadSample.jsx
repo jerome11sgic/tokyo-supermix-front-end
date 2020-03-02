@@ -4,8 +4,9 @@ import { FlexContainer } from "../../styledcomponents/container/FlexGrid";
 import { connect } from "react-redux";
 
 import Paragraph from "antd/lib/typography/Paragraph";
-import AddFinishProduct from "../finshproduct/AddFinishProduct";
+
 import { PrimaryButton } from "../../styledcomponents/button/button";
+import AddMaterialLoad from "../materialload/AddMaterialLoad";
 const style = {
   fontSize: "medium",
   fontWeight: "600",
@@ -16,22 +17,23 @@ const style = {
   flexBasis: "650px"
 };
 
-class ManageFinishProductSampleTitle extends Component {
+class ManageProcessSampleTitle extends Component {
   render() {
     return (
       <FlexContainer titles leveltitles>
-        <Paragraph style={style}>Manage Finish Product Sample</Paragraph>
+        <Paragraph style={style}> Process Sample</Paragraph>
+
         <PrimaryButton
           style={{
             background: "#001328",
             color: "white",
             border: "none"
           }}
-          href='#/samples/viewfpstatus'
+          href='#/samples/viewprocessstatus'
         >
           View Test
         </PrimaryButton>
-        <AddFinishProduct />
+        <AddMaterialLoad />
       </FlexContainer>
     );
   }
@@ -44,4 +46,4 @@ const mapDispatchToProps = null;
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ManageFinishProductSampleTitle);
+)(ManageProcessSampleTitle);
