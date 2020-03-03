@@ -3,11 +3,11 @@ import React, { Component } from "react";
 import { Popconfirm, Divider, Icon } from "antd";
 
 import { AntTable } from "../../styledcomponents/table/AntTabl";
-import ManageFinishProductSampleTitle from "../titles/ManageFinishProductSampleTitle";
+import ManageMaterialLoadSampleTitle from "../titles/ManageMaterialLoadSample";
 
 const data = [];
 
-export default class ManageFinishProduct extends Component {
+export default class ManageMaterialLoad extends Component {
   state = {
     filteredInfo: null,
     sortedInfo: null,
@@ -86,59 +86,36 @@ export default class ManageFinishProduct extends Component {
     sortedInfo = sortedInfo || {};
     filteredInfo = filteredInfo || {};
     const columns = [
-      // {
-      //   title: "ID",
-      //   dataIndex: "id",
-      //   key: "Id",
-
-      //   filters: [
-      //     { text: "Joe", value: "Joe" },
-      //     { text: "Jim", value: "Jim" }
-      //   ],
-      //   filteredValue: filteredInfo.name || null,
-      //   onFilter: (value, record) => record.name.includes(value),
-      //   sorter: (a, b) => a.code - b.code,
-      //   sortOrder: sortedInfo.columnKey === "code" && sortedInfo.order
-      // },
       {
-        title: "Mix Design",
-        dataIndex: "mixdesign",
-        key: "mixdesign",
-
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        title: "Code",
+        dataIndex: "code",
+        key: "code"
       },
       {
-        title: "Project",
-        dataIndex: "project",
-        key: "project",
-
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        title: "Incoming Sample",
+        dataIndex: "incomingSample",
+        key: "incomingSample"
       },
       {
-        title: "Pour",
-        dataIndex: "pour",
-        key: "pour",
-
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        title: "Quantity",
+        dataIndex: "quantity",
+        key: "quantity"
       },
       {
-        title: " Date",
+        title: "Measurement",
+        dataIndex: "measurement",
+        key: "measurement"
+      },
+
+      {
+        title: "Date",
         dataIndex: "date",
-        key: "date",
-
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        key: "date"
+      },
+      {
+        title: "Expiry Date",
+        dataIndex: "expiryDate",
+        key: "expiryDate"
       },
 
       {
@@ -173,7 +150,7 @@ export default class ManageFinishProduct extends Component {
         <AntTable
           maxlength
           nomargin
-          title={() => <ManageFinishProductSampleTitle />}
+          title={() => <ManageMaterialLoadSampleTitle />}
           columns={columns}
           dataSource={data}
           onChange={this.handleChange}
