@@ -9,6 +9,7 @@ import { samplesReducers } from "./sample/SampleIndex";
 import { testResultsReducers } from "./testresults/TestResultIndex";
 import { MasterLevelNavigationReducer } from "./topbarnavigation/MasterLevelNavigationReducer";
 import { PriviledgeLevelNavigationReducer } from "./topbarnavigation/PriviledgeLevelNavigationReducer";
+import { TestConfigurationReducers } from "./testconfiguration/TestConfigurationIndex";
 
 const allReducers = combineReducers({
   plantLevelReducers: plantLevelReducers,
@@ -20,7 +21,8 @@ const allReducers = combineReducers({
   topbarNavigationReducers: TopbarNavigationReducer,
   testResultsReducers: testResultsReducers,
   masterLevelNavigationReducer: MasterLevelNavigationReducer,
-  priviledgeLevelNavigationReducer: PriviledgeLevelNavigationReducer
+  priviledgeLevelNavigationReducer: PriviledgeLevelNavigationReducer,
+  testConfigurationReducers: TestConfigurationReducers
 });
 
 export default allReducers;

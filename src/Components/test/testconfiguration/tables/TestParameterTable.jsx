@@ -2,46 +2,29 @@ import React, { Component } from "react";
 import { Checkbox } from "antd";
 import { AntTable } from "../../../styledcomponents/table/AntTabl";
 import { TestTitle } from "../titles/TestTitle";
+import {
+  ADD_PARAMETERS,
+  POP_PARAMETERS
+} from "../../../../redux/action/testconfiguration/TestConfiguration";
+import { connect } from "react-redux";
 
-const testParameterColumns = [
-  {
-    title: "Test Name",
-    dataIndex: "testName",
-    key: "testName"
-  },
-  {
-    title: "Parameter",
-    dataIndex: "parameterName",
-    key: "parameterName"
-  },
-  {
-    title: "Unit",
-    dataIndex: "unitName",
-    key: "unitName"
-  },
-  {
-    title: "Relevant",
-    dataIndex: "relevant",
-    key: "relevant",
-    render: text => <Checkbox />
-  }
-];
-
-const testParameterData = [
-  {
-    testName: "Moisture",
-    parameterName: "Cement",
-    unitName: "A"
-  },
-  {
-    testName: "Concrete Test",
-    parameterName: "Concrete",
-    unitName: "B"
-  }
-];
-export default class TestParameterTable extends Component {
+class TestParameterTable extends Component {
   state = {
-    size: "small"
+    size: "small",
+    testParameterData: [
+      {
+        testId: 1,
+        testName: "Moisture",
+        parameterName: "Cement",
+        unitName: "A"
+      },
+      {
+        testId: 2,
+        testName: "Concrete Test",
+        parameterName: "Concrete",
+        unitName: "B"
+      }
+    ]
   };
   componentWillMount() {
     if (window.screen.width > 1900) {
@@ -56,10 +39,35 @@ export default class TestParameterTable extends Component {
     }
   }
   render() {
+    const testParameterColumns = [
+      {
+        title: "Test Name",
+        dataIndex: "testName",
+        key: "testName"
+      },
+      {
+        title: "Parameter",
+        dataIndex: "parameterName",
+        key: "parameterName"
+      },
+      {
+        title: "Unit",
+        dataIndex: "unitName",
+        key: "unitName"
+      },
+      {
+        title: "Relevant",
+        dataIndex: "action",
+        key: "action",
+        render: (text, record = this.state.testParameterData) => (
+          <Checkbox onChange={this.props.selectParameters.bind(this, record)} />
+        )
+      }
+    ];
     return (
       <AntTable
         maxlength
-        dataSource={testParameterData}
+        dataSource={this.state.testParameterData}
         size={this.state.size}
         bordered={false}
         columns={testParameterColumns}
@@ -73,3 +81,27 @@ export default class TestParameterTable extends Component {
     );
   }
 }
+
+// const mapStateToProps = state => {
+//   return {
+//     textBody:
+//       state.testConfigurationReducers.equationConfigurationReducer.textBody
+//   };
+// };
+
+const mapDispatchToProps = dispatch => {
+  return {
+    selectParameters: (record, event) => {
+      console.log(event.target.checked);
+      if (event.target.checked === true) {
+        dispatch({ type: ADD_PARAMETERS, payload: record.unitName });
+        console.log("record pushed " + record.unitName);
+      }
+      if (event.target.checked === false) {
+        dispatch({ type: POP_PARAMETERS, payload: record.unitName });
+        console.log("record spliced " + record.unitName);
+      }
+    }
+  };
+};
+export default connect(null, mapDispatchToProps)(TestParameterTable);

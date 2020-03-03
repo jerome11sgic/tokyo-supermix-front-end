@@ -12,7 +12,7 @@ const sagaMiddleware = createSagaMiddleware();
 const persistConfig = {
   key: "root",
   storage,
-  blacklist: []
+  blacklist: ["testConfigurationReducers"]
 };
 let devtools = composeWithDevTools({
   actionCreators,
