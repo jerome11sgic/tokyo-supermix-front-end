@@ -369,6 +369,42 @@ class AddProcessSample extends Component {
     }
   };
 
+  showModal = () => {
+    this.setState({
+      visible: true,
+      processSample_code: "",
+      processSample_Incoming_sample: "",
+      processSample_material_id: "",
+      processSample_quantity: "",
+      processSample_remain_in_qunatity: ""
+    });
+  };
+
+  handleCancel = () => {
+    if (this.state.type === "edit") {
+      // we call the redux function to dispatch and delete all the global redux state to close the modal
+      this.props.setPlantVisiblity();
+    }
+
+    this.setState({
+      visible: false,
+      formValid: false,
+      errors: {
+        code: "",
+        incoming_sample_id: "",
+        materila_id: "",
+        quantity: "",
+        remain_in_quantity: ""
+      },
+      processSample_code: "",
+      processSample_Incoming_sample: "",
+      processSample_material_id: "",
+      processSample_quantity: "",
+      processSample_remain_in_qunatity: "",
+      errormgs: ""
+    });
+  };
+
   componentDidMount() {
     console.log(this.props.screen);
   }
