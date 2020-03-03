@@ -80,8 +80,8 @@ class UnitAddForm extends Component {
         errors.unit =
           value.length === 0
             ? "Unit Name can't be empty"
-            : value.length < 3
-            ? "Unit Name \n must be 3 characters long!"
+            : value.length < 1
+            ? "Unit Name \n must be one characters long!"
             : value.replace(/^[a-zA-Z-,]+(\s{0,1}[a-zA-Z-, ])*$/, "")
             ? "Unit allow only letters"
             : "";
