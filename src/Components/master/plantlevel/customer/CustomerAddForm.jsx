@@ -84,7 +84,7 @@ class CustomerAddForm extends Component {
 
   handleChange = (event, field) => {
     this.setState({ [field]: event.target.value });
-    this.setState({ errormgs: "" });
+    this.setState({ errormsgs: "" });
     event.preventDefault();
     const { name, value } = event.target;
     let errors = this.state.errors;
@@ -158,8 +158,7 @@ class CustomerAddForm extends Component {
       customer_contactno: "",
       customer_email: "",
       // add or edit
-      type: "add",
-      errormgs: ""
+      type: "add"
     });
   };
 
@@ -271,33 +270,44 @@ class CustomerAddForm extends Component {
           email: this.state.customer_email
         };
 
-        api("POST", "supermix", "/customer", "", data, "").then(
-          res => {
-            console.log(res.data);
-
-            Notification("success", res.data.message);
-            this.props.reload();
-            this.setState({ loading: true });
+        api("POST", "supermix", "/customer", "", data, "")
+          .then(
+            res => {
+              console.log(res.data);
+              if (res.data.status === "VALIDATION_FAILURE") {
+                console.log("val error");
+                this.responeserror(res.data.results.name.message);
+              } else {
+                Notification("success", res.data.message);
+                this.props.reload();
+                this.setState({ loading: true });
+                this.setState({
+                  customer_code: "",
+                  customer_contactno: "",
+                  customer_address: "",
+                  customer_email: "",
+                  customer_name: "",
+                  errormsgs: ""
+                });
+                setTimeout(() => {
+                  this.setState({ loading: false, visible: false });
+                }, 1500);
+              }
+            },
+            error => {
+              this.setState({
+                errormsgs: error.validationFailures[0]
+              });
+              console.log("DEBUG34: ", error);
+              console.log(HandelError(error.validationFailures[0]));
+            }
+          )
+          .catch(error => {
             this.setState({
-              customer_code: "",
-              customer_contactno: "",
-              customer_address: "",
-              customer_email: "",
-              customer_name: "",
-              errormgs: ""
+              errormsgs: "customer email already exists"
             });
-            setTimeout(() => {
-              this.setState({ loading: false, visible: false });
-            }, 3000);
-          },
-          error => {
-            this.setState({
-              errormgs: error.validationFailures[0]
-            });
-            console.log("DEBUG34: ", error);
-            console.log(HandelError(error.validationFailures[0]));
-          }
-        );
+            console.log(error);
+          });
       } else {
         const data = {
           id: this.state.customer_code,
@@ -318,11 +328,11 @@ class CustomerAddForm extends Component {
             customer_address: "",
             customer_email: "",
             customer_name: "",
-            errormgs: ""
+            errormsgs: ""
           });
           setTimeout(() => {
             this.setState({ loading: false, visible: false });
-          }, 3000);
+          }, 1500);
         });
       }
 
@@ -336,7 +346,7 @@ class CustomerAddForm extends Component {
   }
   render() {
     const { visible, loading } = this.state;
-    const { errors } = this.state;
+    const { errors, errormsgs } = this.state;
     console.log(this.state.type);
     return (
       <div>
@@ -421,6 +431,7 @@ class CustomerAddForm extends Component {
                 onChange={this.handleChange}
               />
               {errors.name.length > 0 && <div style={error}>{errors.name}</div>}
+
               <div style={{ height: "12px" }}></div>
             </div>
 
@@ -478,6 +489,9 @@ class CustomerAddForm extends Component {
               {errors.email.length > 0 && (
                 <div style={error}>{errors.email}</div>
               )}
+
+              <div style={error}>{HandelError(this.state.errormsgs)}</div>
+
               <div style={{ height: "12px" }}></div>
             </div>
           </MasterLevelForm>

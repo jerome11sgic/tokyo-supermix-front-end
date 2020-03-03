@@ -14,6 +14,13 @@ import { DISABLE_EDIT_MODE } from "../../../../redux/action/master/plantlevel/Pl
 
 const Option = Select;
 
+const error = {
+  color: "red",
+  fontSize: "12px",
+  width: "160px",
+  height: "0.2px"
+};
+
 class AddProjectForm extends Component {
   state = {
     loading: false,
@@ -29,7 +36,16 @@ class AddProjectForm extends Component {
     plant: "",
     plant_edit: "",
     type: "add",
-    errors: {},
+    errors: {
+      code: "",
+      project_name: "",
+      start_date: "",
+      customer: "",
+      contact_person: "",
+      contact_no: "",
+      plant: ""
+    },
+    errormgs: "",
     errorvalmegss: ""
   };
 
@@ -47,7 +63,15 @@ class AddProjectForm extends Component {
       plant: "",
       plant_edit: "",
       type: "add",
-      errors: {}
+      errors: {
+        code: "",
+        project_name: "",
+        customer: "",
+        start_date: "",
+        contact_person: "",
+        contact_no: "",
+        plant: ""
+      }
     });
   };
 
@@ -102,28 +126,59 @@ class AddProjectForm extends Component {
     event.preventDefault();
     const { name, value } = event.target;
     let errors = this.state.errors;
-    // console.log(name + " is \t" + value);
-    // switch (name) {
-    //   case "pour_name":
-    //     errors.pour_name =
-    //       value.length === 0
-    //         ? "Pour No can't be empty"
-    //         : value.length < 3
-    //         ? "Pour No \n must be 3 characters long!"
-    //         : // : !isNaN(value)
-    //           // ? "Pour No won't allow only letters"
-    //           "";
-    //     break;
+    console.log(name + " is \n" + value);
+    switch (name) {
+      case "code":
+        errors.code =
+          value.length === 0
+            ? "Code can't be empty"
+            : value.length < 2
+            ? "Code \n must be 2 characters long!"
+            : !isNaN(value)
+            ? "Code won't allow only letters"
+            : "";
+        break;
+      case "project_name":
+        errors.project_name =
+          value.length === 0
+            ? "Name can't be empty"
+            : value.length < 3
+            ? "Name \n must be 3 characters long!"
+            : !isNaN(value)
+            ? "Code won't allow only letters"
+            : "";
+        break;
 
-    //   default:
-    //     break;
-    // }
+      case "contact_no":
+        errors.contact_no =
+          value.length === 0
+            ? "contact no can't be empty"
+            : value.length < 8
+            ? "contact no \n must be 8 characters long!"
+            : // : isNaN(value)
+              // ? "contact no won't allow only letters"
+              "";
+        break;
+      case "contact_person":
+        errors.contact_person =
+          value.length === 0
+            ? "contact person can't be empty"
+            : value.length < 3
+            ? "contact person \n must be 3 characters long!"
+            : !isNaN(value)
+            ? "contact person won't allow only numbers"
+            : "";
+        break;
+      default:
+        break;
+    }
 
     this.setState({ errors, [name]: value });
   };
 
   // handling for select or dropdown
   handleSelect = (name, value) => {
+    const { errors } = this.state;
     console.log(name);
     console.log(value);
 
@@ -132,7 +187,16 @@ class AddProjectForm extends Component {
     if (name === "customer") {
       this.setState({
         customer: value,
-        customer_edit: value
+        customer_edit: value,
+        errors: {
+          code: errors.code,
+          project_name: errors.project_name,
+          start_date: errors.start_date,
+          customer: "",
+          contact_person: errors.contact_person,
+          contact_no: errors.contact_no,
+          plant: errors.plant
+        }
       });
     }
 
@@ -140,10 +204,43 @@ class AddProjectForm extends Component {
     if (name === "plant") {
       this.setState({
         plant: value,
-        plant_edit: value
+        plant_edit: value,
+        errors: {
+          code: errors.code,
+          project_name: errors.project_name,
+          start_date: errors.start_date,
+          customer: errors.customer,
+          contact_person: errors.contact_person,
+          contact_no: errors.contact_no,
+          plant: ""
+        }
       });
     }
   };
+
+  handleDates(name, dateString, field) {
+    const { errors } = this.state;
+    console.log(name);
+    console.log(dateString);
+    console.log(field);
+    let convertedDate = moment(dateString).format("YYYY-MM-DD");
+    console.log(convertedDate);
+    if (name === "start_date") {
+      this.setState({
+        start_date: dateString,
+        start_date_edit: dateString,
+        errors: {
+          code: errors.code,
+          project_name: errors.project_name,
+          start_date: "",
+          customer: errors.customer,
+          contact_person: errors.contact_person,
+          contact_no: errors.contact_no,
+          plant: errors.plant
+        }
+      });
+    }
+  }
 
   handleCancel = () => {
     if (this.state.type === "edit") {
@@ -163,22 +260,18 @@ class AddProjectForm extends Component {
       plant: "",
       plant_edit: "",
       type: "add",
-      errors: {}
+      errors: {
+        code: "",
+        project_name: "",
+        customer: "",
+        start_date: "",
+        contact_person: "",
+        contact_no: "",
+        plant: ""
+      }
     });
   };
 
-  handleDates(name, dateString, field) {
-    console.log(name);
-    console.log(dateString);
-    console.log(field);
-    let convertedDate = moment(dateString).format("YYYY-MM-DD");
-    console.log(convertedDate);
-    if (name === "start_date") {
-      this.setState({
-        start_date: dateString
-      });
-    }
-  }
   handleSubmit = e => {
     e.preventDefault();
     const {
@@ -192,28 +285,205 @@ class AddProjectForm extends Component {
       contact_person,
       contact_no,
       plant,
-      plant_edit
+      plant_edit,
+      type,
+      errors
     } = this.state;
 
-    console.log("form is valid");
-    if (this.state.type === "edit") {
-      const data = {
-        code: code,
-        name: project_name,
-        contactNumber: contact_no,
-        startDate: moment(start_date).format("YYYY-MM-DD"),
-        customerId: customer_edit,
-        plantCode: plant_edit,
-        contactPerson: contact_person
-      };
-      console.log(data);
-      api("PUT", "supermix", "/project", "", data, "")
-        .then(
+    if (
+      code.length === 0 &&
+      project_name.length === 0 &&
+      start_date.length === 0 &&
+      customer.length === 0 &&
+      contact_person.length === 0 &&
+      contact_no.length === 0 &&
+      plant.length === 0
+    ) {
+      this.setState({
+        errors: {
+          code: "code can't be empty",
+          project_name: "name can't be empty",
+          customer: "customer can't be empty",
+          start_date: "start date can't be empty",
+          contact_person: "contact person can't be empty",
+          contact_no: "contact no can't be empty",
+          plant: "plant can't be empty"
+        }
+      });
+    } else if (errors.code.length === 0 && code.length === 0) {
+      this.setState({
+        errors: {
+          code: errors.code || "code can't be empty",
+          project_name: errors.project_name,
+          start_date: errors.start_date,
+          customer: errors.customer,
+          contact_person: errors.contact_person,
+          contact_no: errors.contact_no,
+          plant: errors.plant
+        }
+      });
+    } else if (errors.project_name.length === 0 && project_name.length === 0) {
+      this.setState({
+        errors: {
+          code: errors.code,
+          project_name: errors.project_name || "project name can't be empty",
+          start_date: errors.start_date,
+          customer: errors.customer,
+          contact_person: errors.contact_person,
+          contact_no: errors.contact_no,
+          plant: errors.plant
+        }
+      });
+    } else if (errors.start_date.length === 0 && start_date.length === 0) {
+      this.setState({
+        errors: {
+          code: errors.code,
+          project_name: errors.project_name,
+          start_date: errors.start_date || "start date can't be empty",
+          customer: errors.customer,
+          contact_person: errors.contact_person,
+          contact_no: errors.contact_no,
+          plant: errors.plant
+        }
+      });
+    } else if (errors.customer.length === 0 && customer.length === 0) {
+      this.setState({
+        errors: {
+          code: errors.code,
+          project_name: errors.project_name,
+          start_date: errors.start_date,
+          customer: errors.customer || "customer can't be empty",
+          contact_person: errors.contact_person,
+          contact_no: errors.contact_no,
+          plant: errors.plant
+        }
+      });
+    } else if (
+      errors.contact_person.length === 0 &&
+      contact_person.length === 0
+    ) {
+      this.setState({
+        errors: {
+          code: errors.code,
+          project_name: errors.project_name,
+          start_date: errors.start_date,
+          customer: errors.customer,
+          contact_person:
+            errors.contact_person || "contact person can't be empty",
+          contact_no: errors.contact_no,
+          plant: errors.plant
+        }
+      });
+    } else if (errors.contact_no.length === 0 && contact_no.length === 0) {
+      this.setState({
+        errors: {
+          code: errors.code,
+          project_name: errors.project_name,
+          start_date: errors.start_date,
+          customer: errors.customer,
+          contact_person: errors.contact_person,
+          contact_no: errors.contact_no || "contact no can't be empty",
+          plant: errors.plant
+        }
+      });
+    } else if (errors.plant.length === 0 && plant.length === 0) {
+      this.setState({
+        errors: {
+          code: errors.code,
+          project_name: errors.project_name,
+          start_date: errors.start_date,
+          customer: errors.customer,
+          contact_person: errors.contact_person,
+          contact_no: errors.contact_no,
+          plant: errors.plant || "plant no can't be empty"
+        }
+      });
+    } else if (
+      errors.code.length === 0 &&
+      errors.contact_no.length === 0 &&
+      errors.contact_person.length === 0 &&
+      errors.customer.length === 0 &&
+      errors.plant.length === 0 &&
+      errors.project_name.length === 0 &&
+      errors.start_date.length === 0
+    ) {
+      console.log("form is valid");
+      if (this.state.type === "edit") {
+        const data = {
+          code: code,
+          name: project_name,
+          contactNumber: contact_no,
+          startDate: moment(start_date).format("YYYY-MM-DD"),
+          customerId: customer_edit,
+          plantCode: plant_edit,
+          contactPerson: contact_person
+        };
+        console.log(data);
+        api("PUT", "supermix", "/project", "", data, "")
+          .then(
+            res => {
+              console.log(res.data);
+
+              if (res.data.status === "VALIDATION_FAILURE") {
+                console.log("update");
+                this.responeserror(res.data.results.name.message);
+              } else {
+                Notification("success", res.data.message);
+                // this.props.reload();
+                this.setState({
+                  loading: true,
+                  code: "",
+                  start_date: "",
+                  project_name: "",
+                  customer: "",
+                  contact_person: "",
+                  contact_no: "",
+                  plant: ""
+                });
+                setTimeout(() => {
+                  this.setState({ loading: false, visible: false });
+                }, 1500);
+              }
+            },
+            error => {
+              this.setState({
+                errorvalmegss: error.validationFailures[0]
+              });
+              console.log("DEBUG34: ", error);
+              console.log(HandelError(error.validationFailures[0]));
+            }
+          )
+          .catch(error => {
+            // this.setState({
+            //   errormgs: "Plant Name Exist"
+            // });
+            console.log(error);
+          });
+      } else {
+        //         code: "pr01"
+        // name: "yifuf"
+        // contactNumber: "12456494"
+        // contactPerson: "uhguhfuf"
+        // startDate: "2020-02-20"
+        // customerId: 1
+        // plantCode: "p01"
+        // plantName: "jaffna"
+        // customerName: "kiri"
+        const data = {
+          code: code,
+          name: project_name,
+          contactNumber: contact_no,
+          startDate: moment(start_date).format("YYYY-MM-DD"),
+          customerId: customer,
+          plantCode: plant,
+          contactPerson: contact_person
+        };
+        console.log(data);
+        api("POST", "supermix", "/project", "", data, "").then(
           res => {
             console.log(res.data);
-
             if (res.data.status === "VALIDATION_FAILURE") {
-              console.log("update");
+              console.log("add");
               this.responeserror(res.data.results.name.message);
             } else {
               Notification("success", res.data.message);
@@ -240,65 +510,8 @@ class AddProjectForm extends Component {
             console.log("DEBUG34: ", error);
             console.log(HandelError(error.validationFailures[0]));
           }
-        )
-        .catch(error => {
-          // this.setState({
-          //   errormgs: "Plant Name Exist"
-          // });
-          console.log(error);
-        });
-    } else {
-      //         code: "pr01"
-      // name: "yifuf"
-      // contactNumber: "12456494"
-      // contactPerson: "uhguhfuf"
-      // startDate: "2020-02-20"
-      // customerId: 1
-      // plantCode: "p01"
-      // plantName: "jaffna"
-      // customerName: "kiri"
-      const data = {
-        code: code,
-        name: project_name,
-        contactNumber: contact_no,
-        startDate: moment(start_date).format("YYYY-MM-DD"),
-        customerId: customer,
-        plantCode: plant,
-        contactPerson: contact_person
-      };
-      console.log(data);
-      api("POST", "supermix", "/project", "", data, "").then(
-        res => {
-          console.log(res.data);
-          if (res.data.status === "VALIDATION_FAILURE") {
-            console.log("add");
-            this.responeserror(res.data.results.name.message);
-          } else {
-            Notification("success", res.data.message);
-            // this.props.reload();
-            this.setState({
-              loading: true,
-              code: "",
-              start_date: "",
-              project_name: "",
-              customer: "",
-              contact_person: "",
-              contact_no: "",
-              plant: ""
-            });
-            setTimeout(() => {
-              this.setState({ loading: false, visible: false });
-            }, 1500);
-          }
-        },
-        error => {
-          this.setState({
-            errorvalmegss: error.validationFailures[0]
-          });
-          console.log("DEBUG34: ", error);
-          console.log(HandelError(error.validationFailures[0]));
-        }
-      );
+        );
+      }
     }
   };
 
@@ -317,7 +530,7 @@ class AddProjectForm extends Component {
     this.setState({
       visible: nextProps.visible,
       code: nextProps.editPlantData.code,
-      start_date: moment(nextProps.editPlantData.start_date, "YYYY-MM-DD"),
+      start_date: moment(nextProps.editPlantData.startDate, "YYYY-MM-DD"),
       project_name: nextProps.editPlantData.name,
       customer: nextProps.editPlantData.customerName,
       customer_edit: nextProps.editPlantData.customerId,
@@ -333,6 +546,7 @@ class AddProjectForm extends Component {
     const {
       visible,
       loading,
+      errors,
       code,
       project_name,
       start_date,
@@ -370,7 +584,7 @@ class AddProjectForm extends Component {
             <PrimaryButton
               key='submit'
               loading={loading}
-              onClick={e => this.handleSubmit(e)}
+              onClick={this.handleSubmit}
               style={{ background: "#001328", color: "white", border: "none" }}
             >
               Submit
@@ -410,7 +624,8 @@ class AddProjectForm extends Component {
                 onChange={this.handleChange}
                 disabled={type === "edit" ? true : false}
               />
-              <div style={{ height: "8px" }}></div>
+              {errors.code.length > 0 && <div style={error}>{errors.code}</div>}
+              <div style={{ height: "12px" }}></div>
             </div>
 
             <div className='input_wrapper'>
@@ -425,7 +640,10 @@ class AddProjectForm extends Component {
                 value={project_name}
                 onChange={this.handleChange}
               />
-              <div style={{ height: "8px" }}></div>
+              {errors.project_name.length > 0 && (
+                <div style={error}>{errors.project_name}</div>
+              )}
+              <div style={{ height: "12px" }}></div>
             </div>
 
             <div className='input_wrapper'>
@@ -435,7 +653,7 @@ class AddProjectForm extends Component {
               <DatePicker
                 id='start_date'
                 name='start_date'
-                format={"DD-MM-YYYY"}
+                format={"YYYY-MM-DD"}
                 showToday
                 // disabledDate={this.disabledDate()}
                 value={start_date}
@@ -444,7 +662,10 @@ class AddProjectForm extends Component {
                 }
                 // disabledTime={() => Date.now()}
               />
-              <div style={{ height: "8px" }}></div>
+              {errors.start_date.length > 0 && (
+                <div style={error}>{errors.start_date}</div>
+              )}
+              <div style={{ height: "12px" }}></div>
             </div>
 
             <div className='input_wrapper'>
@@ -462,7 +683,10 @@ class AddProjectForm extends Component {
               >
                 {this.state.SelectCustomers}
               </Select>
-              <div style={{ height: "8px" }}></div>
+              {errors.customer.length > 0 && (
+                <div style={error}>{errors.customer}</div>
+              )}
+              <div style={{ height: "12px" }}></div>
             </div>
 
             <div className='input_wrapper'>
@@ -478,7 +702,10 @@ class AddProjectForm extends Component {
                 value={contact_person}
                 onChange={this.handleChange}
               />
-              <div style={{ height: "8px" }}></div>
+              {errors.contact_person.length > 0 && (
+                <div style={error}>{errors.contact_person}</div>
+              )}
+              <div style={{ height: "12px" }}></div>
             </div>
             <div className='input_wrapper'>
               <label for='contact_no' className='label'>
@@ -487,13 +714,16 @@ class AddProjectForm extends Component {
 
               <Input
                 id='contact_no'
-                placeholder='Select Contact No'
+                placeholder='Enter Contact No'
                 name='contact_no'
                 style={{ width: "180px" }}
                 value={contact_no}
                 onChange={this.handleChange}
               />
-              <div style={{ height: "8px" }}></div>
+              {errors.contact_no.length > 0 && (
+                <div style={error}>{errors.contact_no}</div>
+              )}
+              <div style={{ height: "12px" }}></div>
             </div>
 
             <div className='input_wrapper'>
@@ -511,7 +741,10 @@ class AddProjectForm extends Component {
               >
                 {this.state.SelectPlants}
               </Select>
-              <div style={{ height: "8px" }}></div>
+              {errors.plant.length > 0 && (
+                <div style={error}>{errors.plant}</div>
+              )}
+              <div style={{ height: "12px" }}></div>
             </div>
           </MasterLevelForm>
         </Modal>

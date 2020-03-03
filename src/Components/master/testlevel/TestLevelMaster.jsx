@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { FlexContainer } from "../../styledcomponents/container/FlexGrid";
 import TestLevelTileArea from "./TestLevelTileArea";
-import ManageTestStstus from "./teststatus/ManageTestStatus";
+import ManageTestType from "./testtype/ManageTestType";
 
 export default class TestLevelMaster extends Component {
   state = {
@@ -16,7 +16,7 @@ export default class TestLevelMaster extends Component {
     return (
       <FlexContainer leveltileareafixed>
         <TestLevelTileArea type={this.typechange} />
-        <ManageTestStstus />
+        <ManageTestType />
       </FlexContainer>
     );
   }

@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { Icon, Popconfirm, Divider } from "antd";
 import { AntTable } from "../../../styledcomponents/table/AntTabl";
 import MixDesignTitle from "../titles/MixDesignTitle";
+import { api } from "../../../services/AxiosService";
 
 export default class ManageMixDesignNew extends Component {
   state = {
@@ -25,6 +26,19 @@ export default class ManageMixDesignNew extends Component {
       });
     }
   }
+
+  componentDidMount() {
+    this.getAllMixDesign();
+  }
+
+  getAllMixDesign = () => {
+    api("GET", "supermix", "/mix-design", "", "", "").then(res => {
+      console.log(res.data.results);
+      this.setState({
+        projectsList: res.data.results.projects
+      });
+    });
+  };
 
   showModal = () => {
     this.setState({

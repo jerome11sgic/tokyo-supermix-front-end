@@ -42,23 +42,11 @@ class AddMixDesignFormNew extends Component {
   };
 
   handleSubmit = e => {
-    console.log(e);
-    console.log(this.props.form);
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log("Received values of form: ", values);
-        this.setState({ loading: true });
-        setTimeout(() => {
-          this.setState({ loading: false, visible: false });
-        }, 3000);
-      }
-    });
   };
 
-  componentDidMount() {
-    console.log(this.props.screen);
-  }
+  componentDidMount() {}
+
   render() {
     const { visible, loading } = this.state;
 

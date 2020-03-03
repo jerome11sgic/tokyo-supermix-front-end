@@ -201,7 +201,16 @@ class UnitAddForm extends Component {
 
   showModal = () => {
     this.setState({
-      visible: true
+      visible: true,
+      errors: {
+        unit: ""
+      },
+      unit_code: "",
+      unit_name: "",
+      errormgs: "",
+      formValid: false,
+      errorCount: 0,
+      type: "add"
     });
   };
 
@@ -270,7 +279,7 @@ class UnitAddForm extends Component {
                 {this.state.type === "edit" ? "Edit Unit" : "Add Unit"}
               </p>
               <Icon
-                type="close-circle"
+                type='close-circle'
                 onClick={this.handleCancel}
                 style={{
                   color: "white"
@@ -279,11 +288,11 @@ class UnitAddForm extends Component {
             </MasterLevelFormTitle>
           }
           footer={[
-            <Button key="back" onClick={this.handleCancel}>
+            <Button key='back' onClick={this.handleCancel}>
               Cancel
             </Button>,
             <PrimaryButton
-              key="submit"
+              key='submit'
               loading={loading}
               onClick={e => this.handleSubmit(e)}
               style={{ background: "#001328", color: "white", border: "none" }}
@@ -291,18 +300,18 @@ class UnitAddForm extends Component {
               {this.state.type === "edit" ? "Edit" : "Save"}
             </PrimaryButton>
           ]}
-          width="400px"
+          width='400px'
         >
           <MasterLevelForm style={{ justifyContent: "space-evenly" }}>
             {/* Code */}
-            <div className="input_wrapper">
-              <label for="plant_code" className="label">
+            <div className='input_wrapper'>
+              <label for='plant_code' className='label'>
                 Unit:
               </label>
               <Input
-                id="unit_name"
-                name="unit_name"
-                placeholder="Enter the Unit "
+                id='unit_name'
+                name='unit_name'
+                placeholder='Enter the Unit '
                 onChange={this.handleChange}
                 value={this.state.unit_name}
                 // disabled={this.state.type === "edit" ? true : false}

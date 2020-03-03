@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { FlexContainer } from "../../../styledcomponents/container/FlexGrid";
 
 import Paragraph from "antd/lib/typography/Paragraph";
-import AddTestStatus from "../teststatus/AddTestStatus";
+import AddTestType from "../testtype/AddTestType";
 
 const style = {
   fontSize: "medium",
@@ -15,8 +15,8 @@ export default class TestLevelTitle extends Component {
   render() {
     return (
       <FlexContainer titles leveltitles>
-        <Paragraph style={style}>Test Status Master</Paragraph>
-        <AddTestStatus />
+        <Paragraph style={style}>Test Type</Paragraph>
+        <AddTestType reload={this.props.reload} />
       </FlexContainer>
     );
   }

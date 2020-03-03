@@ -5,7 +5,7 @@ export const ParagraphTitle = styled.p`
   font-weight: 500;
   letter-spacing: 1.2;
   height: 40px;
-  width: 380px;
+  width: 600px;
   margin-top: -30px;
   margin-left: 3px;
   background-color: #00111b;

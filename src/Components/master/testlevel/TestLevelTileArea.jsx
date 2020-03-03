@@ -39,16 +39,16 @@ export default class TestLevelTileArea extends Component {
         <BasicCard
           finalproduct
           tileareacard
-          size="small"
-          className="test_basic_card"
+          size='small'
+          className='test_basic_card'
           hoverable={true}
           onClick={this.statusChange2}
         >
-          <TileAreaText test>Test Status</TileAreaText>
+          <TileAreaText u>Test Type</TileAreaText>
           <TileAreaAction>
             <Icon
               filled
-              type="plus"
+              type='plus'
               style={{ color: "red", fontSize: "22px" }}
             />
           </TileAreaAction>
