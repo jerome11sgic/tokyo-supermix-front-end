@@ -7,34 +7,38 @@ import ParameterConfig from "./ParameterConfiguration";
 import EquationConfiguration from "./EquationConfiguration";
 import GraphConfiguration from "./GraphConfiguration";
 import ManageTestConfiguration from "./ManageTestConfiguration";
+import AddTestName from "./configure/AddTestName";
+import AddTestParameter from "./configure/AddTestParameter";
+import AddTestEquation from "./configure/AddTestEquation";
+import AddTestAcceptedValue from "./configure/AddTestAcceptedValue";
 
 const { Step } = Steps;
 
 const steps = [
   {
     title: "First",
-    content: <TestConfig />
+    content: <AddTestName />
   },
   {
     title: "Second",
-    content: <ParameterConfig />
+    content: <AddTestParameter />
   },
   {
     title: "Third",
-    content: <EquationConfiguration />
+    content: <AddTestEquation />
   },
   {
-    title: "fourth",
+    title: "Fourth",
+    content: <AddTestAcceptedValue />
+  },
+  {
+    title: "Fifth",
     content: <GraphConfiguration />
   },
   {
     title: "Last",
     content: <ManageTestConfiguration />
   }
-  // {
-  //   title: "Last",
-  //   content: <PickListDemo />
-  // }
 ];
 
 export default class TestConfigurationMaster extends Component {

@@ -5,27 +5,38 @@ import { TestTitle } from "../titles/TestTitle";
 
 const testParameterColumns = [
   {
-    title: "",
-    dataIndex: "testParameterId",
-    key: "testParameterId"
+    title: "Test Name",
+    dataIndex: "testName",
+    key: "testName"
   },
   {
-    title: "",
-    dataIndex: "testParameterName",
-    key: "testParameterName"
+    title: "Parameter",
+    dataIndex: "parameterName",
+    key: "parameterName"
   },
   {
-    title: "",
-    dataIndex: "testParameterCheck",
-    key: "testParameterCheck",
+    title: "Unit",
+    dataIndex: "unitName",
+    key: "unitName"
+  },
+  {
+    title: "Relevant",
+    dataIndex: "relevant",
+    key: "relevant",
     render: text => <Checkbox />
   }
 ];
 
 const testParameterData = [
   {
-    testParameterName: "Moisture",
-    testParameterCheck: "checked"
+    testName: "Moisture",
+    parameterName: "Cement",
+    unitName: "A"
+  },
+  {
+    testName: "Concrete Test",
+    parameterName: "Concrete",
+    unitName: "B"
   }
 ];
 export default class TestParameterTable extends Component {
@@ -46,22 +57,19 @@ export default class TestParameterTable extends Component {
   }
   render() {
     return (
-      <div>
-        <AntTable
-          dataSource={testParameterData}
-          size={this.state.size}
-          bordered={false}
-          columns={testParameterColumns}
-          title={() => TestTitle("Test Parameter")}
-          showHeader={false}
-          style={{
-            width: "400px",
-            height: "200px",
-            background: "white"
-          }}
-          pagination={false}
-        />
-      </div>
+      <AntTable
+        maxlength
+        dataSource={testParameterData}
+        size={this.state.size}
+        bordered={false}
+        columns={testParameterColumns}
+        title={() => <h3 style={{ height: "10px" }}>Test Parameter</h3>}
+        showHeader={true}
+        pagination={{ defaultPageSize: 6 }}
+        style={{
+          height: "200px"
+        }}
+      />
     );
   }
 }
