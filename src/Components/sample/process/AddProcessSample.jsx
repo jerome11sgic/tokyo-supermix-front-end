@@ -7,7 +7,8 @@ import {
   MasterLevelForm
 } from "../../styledcomponents/form/MasterLevelForms";
 import { DISABLE_EDIT_MODE } from "../../../redux/action/master/plantlevel/PlantLevel";
-import TextArea from "antd/lib/input/TextArea";
+import Notificationfuc from "../../Constant/Notification";
+import { api } from "../../services/AxiosService";
 import HandelError from "../../Constant/HandleError";
 import { connect } from "react-redux";
 
@@ -41,6 +42,32 @@ class AddProcessSample extends Component {
       type: "add"
     };
   }
+
+  validateForm = errors => {
+    let valid;
+    Object.values(errors).forEach(
+      val => val.length > 1 && (valid = false),
+      (valid = true)
+    );
+    // this.setState({
+    //   formValid: valid
+    // })
+    console.log(valid);
+
+    return valid;
+  };
+
+  countErrors = errors => {
+    let count = 0;
+    Object.values(errors).forEach(val => val.length > 0 && (count = count + 1));
+
+    // this.setState({
+    //   errorCount: count
+    // })
+    console.log(count);
+
+    return count;
+  };
 
   showModal = () => {
     this.setState({
@@ -130,6 +157,218 @@ class AddProcessSample extends Component {
     this.setState({ errors, [name]: value });
   };
 
+  handleSubmit = event => {
+    event.preventDefault();
+    if (
+      this.state.processSample_code.length === 0 &&
+      this.state.processSample_Incoming_sample.length === 0 &&
+      this.state.processSample_material_id.length === 0 &&
+      this.state.processSample_quantity.length === 0 &&
+      this.state.processSample_remain_in_qunatity.length === 0
+    ) {
+      this.setState({
+        errors: {
+          code: "Code can't be empty",
+          incoming_sample_id: "Incoming Sample can't be empty",
+          materila_id: "Material can't be empty",
+          quantity: "Quantity can't be empty",
+          remain_in_quantity: "Remain Quantity can't be empty"
+        },
+        formValid: this.validateForm(this.state.errors),
+        errorCount: this.countErrors(this.state.errors)
+      });
+    } else if (
+      this.state.processSample_code.length === 0 &&
+      this.state.errors.code.length === 0
+    ) {
+      this.setState({
+        errors: {
+          code: this.state.errors.code || "Code can't be empty",
+          incoming_sample_id: this.state.errors.incoming_sample_id,
+          materila_id: this.state.errors.materila_id,
+          quantity: this.state.errors.quantity,
+          remain_in_quantity: this.state.errors.remain_in_quantity
+        },
+        formValid: this.validateForm(this.state.errors),
+        errorCount: this.countErrors(this.state.errors)
+      });
+    } else if (
+      this.state.processSample_Incoming_sample.length === 0 &&
+      this.state.errors.incoming_sample_id.length === 0
+    ) {
+      this.setState({
+        errors: {
+          code: this.state.errors.code,
+          incoming_sample_id:
+            this.state.errors.incoming_sample_id ||
+            "Incoming Sample can't be empty",
+          materila_id: this.state.errors.materila_id,
+          quantity: this.state.errors.quantity,
+          remain_in_quantity: this.state.errors.remain_in_quantity
+        },
+        formValid: this.validateForm(this.state.errors),
+        errorCount: this.countErrors(this.state.errors)
+      });
+    } else if (
+      this.state.processSample_material_id.length === 0 &&
+      this.state.errors.materila_id.length === 0
+    ) {
+      this.setState({
+        errors: {
+          code: this.state.errors.code,
+          incoming_sample_id: this.state.errors.incoming_sample_id,
+          materila_id:
+            this.state.errors.materila_id || "Material can't be empty",
+          quantity: this.state.errors.quantity,
+          remain_in_quantity: this.state.errors.remain_in_quantity
+        },
+        formValid: this.validateForm(this.state.errors),
+        errorCount: this.countErrors(this.state.errors)
+      });
+    } else if (
+      this.state.processSample_quantity.length === 0 &&
+      this.state.errors.quantity.length === 0
+    ) {
+      this.setState({
+        errors: {
+          code: this.state.errors.code,
+          incoming_sample_id: this.state.errors.incoming_sample_id,
+          materila_id: this.state.errors.materila_id,
+          quantity: this.state.errors.quantity || "Quantity can't be empty",
+          remain_in_quantity: this.state.errors.remain_in_quantity
+        },
+        formValid: this.validateForm(this.state.errors),
+        errorCount: this.countErrors(this.state.errors)
+      });
+    } else if (
+      this.state.processSample_remain_in_qunatity.length === 0 &&
+      this.state.errors.remain_in_quantity.length === 0
+    ) {
+      this.setState({
+        errors: {
+          code: this.state.errors.code,
+          incoming_sample_id: this.state.errors.incoming_sample_id,
+          materila_id: this.state.errors.materila_id,
+          quantity: this.state.errors.quantity,
+          remain_in_quantity:
+            this.state.errors.remain_in_quantity ||
+            "Remain Quantity can't be empty"
+        },
+        formValid: this.validateForm(this.state.errors),
+        errorCount: this.countErrors(this.state.errors)
+      });
+    } else if (
+      this.state.code.length === 0 &&
+      this.state.incoming_sample_id.length === 0 &&
+      this.state.materila_id.length === 0 &&
+      this.state.quantity.length === 0 &&
+      this.state.remain_in_quantity.length === 0
+    ) {
+      console.log(this.state.errors);
+      this.setState({ formValid: this.validateForm(this.state.errors) });
+      this.setState({ errorCount: this.countErrors(this.state.errors) });
+      console.log(this.state.formValid);
+      console.log(this.state.errorCount);
+
+      const data = {
+        code: this.state.plant_code,
+        incoming_sample_id: this.state.processSample_Incoming_sample,
+        materila_id: this.state.processSample_material_id,
+        quantity: this.state.processSample_quantity,
+        remain_in_quantity: this.state.processSample_remain_in_qunatity
+      };
+      if (this.state.type === "add") {
+        api("POST", "supermix", "/processsample", "", data, "")
+          .then(
+            res => {
+              console.log(res.data);
+              if (res.data.status == "VALIDATION_FAILURE") {
+                console.log("add");
+                this.responeserror(res.data.results.name.message);
+              } else {
+                Notificationfuc("success", res.data.message);
+                this.props.reload();
+                this.setState({ loading: true });
+                this.setState({
+                  processSample_code: "",
+                  processSample_Incoming_sample: "",
+                  processSample_material_id: "",
+                  processSample_quantity: "",
+                  processSample_remain_in_qunatity: "",
+                  errormgs: ""
+                });
+                setTimeout(() => {
+                  this.setState({ loading: false, visible: false });
+                });
+              }
+            },
+            error => {
+              this.setState({
+                errormgs: error.validationFailures[0]
+              });
+              console.log("DEBUG34: ", error);
+              console.log(HandelError(error.validationFailures[0]));
+            }
+          )
+          .catch(error => {
+            this.setState({
+              // errormgs: "Plant Name Exist"
+            });
+            console.log(error);
+          });
+      } else {
+        const data = {
+          code: this.state.plant_code,
+          incoming_sample_id: this.state.processSample_Incoming_sample,
+          materila_id: this.state.processSample_material_id,
+          quantity: this.state.processSample_quantity,
+          remain_in_quantity: this.state.processSample_remain_in_qunatity
+        };
+        api("PUT", "supermix", "/processsample", "", data, "")
+          .then(
+            res => {
+              console.log(res.data);
+
+              if (res.data.status == "VALIDATION_FAILURE") {
+                console.log("update");
+                this.responeserror(res.data.results.name.message);
+              } else {
+                Notificationfuc("success", res.data.message);
+                this.props.reload();
+                this.setState({ loading: true });
+                this.setState({
+                  processSample_code: "",
+                  processSample_Incoming_sample: "",
+                  processSample_material_id: "",
+                  processSample_quantity: "",
+                  processSample_remain_in_qunatity: "",
+                  errormgs: ""
+                });
+                setTimeout(() => {
+                  this.setState({ loading: false, visible: false });
+                });
+              }
+            },
+            error => {
+              this.setState({
+                errormgs: error.validationFailures[0]
+              });
+              console.log("DEBUG34: ", error);
+              console.log(HandelError(error.validationFailures[0]));
+            }
+          )
+          .catch(error => {
+            // this.setState({
+            //   errormgs: "Plant Name Exist"
+            // });
+            // console.log(error.response.data);
+          });
+      }
+      console.log(data);
+      console.log("form is valid");
+    }
+  };
+
   componentDidMount() {
     console.log(this.props.screen);
   }
@@ -166,7 +405,7 @@ class AddProcessSample extends Component {
             <PrimaryButton
               key='submit'
               // loading={loading}
-              onClick={e => this.handleSubmit(e)}
+              onClick={this.handleSubmit}
               style={{ background: "#001328", color: "white", border: "none" }}
             >
               Submit
