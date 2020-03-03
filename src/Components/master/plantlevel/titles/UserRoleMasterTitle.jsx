@@ -19,7 +19,7 @@ export default class UserRoleMasterTitle extends Component {
   render() {
     return (
       <FlexContainer titles leveltitles>
-        <Paragraph style={style}>Designation Master</Paragraph>
+        <Paragraph style={style}>Designation </Paragraph>
         <UserRoleAddForm reloadrole={this.getalldesignation} />
       </FlexContainer>
     );

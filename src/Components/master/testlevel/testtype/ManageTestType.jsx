@@ -84,12 +84,6 @@ class ManageTestType extends Component {
   render() {
     const columns = [
       {
-        title: "Code",
-        dataIndex: "id",
-        key: "id"
-        // width: "4%",
-      },
-      {
         title: "Type",
         dataIndex: "type",
         key: "type"
@@ -99,7 +93,7 @@ class ManageTestType extends Component {
       {
         title: "Edit & Delete",
         key: "action",
-        width: "17%",
+        width: "50%",
         render: (text, record = this.state.testTypeList) => (
           <span>
             <a>
@@ -132,7 +126,7 @@ class ManageTestType extends Component {
 
     return (
       <AntTable
-        length
+        small
         title={() => <TestLevelTitle reload={this.getAllTestType} />}
         columns={columns}
         dataSource={this.state.testTypeList}

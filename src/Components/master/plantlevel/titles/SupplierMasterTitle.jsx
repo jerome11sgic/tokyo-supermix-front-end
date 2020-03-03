@@ -4,7 +4,7 @@ import Paragraph from "antd/lib/typography/Paragraph";
 
 import SupplierAddForm from "../supplier/SupplierAddForm";
 import { FlexContainer } from "../../../styledcomponents/container/FlexGrid";
-import { Input } from 'antd';
+import { Input } from "antd";
 import theme from "../../../../theme";
 const { Search } = Input;
 
@@ -22,16 +22,15 @@ export default class SupplierMasterTitle extends Component {
   render() {
     return (
       <FlexContainer titles leveltitles>
-        <Paragraph style={style}>Supplier Master</Paragraph>
+        <Paragraph style={style}>Supplier </Paragraph>
         <div style={{ display: "flex" }}>
           <Search
-            placeholder="Search Supplier"
+            placeholder='Search Supplier'
             onSearch={value => console.log(value)}
             style={{ width: 200, height: 30, marginRight: "50px" }}
           />
           <SupplierAddForm reload={this.getallSupplier} />
         </div>
-
       </FlexContainer>
     );
   }

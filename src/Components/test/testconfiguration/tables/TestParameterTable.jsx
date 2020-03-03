@@ -63,7 +63,7 @@ export default class TestParameterTable extends Component {
         size={this.state.size}
         bordered={false}
         columns={testParameterColumns}
-        title={() => <h3 style={{ height: "10px" }}>Test Parameter</h3>}
+        // title={() => <h3 style={{ height: "10px" }}>Test Parameter</h3>}
         showHeader={true}
         pagination={{ defaultPageSize: 6 }}
         style={{

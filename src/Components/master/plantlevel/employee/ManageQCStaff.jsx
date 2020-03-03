@@ -152,13 +152,13 @@ class ManageQCStaff extends Component {
         width: "6%"
       },
       {
-        title: "Plant Name",
+        title: "Plant",
         dataIndex: "plantName",
         key: "role",
         width: "6%"
       },
       {
-        title: "Designation Name",
+        title: "Designation",
         dataIndex: "designationName",
         key: "email",
         width: "6%"
@@ -170,7 +170,7 @@ class ManageQCStaff extends Component {
         width: "6%"
       },
       {
-        title: "Adress",
+        title: "Address",
         dataIndex: "address",
         key: "address",
         width: "7%"

@@ -116,17 +116,6 @@ class ManageUnit extends Component {
     filteredInfo = filteredInfo || {};
     const columns = [
       {
-        title: "Code",
-        dataIndex: "id",
-        key: "code",
-        width: "4%",
-
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.code - b.code,
-        sortOrder: sortedInfo.columnKey === "code" && sortedInfo.order
-      },
-      {
         title: "Unit",
         dataIndex: "unit",
         key: "unit",
@@ -177,7 +166,7 @@ class ManageUnit extends Component {
 
     return (
       <AntTable
-        length
+        small
         className='userRolesManageTable'
         title={() => <UnitMasterTitle reload={this.getallunit} />}
         columns={columns}

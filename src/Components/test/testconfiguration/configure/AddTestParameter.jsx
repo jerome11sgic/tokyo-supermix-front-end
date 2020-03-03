@@ -104,7 +104,7 @@ export default class AddTestParameter extends Component {
               </FlexContainer>
               <FlexContainer column style={{ height: "180px" }}>
                 {/* Test  */}
-                <div className='input_wrapper'>
+                {/* <div className='input_wrapper'>
                   <label for='test_type' className='label'>
                     Test Name
                   </label>
@@ -114,10 +114,10 @@ export default class AddTestParameter extends Component {
                     placeholder='Select Test Name'
                     style={{ width: 170 }}
                   />
-                </div>
+                </div> */}
 
                 {/*  Unit */}
-                <div className='input_wrapper'>
+                {/* <div className='input_wrapper'>
                   <label className='label'>Unit </label>
                   <Select
                     id='unit'
@@ -126,7 +126,7 @@ export default class AddTestParameter extends Component {
                     placeholder='Select Unit'
                     onChange={handleChange}
                   ></Select>
-                </div>
+                </div> */}
               </FlexContainer>
             </FlexContainer>
           </MasterLevelForm>

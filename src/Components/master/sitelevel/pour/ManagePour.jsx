@@ -135,7 +135,7 @@ class ManagePour extends Component {
       {
         title: "Edit & Delete",
         key: "action",
-        width: "7%",
+        // width: "7%",
         render: (text, record = this.state.poursList) => (
           <span>
             <a>

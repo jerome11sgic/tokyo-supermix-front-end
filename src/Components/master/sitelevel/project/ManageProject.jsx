@@ -163,7 +163,7 @@ class ManageProject extends Component {
       {
         title: "Edit & Delete",
         key: "action",
-        width: "7%",
+
         render: (text, record = this.state.projectsList) => (
           <span>
             <a>
