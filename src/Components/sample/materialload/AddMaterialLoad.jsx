@@ -1,16 +1,14 @@
 import React, { Component } from "react";
 import { Input, Modal, Icon, Select, Button, DatePicker, Form } from "antd";
-
+import TextArea from "antd/lib/input/TextArea";
 import { PrimaryButton } from "../../styledcomponents/button/button";
 import {
   MasterLevelFormTitle,
   MasterLevelForm
 } from "../../styledcomponents/form/MasterLevelForms";
-import { connect } from "react-redux";
-import { DISABLE_EDIT_MODE } from "../../../redux/action/master/plantlevel/PlantLevel";
 
 const Option = Select;
-class AddFinishProduct extends Component {
+class AddMaterialLoad extends Component {
   state = {
     loading: false,
     visible: false
@@ -34,7 +32,7 @@ class AddFinishProduct extends Component {
 
   handleSubmit = e => {
     console.log(e);
-    console.log(this.props.form);
+
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
@@ -46,9 +44,7 @@ class AddFinishProduct extends Component {
       }
     });
   };
-  componentDidMount() {
-    console.log(this.props.screen);
-  }
+
   render() {
     const { visible } = this.state;
 
@@ -64,7 +60,7 @@ class AddFinishProduct extends Component {
             marginLeft: "-10px"
           }}
         >
-          Add FinishProduct Sample
+          Add Material Load
         </PrimaryButton>
         <Modal
           width='500px'
@@ -93,7 +89,7 @@ class AddFinishProduct extends Component {
                   color: "white"
                 }}
               >
-                Add FinishProduct Sample
+                Add Material Load
               </p>
               <Icon
                 type='close-circle'
@@ -107,61 +103,50 @@ class AddFinishProduct extends Component {
         >
           <MasterLevelForm>
             {/* Code */}
-            {/* <div className='input_wrapper'>
+            <div className='input_wrapper'>
               <label for='code' className='label'>
                 Code:
               </label>
-              <Form.Item>
-                {getFieldDecorator("code", {
-                  // rules: [{ required: true, message: "Please enter a code!" }]
-                })(
-                  <Input
-                    id='code'
-                    name='code'
-                    // placeholder='Enter the Code '
-                    disabled
-                  />
-                )}
-              </Form.Item>
-            </div> */}
-
-            <div className='input_wrapper'>
-              <label for='customer_name' className='label'>
-                Mix Design:
-              </label>
-
-              <Select
-                placeholder='Select the Mix Design '
-                id='customer_name'
-                name='customer_name '
-                style={{ width: "180px" }}
-              ></Select>
+              <Input id='code' name='code' placeholder='Enter the Code ' />
             </div>
 
             <div className='input_wrapper'>
-              <label for='sample_size' className='label'>
-                Project:
+              <label for='incoming_sample' className='label'>
+                Incoming Sample:
               </label>
 
               <Select
-                placeholder='Select the Project'
-                id='project_name'
-                name='project_name '
-                style={{ width: "180px" }}
+                placeholder='Select Incoming Sample '
+                id='incoming_sample'
+                name='incoming_sample '
+                style={{ width: 170 }}
               ></Select>
             </div>
 
             <div className='input_wrapper'>
               <label for='project_name' className='label'>
-                Pour:
+                Quantity:
               </label>
 
-              <Select
-                placeholder='Select the Pour'
-                id='project_name'
-                name='project_name '
-                style={{ width: "180px" }}
-              ></Select>
+              <Input
+                placeholder='Enter Quantity'
+                id='quantity'
+                name='quantity '
+                style={{ width: 170 }}
+              />
+            </div>
+
+            <div className='input_wrapper'>
+              <label for='measurement' className='label'>
+                Measurement:
+              </label>
+
+              <Input
+                placeholder='Enter Measurement'
+                id='measurement'
+                name='measurement '
+                style={{ width: 170 }}
+              />
             </div>
 
             <div className='input_wrapper'>
@@ -171,6 +156,18 @@ class AddFinishProduct extends Component {
 
               <DatePicker id='date' name='date' placeholder='Select Date' />
             </div>
+
+            <div className='input_wrapper'>
+              <label for='expiry_date' className='label'>
+                Expiry Date:
+              </label>
+
+              <DatePicker
+                id='expiry_date'
+                name='expiry_date'
+                placeholder='Select Expiry Date'
+              />
+            </div>
           </MasterLevelForm>
         </Modal>
       </div>
@@ -178,23 +175,4 @@ class AddFinishProduct extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  //getting the global redux state to get the data from the EditPlantReducer.js
-  return {
-    visible: state.plantLevelReducers.EditPlantReducer.visible,
-    type: state.plantLevelReducers.EditPlantReducer.type,
-    editPlantData: state.plantLevelReducers.EditPlantReducer.editPlantData
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    // setting visible to false if we close the modal .. and all state data will be deleted if this function is dispatched
-    setPlantVisiblity: () => {
-      dispatch({ type: DISABLE_EDIT_MODE });
-      console.log("edit modal closed");
-    }
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddFinishProduct);
+export default AddMaterialLoad;

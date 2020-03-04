@@ -251,11 +251,7 @@ class AddCalibrationForm extends Component {
       visible: false,
       errors: {
         equipment_plant: "",
-        // calibrated_date: "",
-        // due_date: "",
         calibrated_by: "",
-        // supplier: "",
-        // tester: "",
         status: ""
       },
       equipment_plant: "",
@@ -299,10 +295,6 @@ class AddCalibrationForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
     const {
-      visible,
-      loading,
-      errorCount,
-      formValid,
       errors,
       equipment_plant,
       calibrated_by,
@@ -317,17 +309,11 @@ class AddCalibrationForm extends Component {
       equipment_plant.length === 0 &&
       calibrated_by.length === 0 &&
       status.length === 0
-      // supplier.length === 0 &&
-      // tester.length === 0
     ) {
       this.setState({
         errors: {
           equipment_plant: "Equipment Plant can't be empty",
-          // calibrated_date: errors.calibrated_date,
-          // due_date: errors.due_date,
           calibrated_by: "Calibrated By can't be empty",
-          // supplier: "Supplier can't be empty",
-          // tester: "Tester can't be empty",
           status: "Status can't be empty"
         },
         formValid: this.validateForm(errors),
@@ -341,11 +327,7 @@ class AddCalibrationForm extends Component {
         errors: {
           equipment_plant:
             errors.equipment_plant || "Equipment Plant can't be empty",
-          // calibrated_date: errors.calibrated_date,
-          // due_date: errors.due_date,
           calibrated_by: errors.calibrated_by,
-          // supplier: errors.supplier,
-          // tester: errors.tester,
           status: errors.status
         },
         formValid: this.validateForm(errors),
@@ -358,55 +340,17 @@ class AddCalibrationForm extends Component {
       this.setState({
         errors: {
           equipment_plant: errors.equipment_plant,
-          // calibrated_date: errors.calibrated_date,
-          // due_date: errors.due_date,
           calibrated_by: errors.calibrated_by || "Calibrated By can't be empty",
-          // supplier: errors.supplier,
-          // tester: errors.tester,
           status: errors.status
         },
         formValid: this.validateForm(errors),
         errorCount: this.countErrors(errors)
       });
-    }
-    // else if (supplier.length === 0 && errors.supplier.length === 0) {
-    //   this.setState({
-    //     errors: {
-    //       equipment_plant: errors.equipment_plant,
-    //       // calibrated_date: errors.calibrated_date,
-    //       // due_date: errors.due_date,
-    //       calibrated_by: errors.calibrated_by,
-    //       supplier: errors.supplier || "Supplier can't be empty",
-    //       tester: errors.tester,
-    //       status: errors.status
-    //     },
-    //     formValid: this.validateForm(errors),
-    //     errorCount: this.countErrors(errors)
-    //   });
-    // } else if (tester.length === 0 && errors.tester.length === 0) {
-    //   this.setState({
-    //     errors: {
-    //       equipment_plant: errors.equipment_plant,
-    //       // calibrated_date: errors.calibrated_date,
-    //       // due_date: errors.due_date,
-    //       calibrated_by: errors.calibrated_by,
-    //       supplier: errors.supplier,
-    //       tester: errors.tester || "Tester can't be empty",
-    //       status: errors.status
-    //     },
-    //     formValid: this.validateForm(errors),
-    //     errorCount: this.countErrors(errors)
-    //   });
-    // }
-    else if (status.length === 0 && errors.status.length === 0) {
+    } else if (status.length === 0 && errors.status.length === 0) {
       this.setState({
         errors: {
           equipment_plant: errors.equipment_plant,
-          // calibrated_date: errors.calibrated_date,
-          // due_date: errors.due_date,
           calibrated_by: errors.calibrated_by,
-          // supplier: errors.supplier,
-          // tester: errors.tester,
           status: errors.status || "Status can't be empty"
         },
         formValid: this.validateForm(errors),

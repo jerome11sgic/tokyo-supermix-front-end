@@ -1,7 +1,8 @@
 import {
   ROUTE_TO_INCOMING_SAMPLE,
   ROUTE_TO_PROCESS_SAMPLE,
-  ROUTE_TO_FINISH_PRODUCT_SAMPLE
+  ROUTE_TO_FINISH_PRODUCT_SAMPLE,
+  ROUTE_TO_MATERIAL_LOAD_SAMPLE
 } from "../../action/sample/Sample";
 
 const initialState = {
@@ -26,6 +27,12 @@ export const RoutingBetweenSamples = (state = initialState, action) => {
       return {
         ...state,
         routepath: (state.routepath = "/finishproductsample")
+      };
+
+    case ROUTE_TO_MATERIAL_LOAD_SAMPLE:
+      return {
+        ...state,
+        routepath: (state.routepath = "/materialload")
       };
 
     default:

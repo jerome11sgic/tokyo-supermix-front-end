@@ -76,8 +76,8 @@ class MaterialMasterAddForm extends Component {
         errors.material_name =
           value.length === 0
             ? "Name can't be empty"
-            : value.length < 3
-            ? "Name \n must be 3 characters long!"
+            : value.length < 2
+            ? "Name \n must be 2 characters long!"
             : !isNaN(value)
             ? "Name won't allow only letters"
             : "";
