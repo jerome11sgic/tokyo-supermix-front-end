@@ -7,7 +7,7 @@ import {
 
 const initialState = {
   textBody: "",
-  regex: /[^]/gi,
+  regex: /[^=+-/.()√π<>²\d*]/gi,
   acceptedIndexes: []
 };
 
@@ -19,15 +19,6 @@ export const EquationConfigurationReducer = (state = initialState, action) => {
         textBody: state.textBody + action.payload
       };
     case ADD_TEXT_BODY_WITH_KEYPRESS:
-      //   switch (action.payload) {
-      //     case 8:
-      //       return {
-      //         ...state,
-      //         textBody: state.textBody.slice(0, state.textBody.length - 1)
-      //       };
-      //     default:
-      //       return state;
-      //   }
       return {
         ...state,
         textBody: action.payload.replace(state.regex, "")
@@ -39,10 +30,11 @@ export const EquationConfigurationReducer = (state = initialState, action) => {
       return {
         ...state,
         regex: (state.regex = new RegExp(
-          "[^" + state.acceptedIndexes + "=+-/.()√π<>²d*]",
+          "[^" + state.acceptedIndexes + "0-9=+-/.()√π<>²d*]",
           "g"
         ))
       };
+
     case POP_PARAMETERS:
       for (let i = 0; i < state.acceptedIndexes.length; i++) {
         if (state.acceptedIndexes[i] === action.payload) {
@@ -55,7 +47,7 @@ export const EquationConfigurationReducer = (state = initialState, action) => {
       return {
         ...state,
         regex: (state.regex = new RegExp(
-          "[^" + state.acceptedIndexes + "=+-/.()√π<>²d*]",
+          "[^" + state.acceptedIndexes + "0-9=+-/.()√π<>²d*]",
           "g"
         ))
       };
