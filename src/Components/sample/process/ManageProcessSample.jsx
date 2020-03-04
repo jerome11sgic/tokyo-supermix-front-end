@@ -10,7 +10,16 @@ export default class ManageProcessSample extends Component {
     sortedInfo: null,
     searchText: "",
     visible: false,
-    size: "small"
+    size: "small",
+    data: [
+      {
+        code: "fsf",
+        Incomingsample: "fdf",
+        material: "dDWDD",
+        quantity: "ffrw",
+        remainQuantity: "ffrw"
+      }
+    ]
   };
 
   componentWillMount() {
@@ -85,24 +94,24 @@ export default class ManageProcessSample extends Component {
     const columns = [
       {
         title: " Code",
-        dataIndex: "id",
+        dataIndex: "code",
         width: "8%",
-        key: "id",
+        key: "code",
         sorter: (a, b) => a.id - b.id,
         sortOrder: sortedInfo.columnKey === "id" && sortedInfo.order
       },
       {
-        title: "Process Name",
-        dataIndex: "date",
+        title: "Incoming Sample",
+        dataIndex: "Incomingsample",
         width: "12%",
-        key: "id",
+        key: "Incomingsample",
         sorter: (a, b) => a.id - b.id,
         sortOrder: sortedInfo.columnKey === "id" && sortedInfo.order
       },
       {
-        title: "  Raw Material",
-        dataIndex: "name",
-        key: "name",
+        title: "  Material",
+        dataIndex: "material",
+        key: "material",
         width: "12%",
         filters: [
           { text: "Joe", value: "Joe" },
@@ -114,9 +123,9 @@ export default class ManageProcessSample extends Component {
         sortOrder: sortedInfo.columnKey === "name" && sortedInfo.order
       },
       {
-        title: "Plant",
-        dataIndex: "role",
-        key: "role",
+        title: "Quantity",
+        dataIndex: "quantity",
+        key: "quantity",
         width: "12%",
         filters: [
           { text: "Vechical1", value: "Vechical1" },
@@ -131,10 +140,10 @@ export default class ManageProcessSample extends Component {
       },
 
       {
-        title: "Date/Time",
-        dataIndex: "date",
+        title: "Remain Quantity",
+        dataIndex: "remainQuantity",
         width: "12%",
-        key: "id",
+        key: "remainQuantity",
         sorter: (a, b) => a.id - b.id,
         sortOrder: sortedInfo.columnKey === "id" && sortedInfo.order
       },
@@ -170,6 +179,7 @@ export default class ManageProcessSample extends Component {
         title={() => <ManageProcessSampleTitle />}
         length
         nomargin
+        dataSource={this.state.data}
         columns={columns}
         onChange={this.handleChange}
         size={this.state.size}

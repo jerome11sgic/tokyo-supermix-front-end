@@ -393,11 +393,13 @@ export default class FormGenerator extends Component {
   submitForm() {
     const { form } = this.state;
     const { onSubmit } = this.props;
+    // const { renderSubmit } = this.props;
     const value = [];
     // for(let i=0;i<form.s)
     // console.log(form);
 
     if (onSubmit) {
+      // const { renderSubmit } = this.props;
       let [valid, validationErrors] = this.validateForm();
 
       onSubmit({
@@ -407,6 +409,13 @@ export default class FormGenerator extends Component {
           validationErrors
         }
       });
+      // renderSubmit({
+      //   valid: valid,
+      //   data: {
+      //     form,
+      //     validationErrors
+      //   }
+      // });
     }
   }
 
@@ -518,7 +527,7 @@ export default class FormGenerator extends Component {
                   <Input
                     name={input.name}
                     value={option.value}
-                    type='radio'
+                    type="radio"
                     onChange={this.handleInput.bind(this, input)}
                   />
                   <label>{option.text}</label>
@@ -533,6 +542,7 @@ export default class FormGenerator extends Component {
   }
 
   renderLabel(input) {
+    const { lableStyle } = this.props;
     if (!input.label) {
       return;
     }
@@ -590,6 +600,10 @@ export default class FormGenerator extends Component {
     }
   }
 
+  renderSubmit = () => {
+    this.submitForm();
+  };
+
   renderSubmitButtonContents() {
     const { submitButton, loading, loadingElement } = this.props;
 
@@ -607,7 +621,7 @@ export default class FormGenerator extends Component {
     inputs = inputs.filter(
       input => canRender.includes(input.name) || input.constructor === Array
     );
-
+    const { lableStyle } = this.props;
     return (
       <div
         style={{
@@ -630,7 +644,7 @@ export default class FormGenerator extends Component {
               <FlexContainer style={{ height: "auto" }} key={i}>
                 <Form className={containerClass}>
                   <FlexContainer home>
-                    <div style={{ width: "150px" }}>
+                    <div style={lableStyle}>
                       {!isArray && this.renderLabel(input)}
                     </div>
                     <div>{this.renderInput(input)}</div>
@@ -684,6 +698,7 @@ FormGenerator.defaultProps = {
   inputStyle: {},
   buttonStyle: {},
   formStyle: {},
+  lableStyle: { width: "150px" },
   formDriction: "row",
   onChange: () => null
 };
@@ -709,5 +724,7 @@ FormGenerator.propTypes = {
   inputStyle: PropTypes.object,
   buttonStyle: PropTypes.object,
   formStyle: PropTypes.object,
-  formDriction: PropTypes.string
+  formDriction: PropTypes.string,
+  lableStyle: PropTypes.object,
+  renderSubmit: PropTypes.func
 };
