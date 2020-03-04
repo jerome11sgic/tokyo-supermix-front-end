@@ -1,16 +1,13 @@
 import React, { Component } from "react";
 import { Checkbox, Select } from "antd";
 import { AntTable } from "../../../styledcomponents/table/AntTabl";
-import { TestTitle } from "../titles/TestTitle";
-import TextArea from "antd/lib/input/TextArea";
+
 import { FlexContainer } from "../../../styledcomponents/container/FlexGrid";
 import {
   MasterLevelForm,
   MasterLevelFormTitle
 } from "../../../styledcomponents/form/MasterLevelForms";
 import { TileParagraph } from "../../../styledcomponents/typography/typography";
-
-const { Option } = Select;
 
 function handleChange(value) {
   console.log(`selected ${value}`);
