@@ -26,6 +26,7 @@ import ImportFromExcel from "../../../assets/excelimport.png";
 import Accounts from "../../../assets/accounts.png";
 import Configuration from "../../../assets/homescreen/configurationedited.png";
 import TestTrial from "../../../assets/homescreen/testtrial.png";
+import MixDesign from "../../../assets/homescreen/mixdesign.png";
 
 const size = {
   mobileS: "320px",
@@ -115,6 +116,13 @@ export const ImageCard = styled.div`
       props.settings &&
       css`
         background: url(${Settings});
+        background-size: cover;
+      `}
+    
+    ${props =>
+      props.mixDesign &&
+      css`
+        background: url(${MixDesign});
         background-size: cover;
       `}
 

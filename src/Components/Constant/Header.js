@@ -7,7 +7,8 @@ import "./style.css";
 import { connect } from "react-redux";
 import {
   TOGGLE_TO_HOME_SCREEN_NAVIGATION,
-  TOGGLE_TO_DASHBOARD_NAVIGATION
+  TOGGLE_TO_DASHBOARD_NAVIGATION,
+  TOGGLE_TO_PRIVILEDGES_NAVIGATION
 } from "../../redux/action/topbarnavigation/TopbarNavigation";
 import { TopNavMenu } from "../styledcomponents/topnavigation/TopnavMenu";
 import {
@@ -15,6 +16,7 @@ import {
   CHECK_WHETHER_DEFAULT_MASTER_LEVEL
 } from "../../redux/action/topbarnavigation/MasterLevelNavigation";
 import { TOGGLE_BETWEEN_PRIVILEDGE_LEVELS } from "../../redux/action/topbarnavigation/PrivilegeLevelNavigation";
+import { SettingOutlined } from "@ant-design/icons";
 // import ProfileImg from "../../assets/avatarui.jpg";
 //import './Dashboard.css';
 // const Search = Input.Search;
@@ -124,11 +126,11 @@ class HeaderComponent extends React.Component {
             </NavigationLink>
           </Menu.Item>
 
-          <Menu.Item key='mixdesignlevel' style={{}}>
+          {/* <Menu.Item key='mixdesignlevel' style={{}}>
             <NavigationLink to='/master/mixdesignlevel'>
               <Icon type='dropbox' /> <span>Mix Design</span>
             </NavigationLink>
-          </Menu.Item>
+          </Menu.Item> */}
 
           <Menu.Item key='sitelevel' style={{}}>
             <NavigationLink to='/master/sitelevel'>
@@ -155,13 +157,22 @@ class HeaderComponent extends React.Component {
               </span>
             }
           >
-            <Menu.Item key='masterprofilesetting'>
+            <Menu.Item key='15'>
               <Link to='/profile'>
                 <Icon type='user' />
-                Profile Setting
+                Profile
               </Link>
             </Menu.Item>
-            <Menu.Item key='masterprofilelogout'>
+            <Menu.Item key='16'>
+              <Link
+                to='/settings/priviledges'
+                onClick={this.props.toggleSettingsNavigation}
+              >
+                <SettingOutlined />
+                Settings
+              </Link>
+            </Menu.Item>
+            <Menu.Item key='17'>
               <Link to='/logout'>
                 <Icon type='logout' theme='outlined' twoToneColor />
                 Log Out
@@ -205,13 +216,22 @@ class HeaderComponent extends React.Component {
               </span>
             }
           >
-            <Menu.Item key='sprof1'>
+            <Menu.Item key='15'>
               <Link to='/profile'>
                 <Icon type='user' />
-                Profile Setting
+                Profile
               </Link>
             </Menu.Item>
-            <Menu.Item key='sprof2'>
+            <Menu.Item key='16'>
+              <Link
+                to='/settings/priviledges'
+                onClick={this.props.toggleSettingsNavigation}
+              >
+                <SettingOutlined />
+                Settings
+              </Link>
+            </Menu.Item>
+            <Menu.Item key='17'>
               <Link to='/logout'>
                 <Icon type='logout' theme='outlined' twoToneColor />
                 Log Out
@@ -265,10 +285,19 @@ class HeaderComponent extends React.Component {
             <Menu.Item key='15'>
               <Link to='/profile'>
                 <Icon type='user' />
-                Profile Setting
+                Profile
               </Link>
             </Menu.Item>
             <Menu.Item key='16'>
+              <Link
+                to='/settings/priviledges'
+                onClick={this.props.toggleSettingsNavigation}
+              >
+                <SettingOutlined />
+                Settings
+              </Link>
+            </Menu.Item>
+            <Menu.Item key='17'>
               <Link to='/logout'>
                 <Icon type='logout' theme='outlined' twoToneColor />
                 Log Out
@@ -317,10 +346,19 @@ class HeaderComponent extends React.Component {
             <Menu.Item key='15'>
               <Link to='/profile'>
                 <Icon type='user' />
-                Profile Setting
+                Profile
               </Link>
             </Menu.Item>
             <Menu.Item key='16'>
+              <Link
+                to='/settings/priviledges'
+                onClick={this.props.toggleSettingsNavigation}
+              >
+                <SettingOutlined />
+                Settings
+              </Link>
+            </Menu.Item>
+            <Menu.Item key='17'>
               <Link to='/logout'>
                 <Icon type='logout' theme='outlined' twoToneColor />
                 Log Out
@@ -366,10 +404,19 @@ class HeaderComponent extends React.Component {
             <Menu.Item key='15'>
               <Link to='/profile'>
                 <Icon type='user' />
-                Profile Setting
+                Profile
               </Link>
             </Menu.Item>
             <Menu.Item key='16'>
+              <Link
+                to='/settings/priviledges'
+                onClick={this.props.toggleSettingsNavigation}
+              >
+                <SettingOutlined />
+                Settings
+              </Link>
+            </Menu.Item>
+            <Menu.Item key='17'>
               <Link to='/logout'>
                 <Icon type='logout' theme='outlined' twoToneColor />
                 Log Out
@@ -384,7 +431,6 @@ class HeaderComponent extends React.Component {
           theme='dark'
           mode='horizontal'
           position='right'
-          defaultSelectedKeys={["1"]}
           selectedKeys={this.props.priviledgeKeys}
           onClick={this.props.toggleBetweenPriviledgeLevels}
         >
@@ -397,13 +443,13 @@ class HeaderComponent extends React.Component {
           </NavigationLink>
 
           <Menu.Item key='priviledges' style={{ marginLeft: "10px" }}>
-            <NavigationLink to='/priviledges'>
+            <NavigationLink to='/settings/priviledges'>
               <Icon type='dropbox' /> <span>Priviledges</span>
             </NavigationLink>
           </Menu.Item>
 
-          <Menu.Item key='auditlog' style={{}}>
-            <NavigationLink to='/priviledges/auditlog'>
+          <Menu.Item key='auditlog'>
+            <NavigationLink to='/settings/auditlog'>
               <Icon type='dropbox' /> <span>Audit Log</span>
             </NavigationLink>
           </Menu.Item>
@@ -429,10 +475,78 @@ class HeaderComponent extends React.Component {
             <Menu.Item key='15'>
               <Link to='/profile'>
                 <Icon type='user' />
-                Profile Setting
+                Profile
               </Link>
             </Menu.Item>
             <Menu.Item key='16'>
+              <Link
+                to='/settings/priviledges'
+                onClick={this.props.toggleSettingsNavigation}
+              >
+                <SettingOutlined />
+                Settings
+              </Link>
+            </Menu.Item>
+            <Menu.Item key='17'>
+              <Link to='/logout'>
+                <Icon type='logout' theme='outlined' twoToneColor />
+                Log Out
+              </Link>
+            </Menu.Item>
+          </SubMenu>
+        </TopNavMenu>
+      );
+    } else if (this.props.navpath === "/mixdesign") {
+      return (
+        <TopNavMenu
+          theme='dark'
+          mode='horizontal'
+          position='right'
+          defaultSelectedKeys={["1"]}
+          onClick={this.props.toggleBetweenPriviledgeLevels}
+        >
+          <NavigationLink to='#' style={{ cursor: "default" }}>
+            <div className='logo' />
+          </NavigationLink>
+
+          <NavigationLink to='/' style={{ marginLeft: "10px" }}>
+            <div className='homebtn' />
+          </NavigationLink>
+
+          <div className='testrials_logo_gap' />
+          <SubMenu
+            title={
+              <span className='submenu-title-wrapper'>
+                <Avatar size='large'>
+                  <Icon
+                    type='user'
+                    style={{
+                      fontSize: "24px",
+                      textAlign: "center",
+                      padding: "2px",
+                      margin: "4px"
+                    }}
+                  ></Icon>
+                </Avatar>
+              </span>
+            }
+          >
+            <Menu.Item key='15'>
+              <Link to='/profile'>
+                <Icon type='user' />
+                Profile
+              </Link>
+            </Menu.Item>
+            <Menu.Item key='16'>
+              <Link
+                to='/settings/priviledges'
+                onClick={this.props.toggleSettingsNavigation}
+              >
+                <SettingOutlined />
+                Settings
+              </Link>
+            </Menu.Item>
+            <Menu.Item key='17'>
               <Link to='/logout'>
                 <Icon type='logout' theme='outlined' twoToneColor />
                 Log Out
@@ -478,10 +592,19 @@ class HeaderComponent extends React.Component {
             <Menu.Item key='15'>
               <Link to='/profile'>
                 <Icon type='user' />
-                Profile Setting
+                Profile
               </Link>
             </Menu.Item>
             <Menu.Item key='16'>
+              <Link
+                to='/settings/priviledges'
+                onClick={this.props.toggleSettingsNavigation}
+              >
+                <SettingOutlined />
+                Settings
+              </Link>
+            </Menu.Item>
+            <Menu.Item key='17'>
               <Link to='/logout'>
                 <Icon type='logout' theme='outlined' twoToneColor />
                 Log Out
@@ -539,6 +662,10 @@ const mapDispatchToProps = dispatch => {
     toggleBetweenMasterLevels: e => {
       dispatch({ type: TOGGLE_BETWEEN_MASTER_LEVELS, key: e.key });
       console.log("master level navigation toggleed key is " + e.key);
+    },
+    toggleSettingsNavigation: () => {
+      dispatch({ type: TOGGLE_TO_PRIVILEDGES_NAVIGATION });
+      console.log("toggled to priviledges navigation click dispatched");
     },
     toggleBetweenPriviledgeLevels: e => {
       dispatch({ type: TOGGLE_BETWEEN_PRIVILEDGE_LEVELS, key: e.key });

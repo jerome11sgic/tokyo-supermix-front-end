@@ -36,7 +36,6 @@ import GraphDashboard from "../../graphdashboard/GraphDashboard";
 import AuditLog from "../../AuditLog/AuditLog";
 import ProcessViewStatus from "../../sample/process/processviewstatus/ProcessViewStatus";
 import IncomingViewStatus from "../../sample/incoming/IncomingViewStatus/IncomingViewStatus";
-import ManageMaterialLoad from "../../sample/materialload/ManagematerialLoad";
 
 // import AddMixDesign from "../../ConfigurationLevel/MixDesign/AddMixDesign";
 // import MixDesign from "../../ConfigurationLevel/MixDesign/AddMixDesign";
@@ -151,8 +150,6 @@ class RouterContent extends React.Component {
                 <TestTrialMaster />
               </Route>
 
-              <Route></Route>
-
               <Route exact path='/test/:testId' component={TestPage} />
 
               <Route
@@ -172,19 +169,14 @@ class RouterContent extends React.Component {
               </Route>
 
               {/* Priviledges */}
-              <Route exact path='/priviledges'>
+              <Route exact path='/settings/priviledges'>
                 <CompanyPrivilege />
               </Route>
-
-              <Route exact path='/materiaload'>
-                <ManageMaterialLoad />
-              </Route>
-
               <Route exact path='/testinput'>
                 <Test />
               </Route>
 
-              <Route exact path='/priviledges/auditlog'>
+              <Route exact path='/settings/auditlog'>
                 <AuditLog />
               </Route>
             </Switch>

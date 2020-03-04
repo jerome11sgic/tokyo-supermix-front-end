@@ -13,17 +13,17 @@
 }
 
 .master_logo_gap {
-  margin-left: -10px;
+  margin-left: 108px;
   /* width: 269px; */
 }
 .homescreen_logo_gap {
   width: 920px;
 }
 .samples_logo_gap {
-  width: 1009px;
+  width: 995px;
 }
 .testrials_logo_gap {
-  width: 1009px;
+  width: 995px;
 }
 .configuration_logo_gap {
   width: 720px;
@@ -76,7 +76,7 @@
     width: 1480px;
   }
   .master_logo_gap {
-    width: 469px;
+    width: 560px;
   }
   .samples_logo_gap {
     width: 1600px;
