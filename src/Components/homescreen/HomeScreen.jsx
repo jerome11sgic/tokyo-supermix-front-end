@@ -4,7 +4,6 @@ import { FlexContainer } from "../styledcomponents/container/FlexGrid";
 import { ImageCard } from "../styledcomponents/card/ImageCard";
 import { NavigationLink } from "../styledcomponents/Link/NavLink";
 import "./style.css";
-import {} from "antd";
 import SupplierChain from "./SupplierChain";
 import Slider from "./Slider";
 import Slider2 from "./Slider2";
@@ -17,13 +16,12 @@ import {
   TOGGLE_TO_SAMPLE_TYPE_NAVIGATION,
   TOGGLE_TO_TEST_TRIALS_NAVIGATION,
   TOGGLE_TO_TEST_CONFIGURATION_NAVIGATION,
-  TOGGLE_TO_PRIVILEDGES_NAVIGATION,
+  TOGGLE_TO_MIX_DESIGN_NAVIGATION,
   TOGGLE_TO_TEST_RESULTS_NAVIGATION
 } from "../../redux/action/topbarnavigation/TopbarNavigation";
 import { HomeColoredCard } from "./HomeColoredCard";
 import StrengthTest from "./charts/StrengthTest";
 import { ChartResContainer } from "../styledcomponents/container/ChartResContainer";
-import { CircularRadialBar } from "./charts/CircularRadialBar";
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -238,16 +236,16 @@ class HomeScreen extends Component {
             {/* column 2 tile 2 end*/}
             {/* column 2 tile 3 start*/}
             <NavigationLink
-              to='/priviledges'
-              onClick={this.props.togglePriviledgeNavigation}
+              to='/mixdesign'
+              onClick={this.props.toggleMixDesignNavigation}
             >
-              <ImageCard settings>
+              <ImageCard mixDesign>
                 <div>
                   <h1
                     className='h1'
                     style={{ textAlign: "left", marginLeft: "2em" }}
                   >
-                    Settings
+                    Mix Design
                   </h1>
                   <br></br>
                   <div style={{ height: "25px" }}></div>
@@ -258,14 +256,7 @@ class HomeScreen extends Component {
                       }}
                       className='ani1'
                     >
-                      Privileges
-                    </h4>
-                    <h4
-                      style={{
-                        color: "#ffff"
-                      }}
-                    >
-                      Audit Log
+                      Mix Design <br /> Proportion
                     </h4>
                   </div>
                 </div>
@@ -331,9 +322,9 @@ const mapDispatchToProps = dispatch => {
       dispatch({ type: TOGGLE_TO_TEST_CONFIGURATION_NAVIGATION });
       console.log("toggled to test configuration navigation click dispatched");
     },
-    togglePriviledgeNavigation: () => {
-      dispatch({ type: TOGGLE_TO_PRIVILEDGES_NAVIGATION });
-      console.log("toggled to priviledges navigation click dispatched");
+    toggleMixDesignNavigation: () => {
+      dispatch({ type: TOGGLE_TO_MIX_DESIGN_NAVIGATION });
+      console.log("toggled to mixdesign navigation click dispatched");
     },
     toggleTestResults: () => {
       dispatch({ type: TOGGLE_TO_TEST_RESULTS_NAVIGATION });

@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Table, Switch, Button } from "antd";
 import { PrivlegesFormTitle } from "../styledcomponents/form/MasterLevelForms";
+import { connect } from "react-redux";
+import { CHECK_WHETHER_DEFAULT_PRIVILEDGE_LEVEL } from "../../redux/action/topbarnavigation/PrivilegeLevelNavigation";
 
 const columns = [
   {
@@ -294,7 +296,16 @@ const data = [
   }
 ];
 
-export default class CompanyPrivilege extends Component {
+class CompanyPriviledge extends Component {
+  componentWillMount() {
+    console.log("component rendered");
+    if (this.props.priviledgekeys === "priviledges") {
+      console.log("out passed");
+    } else {
+      console.log("refreshed");
+      this.props.navigationRefresh();
+    }
+  }
   render() {
     const { handleSwitchChange } = this.props;
     // const routes = [
@@ -333,10 +344,27 @@ export default class CompanyPrivilege extends Component {
             size='small'
           />
           <p align='right'>
-            <Button type='primary'>Set Privilages</Button>
+            <Button type='primary'>Set Priviledges</Button>
           </p>
         </div>
       </React.Fragment>
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    priviledgekeys: state.priviledgeLevelNavigationReducer.priviledgekeys
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    navigationRefresh: () => {
+      dispatch({ type: CHECK_WHETHER_DEFAULT_PRIVILEDGE_LEVEL });
+      console.log("check default settings key while settings clicked");
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CompanyPriviledge);

@@ -180,14 +180,14 @@ class RouterContent extends React.Component {
               </Route>
 
               {/* Priviledges */}
-              <Route exact path="/priviledges">
+              <Route exact path="/settings/priviledges">
                 <CompanyPrivilege />
               </Route>
               <Route exact path="/testinput">
                 <Test />
               </Route>
 
-              <Route exact path="/priviledges/auditlog">
+              <Route exact path="/settings/auditlog">
                 <AuditLog />
               </Route>
             </Switch>
