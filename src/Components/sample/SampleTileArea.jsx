@@ -59,7 +59,7 @@ class SampleTitleArea extends Component {
           hoverable={true}
           onClick={this.props.routeToMaterialLoadSample}
         >
-          <TileAreaText unit>Material Load</TileAreaText>
+          <TileAreaText unit>ProcessSample Load</TileAreaText>
           <TileAreaAction>
             <Icon
               filled

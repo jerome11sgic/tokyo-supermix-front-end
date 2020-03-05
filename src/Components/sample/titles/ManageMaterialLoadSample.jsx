@@ -21,7 +21,7 @@ class ManageProcessSampleTitle extends Component {
   render() {
     return (
       <FlexContainer titles leveltitles>
-        <Paragraph style={style}> Process Sample</Paragraph>
+        <Paragraph style={style}> Process Sample Load </Paragraph>
 
         <PrimaryButton
           style={{
