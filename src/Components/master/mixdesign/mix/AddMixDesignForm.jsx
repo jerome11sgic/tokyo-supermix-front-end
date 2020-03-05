@@ -25,8 +25,7 @@ import { FlexContainer } from "../../../styledcomponents/container/FlexGrid";
 
 const a = [];
 const b = [];
-const cal = [];
-const binder = [];
+
 const Option = Select;
 const error = {
   color: "red",
@@ -35,88 +34,25 @@ const error = {
   height: "0.2px"
 };
 
-const data = [
-  {
-    id: 1,
-    name: "cement",
-    nature: "LIQUID",
-    unitId: 1,
-    unitName: "Kg"
-  },
-  {
-    id: 2,
-    name: "water",
-    nature: "SOLID",
-    unitId: 1,
-    unitName: "m"
-  },
-  {
-    id: 3,
-    name: "FA",
-    nature: "SOLID",
-    unitId: 2,
-    unitName: "Pa"
-  },
-  {
-    id: 1,
-    name: "cement",
-    nature: "LIQUID",
-    unitId: 1,
-    unitName: "Kg"
-  },
-  {
-    id: 2,
-    name: "water",
-    nature: "SOLID",
-    unitId: 1,
-    unitName: "m"
-  },
-  {
-    id: 3,
-    name: "FA",
-    nature: "SOLID",
-    unitId: 2,
-    unitName: "Pa"
-  },
-  {
-    id: 1,
-    name: "cement",
-    nature: "LIQUID",
-    unitId: 1,
-    unitName: "Kg"
-  },
-  {
-    id: 2,
-    name: "water",
-    nature: "SOLID",
-    unitId: 1,
-    unitName: "m"
-  },
-  {
-    id: 3,
-    name: "FA",
-    nature: "SOLID",
-    unitId: 2,
-    unitName: "Pa"
-  }
-];
 class AddMixDesignForm extends Component {
   state = {
     loading: false,
-    visible: true,
+    visible: false,
     visible1: false,
     disabled: true,
     errors: {
       code: "",
       plant: "",
       grade: "",
-      target_strength: ""
+      target_strength: "",
+      actual_grade: ""
     },
     code: "",
     plant: "",
     grade: "",
     date: "",
     target_strength: "",
+    actual_grade: "",
     water_cement_ratio: 0,
     water_binder_ratio: 0,
     errormgs: "",
@@ -129,12 +65,20 @@ class AddMixDesignForm extends Component {
     datalist: "",
     unit: "",
     selectunit: "",
-    selectPlants: ""
+    selectPlants: "",
+    cement_data: [],
+    water_data: [],
+    flyash_data: [],
+    material_data: {}
   };
   // **************quantity add modal start*****************
   showModal1 = () => {
     this.setState({
-      visible1: true
+      visible1: true,
+      water_data: [],
+      cement_data: [],
+      flyash_data: [],
+      material_data: {}
     });
   };
 
@@ -146,6 +90,13 @@ class AddMixDesignForm extends Component {
   };
 
   handleCancel1 = e => {
+    this.setState({
+      cement_data: [],
+      water_data: [],
+      flyash_data: [],
+      material_data: {}
+    });
+
     console.log(e);
     this.setState({
       visible1: false
@@ -155,7 +106,10 @@ class AddMixDesignForm extends Component {
   // **************quantity add modal end*****************
   showModal = () => {
     this.setState({
-      visible: true
+      visible: true,
+      water_data: [],
+      cement_data: [],
+      flyash_data: []
     });
   };
 
@@ -173,23 +127,26 @@ class AddMixDesignForm extends Component {
   };
 
   handleCancel = () => {
-    a.slice(0, a.length);
-    b.slice(0, b.length);
-    cal.slice(0, cal.length);
-    binder.slice(0, binder.length);
+    // window.location.reload();
+    console.log("cancelled");
+    a.slice(a.length);
+    b.slice(b.length);
+
     this.setState({
       visible: false,
       errors: {
         code: "",
         plant: "",
         grade: "",
-        target_strength: ""
+        target_strength: "",
+        actual_grade: ""
       },
       code: "",
       plant: "",
       grade: "",
       date: "",
       target_strength: "",
+      actual_grade: "",
       water_cement_ratio: 0,
       water_binder_ratio: 0,
       errormgs: ""
@@ -228,7 +185,15 @@ class AddMixDesignForm extends Component {
           value.length === 0
             ? "target_strength can't be empty"
             : value.length < 2
-            ? "target_strength \n must be one character long!"
+            ? "target strength \n must be one character long!"
+            : "";
+        break;
+      case "actual_grade":
+        errors.actual_grade =
+          value.length === 0
+            ? "target_strength can't be empty"
+            : value.length < 2
+            ? "actual grade \n must be one character long!"
             : "";
         break;
 
@@ -240,7 +205,6 @@ class AddMixDesignForm extends Component {
   };
 
   handleSelect = value => {
-    console.log(value);
     const { errors } = this.state;
     console.log(value);
     this.setState({
@@ -253,7 +217,8 @@ class AddMixDesignForm extends Component {
           code: this.state.errors.code,
           plant: "",
           grade: this.state.errors.grade,
-          target_strength: this.state.errors.target_strength
+          target_strength: this.state.errors.target_strength,
+          actual_grade: this.state.errors.actual_grade
         }
       });
     }
@@ -283,6 +248,7 @@ class AddMixDesignForm extends Component {
       grade,
       date,
       target_strength,
+      actual_grade,
       water_cement_ratio,
       water_binder_ratio
     } = this.state;
@@ -290,6 +256,7 @@ class AddMixDesignForm extends Component {
       code.length === 0 &&
       plant.length === 0 &&
       grade.length === 0 &&
+      actual_grade.length === 0 &&
       target_strength.length === 0
     ) {
       this.setState({
@@ -297,7 +264,8 @@ class AddMixDesignForm extends Component {
           code: "Code can't be empty",
           plant: "Plant can't be empty",
           grade: "Grade can't be empty",
-          target_strength: "Target Strength can't be empty"
+          target_strength: "Target Strength can't be empty",
+          actual_grade: " Actual Grade can't be empty"
         }
       });
     } else if (code.length === 0 && errors.code.length === 0) {
@@ -306,7 +274,8 @@ class AddMixDesignForm extends Component {
           code: errors.code || "Code can't be empty",
           plant: errors.plant,
           grade: errors.grade,
-          target_strength: errors.target_strength
+          target_strength: errors.target_strength,
+          actual_grade: errors.actual_grade
         }
       });
     } else if (plant.length === 0 && errors.plant.length === 0) {
@@ -315,7 +284,8 @@ class AddMixDesignForm extends Component {
           code: errors.code,
           plant: errors.plant || "Plant can't be empty",
           grade: errors.grade,
-          target_strength: errors.target_strength
+          target_strength: errors.target_strength,
+          actual_grade: errors.actual_grade
         }
       });
     } else if (grade.length === 0 && errors.grade.length === 0) {
@@ -324,7 +294,8 @@ class AddMixDesignForm extends Component {
           code: errors.code,
           plant: errors.plant,
           grade: errors.grade || "Grade can't be empty",
-          target_strength: errors.target_strength
+          target_strength: errors.target_strength,
+          actual_grade: errors.actual_grade
         }
       });
     } else if (
@@ -337,13 +308,25 @@ class AddMixDesignForm extends Component {
           plant: errors.plant,
           grade: errors.grade,
           target_strength:
-            errors.target_strength || "Target Strength can't be empty"
+            errors.target_strength || "Target Strength can't be empty",
+          actual_grade: errors.actual_grade
+        }
+      });
+    } else if (actual_grade.length === 0 && errors.actual_grade.length === 0) {
+      this.setState({
+        errors: {
+          code: errors.code,
+          plant: errors.plant,
+          grade: errors.grade,
+          target_strength: errors.target_strength,
+          actual_grade: errors.actual_grade || " Actual Grade can't be empty"
         }
       });
     } else if (
       errors.code.length === 0 &&
       errors.plant.length === 0 &&
       errors.grade.length === 0 &&
+      errors.actual_grade.length === 0 &&
       errors.target_strength.length === 0
     ) {
       console.log("form is valid");
@@ -354,6 +337,7 @@ class AddMixDesignForm extends Component {
         grade: grade,
         date: moment(date).format("YYYY-MM-DD"),
         targetStrength: target_strength,
+        actualGrade: actual_grade,
         waterCementRatio: water_cement_ratio,
         waterBinderRatio: water_binder_ratio
       };
@@ -480,7 +464,6 @@ class AddMixDesignForm extends Component {
       console.log(res.data);
 
       res.data.results.rawMaterial.map((post, index) => {
-        console.log(post);
         datalist.push({
           id: post.id,
           name: post.name,
@@ -490,7 +473,6 @@ class AddMixDesignForm extends Component {
           materialCategoryId: post.materialSubCategory.materialCategoryId,
           materialCategoryName: post.materialSubCategory.materialCategoryName
         });
-        console.log(datalist);
       });
       console.log(datalist);
       this.setState({
@@ -541,6 +523,10 @@ class AddMixDesignForm extends Component {
       this.setState({
         disableAddQuantity: false
       });
+    } else {
+      this.setState({
+        disableAddQuantity: true
+      });
     }
   };
 
@@ -574,8 +560,12 @@ class AddMixDesignForm extends Component {
   getuniValuev = form => {
     console.log(form);
   };
-  setJson = form1 => {
-    console.log(form1.data.form);
+
+  quantityChange = form1 => {
+    this.setState({ material_data: form1.data.form });
+  };
+  setJson = () => {
+    // this.setState({ material_data: form1.data.form });
     this.setState({ visible1: false });
 
     const values = [];
@@ -585,41 +575,82 @@ class AddMixDesignForm extends Component {
         mixDesignCode: this.state.code,
         materialId: a[i].id,
         unitId: this.state.unit[a[i].name],
-        quantity: form1.data.form[a[i].name]
+        quantity: this.state.material_data[a[i].name]
       });
     }
     this.setState({ mixProportionData: values });
     console.log(values);
 
-    Object.entries(form1.data.form).map(([make, type]) => {
-      if (make === "cement") {
-        cal.push(type);
-      } else if (make === "water") {
-        cal.push(type);
-      } else if (make === "FA") {
-        binder.push(type);
-      } else {
-        console.log("notfound");
-      }
+    Object.entries(this.state.material_data).map(([make, type]) => {
+      a.map((post, index) => {
+        console.log(post.subCategoryName);
+        if (
+          post.name === make &&
+          post.subCategoryName.toLowerCase() === "water"
+        ) {
+          this.state.water_data.push(parseInt(type));
+        } else if (
+          post.name === make &&
+          post.subCategoryName.toLowerCase() === "cement"
+        ) {
+          this.state.cement_data.push(parseInt(type));
+        } else if (
+          post.name === make &&
+          post.subCategoryName.toLowerCase() === "flyash"
+        ) {
+          this.state.flyash_data.push(parseInt(type));
+        } else {
+          console.log("notfound");
+        }
+      });
     });
-    // console.log(type);
-    console.log(cal);
-    if (cal.length == 1) {
-      this.findWaterCementRatio(cal[1], 0);
-    } else if (cal.length == 2) {
-      this.findWaterCementRatio(cal[1], cal[0]);
+    console.log(this.state.water_data);
+    console.log(this.state.cement_data);
+    console.log(this.state.flyash_data);
+    if (
+      this.state.cement_data.length > 0 &&
+      this.state.water_data.length == 1 &&
+      this.state.flyash_data.length == 0
+    ) {
+      // Getting sum of numbers
+      var sum = this.state.cement_data.reduce(function(a, b) {
+        return a + b;
+      }, 0);
+      this.findWaterCementRatio(this.state.water_data[0], sum);
+    } else if (
+      this.state.cement_data.length > 0 &&
+      this.state.water_data.length == 1 &&
+      this.state.flyash_data.length == 1
+    ) {
+      var sum = this.state.cement_data.reduce(function(a, b) {
+        return a + b;
+      }, 0);
+
+      this.findWaterCementRatio(this.state.water_data[0], sum);
+      this.findWaterBinderRatio(
+        this.state.water_data[0],
+        sum + this.state.flyash_data[0]
+      );
     } else {
-      this.findWaterCementRatio(0, 0);
+      this.setState({
+        water_cement_ratio: 0,
+        water_binder_ratio: 0
+      });
     }
   };
 
-  findWaterCementRatio = (water, cement) => {
-    let w_c_r = (water / cement) * 100;
+  findWaterBinderRatio = (w, f) => {
+    console.log(w);
+    console.log(f);
+    let w_b_r = (w / f) * 100;
+    this.setState({ water_binder_ratio: Number(w_b_r.toFixed(1)) });
+    console.log(Number(w_b_r.toFixed(1)));
+  };
+
+  findWaterCementRatio = (w, c) => {
+    let w_c_r = (w / c) * 100;
     this.setState({ water_cement_ratio: Number(w_c_r.toFixed(1)) });
     console.log(Number(w_c_r.toFixed(1)));
-    cal.splice(0, cal.length);
-
-    console.log(cal);
   };
   renderSubmit = from => {
     console.log(from);
@@ -675,7 +706,8 @@ class AddMixDesignForm extends Component {
       target_strength,
       water_cement_ratio,
       water_binder_ratio,
-      SubCategory
+      SubCategory,
+      actual_grade
     } = this.state;
 
     const columns = [
@@ -694,12 +726,6 @@ class AddMixDesignForm extends Component {
         title: "SubCategory",
         dataIndex: "subCategoryName",
         key: "subCategoryName"
-      },
-
-      {
-        title: "Unit",
-        dataIndex: "unitName",
-        key: "unit"
       }
     ];
 
@@ -832,6 +858,24 @@ class AddMixDesignForm extends Component {
                 )}
                 <div style={{ height: "12px" }}></div>
               </div>
+              <div className="input_wrapper">
+                <label for="grade" className="label">
+                  Actual Grade
+                </label>
+
+                <Input
+                  id="actual_grade"
+                  name="actual_grade"
+                  placeholder="Enter Grade"
+                  style={{ width: "180px" }}
+                  value={actual_grade}
+                  onChange={this.handleChange}
+                />
+                {errors.actual_grade.length > 0 && (
+                  <div style={error}>{errors.actual_grade}</div>
+                )}
+                <div style={{ height: "12px" }}></div>
+              </div>
 
               {/* Place */}
               <div className="input_wrapper">
@@ -937,9 +981,9 @@ class AddMixDesignForm extends Component {
 
         {/* Quantity add modal */}
         <Modal
-          title="Basic Modal"
+          title=" Add RawMaterial Quantity"
           visible={this.state.visible1}
-          onOk={this.handleOk1}
+          onOk={this.setJson}
           onCancel={this.handleCancel1}
           footer={false}
         >
@@ -947,16 +991,20 @@ class AddMixDesignForm extends Component {
             <Col span={12}>
               <FormGenerator
                 form={JSON.parse(this.x())}
+                dedefaultValues={this.state.material_data}
                 submitButton={{
                   text: "Submit",
                   className: "submit"
+                }}
+                onChange={form => {
+                  this.quantityChange(form);
                 }}
                 onSubmit={form => {
                   this.setJson(form);
                   console.log(form);
                 }}
                 inputStyle={instyle}
-                // buttonStyle={btstyle}
+                buttonStyle={btstyle}
                 // formStyle={fostyle}
                 formDriction="column"
               />
@@ -988,13 +1036,13 @@ class AddMixDesignForm extends Component {
 
 export default AddMixDesignForm;
 const fostyle = {
-  marginTop: "5px",
+  marginTop: "1px",
   display: "flex",
   flexDirection: "row",
   width: "300px",
   height: "auto",
   flexWrap: "wrap",
-  justifyContent: "space-between",
+  justifyContent: "space-around",
   position: "relative",
   // overflowY: "scroll",
   scrollBehavior: "smooth"
@@ -1005,5 +1053,10 @@ const instyle = {
 };
 
 const lableStyle = {
-  width: "40px"
+  width: "40px",
+  height: "32px"
+};
+
+const btstyle = {
+  marginLeft: "380px"
 };

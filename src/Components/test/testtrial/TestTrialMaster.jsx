@@ -5,6 +5,7 @@ import { FlexContainer } from "../../styledcomponents/container/FlexGrid";
 import imgObj from "../../../assets/labtesting.jpg";
 import { ManageTest, MaterialsType } from "./TestTrial";
 import { NavigationLink } from "../../styledcomponents/Link/NavLink";
+import { api } from "../../services/AxiosService";
 
 export const TestPage = ({ match, location }) => {
   const {
@@ -13,14 +14,41 @@ export const TestPage = ({ match, location }) => {
 
   return (
     <div>
-      <div>{MaterialsType(testData[testId - 1].typeData)}</div>
+      {/* <div>{MaterialsType(testData[testId - 1].typeData)}</div>
       <div style={{ height: "40px" }}></div>
       <div>
         {ManageTest(testData[testId - 1].data, testData[testId - 1].name)}
-      </div>
+      </div> */}
     </div>
   );
 };
+
+const testDetails = [
+  {
+    id: 1,
+    name: "75% Micron Test",
+    testType: {
+      id: 1,
+      type: "RawMaterialTest"
+    },
+    equation: {
+      id: 1,
+      formula: "A+B"
+    }
+  },
+  {
+    id: 2,
+    name: "SlumpTest",
+    testType: {
+      id: 2,
+      type: "ConcreteTest"
+    },
+    equation: {
+      id: 2,
+      formula: "A/B"
+    }
+  }
+];
 
 const testData = [
   {
@@ -171,20 +199,44 @@ const testData = [
 ];
 
 export default class TestTrialMaster extends Component {
+  state = {
+    testByTest: ""
+  };
+  componentDidMount() {
+    console.log(this.props.typeId);
+    this.getTestByTestType();
+  }
+  getTestByTestType = () => {
+    api(
+      "GET",
+      "supermix",
+      "/test/test-type",
+      "",
+      "",
+      `${this.props.typeId}`
+    ).then(res => {
+      let testByTest = res.data.results.testType.map((post, index) => {
+        return (
+          <NavigationLink to={`/test/${index + 1}`}>
+            <BasicCard
+              testtrial
+              finalproduct
+              imgUrl={imgObj}
+              style={{ margin: "10px" }}
+            >
+              <h1 style={styleObj}>{post.name}</h1>
+            </BasicCard>
+          </NavigationLink>
+        );
+      });
+      this.setState({
+        testByTest
+      });
+      console.log(res.data);
+    });
+  };
   render() {
-    return (
-      <FlexContainer>
-        {testData.map((post, index) => {
-          return (
-            <NavigationLink to={`/test/${index + 1}`}>
-              <BasicCard testtrial finalproduct imgUrl={imgObj}>
-                <h1 style={styleObj}>{post.name}</h1>
-              </BasicCard>
-            </NavigationLink>
-          );
-        })}
-      </FlexContainer>
-    );
+    return <FlexContainer home>{this.state.testByTest}</FlexContainer>;
   }
 }
 const styleObj = {
