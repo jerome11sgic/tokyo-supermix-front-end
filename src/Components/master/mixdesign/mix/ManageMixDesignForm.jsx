@@ -90,11 +90,11 @@ export default class ManageMixDesignForm extends Component {
   };
 
   getallMixdesigns = () => {
-    api("GET", "supermix", "/mixdesigns", "", "", "").then(res => {
+    api("GET", "supermix", "/mix-designs", "", "", "").then(res => {
       console.log(res.data);
 
       this.setState({
-        datalist: res.data.results.mixdesigns
+        datalist: res.data.results.mixDesigns
       });
     });
   };

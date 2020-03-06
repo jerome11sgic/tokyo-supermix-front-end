@@ -38,6 +38,7 @@ import GraphDashboard from "../../graphdashboard/GraphDashboard";
 import AuditLog from "../../AuditLog/AuditLog";
 import ProcessViewStatus from "../../sample/process/processviewstatus/ProcessViewStatus";
 import IncomingViewStatus from "../../sample/incoming/IncomingViewStatus/IncomingViewStatus";
+import ConcreteTest from "../../test/concrete/ManageConcreteTest";
 
 // import AddMixDesign from "../../ConfigurationLevel/MixDesign/AddMixDesign";
 // import MixDesign from "../../ConfigurationLevel/MixDesign/AddMixDesign";
@@ -177,6 +178,10 @@ class RouterContent extends React.Component {
               {/* Profile */}
               <Route exact path="/profile">
                 <Profile />
+              </Route>
+
+              <Route exact path="/concretetest">
+                <ConcreteTest />
               </Route>
 
               {/* Priviledges */}

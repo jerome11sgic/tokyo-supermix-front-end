@@ -334,9 +334,9 @@ class AddMixDesignForm extends Component {
       const data = {
         code: code,
         plantCode: plant,
-        grade: grade,
+        targetGrade: grade,
         date: moment(date).format("YYYY-MM-DD"),
-        targetStrength: target_strength,
+        targetSlump: target_strength,
         actualGrade: actual_grade,
         waterCementRatio: water_cement_ratio,
         waterBinderRatio: water_binder_ratio
@@ -398,10 +398,21 @@ class AddMixDesignForm extends Component {
       } else {
         console.log("hhhhhhhhhhhhhhh");
         console.log(data);
-        api("POST", "supermix", "/mixdesign", "", data, "").then(
+        api("POST", "supermix", "/mix-design", "", data, "").then(
           res => {
             console.log(res.data);
             console.log(this.state.mixProportionData);
+            api(
+              "POST",
+              "supermix",
+              "/mix-design-proportion",
+              "",
+              this.state.mixProportionData,
+              ""
+            ).then(res => {
+              console.log(res.data);
+            });
+
             // Notification("success", res.data.message);
             // this.props.reload();
             // this.setState({ loading: true });
@@ -573,7 +584,7 @@ class AddMixDesignForm extends Component {
     for (let i = 0; i < a.length; i++) {
       values.push({
         mixDesignCode: this.state.code,
-        materialId: a[i].id,
+        rawMaterialId: a[i].id,
         unitId: this.state.unit[a[i].name],
         quantity: this.state.material_data[a[i].name]
       });
