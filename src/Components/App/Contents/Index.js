@@ -26,7 +26,9 @@ import SampleMaster from "../../sample/SampleMaster";
 import TestTrialMaster, {
   TestPage
 } from "../../test/testtrial/TestTrialMaster";
+import TestTypes from "../../test/testtrial/TestType";
 import MaterialTest from "../../test/testtrial/MaterialTest";
+import { TestTypePage } from "../../test/testtrial/TestType";
 
 import Profile from "../../profile/Profile";
 import CompanyPrivilege from "../../priviledges/Privileges";
@@ -36,6 +38,7 @@ import GraphDashboard from "../../graphdashboard/GraphDashboard";
 import AuditLog from "../../AuditLog/AuditLog";
 import ProcessViewStatus from "../../sample/process/processviewstatus/ProcessViewStatus";
 import IncomingViewStatus from "../../sample/incoming/IncomingViewStatus/IncomingViewStatus";
+import ConcreteTest from "../../test/concrete/ManageConcreteTest";
 
 // import AddMixDesign from "../../ConfigurationLevel/MixDesign/AddMixDesign";
 // import MixDesign from "../../ConfigurationLevel/MixDesign/AddMixDesign";
@@ -55,7 +58,7 @@ class RouterContent extends React.Component {
             background: `url(${Image})`
           }}
         >
-          <Route path='/'>
+          <Route path="/">
             <HeaderComponent />
           </Route>
 
@@ -65,21 +68,21 @@ class RouterContent extends React.Component {
             }}
           >
             <Switch>
-              <Route exact path='/'>
+              <Route exact path="/">
                 <HomeScreen />
               </Route>
 
-              <Route exact path='/dashboard'>
+              <Route exact path="/dashboard">
                 <GraphDashboard />
               </Route>
 
               {/* Plant Level */}
-              <Route exact path='/master/plantlevel'>
+              <Route exact path="/master/plantlevel">
                 <PlantMaster />
               </Route>
 
               {/* Category Level */}
-              <Route exact path='/master/categorylevel'>
+              <Route exact path="/master/categorylevel">
                 <CategoryMaster />
               </Route>
 
@@ -89,94 +92,107 @@ class RouterContent extends React.Component {
               {/* <Route exact path="/rawmaterial">
                 <RawMaterialHome />
               </Route> */}
-              <Route exact path='/master/materiallevel'>
+              <Route exact path="/master/materiallevel">
                 <MaterialMaster />
               </Route>
               {/* <Route  exact path="/MixDesign">
               <MixDesign/>
              </Route> */}
 
-              <Route exact path='/master/sitelevel'>
+              <Route exact path="/master/sitelevel">
                 <SiteMaster />
               </Route>
 
-              <Route exact path='/master/equipmentlevel'>
+              <Route exact path="/master/equipmentlevel">
                 <EquipmentMaster />
               </Route>
 
-              <Route exact path='/master/testlevel'>
+              <Route exact path="/master/testlevel">
                 <TestLevelMaster />
               </Route>
 
-              <Route exact path='/master/unitlevel'>
+              <Route exact path="/master/unitlevel">
                 <UnitMaster />
               </Route>
 
-              <Route exact path='/master/parameterlevel'>
+              <Route exact path="/master/parameterlevel">
                 <ParameterMaster />
               </Route>
 
-              <Route exact path='/master/mixdesignlevel'>
+              <Route exact path="/master/mixdesignlevel">
                 <MixDesignMaster />
               </Route>
 
               {/* Test Configuration */}
-              <Route exact path='/testconfiguration'>
+              <Route exact path="/testconfiguration">
                 <TestConfigurationMaster />
               </Route>
 
               {/* Samples */}
-              <Route exact path='/samples'>
+              <Route exact path="/samples">
                 <SampleMaster />
               </Route>
-              <Route exact path='/samples/incoming'>
+              <Route exact path="/samples/incoming">
                 <SampleMaster />
               </Route>
 
-              <Route exact path='/samples/viewincomingstatus'>
+              <Route exact path="/samples/viewincomingstatus">
                 <IncomingViewStatus />
               </Route>
 
-              <Route exact path='/samples/viewprocessstatus'>
+              <Route exact path="/samples/viewprocessstatus">
                 <ProcessViewStatus />
               </Route>
 
-              <Route exact path='/samples/viewfpstatus'>
+              <Route exact path="/samples/viewfpstatus">
                 <FPViewStatus />
               </Route>
 
               {/* Test Trial */}
-              <Route exact path='/test/testtrial'>
+              <Route exact path="/test/testtrial">
                 <TestTrialMaster />
               </Route>
 
-              <Route exact path='/test/:testId' component={TestPage} />
+              <Route exact path="/test/:testId" component={TestPage} />
+              <Route
+                exact
+                path="/testtype/:testTypeId"
+                component={TestTypePage}
+              />
 
               <Route
                 exact
-                path='/matrialtest/:sampleId'
+                path="/matrialtest/:sampleId"
                 component={MaterialTest}
               />
 
               {/* Test Reports and Results */}
-              <Route exact path='/testreport'>
+              <Route exact path="/testreport">
                 <TestResultsMaster />
               </Route>
 
+              <Route exact path="/testtype">
+                <TestTypes />
+              </Route>
+
               {/* Profile */}
-              <Route exact path='/profile'>
+              <Route exact path="/profile">
                 <Profile />
               </Route>
 
+              <Route exact path="/concretetest">
+                <ConcreteTest />
+              </Route>
+
               {/* Priviledges */}
-              <Route exact path='/settings/priviledges'>
+              <Route exact path="/settings/priviledges">
                 <CompanyPrivilege />
               </Route>
-              <Route exact path='/testinput'>
+              <Route exact path="/testinput">
                 <Test />
               </Route>
 
-              <Route exact path='/settings/auditlog'>
+              <Route exact path="/settings/auditlog">
                 <AuditLog />
               </Route>
             </Switch>

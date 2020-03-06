@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import flatten from "flatten";
 import { PrimaryButton } from "../styledcomponents/button/button";
-import { Input, Form } from "antd";
+import { Input, Form, Select } from "antd";
 import { FlexContainer } from "../styledcomponents/container/FlexGrid";
 
 export default class FormGenerator extends Component {
@@ -409,6 +409,9 @@ export default class FormGenerator extends Component {
           validationErrors
         }
       });
+      this.setState({
+        form: {}
+      });
       // renderSubmit({
       //   valid: valid,
       //   data: {
@@ -503,7 +506,16 @@ export default class FormGenerator extends Component {
         );
       case "select":
         return (
-          <select {...props}>
+          <select
+            {...props}
+            style={{
+              width: "80px",
+              boxShadow: "1px 2px 8px 1px rgba(0,0,0,0.08)",
+              borderRadius: "6px",
+              height: "32px"
+              // marginTop: "-10px"
+            }}
+          >
             {input.defaultOptionText && (
               <option hidden selected value>
                 {input.defaultOptionText}

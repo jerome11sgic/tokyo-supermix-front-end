@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from "react";
-import { Icon, Popconfirm, Divider } from "antd";
+import { Icon, Popconfirm, Divider, Modal, Table } from "antd";
 import { AntTable } from "../../../styledcomponents/table/AntTabl";
 import MixDesignTitle from "../titles/MixDesignTitle";
+import { api } from "../../../services/AxiosService";
 
 export default class ManageMixDesignForm extends Component {
   state = {
@@ -10,7 +11,9 @@ export default class ManageMixDesignForm extends Component {
     sortedInfo: null,
     searchText: "",
     visible: false,
-    size: "small"
+    size: "small",
+    datalist: "",
+    mixCode: ""
   };
 
   componentWillMount() {
@@ -26,9 +29,11 @@ export default class ManageMixDesignForm extends Component {
     }
   }
 
-  showModal = () => {
+  showModal = code => {
+    this.getMixDesignProportion(code);
     this.setState({
-      visible: true
+      visible: true,
+      mixCode: code
     });
   };
 
@@ -73,108 +78,82 @@ export default class ManageMixDesignForm extends Component {
       }
     });
   };
+  componentDidMount() {
+    this.getallMixdesigns();
+  }
 
   onChange(pageNumber) {
     console.log("Page: ", pageNumber);
   }
+  getMixDesignProportion = code => {
+    console.log(code);
+  };
+
+  getallMixdesigns = () => {
+    api("GET", "supermix", "/mix-designs", "", "", "").then(res => {
+      console.log(res.data);
+
+      this.setState({
+        datalist: res.data.results.mixDesigns
+      });
+    });
+  };
 
   render() {
     let { sortedInfo, filteredInfo } = this.state;
     sortedInfo = sortedInfo || {};
     filteredInfo = filteredInfo || {};
+
     const columns = [
       {
         title: "Code",
         dataIndex: "code",
-        key: "id",
-
-        filters: [
-          { text: "Joe", value: "Joe" },
-          { text: "Jim", value: "Jim" }
-        ],
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.id - b.id,
-        sortOrder: sortedInfo.columnKey === "id" && sortedInfo.order
+        key: "code"
       },
       {
-        title: "Product Name",
-        dataIndex: "productName",
-        key: "name",
-
-        filters: [
-          { text: "Joe", value: "Joe" },
-          { text: "Jim", value: "Jim" }
-        ],
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.name.length - b.name.length,
-        sortOrder: sortedInfo.columnKey === "name" && sortedInfo.order
+        title: "TargetSlump",
+        dataIndex: "targetStrength",
+        key: "targetStrength"
       },
       {
         title: "Plant",
-        dataIndex: "plant",
-        key: "plant",
-
-        filters: [
-          { text: "Vechical1", value: "Vechical1" },
-          { text: "Vechical2", value: " Vechical2" },
-          { text: "Vechical3", value: "Vechical3" },
-          { text: "Vechical4", value: "Vechical4" }
-        ],
-        filteredValue: filteredInfo.role || null,
-        onFilter: (value, record) => record.role.includes(value),
-        sorter: (a, b) => a.role.length - b.role.length,
-        sortOrder: sortedInfo.columnKey === "role" && sortedInfo.order
+        dataIndex: "plantName",
+        key: "plantName"
       },
       {
         title: "Grade",
         dataIndex: "grade",
-        key: "grade",
-
-        filters: [
-          { text: "Vechical1", value: "Vechical1" },
-          { text: "Vechical2", value: " Vechical2" },
-          { text: "Vechical3", value: "Vechical3" },
-          { text: "Vechical4", value: "Vechical4" }
-        ],
-        filteredValue: filteredInfo.role || null,
-        onFilter: (value, record) => record.role.includes(value),
-        sorter: (a, b) => a.role.length - b.role.length,
-        sortOrder: sortedInfo.columnKey === "role" && sortedInfo.order
+        key: "grade"
       },
 
       {
         title: "Date",
         dataIndex: "date",
-        key: "date",
+        key: "date"
+      },
 
-        filters: [
-          { text: "Vechical1", value: "Vechical1" },
-          { text: "Vechical2", value: " Vechical2" },
-          { text: "Vechical3", value: "Vechical3" },
-          { text: "Vechical4", value: "Vechical4" }
-        ],
-        filteredValue: filteredInfo.role || null,
-        onFilter: (value, record) => record.role.includes(value),
-        sorter: (a, b) => a.role.length - b.role.length,
-        sortOrder: sortedInfo.columnKey === "role" && sortedInfo.order
+      {
+        title: "WaterCementRatio",
+        dataIndex: "waterCementRatio",
+        key: "waterCementRatio"
+      },
+      {
+        title: "WaterBinderRatio",
+        dataIndex: "waterBinderRatio",
+        key: "waterBinderRatio"
       },
       {
         title: "Raw Material",
         dataIndex: "rawmaterial",
         key: "rawmaterial",
-
-        filters: [
-          { text: "Vechical1", value: "Vechical1" },
-          { text: "Vechical2", value: " Vechical2" },
-          { text: "Vechical3", value: "Vechical3" },
-          { text: "Vechical4", value: "Vechical4" }
-        ],
-        filteredValue: filteredInfo.role || null,
-        onFilter: (value, record) => record.role.includes(value),
-        sorter: (a, b) => a.role.length - b.role.length,
-        sortOrder: sortedInfo.columnKey === "role" && sortedInfo.order
+        render: (text, record = this.state.datalist) => (
+          <a>
+            <Icon
+              type="edit"
+              onClick={this.showModal.bind(this, record.code)}
+            />
+          </a>
+        )
       },
 
       {
@@ -184,18 +163,18 @@ export default class ManageMixDesignForm extends Component {
         render: (text, record) => (
           <span>
             <a>
-              <Icon type='edit' />
+              <Icon type="edit" />
             </a>
-            <Divider type='vertical' />
+            <Divider type="vertical" />
             <a>
               <Popconfirm
-                title='Are you sure you want to Delete this?'
+                title="Are you sure you want to Delete this?"
                 icon={
-                  <Icon type='question-circle-o' style={{ color: "red" }} />
+                  <Icon type="question-circle-o" style={{ color: "red" }} />
                 }
               >
-                <a href='#'>
-                  <Icon type='delete'></Icon>
+                <a href="#">
+                  <Icon type="delete"></Icon>
                 </a>
               </Popconfirm>
             </a>
@@ -204,15 +183,62 @@ export default class ManageMixDesignForm extends Component {
       }
     ];
 
+    const columns1 = [
+      {
+        title: "MaterialName",
+        dataIndex: "materialName",
+        key: "materialName"
+      },
+      {
+        title: "Category",
+        dataIndex: "category",
+        key: "category"
+      },
+      {
+        title: "SubCategory",
+        dataIndex: "subCategoryName",
+        key: "subCategoryName"
+      },
+      {
+        title: "Quantity",
+        dataIndex: "quantity",
+        key: "quantity"
+      },
+      {
+        title: "Unit",
+        dataIndex: "unitName",
+        key: "unitName"
+      }
+    ];
+
     return (
-      <AntTable
-        length
-        title={() => <MixDesignTitle />}
-        columns={columns}
-        onChange={this.handleChange}
-        pagination={{ defaultPageSize: 3 }}
-        size={this.state.size}
-      />
+      <div>
+        <AntTable
+          length
+          title={() => <MixDesignTitle />}
+          columns={columns}
+          dataSource={this.state.datalist}
+          onChange={this.handleChange}
+          pagination={{ defaultPageSize: 8 }}
+          size={this.state.size}
+        />
+        <Modal
+          title=" RawMaterial Details"
+          visible={this.state.visible}
+          onOk={this.setJson}
+          onCancel={this.handleCancel}
+          footer={true}
+        >
+          <Table
+            showHeader={false}
+            // title={() => <MixDesignTitle />}
+            columns={columns1}
+            // dataSource={this.state.datalist}
+            pagination={{ defaultPageSize: 8 }}
+            // size={this.state.size}
+          />
+        </Modal>
+      </div>
     );
   }
 }

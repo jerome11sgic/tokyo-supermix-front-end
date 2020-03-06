@@ -170,9 +170,9 @@ class AddType extends Component {
           }, 3000);
         },
         error => {
-          this.setState({
-            errormgs: error.validationFailures[0]
-          });
+          // this.setState({
+          //   errormgs: error.validationFailures[0]
+          // });
           console.log("DEBUG34: ", error);
           console.log(HandelError(error.validationFailures[0]));
         }
