@@ -2,13 +2,17 @@ import {
   ADD_EQUATION_SYMBOLS,
   ADD_TEXT_BODY_WITH_KEYPRESS,
   ADD_PARAMETERS,
-  POP_PARAMETERS
+  POP_PARAMETERS,
+  CREATE_MINI_CARD,
+  REMOVE_MINI_CARD
 } from "../../action/testconfiguration/TestConfiguration";
 
 const initialState = {
   textBody: "",
   regex: /[^=+-/.()√π<>²\d*]/gi,
-  acceptedIndexes: []
+  acceptedIndexes: [],
+  //creation of mini cards
+  cards: []
 };
 
 export const EquationConfigurationReducer = (state = initialState, action) => {
@@ -51,6 +55,31 @@ export const EquationConfigurationReducer = (state = initialState, action) => {
           "g"
         ))
       };
+
+    case CREATE_MINI_CARD:
+      console.log(action.payload.parameterAbbr);
+      state.cards.push(action.payload.parameterAbbr);
+      console.log(state.cards);
+
+      return {
+        ...state,
+        cards: state.cards
+      };
+
+    case REMOVE_MINI_CARD:
+      console.log(action.payload.parameterAbbr);
+      for (let i = 0; i < state.cards.length; i++) {
+        if (state.cards[i] === action.payload.parameterAbbr) {
+          console.log(state.cards[i]);
+          state.cards.splice(i, 1);
+        }
+      }
+      console.log(state.cards);
+      return {
+        ...state,
+        cards: state.cards
+      };
+
     default:
       return state;
   }

@@ -66,7 +66,6 @@ class TestParameterTable extends Component {
     ];
     return (
       <AntTable
-        maxlength
         dataSource={this.state.testParameterData}
         size={this.state.size}
         bordered={false}
@@ -75,7 +74,8 @@ class TestParameterTable extends Component {
         showHeader={true}
         pagination={{ defaultPageSize: 6 }}
         style={{
-          height: "200px"
+          height: "auto",
+          width: `calc(100% +  0px)`
         }}
       />
     );
@@ -91,17 +91,17 @@ class TestParameterTable extends Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    selectParameters: (record, event) => {
-      console.log(event.target.checked);
-      if (event.target.checked === true) {
-        dispatch({ type: ADD_PARAMETERS, payload: record.unitName });
-        console.log("record pushed " + record.unitName);
-      }
-      if (event.target.checked === false) {
-        dispatch({ type: POP_PARAMETERS, payload: record.unitName });
-        console.log("record spliced " + record.unitName);
-      }
-    }
+    // selectParameters: (record, event) => {
+    //   console.log(event.target.checked);
+    //   if (event.target.checked === true) {
+    //     dispatch({ type: ADD_PARAMETERS, payload: record.unitName });
+    //     console.log("record pushed " + record.unitName);
+    //   }
+    //   if (event.target.checked === false) {
+    //     dispatch({ type: POP_PARAMETERS, payload: record.unitName });
+    //     console.log("record spliced " + record.unitName);
+    //   }
+    // }
   };
 };
 export default connect(null, mapDispatchToProps)(TestParameterTable);

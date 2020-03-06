@@ -8,110 +8,445 @@ import {
   MasterLevelFormTitle
 } from "../../../styledcomponents/form/MasterLevelForms";
 import { TileParagraph } from "../../../styledcomponents/typography/typography";
+import { PrimaryButton } from "../../../styledcomponents/button/button";
+import theme from "../../../../theme";
+import { connect } from "react-redux";
+import {
+  TRIGGER_EQUATIONS_AREA,
+  TRIGGER_BACK_EQUATIONS_AREA
+} from "../../../../redux/action/testconfiguration/TestConfiguration";
+import { api } from "../../../services/AxiosService";
 
 const { Option } = Select;
 
 const children = [
   { id: 0, name: "Peliyagoda" },
-  { id: 1, name: "Trincomalee" }
+  { id: 1, name: "Trincomalee" },
+  { id: 2, name: "Jaffna" }
 ];
 
-function handleChange(value) {
-  console.log(`selected ${value}`);
-}
+const error = {
+  color: "red",
+  fontSize: "12px",
+  width: "170px",
+  height: "0.2px"
+};
 
-export default class AddTestName extends Component {
+class AddTestName extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showSecondColumn: false,
+      icon: "+",
+      test_name: "",
+      equation: "",
+      test_type: "",
+      plant: [],
+      errors: {
+        test_name: "",
+        equation: "",
+        test_type: "",
+        plant: ""
+      },
+      errormsgs: ""
+    };
+  }
+
+  componentDidMount() {
+    this.getAllTestType();
+    this.getAllPlant();
+    this.getAllEquations();
+  }
+
+  //get all for test type select
+  getAllTestType() {
+    api("GET", "supermix", "/test-types", "", "", "").then(res => {
+      console.log(res.data.results.testTypes);
+      if (res.data.results.testTypes.length > 0) {
+        console.log("ggg");
+        let SelectTestType = res.data.results.testTypes.map((post, index) => {
+          return (
+            <Option value={post.id} key={index}>
+              {post.type}
+            </Option>
+          );
+        });
+        this.setState({
+          SelectTestType
+        });
+      }
+    });
+  }
+
+  //get all for plant select
+  getAllPlant() {
+    api("GET", "supermix", "/plants", "", "", "").then(res => {
+      console.log(res.data.results.plants.length);
+      if (res.data.results.plants.length > 0) {
+        console.log("ggg");
+        let SelectPlants = res.data.results.plants.map((post, index) => {
+          return (
+            <Option value={post.code} key={index}>
+              {post.name}
+            </Option>
+          );
+        });
+        this.setState({
+          SelectPlants
+        });
+      }
+    });
+  }
+
+  //get all for equations select
+  getAllEquations() {
+    api("GET", "supermix", "/equations", "", "", "").then(res => {
+      console.log(res.data.results.equations);
+      if (res.data.results.equations.length > 0) {
+        console.log("ggg");
+        let SelectEquation = res.data.results.equations.map((post, index) => {
+          return (
+            <Option value={post.id} key={index}>
+              {post.formula}
+            </Option>
+          );
+        });
+        this.setState({
+          SelectEquation
+        });
+      }
+    });
+  }
+
+  handleChange = (event, field) => {
+    this.setState({ [field]: event.target.value });
+    this.setState({ errormgs: "" });
+    event.preventDefault();
+    const { name, value } = event.target;
+    let errors = this.state.errors;
+    // console.log(name + " is \t" + value);
+    switch (name) {
+      case "test_name":
+        errors.test_name =
+          value.length === 0
+            ? "test name can't be empty"
+            : value.length < 3
+            ? "test name \n must be 3 characters long!"
+            : !isNaN(value)
+            ? "test name won't allow only letters"
+            : "";
+        break;
+
+      default:
+        break;
+    }
+
+    this.setState({ errors, [name]: value });
+  };
+
+  handleSelect = (name, value) => {
+    const { errors } = this.state;
+    console.log(value);
+    if (name === "plant") {
+      this.setState({
+        plant: value,
+        errors: {
+          test_name: errors.test_name,
+          equation: errors.equation,
+          test_type: errors.test_type,
+          plant: ""
+        }
+      });
+    }
+    if (name === "equation") {
+      this.setState({
+        equation: value,
+        errors: {
+          test_name: errors.test_name,
+          equation: "",
+          test_type: errors.test_type,
+          plant: errors.plant
+        }
+      });
+    }
+    if (name === "test_type" || this.props.icon === "-") {
+      this.setState({
+        test_type: value,
+        errors: {
+          test_name: errors.test_name,
+          equation: errors.equation,
+          test_type: "",
+          plant: errors.plant
+        }
+      });
+    }
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    const { errors, test_name, test_type, equation, plant } = this.state;
+    if (
+      test_name.length === 0 &&
+      test_type.length === 0 &&
+      equation.length === 0 &&
+      plant.length === 0
+    ) {
+      console.log("form is not valid");
+      this.setState({
+        errors: {
+          test_name: "test name can't be empty",
+          equation: "equation can't be empty",
+          test_type: "test type can't be empty",
+          plant: "plant can't be empty"
+        }
+      });
+    } else if (test_name.length === 0 && errors.test_name.length === 0) {
+      this.setState({
+        errors: {
+          test_name: errors.test_name || "test name can't be empty",
+          equation: errors.equation,
+          test_type: errors.test_type,
+          plant: errors.plant
+        }
+      });
+    } else if (equation.length === 0 && errors.equation.length === 0) {
+      this.setState({
+        errors: {
+          test_name: errors.test_name,
+          equation: errors.equation || "equation can't be empty",
+          test_type: errors.test_type,
+          plant: errors.plant
+        }
+      });
+    } else if (test_type.length === 0 && errors.test_type.length === 0) {
+      this.setState({
+        errors: {
+          test_name: errors.test_name,
+          equation: errors.equation,
+          test_type: errors.test_type || "test type can't be empty",
+          plant: errors.plant
+        }
+      });
+    } else if (plant.length === 0 && errors.plant.length === 0) {
+      this.setState({
+        errors: {
+          test_name: errors.test_name,
+          equation: errors.equation,
+          test_type: errors.test_type,
+          plant: errors.plant || "plant can't be empty"
+        }
+      });
+    } else if (
+      errors.test_name.length === 0 &&
+      errors.equation.length === 0 &&
+      errors.plant.length === 0 &&
+      errors.test_type.length === 0
+    ) {
+      console.log("form is valid");
+    }
+  };
+
+  // componentWillReceiveProps(nextProps) {
+  //   this.setState({
+  //     showSecondColumn: nextProps.showSecondColumn,
+  //     icon: nextProps.icon
+  //   });
+  // }
   render() {
+    const { test_name, equation, test_type, plant, errors } = this.state;
     return (
-      <FlexContainer stepsarea style={{ marginTop: "45px" }}>
-        <div testconfig>
-          <MasterLevelFormTitle nomargin>
-            <TileParagraph>Add Test</TileParagraph>
-          </MasterLevelFormTitle>
-          {/* <Divider style={{marginTop:'-5px'}}/> */}
+      <FlexContainer
+        style={{
+          background: "white",
+          padding: "15px",
+          borderBottomLeftRadius: "15px",
+          borderBottomRightRadius: "15px"
+        }}
+      >
+        {/* Code */}
+        <div className='input_wrapper'>
+          <label for='test_name' className='label'>
+            Test Name
+          </label>
+          <Input
+            id='test_name'
+            name='test_name'
+            placeholder='Enter Test Name'
+            value={test_name}
+            onChange={this.handleChange}
+          />
+          {errors.test_name.length > 0 && (
+            <div style={error}>{errors.test_name}</div>
+          )}
+          <div style={{ height: "6px" }}></div>
+        </div>
 
-          <MasterLevelForm
-            filled
-            borderRadiused
-            style={{
-              justifyContent: "space-around",
-              paddingBottom: "70px",
-              paddingLeft: "40px",
-              paddingRight: "60px",
-              paddingTop: "20px",
-              borderBottomRightRadius: "15px",
-              borderBottomLeftRadius: "15px"
-            }}
+        {/* Equation */}
+        <div className='input_wrapper'>
+          <label for='equation' className='label'>
+            Equation
+          </label>
+          <FlexContainer>
+            <Select
+              id='equation'
+              name='equation'
+              placeholder='Select Equation'
+              style={{ width: 150 }}
+              value={equation}
+              onChange={value => this.handleSelect("equation", value)}
+            >
+              {this.state.SelectEquation}
+            </Select>
+
+            <div style={{ height: "6px" }}></div>
+            <PrimaryButton
+              type='primary'
+              value={this.props.togglerValue}
+              style={{
+                background: theme.colors.primary,
+                color: "white",
+                border: "none",
+                marginLeft: "5px",
+                fontWeight: 500
+              }}
+              onClick={this.props.toggleEquationArea}
+            >
+              {this.props.icon}
+            </PrimaryButton>
+          </FlexContainer>
+          {errors.equation.length > 0 && (
+            <div style={error}>{errors.equation}</div>
+          )}
+          <div style={{ height: "6px", width: "auto" }}></div>
+        </div>
+
+        {/* Test Type */}
+        <div className='input_wrapper'>
+          <label for='test_type' className='label'>
+            Test Type
+          </label>
+          <Select
+            id='test_type'
+            name='test_type'
+            placeholder='Select Test Type'
+            style={{ width: 150 }}
+            value={test_type}
+            onChange={value => this.handleSelect("test_type", value)}
           >
-            {/* Code */}
-            <div className='input_wrapper'>
-              <label for='test_name' className='label'>
-                Test Name
-              </label>
-              <Input
-                id='test_name'
-                name='test_name'
-                placeholder='Enter Test Name'
-              />
-            </div>
+            {this.state.SelectTestType}
+          </Select>
+          {errors.test_type.length > 0 && (
+            <div style={error}>{errors.test_type}</div>
+          )}
+          <div style={{ height: "6px" }}></div>
+        </div>
 
-            {/* Test Type */}
-            <div className='input_wrapper'>
-              <label for='test_type' className='label'>
-                Test Type
-              </label>
-              <Select
-                id='test_type'
-                name='test_type'
-                placeholder='Select Test Type'
-                style={{ width: 170 }}
-              />
-            </div>
+        {/* Plant Multiselect */}
+        <div className='input_wrapper'>
+          <label className='label' style={{ position: "relative" }}>
+            Plant
+          </label>
+          <Select
+            mode='multiple'
+            style={{ width: 250 }}
+            placeholder='Select Plant'
+            id='plant'
+            name='plant'
+            value={plant}
+            onChange={value => this.handleSelect("plant", value)}
+          >
+            {/* {children.map(post => (
+              <Option value={post.id}>{post.name}</Option>
+            ))} */}
+            {this.state.SelectPlants}
+          </Select>
+          {errors.plant.length > 0 && <div style={error}>{errors.plant}</div>}
+          <div style={{ height: "6px" }}></div>
+        </div>
 
-            {/* Plant Multiselect */}
-            <div className='input_wrapper'>
-              <label className='label'>Plant </label>
-              <Select
-                mode='multiple'
-                style={{ width: 200 }}
-                placeholder='Select Plant'
-                onChange={handleChange}
-              >
-                {children.map(post => (
-                  <Option value={post.id}>{post.name}</Option>
-                ))}
-              </Select>
-            </div>
+        {/* Description  */}
+        <div className='input_wrapper'>
+          <label for='description' className='label'>
+            Description
+          </label>
+          <TextArea
+            style={{ width: 300 }}
+            id='description'
+            name='description'
+            placeholder=''
+          />
+        </div>
 
-            {/* Description  */}
-            <div className='input_wrapper'>
-              <label for='description' className='label'>
-                Description
-              </label>
-              <TextArea
-                style={{ width: 187 }}
-                id='description'
-                name='description'
-                placeholder=''
-              />
-            </div>
-
-            {/* Procedure */}
-            <div className='input_wrapper'>
-              <label for='procedure' className='label'>
-                Procedure
-              </label>
-              <TextArea
-                className='textarea1'
-                style={{ width: 187 }}
-                id='procedure'
-                name='procedure'
-                placeholder='Enter Procedure'
-              />
-            </div>
-          </MasterLevelForm>
+        {/* Procedure */}
+        <div className='input_wrapper'>
+          <label for='procedure' className='label'>
+            Procedure
+          </label>
+          <TextArea
+            className='textarea1'
+            style={{ width: 590 }}
+            id='procedure'
+            name='procedure'
+            placeholder='Enter Procedure'
+          />
+        </div>
+        <div
+          style={{
+            marginTop: "30px",
+            marginLeft: "20px",
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignSelf: "center"
+          }}
+        >
+          <PrimaryButton
+            type='submit'
+            primary
+            style={{
+              background: theme.colors.primary,
+              border: "none",
+              color: "white"
+            }}
+            onClick={this.handleSubmit}
+          >
+            Submit
+          </PrimaryButton>
         </div>
       </FlexContainer>
     );
   }
+  // changeAction = () => {
+  //   if (this.props.showSecondColumn === false) {
+  //     return { type: TRIGGER_EQUATIONS_AREA };
+  //   } else {
+  //     return { type: TRIGGER_BACK_EQUATIONS_AREA };
+  //   }
+  // };
 }
+
+const mapStateToProps = state => {
+  return {
+    icon: state.testConfigurationReducers.triggerEquationAreaReducer.icon,
+    togglerValue:
+      state.testConfigurationReducers.triggerEquationAreaReducer.togglable
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    toggleEquationArea: event => {
+      console.log(event.target.value);
+      if (event.target.value === "yes") {
+        dispatch({ type: TRIGGER_EQUATIONS_AREA });
+        console.log("triggered equation area");
+      } else {
+        dispatch({ type: TRIGGER_BACK_EQUATIONS_AREA });
+        console.log("triggered back equation area");
+      }
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddTestName);

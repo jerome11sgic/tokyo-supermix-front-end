@@ -18,16 +18,34 @@ class AddTestEquation extends Component {
 
     this.state = {
       equations: [],
-      textBoxEquation: ""
+      textBoxEquation: "",
+      cards: []
     };
   }
 
   componentWillReceiveProps(nextProps) {
     console.log(nextProps.textBody);
+    console.log(nextProps.cards);
     this.setState({
-      textBoxEquation: nextProps.textBody
+      textBoxEquation: nextProps.textBody,
+      cards: nextProps.cards
     });
   }
+
+  // componentDidMount() {
+  //   this.renderMiniCards();
+  // }
+
+  //render mini cards as per cards in the redux state
+  renderMiniCards = () => {
+    this.state.cards.map((post, index) => {
+      return (
+        <MiniCard letters key={index}>
+          <Paragraph className='backImg'>{post}</Paragraph>
+        </MiniCard>
+      );
+    });
+  };
 
   // sum = (a, b) => {
   //   return `${a} ${b}`;
@@ -62,13 +80,9 @@ class AddTestEquation extends Component {
 
   render() {
     const { textBoxEquation } = this.state;
+    console.log(this.props.cards);
     return (
-      <FlexContainer column>
-        <div style={{ height: "20px" }}></div>
-        <FlexContainer normal>
-          <TestParameterTable />
-        </FlexContainer>
-        <div style={{ height: "25px" }}></div>
+      <FlexContainer style={{ width: "600px" }}>
         <FlexContainer normal className='equation_wrapper'>
           <TextArea
             className='equation_playground textEmph'
@@ -170,16 +184,14 @@ class AddTestEquation extends Component {
               onClick={value => this.props.handleCalculate("²", value)}
             ></MiniCard>
           </div>
-          <PrimaryButton
-            style={{
-              background: "#001328",
-              color: "white",
-              marginTop: "100px",
-              marginLeft: "10px"
-            }}
-          >
-            Submit
-          </PrimaryButton>
+        </FlexContainer>
+        <FlexContainer className='letters_area'>
+          {/* {this.state.cards.map((post, index) => (
+            <MiniCard letters key={index}>
+              <Paragraph className='backImg'>{post}</Paragraph>
+            </MiniCard>
+          ))} */}
+          {this.renderMiniCards()}
         </FlexContainer>
       </FlexContainer>
     );
@@ -189,7 +201,8 @@ class AddTestEquation extends Component {
 const mapStateToProps = state => {
   return {
     textBody:
-      state.testConfigurationReducers.equationConfigurationReducer.textBody
+      state.testConfigurationReducers.equationConfigurationReducer.textBody,
+    cards: state.testConfigurationReducers.equationConfigurationReducer.cards
   };
 };
 
