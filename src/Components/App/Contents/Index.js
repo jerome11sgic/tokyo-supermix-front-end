@@ -39,6 +39,7 @@ import AuditLog from "../../AuditLog/AuditLog";
 import ProcessViewStatus from "../../sample/process/processviewstatus/ProcessViewStatus";
 import IncomingViewStatus from "../../sample/incoming/IncomingViewStatus/IncomingViewStatus";
 import ConcreteTest from "../../test/concrete/ManageConcreteTest";
+import ConcreteStrengthTest from "../../test/concreteStrength/ManageStrength";
 
 // import AddMixDesign from "../../ConfigurationLevel/MixDesign/AddMixDesign";
 // import MixDesign from "../../ConfigurationLevel/MixDesign/AddMixDesign";
@@ -182,6 +183,10 @@ class RouterContent extends React.Component {
 
               <Route exact path="/concretetest">
                 <ConcreteTest />
+              </Route>
+
+              <Route exact path="/strengthtest">
+                <ConcreteStrengthTest />
               </Route>
 
               {/* Priviledges */}
