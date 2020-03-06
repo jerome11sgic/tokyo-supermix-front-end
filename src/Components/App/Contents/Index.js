@@ -40,6 +40,7 @@ import ProcessViewStatus from "../../sample/process/processviewstatus/ProcessVie
 import IncomingViewStatus from "../../sample/incoming/IncomingViewStatus/IncomingViewStatus";
 import ConcreteTest from "../../test/concrete/ManageConcreteTest";
 import ConcreteStrengthTest from "../../test/concreteStrength/ManageStrength";
+import TestTrialHome from "../../test/testtrial/card/TestTrialHome";
 
 // import AddMixDesign from "../../ConfigurationLevel/MixDesign/AddMixDesign";
 // import MixDesign from "../../ConfigurationLevel/MixDesign/AddMixDesign";
@@ -120,9 +121,9 @@ class RouterContent extends React.Component {
                 <ParameterMaster />
               </Route>
 
-              <Route exact path="/master/mixdesignlevel">
+              {/* <Route exact path="/master/mixdesignlevel">
                 <MixDesignMaster />
-              </Route>
+              </Route> */}
 
               {/* Test Configuration */}
               <Route exact path="/testconfiguration">
@@ -149,9 +150,18 @@ class RouterContent extends React.Component {
                 <FPViewStatus />
               </Route>
 
+              <Route exact path="/mixdesign">
+                <MixDesignMaster />
+              </Route>
+
               {/* Test Trial */}
               <Route exact path="/test/testtrial">
                 <TestTrialMaster />
+              </Route>
+
+              {/* TestTrialHome Cards */}
+              <Route exact path="/trialcards">
+                <TestTrialHome />
               </Route>
 
               <Route exact path="/test/:testId" component={TestPage} />
