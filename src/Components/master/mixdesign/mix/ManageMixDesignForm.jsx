@@ -4,6 +4,7 @@ import { Icon, Popconfirm, Divider, Modal, Table } from "antd";
 import { AntTable } from "../../../styledcomponents/table/AntTabl";
 import MixDesignTitle from "../titles/MixDesignTitle";
 import { api } from "../../../services/AxiosService";
+import Notification from "../../../Constant/Notification";
 
 export default class ManageMixDesignForm extends Component {
   state = {
@@ -13,7 +14,8 @@ export default class ManageMixDesignForm extends Component {
     visible: false,
     size: "small",
     datalist: "",
-    mixCode: ""
+    mixCode: "",
+    MixDesignProportionData: ""
   };
 
   componentWillMount() {
@@ -87,6 +89,20 @@ export default class ManageMixDesignForm extends Component {
   }
   getMixDesignProportion = code => {
     console.log(code);
+    api(
+      "GET",
+      "supermix",
+      "/mix-design-proportion/mix-design",
+      "",
+      "",
+      code
+    ).then(res => {
+      console.log(res.data);
+
+      this.setState({
+        MixDesignProportionData: res.data.results.mixDesignProportion
+      });
+    });
   };
 
   getallMixdesigns = () => {
@@ -98,6 +114,28 @@ export default class ManageMixDesignForm extends Component {
       });
     });
   };
+  onConfirmdelete(id) {
+    console.log(id);
+
+    api("DELETE", "supermix", "/mix-design", "", "", id).then(res => {
+      console.log(res.data);
+      this.getallMixdesigns();
+      Notification("success", res.data.message);
+    });
+    console.log(this.state.id);
+  }
+
+  deleteProportionData(record) {
+    console.log(record);
+    console.log(this.state.mixCode);
+    api("DELETE", "supermix", "/mix-design-proportion", "", "", record.id).then(
+      res => {
+        console.log(res.data);
+        this.getMixDesignProportion(this.state.mixCode);
+        Notification("success", res.data.message);
+      }
+    );
+  }
 
   render() {
     let { sortedInfo, filteredInfo } = this.state;
@@ -112,8 +150,8 @@ export default class ManageMixDesignForm extends Component {
       },
       {
         title: "TargetSlump",
-        dataIndex: "targetStrength",
-        key: "targetStrength"
+        dataIndex: "targetSlump",
+        key: "targetSlump"
       },
       {
         title: "Plant",
@@ -121,9 +159,9 @@ export default class ManageMixDesignForm extends Component {
         key: "plantName"
       },
       {
-        title: "Grade",
-        dataIndex: "grade",
-        key: "grade"
+        title: "TargetGrade",
+        dataIndex: "targetGrade",
+        key: "targetGrade"
       },
 
       {
@@ -149,7 +187,8 @@ export default class ManageMixDesignForm extends Component {
         render: (text, record = this.state.datalist) => (
           <a>
             <Icon
-              type="edit"
+              type="form"
+              style={{ color: "green" }}
               onClick={this.showModal.bind(this, record.code)}
             />
           </a>
@@ -160,10 +199,16 @@ export default class ManageMixDesignForm extends Component {
         title: "Edit & Delete",
         key: "action",
         width: "7%",
-        render: (text, record) => (
+        render: (text, record = this.state.datalist) => (
           <span>
             <a>
-              <Icon type="edit" />
+              <Icon
+                type="edit"
+                // onClick={this.props.passEditManageCategoryToModal.bind(
+                //   this,
+                //   record
+                // )}
+              />
             </a>
             <Divider type="vertical" />
             <a>
@@ -172,9 +217,10 @@ export default class ManageMixDesignForm extends Component {
                 icon={
                   <Icon type="question-circle-o" style={{ color: "red" }} />
                 }
+                onConfirm={this.onConfirmdelete.bind(this, record.code)}
               >
                 <a href="#">
-                  <Icon type="delete"></Icon>
+                  <Icon type="delete" style={{ color: "red" }}></Icon>
                 </a>
               </Popconfirm>
             </a>
@@ -186,18 +232,8 @@ export default class ManageMixDesignForm extends Component {
     const columns1 = [
       {
         title: "MaterialName",
-        dataIndex: "materialName",
+        dataIndex: "rawMaterialName",
         key: "materialName"
-      },
-      {
-        title: "Category",
-        dataIndex: "category",
-        key: "category"
-      },
-      {
-        title: "SubCategory",
-        dataIndex: "subCategoryName",
-        key: "subCategoryName"
       },
       {
         title: "Quantity",
@@ -206,8 +242,40 @@ export default class ManageMixDesignForm extends Component {
       },
       {
         title: "Unit",
-        dataIndex: "unitName",
+        dataIndex: "unit",
         key: "unitName"
+      },
+      {
+        title: "Edit & Delete",
+        key: "action",
+        width: "7%",
+        render: (text, record = this.state.MixDesignProportionData) => (
+          <span>
+            {/* <a>
+              <Icon
+                type="edit"
+                // onClick={this.props.passEditManageCategoryToModal.bind(
+                //   this,
+                //   record
+                // )}
+              />
+            </a>
+            <Divider type="vertical" /> */}
+            <a>
+              <Popconfirm
+                title="Are you sure you want to Delete this?"
+                icon={
+                  <Icon type="question-circle-o" style={{ color: "red" }} />
+                }
+                onConfirm={this.deleteProportionData.bind(this, record)}
+              >
+                <a href="#">
+                  <Icon type="delete" style={{ color: "red" }}></Icon>
+                </a>
+              </Popconfirm>
+            </a>
+          </span>
+        )
       }
     ];
 
@@ -215,7 +283,7 @@ export default class ManageMixDesignForm extends Component {
       <div>
         <AntTable
           length
-          title={() => <MixDesignTitle />}
+          title={() => <MixDesignTitle reload={this.getallMixdesigns} />}
           columns={columns}
           dataSource={this.state.datalist}
           onChange={this.handleChange}
@@ -230,10 +298,10 @@ export default class ManageMixDesignForm extends Component {
           footer={true}
         >
           <Table
-            showHeader={false}
+            // showHeader={false}
             // title={() => <MixDesignTitle />}
             columns={columns1}
-            // dataSource={this.state.datalist}
+            dataSource={this.state.MixDesignProportionData}
             pagination={{ defaultPageSize: 8 }}
             // size={this.state.size}
           />
