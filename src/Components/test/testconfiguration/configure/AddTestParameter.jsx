@@ -5,7 +5,9 @@ import { FlexContainer } from "../../../styledcomponents/container/FlexGrid";
 import { connect } from "react-redux";
 import {
   REMOVE_MINI_CARD,
-  CREATE_MINI_CARD
+  CREATE_MINI_CARD,
+  SELECT_UNIT,
+  TICK_CHECKBOX
 } from "../../../../redux/action/testconfiguration/TestConfiguration";
 
 const { Option } = Select;
@@ -14,15 +16,22 @@ class AddTestParameter extends Component {
   state = {
     size: "small",
     unit: [],
+    checked: false,
     testParameterData: [
       {
+        parameterId: 1,
         parameterName: "Cement",
         parameterAbbr: "A"
       },
       {
+        parameterId: 2,
         parameterName: "Sand",
         parameterAbbr: "B"
       }
+      // {
+      //   parameterName: "Concrete",
+      //   parameterAbbr: "C"
+      // }
     ]
   };
 
@@ -44,11 +53,19 @@ class AddTestParameter extends Component {
     console.log(record);
   };
 
+  // stateCheck = e => {
+  //   console.log("checked in state" + e.target.checked);
+  //   this.setState({
+  //     checked: e.target.checked
+  //   });
+  // };
+
   handleChange = value => {
     console.log(`selected ${value}`);
   };
 
   render() {
+    console.log("DEBUG4142", this.props.cards);
     const testParameterColumns = [
       {
         title: "Parameter",
@@ -84,6 +101,7 @@ class AddTestParameter extends Component {
           <Checkbox
             id='relevant_check'
             name='relevant_check'
+            key={this.state.testParameterData.parameterName}
             onChange={this.props.selectCreateMiniCard.bind(this, record)}
           />
         )
@@ -105,14 +123,18 @@ class AddTestParameter extends Component {
             boxShadow: "0px 0px 0px 0px rgba(0,0,0,0)",
             justifyContent: "right"
           }}
-          pagination={{ defaultPageSize: 4 }}
+          pagination={{ defaultPageSize: 2 }}
         />
       </FlexContainer>
     );
   }
 }
 
-const mapStateToProps = state => null;
+const mapStateToProps = state => {
+  return {
+    cards: state.testConfigurationReducers.equationConfigurationReducer.cards
+  };
+};
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -143,10 +165,14 @@ const mapDispatchToProps = dispatch => {
     // }
     selectCreateMiniCard: (record, event) => {
       console.log(event.target.checked);
-      if (event.target.checked) {
+      if (event.target.checked === true) {
         dispatch({ type: CREATE_MINI_CARD, payload: record });
         console.log("created mini card " + record.parameterAbbr);
-      } else {
+        // dispatch({
+        //   type: TICK_CHECKBOX,
+        //   payload: record
+        // });
+      } else if (event.target.checked === false) {
         dispatch({ type: REMOVE_MINI_CARD, payload: record });
         console.log("removed mini card " + record.parameterAbbr);
       }

@@ -7,7 +7,10 @@ import { connect } from "react-redux";
 import { Modal, Button } from "antd";
 
 import theme from "../../../../theme";
-import { TRIGGER_BACK_EQUATIONS_AREA } from "../../../../redux/action/testconfiguration/TestConfiguration";
+import {
+  TRIGGER_BACK_EQUATIONS_AREA,
+  CLEAR_STATES_WHILE_CANCEL
+} from "../../../../redux/action/testconfiguration/TestConfiguration";
 import AddTestParameter from "../configure/AddTestParameter";
 import { PrimaryButton } from "../../../styledcomponents/button/button";
 
@@ -22,7 +25,20 @@ class Step01 extends Component {
     };
   }
 
+  handleSubmit = () => {
+    const saveEquation = {
+      formula: this.props.textBody
+    };
+    const testParameter = {
+      equation_id: 1,
+      parameter_id: this.props.paramsData
+    };
+    console.log(saveEquation);
+    console.log(testParameter);
+  };
+
   render() {
+    console.log(this.props.paramsData);
     return (
       <FlexContainer style={{ justifyContent: "center" }}>
         <FlexContainer
@@ -65,7 +81,7 @@ class Step01 extends Component {
               </Button>,
               <PrimaryButton
                 key='submit'
-                onClick={e => this.handleSubmit(e)}
+                onClick={this.handleSubmit}
                 style={{
                   background: "#001328",
                   color: "white",
@@ -89,7 +105,12 @@ class Step01 extends Component {
 
 const mapStateToProps = state => {
   return {
-    visible: state.testConfigurationReducers.triggerEquationAreaReducer.visible
+    visible: state.testConfigurationReducers.triggerEquationAreaReducer.visible,
+    cards: state.testConfigurationReducers.equationConfigurationReducer.cards,
+    paramsData:
+      state.testConfigurationReducers.equationConfigurationReducer.paramsData,
+    textBody:
+      state.testConfigurationReducers.equationConfigurationReducer.textBody
   };
 };
 
@@ -97,6 +118,7 @@ const mapDispatchToProps = dispatch => {
   return {
     handleCancelEquationArea: () => {
       dispatch({ type: TRIGGER_BACK_EQUATIONS_AREA });
+      dispatch({ type: CLEAR_STATES_WHILE_CANCEL });
       console.log("triggered back equation area");
     }
   };
