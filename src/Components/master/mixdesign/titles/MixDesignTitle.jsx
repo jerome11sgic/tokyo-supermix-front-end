@@ -16,7 +16,7 @@ export default class MixDesignTitle extends Component {
     return (
       <FlexContainer titles leveltitles>
         <Paragraph style={style}>Mix Design</Paragraph>
-        <AddMixDesignForm />
+        <AddMixDesignForm reload={this.props.reload} />
       </FlexContainer>
     );
   }

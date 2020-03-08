@@ -22,6 +22,8 @@ import moment from "moment";
 import FormGenerator from "../../../Constant/FormGenerator";
 import { api } from "../../../services/AxiosService";
 import { FlexContainer } from "../../../styledcomponents/container/FlexGrid";
+import Notification from "../../../Constant/Notification";
+import HandelError from "../../../Constant/HandleError";
 
 const a = [];
 const b = [];
@@ -411,10 +413,29 @@ class AddMixDesignForm extends Component {
               ""
             ).then(res => {
               console.log(res.data);
+              Notification("success", res.data.message);
+              // a.splice(0, a.length);
+              // b.splice(0, b.length);
+
+              this.setState({
+                cement_data: [],
+                water_data: [],
+                flyash_data: [],
+                material_data: {},
+                code: "",
+                plant: "",
+                grade: "",
+                date: "",
+                target_strength: "",
+                actual_grade: "",
+                water_cement_ratio: 0,
+                water_binder_ratio: 0
+              });
             });
 
-            // Notification("success", res.data.message);
-            // this.props.reload();
+            Notification("success", res.data.message);
+            this.props.reload();
+
             // this.setState({ loading: true });
             // this.setState({
             //   equipment_plant: "",

@@ -69,7 +69,7 @@ const BasicCard = styled.div`
         padding-right: 50px;
         font-size: 12px;
         background: url(${props => props.imgUrl});
-        width: 250px;
+        width: 245px;
         padding: 6px;
         display: flex;
         flex-direction: row;
