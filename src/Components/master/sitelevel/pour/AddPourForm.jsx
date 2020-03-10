@@ -168,7 +168,7 @@ class AddPourForm extends Component {
                 this.responeserror(res.data.results.name.message);
               } else {
                 Notification("success", res.data.message);
-                // this.props.reload();
+                this.props.reload();
                 this.setState({
                   loading: true,
                   code: "",
@@ -211,7 +211,7 @@ class AddPourForm extends Component {
               this.responeserror(res.data.results.name.message);
             } else {
               Notification("success", res.data.message);
-              // this.props.reload();
+              this.props.reload();
 
               this.setState({
                 loading: true,
@@ -308,11 +308,11 @@ class AddPourForm extends Component {
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[
-            <Button key='back' onClick={this.handleCancel}>
+            <Button key="back" onClick={this.handleCancel}>
               Return
             </Button>,
             <PrimaryButton
-              key='submit'
+              key="submit"
               loading={loading}
               onClick={e => this.handleSubmit(e)}
               style={{ background: "#001328", color: "white", border: "none" }}
@@ -330,7 +330,7 @@ class AddPourForm extends Component {
                 Add Pour
               </p>
               <Icon
-                type='close-circle'
+                type="close-circle"
                 onClick={this.handleCancel}
                 style={{
                   color: "white"
@@ -342,14 +342,14 @@ class AddPourForm extends Component {
           <MasterLevelForm>
             {/* Code */}
             {type === "edit" ? (
-              <div className='input_wrapper'>
-                <label for='code' className='label'>
+              <div className="input_wrapper">
+                <label for="code" className="label">
                   Code:
                 </label>
 
                 <Input
-                  id='code'
-                  name='code'
+                  id="code"
+                  name="code"
                   value={code}
                   // placeholder='Enter the Code '
                   disabled
@@ -360,15 +360,15 @@ class AddPourForm extends Component {
               ""
             )}
 
-            <div className='input_wrapper'>
-              <label for='pour_name' className='label'>
+            <div className="input_wrapper">
+              <label for="pour_name" className="label">
                 Pour Name:
               </label>
 
               <Input
-                id='pour_name'
-                name='pour_name'
-                placeholder=' Enter Pour No'
+                id="pour_name"
+                name="pour_name"
+                placeholder=" Enter Pour No"
                 value={pour_name}
                 onChange={this.handleChange}
               />
@@ -378,14 +378,14 @@ class AddPourForm extends Component {
               <div style={{ height: "8px" }}></div>
             </div>
 
-            <div className='input_wrapper' style={{ width: "200px" }}>
-              <label for='project' className='label'>
+            <div className="input_wrapper" style={{ width: "200px" }}>
+              <label for="project" className="label">
                 Project:
               </label>
               <Select
-                id='project'
-                name='project'
-                placeholder=' Select Project'
+                id="project"
+                name="project"
+                placeholder=" Select Project"
                 value={project}
                 onChange={value => this.handleSelect("project", value)}
               >
@@ -396,14 +396,14 @@ class AddPourForm extends Component {
               )}
               <div style={{ height: "8px" }}></div>
             </div>
-            <div className='input_wrapper'>
-              <label for='description' className='label'>
+            <div className="input_wrapper">
+              <label for="description" className="label">
                 Description:
               </label>
               <TextArea
-                id='description'
-                name='description'
-                placeholder='Enter Description'
+                id="description"
+                name="description"
+                placeholder="Enter Description"
                 value={description}
                 onChange={this.handleChange}
                 style={{ width: "410px" }}

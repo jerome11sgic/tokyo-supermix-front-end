@@ -429,7 +429,7 @@ class AddProjectForm extends Component {
                 this.responeserror(res.data.results.name.message);
               } else {
                 Notification("success", res.data.message);
-                // this.props.reload();
+                this.props.reload();
                 this.setState({
                   loading: true,
                   code: "",
@@ -487,7 +487,7 @@ class AddProjectForm extends Component {
               this.responeserror(res.data.results.name.message);
             } else {
               Notification("success", res.data.message);
-              // this.props.reload();
+              this.props.reload();
               this.setState({
                 loading: true,
                 code: "",
@@ -572,17 +572,17 @@ class AddProjectForm extends Component {
           Add Project
         </PrimaryButton>
         <Modal
-          width='800px'
+          width="800px"
           visible={visible}
           closable={false}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[
-            <Button key='back' onClick={this.handleCancel}>
+            <Button key="back" onClick={this.handleCancel}>
               Return
             </Button>,
             <PrimaryButton
-              key='submit'
+              key="submit"
               loading={loading}
               onClick={this.handleSubmit}
               style={{ background: "#001328", color: "white", border: "none" }}
@@ -600,7 +600,7 @@ class AddProjectForm extends Component {
                 Add Project
               </p>
               <Icon
-                type='close-circle'
+                type="close-circle"
                 onClick={this.handleCancel}
                 style={{
                   color: "white"
@@ -611,15 +611,15 @@ class AddProjectForm extends Component {
         >
           <MasterLevelForm>
             {/* Code */}
-            <div className='input_wrapper'>
-              <label for='code' className='label'>
+            <div className="input_wrapper">
+              <label for="code" className="label">
                 Code:
               </label>
 
               <Input
-                id='code'
-                name='code'
-                placeholder='Enter the Code '
+                id="code"
+                name="code"
+                placeholder="Enter the Code "
                 value={code}
                 onChange={this.handleChange}
                 disabled={type === "edit" ? true : false}
@@ -628,15 +628,15 @@ class AddProjectForm extends Component {
               <div style={{ height: "12px" }}></div>
             </div>
 
-            <div className='input_wrapper'>
-              <label for='project_name' className='label'>
+            <div className="input_wrapper">
+              <label for="project_name" className="label">
                 Project Name:
               </label>
 
               <Input
-                id='project_name'
-                name='project_name'
-                placeholder='Enter Project Name'
+                id="project_name"
+                name="project_name"
+                placeholder="Enter Project Name"
                 value={project_name}
                 onChange={this.handleChange}
               />
@@ -646,13 +646,13 @@ class AddProjectForm extends Component {
               <div style={{ height: "12px" }}></div>
             </div>
 
-            <div className='input_wrapper'>
-              <label for='start_date' className='label'>
+            <div className="input_wrapper">
+              <label for="start_date" className="label">
                 Start Date:
               </label>
               <DatePicker
-                id='start_date'
-                name='start_date'
+                id="start_date"
+                name="start_date"
                 format={"YYYY-MM-DD"}
                 showToday
                 // disabledDate={this.disabledDate()}
@@ -668,15 +668,15 @@ class AddProjectForm extends Component {
               <div style={{ height: "12px" }}></div>
             </div>
 
-            <div className='input_wrapper'>
-              <label for='customer' className='label'>
+            <div className="input_wrapper">
+              <label for="customer" className="label">
                 Customer
               </label>
 
               <Select
-                id='customer'
-                placeholder='Select Customer'
-                name='customer '
+                id="customer"
+                placeholder="Select Customer"
+                name="customer "
                 style={{ width: "180px" }}
                 value={customer}
                 onChange={value => this.handleSelect("customer", value)}
@@ -689,15 +689,15 @@ class AddProjectForm extends Component {
               <div style={{ height: "12px" }}></div>
             </div>
 
-            <div className='input_wrapper'>
-              <label for='contact_person ' className='label'>
+            <div className="input_wrapper">
+              <label for="contact_person " className="label">
                 Contact Person
               </label>
 
               <Input
-                id='contact_person'
-                placeholder='Select Contact Person'
-                name='contact_person'
+                id="contact_person"
+                placeholder="Select Contact Person"
+                name="contact_person"
                 style={{ width: "180px" }}
                 value={contact_person}
                 onChange={this.handleChange}
@@ -707,15 +707,15 @@ class AddProjectForm extends Component {
               )}
               <div style={{ height: "12px" }}></div>
             </div>
-            <div className='input_wrapper'>
-              <label for='contact_no' className='label'>
+            <div className="input_wrapper">
+              <label for="contact_no" className="label">
                 Contact No
               </label>
 
               <Input
-                id='contact_no'
-                placeholder='Enter Contact No'
-                name='contact_no'
+                id="contact_no"
+                placeholder="Enter Contact No"
+                name="contact_no"
                 style={{ width: "180px" }}
                 value={contact_no}
                 onChange={this.handleChange}
@@ -726,15 +726,15 @@ class AddProjectForm extends Component {
               <div style={{ height: "12px" }}></div>
             </div>
 
-            <div className='input_wrapper'>
-              <label for='plant' className='label'>
+            <div className="input_wrapper">
+              <label for="plant" className="label">
                 Plant
               </label>
 
               <Select
-                id='plant'
-                placeholder='Select Plant'
-                name='plant '
+                id="plant"
+                placeholder="Select Plant"
+                name="plant "
                 style={{ width: "180px" }}
                 value={plant}
                 onChange={value => this.handleSelect("plant", value)}

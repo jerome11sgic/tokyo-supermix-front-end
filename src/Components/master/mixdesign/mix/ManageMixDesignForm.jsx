@@ -5,8 +5,10 @@ import { AntTable } from "../../../styledcomponents/table/AntTabl";
 import MixDesignTitle from "../titles/MixDesignTitle";
 import { api } from "../../../services/AxiosService";
 import Notification from "../../../Constant/Notification";
+import { SWITCH_TO_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
+import { connect } from "react-redux";
 
-export default class ManageMixDesignForm extends Component {
+class ManageMixDesignForm extends Component {
   state = {
     filteredInfo: null,
     sortedInfo: null,
@@ -89,6 +91,7 @@ export default class ManageMixDesignForm extends Component {
   }
   getMixDesignProportion = code => {
     console.log(code);
+
     api(
       "GET",
       "supermix",
@@ -97,7 +100,7 @@ export default class ManageMixDesignForm extends Component {
       "",
       code
     ).then(res => {
-      console.log(res.data);
+      console.log(JSON.stringify(res.data.results.mixDesignProportion));
 
       this.setState({
         MixDesignProportionData: res.data.results.mixDesignProportion
@@ -204,10 +207,7 @@ export default class ManageMixDesignForm extends Component {
             <a>
               <Icon
                 type="edit"
-                // onClick={this.props.passEditManageCategoryToModal.bind(
-                //   this,
-                //   record
-                // )}
+                onClick={this.props.passEditMixDesignToModal.bind(this, record)}
               />
             </a>
             <Divider type="vertical" />
@@ -310,3 +310,15 @@ export default class ManageMixDesignForm extends Component {
     );
   }
 }
+const mapDispatchToProps = dispatch => {
+  return {
+    // if this function dispatches modal will be shown and the data will be drawn :)
+    passEditMixDesignToModal: record => {
+      //this payload is the data we pass into redux which is in the row which we clicked
+      dispatch({ type: SWITCH_TO_EDIT_MODE, payload: record });
+      console.log(record);
+    }
+  };
+};
+
+export default connect(null, mapDispatchToProps)(ManageMixDesignForm);
