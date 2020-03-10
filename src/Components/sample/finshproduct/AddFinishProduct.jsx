@@ -27,23 +27,40 @@ class AddFinishProduct extends Component {
       errorCount: 0,
       errors: {
         date: "",
-        project_code: "",
-        pour_id: "",
-        mixdesign_code: ""
+        project: "",
+        pour: "",
+        mixdesign: ""
       },
       loading: false,
       visible: false,
-      finish_product_code: "",
-      finish_product_date: "",
-      finish_product_project_code: "",
-      finsih_product_pour_id: "",
-      finsih_product_mixdesign_code: "",
+      code: "",
+      date: "",
+      project: "",
+      pour: "",
+      mixdesign: "",
       projectEdit: "",
       pourEdit: "",
       mixdesignEdit: "",
       errormgs: "",
-      type: "add"
+      type: "add",
+      errorvalmegss: ""
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps.editPlantData);
+    this.setState({
+      visible: nextProps.visible,
+      code: nextProps.editPlantData.id,
+      date: moment(nextProps.editPlantData.date, "DD-MM-YYYY"),
+      project: nextProps.editPlantData.project,
+      pour: nextProps.editPlantData.pour,
+      mixdesign: nextProps.editPlantData.mixdesign,
+      projectEdit: nextProps.editPlantData.projectName,
+      pourEdit: nextProps.editPlantData.pourName,
+      mixdesignEdit: nextProps.editPlantData.mixdesignName,
+      type: nextProps.type
+    });
   }
 
   validateForm = errors => {
@@ -70,10 +87,10 @@ class AddFinishProduct extends Component {
   showModal = () => {
     this.setState({
       visible: true,
-      finish_product_date: "",
-      finish_product_project_code: "",
-      finsih_product_pour_id: "",
-      finsih_product_mixdesign_code: ""
+      date: "",
+      project: "",
+      pour: "",
+      mixdesign: ""
     });
   };
 
@@ -85,9 +102,30 @@ class AddFinishProduct extends Component {
   };
 
   handleCancel = () => {
-    this.setState({ visible: false });
+    if (this.state.type === "edit") {
+      this.props.setEmployeeVisibility();
+    }
+    this.setState({
+      visible: false,
+      errors: {
+        date: "",
+        project: "",
+        pour: "",
+        mixdesign: ""
+      },
+      code: "",
+      date: "",
+      project: "",
+      pour: "",
+      mixdesign: "",
+      projectEdit: "",
+      pourEdit: "",
+      mixdesignEdit: "",
+      errormgs: "",
+      type: "add",
+      errorvalmegss: ""
+    });
   };
-
   handleChange = (event, field) => {
     this.setState({ [field]: event.target.value });
     this.setState({ errormgs: "" });
@@ -96,7 +134,7 @@ class AddFinishProduct extends Component {
     let errors = this.state.errors;
     // console.log(name + " is \t" + value);
     switch (name) {
-      case "finish_product_code":
+      case "code":
         errors.code =
           value.length === 0
             ? "Code can't be empty"
@@ -104,7 +142,7 @@ class AddFinishProduct extends Component {
             ? "Code must be one characters long!"
             : "";
         break;
-      case "finish_product_date":
+      case "date":
         errors.date =
           value.length === 0
             ? "Date can't be empty"
@@ -112,31 +150,33 @@ class AddFinishProduct extends Component {
             ? "Date allow only letters"
             : "";
         break;
-      case "finish_product_project_code":
-        errors.project_code =
+      case "project":
+        errors.project =
           value.length === 0
             ? "Project  can't be empty"
             : value.length < 3
             ? "Project must be 3 characters long!"
             : "";
         break;
-      case "finsih_product_pour_id":
-        errors.pour_id = isNaN(value)
-          ? `Pour must be a number`
-          : value.length === 0
-          ? "Pour can't be empty"
-          : value.length < 9
-          ? `Pour must be 10 characters long!`
-          : "";
+      case "pour":
+        errors.pour =
+          value.length === 0
+            ? `Pour must be a number`
+            : value.length === 0
+            ? "Pour can't be empty"
+            : value.length < 9
+            ? `Pour must be 10 characters long!`
+            : "";
         break;
-      case "finsih_product_mixdesign_code":
-        errors.mixdesign_code = isNaN(value)
-          ? `Mixdesign must be a number`
-          : value.length === 0
-          ? "Mixdesign can't be empty"
-          : value.length < 9
-          ? `Mixdesign must be 10 characters long!`
-          : "";
+      case "mixdesign":
+        errors.mixdesign =
+          value.length === 0
+            ? `Mixdesign must be a number`
+            : value.length === 0
+            ? "Mixdesign can't be empty"
+            : value.length < 9
+            ? `Mixdesign must be 10 characters long!`
+            : "";
         break;
       default:
         break;
@@ -149,9 +189,9 @@ class AddFinishProduct extends Component {
     console.log(name);
     console.log(value);
     // handle select for  plant
-    if (name === "project_code") {
+    if (name === "project") {
       this.setState({
-        project_code: value,
+        project: value,
         projectEdit: value
       });
 
@@ -160,9 +200,9 @@ class AddFinishProduct extends Component {
           errors: {
             // code: this.state.errors.code,
             // code: this.state.errors.code,
-            project_code: "",
-            pour_id: this.state.errors.pour_id,
-            mixdesign_code: this.state.errors.mixdesign_code,
+            project: "",
+            pour: this.state.errors.pour,
+            mixdesign: this.state.errors.mixdesign,
             date: this.state.errors.date
           }
         });
@@ -170,9 +210,9 @@ class AddFinishProduct extends Component {
     }
 
     //handle select for designation
-    if (name === "pour_id") {
+    if (name === "pour") {
       this.setState({
-        pour_id: value,
+        pour: value,
         pourEdit: value
       });
 
@@ -180,18 +220,18 @@ class AddFinishProduct extends Component {
         this.setState({
           errors: {
             // code: this.state.errors.code,
-            project_code: this.state.errors.project_code,
-            pour_id: "",
-            mixdesign_code: this.state.errors.mixdesign_code,
+            project: this.state.errors.project,
+            pour: "",
+            mixdesign: this.state.errors.mixdesign,
             date: this.state.errors.date
           }
         });
       }
     }
 
-    if (name === "mixdesign_code") {
+    if (name === "mixdesign") {
       this.setState({
-        mixdesign_code: value,
+        mixdesign: value,
         mixdesignEdit: value
       });
 
@@ -199,9 +239,9 @@ class AddFinishProduct extends Component {
         this.setState({
           errors: {
             // code: this.state.errors.code,
-            project_code: this.state.errors.project_code,
-            pour_id: this.state.errors.pour_id,
-            mixdesign_code: "",
+            project: this.state.errors.project,
+            pour: this.state.errors.pour,
+            mixdesign: "",
             date: this.state.errors.date
           }
         });
@@ -210,7 +250,7 @@ class AddFinishProduct extends Component {
   };
 
   //dropdown data
-  getAllproject() {
+  getAllproject = () => {
     api("GET", "supermix", "/projects", "", "", "").then(res => {
       if (res.data.results.projects.length > 0) {
         let SelectProject = res.data.results.projects.map((post, index) => {
@@ -225,17 +265,15 @@ class AddFinishProduct extends Component {
         });
       }
     });
-  }
+  };
 
   getallPour = () => {
-    console.log("api");
+    // console.log("api");
 
     api("GET", "supermix", "/pours", "", "", "").then(res => {
-      console.log(res);
-
-      if (res.data.results.pours.length > 0) {
+      if (res.data.results.Pour.length > 0) {
         console.log("ggg");
-        let SelectPour = res.data.results.pours.map((post, index) => {
+        let SelectPour = res.data.results.Pour.map((post, index) => {
           return (
             <Option value={post.id} key={index}>
               {post.name}
@@ -249,11 +287,12 @@ class AddFinishProduct extends Component {
     });
   };
 
-  getallmixdesign = () => {
+  getallMixdesign = () => {
+    console.log("api");
     api("GET", "supermix", "/mixdesigns", "", "", "").then(res => {
-      console.log(res.data);
+      console.log(res);
       if (res.data.results.mixdesigns.length > 0) {
-        let SelectMixDesign = res.data.results.mixdesign.map((post, index) => {
+        let SelectMix = res.data.results.mixdesigns.map((post, index) => {
           return (
             <Option value={post.id} key={index}>
               {post.name}
@@ -261,7 +300,7 @@ class AddFinishProduct extends Component {
           );
         });
         this.setState({
-          SelectMixDesign
+          SelectMix
         });
       }
     });
@@ -275,15 +314,15 @@ class AddFinishProduct extends Component {
     this.setState({
       visible: false,
       formValid: false,
-      finish_product_date: "",
-      finish_product_project_code: "",
-      finsih_product_pour_id: "",
-      finsih_product_mixdesign_code: "",
+      date: "",
+      project: "",
+      pour: "",
+      mixdesign: "",
       errors: {
         date: "",
-        project_code: "",
-        pour_id: "",
-        mixdesign_code: ""
+        project: "",
+        pour: "",
+        mixdesign: ""
       },
       errormgs: ""
     });
@@ -291,102 +330,100 @@ class AddFinishProduct extends Component {
   handleSubmit = e => {
     e.preventDefault();
     if (
-      this.state.finish_product_date.length === 0 &&
-      this.state.finish_product_project_code.length === 0 &&
-      this.state.finsih_product_pour_id.length === 0 &&
-      this.state.finsih_product_mixdesign_code.length === 0
+      this.state.date.length === 0 &&
+      this.state.project.length === 0 &&
+      this.state.pour.length === 0 &&
+      this.state.mixdesign.length === 0
     ) {
       this.setState({
         errors: {
           date: "Date can't be empty",
-          project_code: "Project can't be empty",
-          pour_id: "Pour can't be empty",
-          mixdesign_code: "Mixdesign can't be empty"
+          project: "Project can't be empty",
+          pour: "Pour can't be empty",
+          mixdesign: "Mixdesign can't be empty"
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
       });
     } else if (
-      this.state.finish_product_date.length === 0 &&
+      this.state.date.length === 0 &&
       this.state.errors.date.length === 0
     ) {
       this.setState({
         errors: {
           date: this.state.errors.date || "Date can't be empty",
-          project_code: this.state.errors.project_code,
-          pour_id: this.state.errors.pour_id,
-          mixdesign_code: this.state.errors.mixdesign_code
+          project: this.state.errors.project,
+          pour: this.state.errors.pour,
+          mixdesign: this.state.errors.mixdesign
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
       });
     } else if (
-      this.state.finish_product_project_code.length === 0 &&
-      this.state.errors.project_code.length === 0
+      this.state.project.length === 0 &&
+      this.state.errors.project.length === 0
     ) {
       this.setState({
         errors: {
           date: this.state.errors.date,
-          project_code:
-            this.state.errors.project_code || "Project can't be empty",
-          pour_id: this.state.errors.pour_id,
-          mixdesign_code: this.state.errors.mixdesign_code
+          project: this.state.errors.project || "Project can't be empty",
+          pour: this.state.errors.pour,
+          mixdesign: this.state.errors.mixdesign
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
       });
     } else if (
-      this.state.finsih_product_pour_id.length === 0 &&
-      this.state.errors.pour_id.length === 0
+      this.state.pour.length === 0 &&
+      this.state.errors.pour.length === 0
     ) {
       this.setState({
         errors: {
           date: this.state.errors.date,
-          project_code: this.state.errors.project_code,
-          pour_id: this.state.errors.pour_id || "Pour can't be empty",
-          mixdesign_code: this.state.errors.mixdesign_code
+          project: this.state.errors.project,
+          pour: this.state.errors.pour || "Pour can't be empty",
+          mixdesign: this.state.errors.mixdesign
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
       });
     } else if (
-      this.state.finsih_product_mixdesign_code.length === 0 &&
-      this.state.errors.mixdesign_code.length === 0
+      this.state.mixdesign.length === 0 &&
+      this.state.errors.mixdesign.length === 0
     ) {
       this.setState({
         errors: {
           date: this.state.errors.date,
-          project_code: this.state.errors.project_code,
-          pour_id: this.state.errors.pour_id,
-          mixdesign_code:
-            this.state.errors.mixdesign_code || "Mix Design can't be empty"
+          project: this.state.errors.project,
+          pour: this.state.errors.pour,
+          mixdesign: this.state.errors.mixdesign || "Mix Design can't be empty"
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
       });
     } else if (
-      this.state.finish_product_date.length === 0 &&
-      this.state.finish_product_project_code.length === 0 &&
-      this.state.finsih_product_pour_id.length === 0 &&
-      this.state.finsih_product_mixdesign_code.length === 0
+      this.state.date.length === 0 &&
+      this.state.project.length === 0 &&
+      this.state.pour.length === 0 &&
+      this.state.mixdesign.length === 0
     ) {
       this.setState({ formValid: this.validateForm(this.state.errors) });
       this.setState({ errorCount: this.countErrors(this.state.errors) });
       console.log(this.state.designation_name);
       const data = {
         // i: this.state.designation_code,
-        date: this.state.finish_product_date,
-        project_code: this.state.finish_product_project_code,
-        pour_id: this.state.finsih_product_pour_id,
-        mixdesign_code: this.state.finsih_product_mixdesign_code
+        date: this.state.date,
+        project: this.state.project,
+        pour: this.state.pour,
+        mixdesign: this.state.mixdesign
       };
       if (this.state.type === "edit") {
         const data = {
-          id: this.state.finish_product_code,
-          date: this.state.finish_product_date,
-          project_code: this.state.finish_product_project_code,
-          pour_id: this.state.finsih_product_pour_id,
-          mixdesign_code: this.state.finsih_product_mixdesign_code
+          id: this.state.code,
+          date: this.state.date,
+          project: this.state.project,
+          pour: this.state.pour,
+          mixdesign: this.state.mixdesign
         };
         console.log(data);
         api("PUT", "supermix", "/finishProduct", "", data, "").then(
@@ -401,11 +438,11 @@ class AddFinishProduct extends Component {
               this.props.reloadrole();
               this.setState({ loading: true });
               this.setState({
-                finish_product_code: "",
-                finish_product_project_code: "",
-                finish_product_date: "",
-                finsih_product_pour_id: "",
-                finsih_product_mixdesign_code: "",
+                code: "",
+                project: "",
+                date: "",
+                pour: "",
+                mixdesign: "",
 
                 errormgs: ""
               });
@@ -424,11 +461,11 @@ class AddFinishProduct extends Component {
         );
       } else {
         const data = {
-          id: this.state.finish_product_code,
-          date: this.state.finish_product_date,
-          project_code: this.state.finish_product_project_code,
-          pour_id: this.state.finsih_product_pour_id,
-          mixdesign_code: this.state.finsih_product_mixdesign_code
+          id: this.state.code,
+          date: this.state.date,
+          project: this.state.project,
+          pour: this.state.pour,
+          mixdesign: this.state.mixdesign
         };
         console.log(data);
         api("POST", "supermix", "/finishproduct", "", data, "")
@@ -445,11 +482,11 @@ class AddFinishProduct extends Component {
                 // this.props.reload();
                 this.setState({ loading: true });
                 this.setState({
-                  finish_product_code: "",
-                  finish_product_date: "",
-                  finish_product_project_code: "",
-                  finsih_product_pour_id: "",
-                  finsih_product_mixdesign_code: "",
+                  code: "",
+                  date: "",
+                  project: "",
+                  pour: "",
+                  mixdesign: "",
                   errormgs: ""
                 });
                 setTimeout(() => {
@@ -475,19 +512,6 @@ class AddFinishProduct extends Component {
     }
   };
 
-  componentWillReceiveProps(nextProps) {
-    console.log(nextProps.editPlantData);
-    this.setState({
-      visible: nextProps.visible,
-
-      finish_product_date: moment(nextProps.editPlantData.date, "DD-MM-YYYY"),
-      finish_product_project_code: nextProps.editPlantData.project_code,
-      finsih_product_pour_id: nextProps.editPlantData.pour_id,
-      finsih_product_mixdesign_code: nextProps.editPlantData.mixdesign_code,
-      type: nextProps.type
-    });
-  }
-
   handleDates(name, dateString, field) {
     console.log(name);
     console.log(dateString);
@@ -499,9 +523,9 @@ class AddFinishProduct extends Component {
     this.setState({
       date: dateString,
       errors: {
-        pour_id: errors.pour_id,
-        project_code: errors.project_code,
-        mixdesign_code: errors.mixdesign_code,
+        pour: errors.pour,
+        project: errors.project,
+        mixdesign: errors.mixdesign,
         date: ""
       }
     });
@@ -510,20 +534,11 @@ class AddFinishProduct extends Component {
   componentDidMount() {
     this.getAllproject();
     this.getallPour();
-    this.getallmixdesign();
+    this.getallMixdesign();
     console.log(this.props.screen);
   }
   render() {
-    const {
-      visible,
-      loading,
-      errors,
-      errorCount,
-      finish_product_date,
-      finish_product_project_code,
-      finsih_product_pour_id,
-      finsih_product_mixdesign_code
-    } = this.state;
+    const { visible, loading, errors, errorCount } = this.state;
     console.log(errorCount);
 
     return (
@@ -582,35 +597,16 @@ class AddFinishProduct extends Component {
           }
         >
           <MasterLevelForm>
-            {/* Code */}
-            {/* <div className='input_wrapper'>
-              <label for='code' className='label'>
-                Code:
-              </label>
-              <Form.Item>
-                {getFieldDecorator("code", {
-                  // rules: [{ required: true, message: "Please enter a code!" }]
-                })(
-                  <Input
-                    id='code'
-                    name='code'
-                    // placeholder='Enter the Code '
-                    disabled
-                  />
-                )}
-              </Form.Item>
-            </div> */}
-
             <div className='input_wrapper'>
-              <label for='finsih_product_mixdesign_code' className='label'>
+              <label for='mixdesign' className='label'>
                 Mix Design:
               </label>
 
               <Select
                 showSearch
                 style={{ width: 180 }}
-                id='finsih_product_mixdesign_code'
-                name='finsih_product_mixdesign_code'
+                id='mixdesign'
+                name='mixdesign'
                 placeholder='Select a Mix Design'
                 optionFilterProp='children'
                 onChange={value => this.handleSelect("plant", value)}
@@ -619,25 +615,25 @@ class AddFinishProduct extends Component {
                 // onBlur={onBlur}
                 // onSearch={onSearch}
               >
-                {this.state.SelectMixDesign}
+                {this.state.SelectMix}
               </Select>
-              {errors.mixdesign_code.length > 0 && (
-                <div style={error}>{errors.mixdesign_code}</div>
+              {errors.mixdesign.length > 0 && (
+                <div style={error}>{errors.mixdesign}</div>
               )}
               <div style={error}>{this.state.errormgs}</div>
               <div style={{ height: "12px" }}></div>
             </div>
 
             <div className='input_wrapper'>
-              <label for='finish_product_project_code' className='label'>
+              <label for='project' className='label'>
                 Project:
               </label>
 
               <Select
                 showSearch
                 style={{ width: 180 }}
-                id='finish_product_project_code'
-                name='finish_product_project_code'
+                id='project'
+                name='project'
                 placeholder='Select a Project'
                 optionFilterProp='children'
                 onChange={value => this.handleSelect("plant", value)}
@@ -648,23 +644,23 @@ class AddFinishProduct extends Component {
               >
                 {this.state.SelectProject}
               </Select>
-              {errors.project_code.length > 0 && (
-                <div style={error}>{errors.project_code}</div>
+              {errors.project.length > 0 && (
+                <div style={error}>{errors.project}</div>
               )}
               <div style={error}>{this.state.errormgs}</div>
               <div style={{ height: "12px" }}></div>
             </div>
 
             <div className='input_wrapper'>
-              <label for='finsih_product_pour_id' className='label'>
+              <label for='pour' className='label'>
                 Pour:
               </label>
 
               <Select
                 showSearch
                 style={{ width: 180 }}
-                id='finsih_product_pour_id'
-                name='finsih_product_pour_id'
+                id='pour'
+                name='pour'
                 placeholder='Select a Pour'
                 optionFilterProp='children'
                 onChange={value => this.handleSelect("plant", value)}
@@ -675,21 +671,19 @@ class AddFinishProduct extends Component {
               >
                 {this.state.SelectPour}
               </Select>
-              {errors.pour_id.length > 0 && (
-                <div style={error}>{errors.pour_id}</div>
-              )}
+              {errors.pour.length > 0 && <div style={error}>{errors.pour}</div>}
               <div style={error}>{this.state.errormgs}</div>
               <div style={{ height: "12px" }}></div>
             </div>
 
             <div className='input_wrapper'>
-              <label for='finish_product_date' className='label'>
+              <label for='date' className='label'>
                 Date:
               </label>
 
               <DatePicker
-                id='finish_product_date'
-                name='finish_product_date'
+                id='date'
+                name='date'
                 format={"YYYY-MM-DD"}
                 style={{ width: 170 }}
                 value={this.state.date}

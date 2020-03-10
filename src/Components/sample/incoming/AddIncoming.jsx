@@ -9,7 +9,7 @@ import {
 import moment from "moment";
 import { api } from "../../services/AxiosService";
 import Notification from "../../Constant/Notification";
-// import HandelError from "../../Constant/HandleError";
+import HandelError from "../../Constant/HandleError";
 import { connect } from "react-redux";
 import { DISABLE_EDIT_MODE } from "../../../redux/action/master/plantlevel/PlantLevel";
 
@@ -33,7 +33,7 @@ class Addincoming extends Component {
     vehicleNo: "",
     rawMaterialId: "",
     supplierselect: "",
-    SelectPlants: "",
+
     SelectRaw: "",
     plantName: "",
     supplierName: "",
@@ -205,7 +205,7 @@ class Addincoming extends Component {
     });
   };
 
-  getAllplant = () => {
+  getAllplant() {
     api("GET", "supermix", "/plants", "", "", "").then(res => {
       console.log(res.data.results.plants.length);
       if (res.data.results.plants.length > 0) {
@@ -222,7 +222,7 @@ class Addincoming extends Component {
         });
       }
     });
-  };
+  }
 
   getallMaterial = () => {
     console.log("api");
@@ -240,7 +240,7 @@ class Addincoming extends Component {
           );
         });
         this.setState({
-          SelectRaw
+          SelectRaw: SelectRaw
         });
       }
     });
@@ -524,7 +524,7 @@ class Addincoming extends Component {
             {/* Code */}
             <div className='input_wrapper'>
               <label for='code' className='label'>
-                Code:
+                Code:llll
               </label>
 
               <Input
@@ -546,7 +546,7 @@ class Addincoming extends Component {
 
               <Select
                 className='inputfield'
-                id=''
+                id='supplierId'
                 name='supplierId'
                 placeholder='Enter Supplier Name'
                 style={{ width: "180px" }}

@@ -45,6 +45,7 @@ class AddMaterialLoad extends Component {
       processLoad_measurement: "",
       processLoad_dateandtime: "",
       processLoad_expiry_date: "",
+      edit_process_sample: "",
       errormgs: "",
       type: "add"
     };
@@ -164,6 +165,22 @@ class AddMaterialLoad extends Component {
     setTimeout(() => {
       this.setState({ loading: false, visible: false });
     }, 3000);
+  };
+
+  handleSelect = value => {
+    this.setState({
+      processLoad_process_sample_code: value,
+      edit_process_sample: value
+      // errors: {
+      //   code: "",
+      //   name: this.state.errors.name,
+      //   companyName: this.state.errors.companyName,
+      //   category: "",
+      //   address: this.state.errors.address,
+      //   contactno: this.state.errors.contactno,
+      //   email: this.state.errors.email
+      // }
+    });
   };
 
   handleCancel = () => {
@@ -440,6 +457,33 @@ class AddMaterialLoad extends Component {
     }
   };
 
+  componentDidMount() {
+    console.log(this.props.screen);
+    this.getallprocessSample();
+  }
+
+  getallprocessSample = () => {
+    api("GET", "supermix", "/process-samples", "", "", "").then(res => {
+      console.log(res.data);
+      let a = "supplier - category";
+      if (res.data.results.processSamples.length > 0) {
+        console.log("kkkkkkkkkk");
+        let SelectProcessSample = res.data.results.processSamples.map(
+          (post, index) => {
+            return (
+              <Option value={post.id} key={index}>
+                {post.name}
+              </Option>
+            );
+          }
+        );
+        this.setState({
+          SelectProcessSample
+        });
+      }
+    });
+  };
+
   handleDates(name, dateString, field) {
     console.log(name);
     console.log(dateString);
@@ -449,14 +493,14 @@ class AddMaterialLoad extends Component {
     const { errors } = this.state;
 
     this.setState({
-      dateandtime: dateString,
+      date: dateString,
       errors: {
-        quantity: errors.quantity,
-        vechicle_no: errors.vechicle_no,
-        measurement: errors.measurement,
-        dateandtime: "",
         process_sample_code: errors.process_sample_code,
-        expiry_date: error.expiry_date
+        vechicle_no: errors.vechicle_no,
+        quantity: errors.quantity,
+        measurement: errors.measurement,
+        expiry_date: "",
+        dateandtime: ""
       }
     });
   }
@@ -549,9 +593,9 @@ class AddMaterialLoad extends Component {
                 onChange={value =>
                   this.handleSelect("processLoad_process_sample_code", value)
                 }
-                value={this.state.desiginationEdit}
+                value={this.state.edit_process_sample}
               >
-                {this.state.SelectDesignation}
+                {this.state.SelectProcessSample}
               </Select>
               {errors.process_sample_code.length > 0 && (
                 <div style={error}>{errors.process_sample_code}</div>
@@ -646,7 +690,7 @@ class AddMaterialLoad extends Component {
                 style={{ width: 170 }}
                 value={this.state.date}
                 onChange={(dateString, field) =>
-                  this.handleDates("dateandtime", dateString, field)
+                  this.handleDates("date", dateString, field)
                 }
                 showToday
               />

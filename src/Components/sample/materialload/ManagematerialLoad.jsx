@@ -1,13 +1,15 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from "react";
 import { Popconfirm, Divider, Icon } from "antd";
-
+import { api } from "../../services/AxiosService";
 import { AntTable } from "../../styledcomponents/table/AntTabl";
 import ManageMaterialLoadSampleTitle from "../titles/ManageMaterialLoadSample";
+import { SWITCH_TO_EDIT_MODE } from "../../../redux/action/master/plantlevel/PlantLevel";
+import { connect } from "react-redux";
 
 const data = [];
 
-export default class ManageMaterialLoad extends Component {
+class ManageMaterialLoad extends Component {
   state = {
     filteredInfo: null,
     sortedInfo: null,
@@ -81,6 +83,30 @@ export default class ManageMaterialLoad extends Component {
     console.log("Page: ", pageNumber);
   }
 
+  componentDidMount() {
+    this.getallProcessSampleLoad();
+  }
+
+  getallProcessSampleLoad = () => {
+    api("GET", "supermix", "/process-sample-load", "", "", "").then(res => {
+      console.log(res.data.results.processSampleLoad);
+      this.setState({
+        dataList: res.data.results.processSampleLoad
+      });
+    });
+  };
+  onConfirmdelete(id) {
+    console.log(id);
+    let mesg = "employee delete";
+
+    api("DELETE", "supermix", "/process-sample-load", "", "", id).then(res => {
+      console.log(res.data);
+      this.getallProcessSampleLoad();
+      Notification("success", res.data.message);
+    });
+    console.log(this.state.id);
+  }
+
   render() {
     let { sortedInfo, filteredInfo } = this.state;
     sortedInfo = sortedInfo || {};
@@ -121,11 +147,18 @@ export default class ManageMaterialLoad extends Component {
       {
         title: "Edit & Delete",
         key: "action",
-        width: "10%",
-        render: (text, record) => (
+        width: "7%",
+        render: (text, record = this.state.datalist) => (
           <span>
             <a>
-              <Icon type='edit' />
+              <Icon
+                type='edit'
+                style={{ fontSize: "1.2em" }}
+                onClick={this.props.passEditincomingRecordToModal.bind(
+                  this,
+                  record
+                )}
+              />
             </a>
             <Divider type='vertical' />
             <a>
@@ -134,9 +167,13 @@ export default class ManageMaterialLoad extends Component {
                 icon={
                   <Icon type='question-circle-o' style={{ color: "red" }} />
                 }
+                onConfirm={this.onConfirmdelete.bind(this, record.code)}
               >
                 <a href='#'>
-                  <Icon type='delete'></Icon>
+                  <Icon
+                    type='delete'
+                    style={{ color: "red", fontSize: "1.2em" }}
+                  />
                 </a>
               </Popconfirm>
             </a>
@@ -144,15 +181,18 @@ export default class ManageMaterialLoad extends Component {
         )
       }
     ];
-
     return (
       <div>
         <AntTable
           maxlength
           nomargin
-          title={() => <ManageMaterialLoadSampleTitle />}
+          title={() => (
+            <ManageMaterialLoadSampleTitle
+              reload={this.getallProcessSampleLoad}
+            />
+          )}
           columns={columns}
-          dataSource={data}
+          dataSource={this.state.datalist}
           onChange={this.handleChange}
           pagination={{ defaultPageSize: 3 }}
           size={this.state.size}
@@ -161,3 +201,17 @@ export default class ManageMaterialLoad extends Component {
     );
   }
 }
+
+const mapStateToProps = state => null;
+
+const mapDispatchToProps = dispatch => {
+  return {
+    passEditQCStaffRecordToModal: record => {
+      //this payload is the data we pass into redux which is in the row which we clicked
+      dispatch({ type: SWITCH_TO_EDIT_MODE, payload: record });
+      console.log(record);
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ManageMaterialLoad);

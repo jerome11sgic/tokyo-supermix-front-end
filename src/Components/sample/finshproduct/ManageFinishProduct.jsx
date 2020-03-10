@@ -4,10 +4,11 @@ import { Popconfirm, Divider, Icon } from "antd";
 
 import { AntTable } from "../../styledcomponents/table/AntTabl";
 import ManageFinishProductSampleTitle from "../titles/ManageFinishProductSampleTitle";
+import { api } from "../../services/AxiosService";
+import { connect } from "react-redux";
+import { SWITCH_TO_EDIT_MODE } from "../../../redux/action/master/plantlevel/PlantLevel";
 
-const data = [];
-
-export default class ManageFinishProduct extends Component {
+class ManageFinishProduct extends Component {
   state = {
     filteredInfo: null,
     sortedInfo: null,
@@ -81,25 +82,36 @@ export default class ManageFinishProduct extends Component {
     console.log("Page: ", pageNumber);
   }
 
+  componentDidMount() {
+    this.getallfinishproduct();
+  }
+
+  getallfinishproduct = () => {
+    api("GET", "supermix", "/finish-products", "", "", "").then(res => {
+      console.log(res.data.results.processSamples);
+      this.setState({
+        dataList: res.data.results.processSamples
+      });
+    });
+  };
+  onConfirmdelete(code) {
+    console.log("delete");
+    console.log(code);
+    let mesg = "equipmentplant delete";
+
+    api("DELETE", "supermix", "/finish-product", "", "", code).then(res => {
+      console.log(res.data);
+      this.getallfinishproduct();
+      Notification("success", res.data.message);
+    });
+    console.log(this.state.id);
+  }
+
   render() {
     let { sortedInfo, filteredInfo } = this.state;
     sortedInfo = sortedInfo || {};
     filteredInfo = filteredInfo || {};
     const columns = [
-      // {
-      //   title: "ID",
-      //   dataIndex: "id",
-      //   key: "Id",
-
-      //   filters: [
-      //     { text: "Joe", value: "Joe" },
-      //     { text: "Jim", value: "Jim" }
-      //   ],
-      //   filteredValue: filteredInfo.name || null,
-      //   onFilter: (value, record) => record.name.includes(value),
-      //   sorter: (a, b) => a.code - b.code,
-      //   sortOrder: sortedInfo.columnKey === "code" && sortedInfo.order
-      // },
       {
         title: "Mix Design",
         dataIndex: "mixdesign",
@@ -122,7 +134,7 @@ export default class ManageFinishProduct extends Component {
       },
       {
         title: "Pour",
-        dataIndex: "pour",
+        dataIndex: "Pour",
         key: "pour",
 
         filteredValue: filteredInfo.name || null,
@@ -144,11 +156,18 @@ export default class ManageFinishProduct extends Component {
       {
         title: "Edit & Delete",
         key: "action",
-        width: "10%",
-        render: (text, record) => (
+        width: "7%",
+        render: (text, record = this.state.datalist) => (
           <span>
             <a>
-              <Icon type='edit' />
+              <Icon
+                type='edit'
+                style={{ fontSize: "1.2em" }}
+                onClick={this.props.passEditincomingRecordToModal.bind(
+                  this,
+                  record
+                )}
+              />
             </a>
             <Divider type='vertical' />
             <a>
@@ -157,9 +176,13 @@ export default class ManageFinishProduct extends Component {
                 icon={
                   <Icon type='question-circle-o' style={{ color: "red" }} />
                 }
+                onConfirm={this.onConfirmdelete.bind(this, record.code)}
               >
                 <a href='#'>
-                  <Icon type='delete'></Icon>
+                  <Icon
+                    type='delete'
+                    style={{ color: "red", fontSize: "1.2em" }}
+                  />
                 </a>
               </Popconfirm>
             </a>
@@ -167,15 +190,16 @@ export default class ManageFinishProduct extends Component {
         )
       }
     ];
-
     return (
       <div>
         <AntTable
           maxlength
           nomargin
-          title={() => <ManageFinishProductSampleTitle />}
+          title={() => (
+            <ManageFinishProductSampleTitle reload={this.getallfinishproduct} />
+          )}
           columns={columns}
-          dataSource={data}
+          dataSource={this.state.datalist}
           onChange={this.handleChange}
           pagination={{ defaultPageSize: 3 }}
           size={this.state.size}
@@ -184,3 +208,19 @@ export default class ManageFinishProduct extends Component {
     );
   }
 }
+const mapStateToProps = state => null;
+
+const mapDispatchToProps = dispatch => {
+  return {
+    passEditincomingRecordToModal: record => {
+      //this payload is the data we pass into redux which is in the row which we clicked
+      dispatch({ type: SWITCH_TO_EDIT_MODE, payload: record });
+      console.log(record);
+    }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ManageFinishProduct);
