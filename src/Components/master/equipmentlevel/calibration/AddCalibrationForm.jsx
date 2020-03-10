@@ -59,7 +59,9 @@ class AddCalibrationForm extends Component {
     edit_supplier: "",
     type: "add",
     employeeId: "",
-    edit_employeeId: ""
+    edit_employeeId: "",
+    user: "",
+    userId: ""
   };
 
   showModal = () => {
@@ -86,7 +88,8 @@ class AddCalibrationForm extends Component {
       description: "",
       status: "",
       errormgs: "",
-      type: "add"
+      type: "add",
+      user: ""
     });
   };
 
@@ -183,6 +186,12 @@ class AddCalibrationForm extends Component {
       this.setState({
         supplier: value,
         edit_supplier: value
+      });
+    }
+    if (name === "user") {
+      this.setState({
+        user: value
+        // edit_supplier: value
       });
     }
     if (name === "employeeId") {
@@ -295,13 +304,16 @@ class AddCalibrationForm extends Component {
       equipment_plant: nextProps.editPlantData.plantEquipmentSerialNo,
       edit_equipment_plant: nextProps.editPlantData.plantEquipmentEquipmentName,
       supplier: nextProps.editPlantData.supplierId,
-      type: nextProps.type
+      type: nextProps.type,
+      // employeeId: nextProps.editPlantData.employe,
+      userId: nextProps.editPlantData.userId
     });
   }
   componentDidMount() {
     this.Selectequipmantplant();
     this.Selectsupplier();
     this.Selectemployee();
+    this.SelectUser();
   }
   handleSubmit = e => {
     e.preventDefault();
@@ -383,10 +395,10 @@ class AddCalibrationForm extends Component {
           dueDate: moment(due_date).format("YYYY-MM-DD"),
           calibrationType: calibrated_by,
           supplierId: supplier,
-          userId: tester,
+          userId: this.state.userId,
           description: description,
           status: status,
-          employeeId: 23
+          employeeId: this.state.employeeId
         };
         console.log(data);
         api(
@@ -433,7 +445,7 @@ class AddCalibrationForm extends Component {
           dueDate: moment(due_date).format("YYYY-MM-DD"),
           calibrationType: calibrated_by,
           supplierId: supplier,
-          userId: 1,
+          userId: this.state.user,
           description: description,
           status: status,
           employeeId: this.state.employeeId
@@ -529,7 +541,25 @@ class AddCalibrationForm extends Component {
       }
     });
   };
+  SelectUser = () => {
+    api("GET", "supermix", "/users", "", "", "").then(res => {
+      console.log(res.data);
 
+      if (res.data.results.user.length > 0) {
+        let userselect = res.data.results.user.map((post, index) => {
+          console.log("kkkkkkkkkk");
+          return (
+            <Option value={post.id} key={index}>
+              {post.userName}
+            </Option>
+          );
+        });
+        this.setState({
+          userselect
+        });
+      }
+    });
+  };
   Selectemployee = () => {
     api("GET", "supermix", "/employees", "", "", "").then(res => {
       console.log(res.data);
@@ -566,7 +596,8 @@ class AddCalibrationForm extends Component {
       due_date,
       status,
       supplier,
-      tester
+      tester,
+      user
     } = this.state;
     console.log(errorCount);
 
@@ -794,6 +825,24 @@ class AddCalibrationForm extends Component {
               {/* {errors.incoming_sample.length > 0 && (
                 <div style={error}>{errors.incoming_sample}</div>
               )} */}
+
+              <div style={{ height: "12px" }}></div>
+            </div>
+            <div className="input_wrapper">
+              <label for="user" className="label" style={{ left: "20px" }}>
+                user:
+              </label>
+
+              <Select
+                id="user"
+                name="user"
+                placeholder="Select User"
+                style={{ width: 170 }}
+                value={user}
+                onChange={value => this.handleSelect("user", value)}
+              >
+                {this.state.userselect}
+              </Select>
 
               <div style={{ height: "12px" }}></div>
             </div>

@@ -15,7 +15,7 @@ export default class ManagePourMasterTitle extends Component {
   render() {
     return (
       <FlexContainer titles leveltitles>
-        <Paragraph style={style}>Pour Master</Paragraph>
+        <Paragraph style={style}>Pour </Paragraph>
         <AddPourForm reload={this.props.reload} />
       </FlexContainer>
     );
