@@ -104,7 +104,8 @@ class ConcreteTest extends Component {
       temperature: "",
       water_content: "",
       status: "",
-      errormgs: ""
+      errormgs: "",
+      type: "add"
     });
   };
 
