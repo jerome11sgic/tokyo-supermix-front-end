@@ -388,7 +388,7 @@ class AddParameter extends Component {
         >
           <MasterLevelForm>
             {/* Code */}
-            <div className="input_wrapper">
+            {/* <div className="input_wrapper">
               <label for="parameter_code" className="label">
                 Code:
               </label>
@@ -400,10 +400,10 @@ class AddParameter extends Component {
                 value={this.state.parameter_code}
                 disabled={this.state.type === "edit" ? true : false}
                 // disabled
-              />
+              /> */}
 
-              <div style={{ height: "12px" }}></div>
-            </div>
+            {/* <div style={{ height: "12px" }}></div>
+            </div> */}
             {/* Paramter Name */}
             <div className="input_wrapper">
               <label for="parameter_name" className="label">

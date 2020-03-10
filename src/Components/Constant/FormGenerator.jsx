@@ -16,7 +16,7 @@ export default class FormGenerator extends Component {
       validationErrors: {},
       randomisedFields: {}
     };
-    this.reset();
+    // this.reset();
 
     this.filterRules = {
       numeric: value => /^$|^[0-9]+$/.test(value),
@@ -53,11 +53,11 @@ export default class FormGenerator extends Component {
     this.propagateChange = this.propagateChange.bind(this);
   }
 
-  reset = () => {
-    this.setState({
-      form: {}
-    });
-  };
+  // reset = () => {
+  //   this.setState({
+  //     form: {}
+  //   });
+  // };
   static flatInputs(entity) {
     return flatten(entity);
   }

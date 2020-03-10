@@ -98,15 +98,6 @@ class SupplierAddForm extends Component {
     this.setState({
       supplier_category: value,
       edit_supplier_category: value
-      // errors: {
-      //   code: "",
-      //   name: this.state.errors.name,
-      //   companyName: this.state.errors.companyName,
-      //   category: "",
-      //   address: this.state.errors.address,
-      //   contactno: this.state.errors.contactno,
-      //   email: this.state.errors.email
-      // }
     });
   };
   componentWillReceiveProps(nextProps) {
@@ -145,7 +136,7 @@ class SupplierAddForm extends Component {
         errors.name =
           value.length === 0
             ? "Name can't be empty"
-            : value.length < 6
+            : value.length < 3
             ? "Name \n must be 6 characters long!"
             : "";
         break;
@@ -178,7 +169,7 @@ class SupplierAddForm extends Component {
         errors.companyName =
           value.length === 0
             ? "Company Name can't be empty"
-            : value.length < 6
+            : value.length < 2
             ? "Company Name \n must be 6 characters long!"
             : "";
         break;

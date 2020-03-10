@@ -16,9 +16,8 @@ export default class ManageProjectMasterTitle extends Component {
     return (
       <FlexContainer titles leveltitles>
         <Paragraph style={style}>Project Master</Paragraph>
-        <AddProjectForm />
+        <AddProjectForm reload={this.props.reload} />
       </FlexContainer>
     );
   }
 }
-

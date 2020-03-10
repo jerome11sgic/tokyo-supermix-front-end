@@ -27,8 +27,7 @@ class AddSupplierCategory extends Component {
       formValid: false,
       errorCount: null,
       errors: {
-        category: "",
-        description: ""
+        category: ""
       },
       loading: false,
       visible: false,
@@ -67,8 +66,7 @@ class AddSupplierCategory extends Component {
     this.setState({
       visible: false,
       errors: {
-        category: "",
-        description: ""
+        category: ""
       },
       errormgs: "",
       supplier_category: "",
@@ -96,18 +94,10 @@ class AddSupplierCategory extends Component {
         errors.category =
           value.length === 0
             ? "Category can't be empty"
-            : value.length < 6
-            ? "Category \n must be 6 characters long!"
+            : value.length < 2
+            ? "Category \n must be two characters long!"
             : value.length > 20
             ? "Category \n must not be exceeded than 20 characters"
-            : "";
-        break;
-      case "supplierCategory_description":
-        errors.description =
-          value.length === 0
-            ? "Description can't be empty"
-            : value.length < 6
-            ? "Description must be 6 characters long!"
             : "";
         break;
 
@@ -121,66 +111,30 @@ class AddSupplierCategory extends Component {
   handleSubmit = event => {
     event.preventDefault();
     // check for whole empty fields
-    if (
-      this.state.supplier_category.length === 0 &&
-      this.state.supplierCategory_description.length === 0
-    ) {
+    if (this.state.supplier_category.length === 0) {
       this.setState({
         errors: {
-          category: "Category can't be empty",
-          description: "Description can't be empty"
+          category: "Category can't be empty"
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
       });
-    }
-    // code
-    // else if (this.state.errors.code.length === 0) {
-    //   this.setState({
-    //     errors: {
-    //       category: this.state.errors.category || "Category can't be empty",
-    //       description:
-    //         this.state.errors.description || "Description can't be empty"
-    //     },
-    //     formValid: this.validateForm(this.state.errors),
-    //     errorCount: this.countErrors(this.state.errors)
-    //   });
-    // }
-    //category
-    else if (
+    } else if (
       this.state.supplier_category === 0 &&
       this.state.errors.category.length === 0
     ) {
       this.setState({
         errors: {
-          category: this.state.errors.category || "Category can't be empty",
-          description:
-            this.state.errors.description || "Description can't be empty"
+          category: this.state.errors.category || "Category can't be empty"
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
       });
     }
     //description
-    else if (
-      this.state.supplierCategory_description.length === 0 &&
-      this.state.errors.description.length === 0
-    ) {
-      this.setState({
-        errors: {
-          category: this.state.errors.category || "Category can't be empty",
-          description:
-            this.state.errors.description || "Description can't be empty"
-        },
-        formValid: this.validateForm(this.state.errors),
-        errorCount: this.countErrors(this.state.errors)
-      });
-    }
+
     // api request section if no errors occured
-    else if (
-      this.state.errors.category.length === 0 &&
-      this.state.errors.description.length === 0
-    ) {
+    else if (this.state.errors.category.length === 0) {
       this.setState({ formValid: this.validateForm(this.state.errors) });
       this.setState({ errorCount: this.countErrors(this.state.errors) });
       console.log(this.state.supplierCategory_description);
@@ -213,7 +167,7 @@ class AddSupplierCategory extends Component {
               });
               setTimeout(() => {
                 this.setState({ loading: false, visible: false });
-              }, 3000);
+              }, 200);
             }
           },
           error => {
@@ -247,7 +201,7 @@ class AddSupplierCategory extends Component {
             });
             setTimeout(() => {
               this.setState({ loading: false, visible: false });
-            }, 3000);
+            }, 200);
           }
         });
       }
@@ -329,21 +283,25 @@ class AddSupplierCategory extends Component {
         >
           <MasterLevelForm>
             {/* Code */}
-            <div className="input_wrapper">
-              <label for="supllierCategory_code" className="label">
-                Code:
-              </label>
+            {this.state.type === "edit" ? (
+              <div className="input_wrapper">
+                <label for="supllierCategory_code" className="label">
+                  Code:
+                </label>
 
-              <Input
-                id="supllierCategory_code"
-                name="supllierCategory_code"
-                onChange={this.handleChange}
-                value={this.state.supllierCategory_code}
-                disabled
-              />
-              {/* {errors.code.length > 0 && <div style={error}>{errors.code}</div>} */}
-              <div style={{ height: "12px" }}></div>
-            </div>
+                <Input
+                  id="supllierCategory_code"
+                  name="supllierCategory_code"
+                  onChange={this.handleChange}
+                  value={this.state.supllierCategory_code}
+                  disabled
+                />
+                {/* {errors.code.length > 0 && <div style={error}>{errors.code}</div>} */}
+                <div style={{ height: "12px" }}></div>
+              </div>
+            ) : (
+              ""
+            )}
 
             {/* category*/}
             <div className="input_wrapper">
@@ -382,9 +340,6 @@ class AddSupplierCategory extends Component {
                 style={{ width: "180px" }}
                 value={this.state.supplierCategory_description}
               />
-              {errors.description.length > 0 && (
-                <div style={error}>{errors.description}</div>
-              )}
 
               <div style={{ height: "12px" }}></div>
             </div>

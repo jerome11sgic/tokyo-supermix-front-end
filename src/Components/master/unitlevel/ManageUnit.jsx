@@ -115,17 +115,17 @@ class ManageUnit extends Component {
     sortedInfo = sortedInfo || {};
     filteredInfo = filteredInfo || {};
     const columns = [
-      {
-        title: "Code",
-        dataIndex: "id",
-        key: "code",
-        width: "4%",
+      // {
+      //   title: "Code",
+      //   dataIndex: "id",
+      //   key: "code",
+      //   width: "4%",
 
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.code - b.code,
-        sortOrder: sortedInfo.columnKey === "code" && sortedInfo.order
-      },
+      //   filteredValue: filteredInfo.name || null,
+      //   onFilter: (value, record) => record.name.includes(value),
+      //   sorter: (a, b) => a.code - b.code,
+      //   sortOrder: sortedInfo.columnKey === "code" && sortedInfo.order
+      // },
       {
         title: "Unit",
         dataIndex: "unit",
@@ -145,7 +145,7 @@ class ManageUnit extends Component {
           <span>
             <a>
               <Icon
-                type='edit'
+                type="edit"
                 style={{ fontSize: "1.2em" }}
                 onClick={this.props.passEditDesignationRecordToModal.bind(
                   this,
@@ -153,18 +153,18 @@ class ManageUnit extends Component {
                 )}
               />
             </a>
-            <Divider type='vertical' />
+            <Divider type="vertical" />
             <a>
               <Popconfirm
-                title='Are you sure you want to Delete this?'
+                title="Are you sure you want to Delete this?"
                 icon={
-                  <Icon type='question-circle-o' style={{ color: "red" }} />
+                  <Icon type="question-circle-o" style={{ color: "red" }} />
                 }
                 onConfirm={this.onConfirmdelete.bind(this, record.id)}
               >
-                <a href='#'>
+                <a href="#">
                   <Icon
-                    type='delete'
+                    type="delete"
                     style={{ color: "red", fontSize: "1.2em" }}
                   />
                 </a>
@@ -178,7 +178,7 @@ class ManageUnit extends Component {
     return (
       <AntTable
         length
-        className='userRolesManageTable'
+        className="userRolesManageTable"
         title={() => <UnitMasterTitle reload={this.getallunit} />}
         columns={columns}
         dataSource={this.state.listData}

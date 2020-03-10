@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { FlexContainer } from "../../../styledcomponents/container/FlexGrid";
 
 import Paragraph from "antd/lib/typography/Paragraph";
-import AddPourForm from "../pour/AddPourForm"
+import AddPourForm from "../pour/AddPourForm";
 
 const style = {
   fontSize: "medium",
@@ -16,9 +16,8 @@ export default class ManagePourMasterTitle extends Component {
     return (
       <FlexContainer titles leveltitles>
         <Paragraph style={style}>Pour Master</Paragraph>
-        <AddPourForm/>
+        <AddPourForm reload={this.props.reload} />
       </FlexContainer>
     );
   }
 }
-

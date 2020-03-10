@@ -692,7 +692,8 @@ class AddMixDesignForm extends Component {
 
       para.push({
         name: `${this.state.a[i].name}`,
-        label: `${this.state.a[i].name}`
+        label: `${this.state.a[i].name}`,
+        type: "number"
       });
     }
     console.log(para);
@@ -822,13 +823,17 @@ class AddMixDesignForm extends Component {
     console.log(w);
     console.log(f);
     let w_b_r = (w / f) * 100;
-    this.setState({ water_binder_ratio: Number(w_b_r.toFixed(1)) });
+    if (this.state.type === "add")
+      this.setState({ water_binder_ratio: Number(w_b_r.toFixed(1)) });
+
     console.log(Number(w_b_r.toFixed(1)));
   };
 
   findWaterCementRatio = (w, c) => {
     let w_c_r = (w / c) * 100;
-    this.setState({ water_cement_ratio: Number(w_c_r.toFixed(1)) });
+    if (this.state.type === "add")
+      this.setState({ water_cement_ratio: Number(w_c_r.toFixed(1)) });
+
     console.log(Number(w_c_r.toFixed(1)));
   };
   renderSubmit = from => {
@@ -988,7 +993,7 @@ class AddMixDesignForm extends Component {
                   placeholder="Enter the Code "
                   value={code}
                   onChange={this.handleChange}
-                  // disabled
+                  disabled={this.state.type === "add" ? false : true}
                 />
                 {errors.code.length > 0 && (
                   <div style={error}>{errors.code}</div>
@@ -1158,8 +1163,9 @@ class AddMixDesignForm extends Component {
                 columns={columns}
                 dataSource={this.state.datalist}
                 size="middle"
-                pagination={{ defaultPageSize: 7 }}
+                scroll={{ Y: 80 }}
                 rowSelection={rowSelection}
+                pagination={false}
               />
             </div>
           </MasterLevelForm>
