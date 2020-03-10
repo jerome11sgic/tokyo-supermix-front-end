@@ -84,6 +84,12 @@ export default class LoginForm extends Component {
                     Login
                   </Button>
                 </Link>
+                <h4>
+                  Don't have an Account{" "}
+                  <Link to='/signup'>
+                    <u>Signup</u>
+                  </Link>
+                </h4>
               </Form.Item>
             </div>
           </Form>
