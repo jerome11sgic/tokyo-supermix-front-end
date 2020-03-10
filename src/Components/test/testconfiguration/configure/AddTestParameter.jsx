@@ -9,6 +9,7 @@ import {
   SELECT_UNIT,
   TICK_CHECKBOX
 } from "../../../../redux/action/testconfiguration/TestConfiguration";
+import { api } from "../../../services/AxiosService";
 
 const { Option } = Select;
 
@@ -17,22 +18,20 @@ class AddTestParameter extends Component {
     size: "small",
     unit: [],
     checked: false,
-    testParameterData: [
-      {
-        parameterId: 1,
-        parameterName: "Cement",
-        parameterAbbr: "A"
-      },
-      {
-        parameterId: 2,
-        parameterName: "Sand",
-        parameterAbbr: "B"
-      }
-      // {
-      //   parameterName: "Concrete",
-      //   parameterAbbr: "C"
-      // }
-    ]
+    testParameterData: []
+  };
+
+  componentDidMount() {
+    this.getAllParameters();
+  }
+
+  getAllParameters = () => {
+    api("GET", "supermix", "/parameters", "", "", "").then(res => {
+      console.log(res.data.results);
+      this.setState({
+        testParameterData: res.data.results.parameters
+      });
+    });
   };
 
   componentWillMount() {
@@ -69,13 +68,13 @@ class AddTestParameter extends Component {
     const testParameterColumns = [
       {
         title: "Parameter",
-        dataIndex: "parameterName",
-        key: "parameterName"
+        dataIndex: "name",
+        key: "name"
       },
       {
         title: "Abbreviation",
-        dataIndex: "parameterAbbr",
-        key: "parameterAbbr"
+        dataIndex: "abbreviation",
+        key: "abbreviation"
       },
       // {
       //   title: "Unit",
@@ -118,12 +117,14 @@ class AddTestParameter extends Component {
           //   title={() => TestTitle("Select Parameter")}
           showHeader={true}
           style={{
-            width: "700px",
+            width: "400px",
+            height: "280px",
             background: "white",
             boxShadow: "0px 0px 0px 0px rgba(0,0,0,0)",
             justifyContent: "right"
           }}
-          pagination={{ defaultPageSize: 2 }}
+          scroll={{ y: 230 }}
+          pagination={false}
         />
       </FlexContainer>
     );
@@ -167,14 +168,14 @@ const mapDispatchToProps = dispatch => {
       console.log(event.target.checked);
       if (event.target.checked === true) {
         dispatch({ type: CREATE_MINI_CARD, payload: record });
-        console.log("created mini card " + record.parameterAbbr);
+        console.log("created mini card " + record.abbreviation);
         // dispatch({
         //   type: TICK_CHECKBOX,
         //   payload: record
         // });
       } else if (event.target.checked === false) {
         dispatch({ type: REMOVE_MINI_CARD, payload: record });
-        console.log("removed mini card " + record.parameterAbbr);
+        console.log("removed mini card " + record.abbreviation);
       }
     }
   };

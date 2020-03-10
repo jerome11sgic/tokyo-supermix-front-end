@@ -11,6 +11,8 @@ import { TileParagraph } from "../../../styledcomponents/typography/typography";
 import { PrimaryButton } from "../../../styledcomponents/button/button";
 import theme from "../../../../theme";
 import { connect } from "react-redux";
+import Notification from "../../../Constant/Notification";
+import HandelError from "../../../Constant/HandleError";
 import {
   TRIGGER_EQUATIONS_AREA,
   TRIGGER_BACK_EQUATIONS_AREA
@@ -231,10 +233,42 @@ class AddTestName extends Component {
       console.log("form is valid");
       const data = {
         name: test_name,
-        equation_id: equation,
-        test_type_id: test_type
+        equationId: equation,
+        testTypeId: test_type
       };
       console.log(data);
+      api("POST", "supermix", "/test", "", data, "").then(
+        res => {
+          console.log(res.data);
+          if (res.data.status === "VALIDATION_FAILURE") {
+            console.log("add");
+            this.responeserror(res.data.results.name.message);
+          } else {
+            Notification("success", res.data.message);
+            // this.props.reload();
+
+            this.setState({
+              test_name: "",
+              equation: "",
+              test_type: "",
+              plant: [],
+              errors: {
+                test_name: "",
+                equation: "",
+                test_type: ""
+              },
+              errormsgs: ""
+            });
+          }
+        },
+        error => {
+          this.setState({
+            errorvalmegss: error.validationFailures[0]
+          });
+          console.log("DEBUG34: ", error);
+          console.log(HandelError(error.validationFailures[0]));
+        }
+      );
     }
   };
 
@@ -287,12 +321,12 @@ class AddTestName extends Component {
               value={equation}
               onChange={value => this.handleSelect("equation", value)}
             >
-              {/* {this.state.SelectEquation} */}
-              {childrenEquation.map((post, index) => (
+              {this.state.SelectEquation}
+              {/* {childrenEquation.map((post, index) => (
                 <Option value={post.id} key={index}>
                   {post.name}
                 </Option>
-              ))}
+              ))} */}
             </Select>
 
             <div style={{ height: "6px" }}></div>
@@ -330,12 +364,12 @@ class AddTestName extends Component {
             value={test_type}
             onChange={value => this.handleSelect("test_type", value)}
           >
-            {/* {this.state.SelectTestType} */}
-            {childrenTestType.map((post, index) => (
+            {this.state.SelectTestType}
+            {/* {childrenTestType.map((post, index) => (
               <Option value={post.id} key={index}>
                 {post.name}
               </Option>
-            ))}
+            ))} */}
           </Select>
           {errors.test_type.length > 0 && (
             <div style={error2}>{errors.test_type}</div>

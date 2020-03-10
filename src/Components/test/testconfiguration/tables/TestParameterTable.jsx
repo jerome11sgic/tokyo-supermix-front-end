@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Checkbox } from "antd";
+import { Checkbox, Select } from "antd";
 import { AntTable } from "../../../styledcomponents/table/AntTabl";
 import { TestTitle } from "../titles/TestTitle";
 import {
@@ -8,24 +8,19 @@ import {
 } from "../../../../redux/action/testconfiguration/TestConfiguration";
 import { connect } from "react-redux";
 import theme from "../../../../theme";
+import { FlexContainer } from "../../../styledcomponents/container/FlexGrid";
+import { api } from "../../../services/AxiosService";
+import { PrimaryButton } from "../../../styledcomponents/button/button";
+import Notification from "../../../Constant/Notification";
 
+const { Option } = Select;
 class TestParameterTable extends Component {
   state = {
     size: "small",
-    testParameterData: [
-      {
-        testId: 1,
-        testName: "Moisture",
-        parameterName: "Cement",
-        unitName: "A"
-      },
-      {
-        testId: 2,
-        testName: "Concrete Test",
-        parameterName: "Concrete",
-        unitName: "B"
-      }
-    ]
+    parameterList: [],
+    selectedTestParams: [],
+    test_name: "",
+    addToTestParams: []
   };
   componentWillMount() {
     if (window.screen.width > 1900) {
@@ -39,61 +34,216 @@ class TestParameterTable extends Component {
       });
     }
   }
+
+  //get all for tests select
+  getAllTests() {
+    api("GET", "supermix", "/tests", "", "", "").then(res => {
+      console.log(res.data.results);
+      if (res.data.results.test.length > 0) {
+        console.log("got tests");
+        let SelectTest = res.data.results.test.map((post, index) => {
+          return (
+            <Option value={post.id} key={index}>
+              {post.name}
+            </Option>
+          );
+        });
+        this.setState({
+          SelectTest
+        });
+      }
+    });
+  }
+
+  getAllParameters = () => {
+    api("GET", "supermix", "/parameters", "", "", "").then(res => {
+      console.log(res.data.results);
+      this.setState({
+        parameterList: res.data.results.parameters
+      });
+    });
+  };
+
+  componentDidMount() {
+    this.getAllParameters();
+    this.getAllTests();
+  }
+
+  handleCheck = (record, event) => {
+    const { selectedTestParams } = this.state;
+    console.log(record);
+    console.log(event.target.checked);
+    if (event.target.checked === true) {
+      selectedTestParams.push(record);
+    } else if (event.target.checked === false) {
+      for (let i = 0; i < selectedTestParams.length; i++) {
+        if (selectedTestParams[i] === record) {
+          selectedTestParams.splice(i, 1);
+        }
+      }
+      console.log(selectedTestParams);
+    }
+  };
+
+  handleSelect = (name, value) => {
+    console.log(value);
+    this.setState({
+      test_name: value
+    });
+  };
+
+  handleSubmit = e => {
+    const { selectedTestParams, addToTestParams, test_name } = this.state;
+    e.preventDefault();
+    for (let k = 0; k < selectedTestParams.length; k++) {
+      addToTestParams.push({
+        testId: test_name,
+        parameterId: selectedTestParams[k].id,
+        unitId: 1
+      });
+    }
+    console.log(addToTestParams);
+    api("POST", "supermix", "/test-parameter", "", addToTestParams, "").then(
+      res => {
+        console.log(res.data);
+        Notification("success", res.data.message);
+        // this.props.reload();
+        this.setState({
+          selectedTestParams: [],
+          test_name: "",
+          addToTestParams: []
+        });
+      },
+      error => {
+        console.log(error);
+      }
+    );
+
+    console.log("submitted");
+  };
+
   render() {
     const testParameterColumns = [
       {
-        title: "Test Name",
-        dataIndex: "testName",
-        key: "testName"
-      },
-      {
         title: "Parameter",
-        dataIndex: "parameterName",
-        key: "parameterName"
+        dataIndex: "name",
+        key: "name"
       },
       {
-        title: "Unit",
-        dataIndex: "unitName",
-        key: "unitName"
+        title: "Abbreviation",
+        dataIndex: "abbreviation",
+        key: "abbreviation"
       },
       {
         title: "Relevant",
         dataIndex: "action",
         key: "action",
-        render: (text, record = this.state.testParameterData) => <Checkbox />
+        render: (text, record = this.state.testParameterData) => (
+          <Checkbox
+            id='check_relevant'
+            name='check_relevant'
+            onChange={this.handleCheck.bind(this, record)}
+          />
+        )
       }
     ];
     return (
-      <AntTable
-        dataSource={this.state.testParameterData}
-        size={this.state.size}
-        bordered={false}
-        columns={testParameterColumns}
-        title={() => (
+      <FlexContainer
+        style={{
+          width: "800px",
+          background: "white",
+          marginTop: "20px",
+          borderRadius: "15px",
+          padding: "10px"
+        }}
+      >
+        <FlexContainer
+          style={{
+            width: "800px",
+            justifyContent: "center",
+            marginTop: "10px"
+          }}
+        >
           <div
+            className='input-wrapper'
+            style={{ display: "flex", flexDirection: "column" }}
+          >
+            <label className='label' for='test_name'>
+              Test
+            </label>
+            <Select
+              id='test_name'
+              name='test_name'
+              value={this.state.test_name}
+              onChange={value => this.handleSelect("test_name", value)}
+              style={{ width: 170, marginLeft: "10px" }}
+            >
+              {this.state.SelectTest}
+            </Select>
+          </div>
+
+          {/* <PrimaryButton
+            type={"ghost"}
+            primary
             style={{
               background: theme.colors.primary,
-              color: "white",
-              height: "40px",
-              fontSize: "16px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              margin: "-10px",
-              borderTopLeftRadius: "15px",
-              borderTopRightRadius: "15px"
+              border: "none",
+              marginLeft: "20px",
+              color: "white"
             }}
+            onClick={this.openUnitModal}
+            disabled={true}
           >
-            Test Parameter
-          </div>
-        )}
-        showHeader={true}
-        pagination={{ defaultPageSize: 6 }}
-        style={{
-          height: "auto",
-          width: "50%"
-        }}
-      />
+            Add Units
+          </PrimaryButton> */}
+        </FlexContainer>
+        <AntTable
+          dataSource={this.state.parameterList}
+          size={this.state.size}
+          bordered={false}
+          columns={testParameterColumns}
+          title={() => (
+            <div
+              style={{
+                background: theme.colors.primary,
+                color: "white",
+                height: "40px",
+                fontSize: "16px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                margin: "-10px",
+                borderTopLeftRadius: "15px",
+                borderTopRightRadius: "15px"
+              }}
+            >
+              Test Parameter
+            </div>
+          )}
+          showHeader={true}
+          pagination={{ defaultPageSize: 6 }}
+          style={{
+            height: "auto",
+            width: "770px"
+          }}
+        />
+        <FlexContainer
+          style={{
+            width: "800px",
+            justifyContent: "center",
+            marginTop: "25px"
+          }}
+        >
+          <PrimaryButton
+            type={"primary"}
+            primary
+            style={{ background: theme.colors.primary, border: "none" }}
+            onClick={this.handleSubmit}
+          >
+            Submit
+          </PrimaryButton>
+        </FlexContainer>
+      </FlexContainer>
     );
   }
 }
