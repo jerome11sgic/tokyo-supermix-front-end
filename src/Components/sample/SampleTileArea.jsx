@@ -22,7 +22,7 @@ class SampleTitleArea extends Component {
         <BasicCard
           finalproduct
           tileareacard
-          size='small'
+          size="small"
           hoverable={true}
           onClick={this.props.routeToIncomingSample}
         >
@@ -30,7 +30,7 @@ class SampleTitleArea extends Component {
           <TileAreaAction>
             <Icon
               filled
-              type='plus'
+              type="plus"
               style={{ color: "red", fontSize: "22px" }}
             />
           </TileAreaAction>
@@ -38,7 +38,7 @@ class SampleTitleArea extends Component {
         <BasicCard
           finalproduct
           tileareacard
-          size='small'
+          size="small"
           hoverable={true}
           onClick={this.props.routeToProcessSample}
         >
@@ -46,13 +46,13 @@ class SampleTitleArea extends Component {
           <TileAreaAction>
             <Icon
               filled
-              type='plus'
+              type="plus"
               style={{ color: "red", fontSize: "22px" }}
             />
           </TileAreaAction>
         </BasicCard>
 
-        <BasicCard
+        {/* <BasicCard
           finalproduct
           tileareacard
           size='small'
@@ -67,11 +67,11 @@ class SampleTitleArea extends Component {
               style={{ color: "red", fontSize: "22px" }}
             />
           </TileAreaAction>
-        </BasicCard>
+        </BasicCard> */}
         <BasicCard
           finalproduct
           tileareacard
-          size='small'
+          size="small"
           hoverable={true}
           onClick={this.props.routeToFinishProductSample}
         >
@@ -79,7 +79,7 @@ class SampleTitleArea extends Component {
           <TileAreaAction>
             <Icon
               filled
-              type='plus'
+              type="plus"
               style={{ color: "red", fontSize: "22px" }}
             />
           </TileAreaAction>

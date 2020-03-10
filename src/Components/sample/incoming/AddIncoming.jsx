@@ -32,9 +32,6 @@ class Addincoming extends Component {
     plantCode: "",
     vehicleNo: "",
     rawMaterialId: "",
-    supplierselect: "",
-
-    SelectRaw: "",
     plantName: "",
     supplierName: "",
     rawMaterialName: "",
@@ -68,9 +65,7 @@ class Addincoming extends Component {
       plantCode: "",
       vehicleNo: "",
       rawMaterialId: "",
-      supplierselect: "",
-      SelectPlants: "",
-      SelectRaw: "",
+
       plantName: "",
       supplierName: "",
       rawMaterialName: "",
@@ -98,9 +93,6 @@ class Addincoming extends Component {
       plantCode: "",
       vehicleNo: "",
       rawMaterialId: "",
-      supplierselect: "",
-      SelectPlants: "",
-      SelectRaw: "",
       plantName: "",
       supplierName: "",
       rawMaterialName: "",
@@ -109,6 +101,12 @@ class Addincoming extends Component {
       edit_rawMaterialName: ""
     });
   };
+  componentDidMount() {
+    this.Selectsupplier();
+    this.getAllplant();
+    this.getallMaterial();
+    console.log(this.props.screen);
+  }
   handleChange = (event, field) => {
     this.setState({ [field]: event.target.value });
     this.setState({ errormgs: "" });
@@ -142,7 +140,7 @@ class Addincoming extends Component {
     if (name === "plant") {
       console.log(value);
       this.setState({
-        plantCode: value,
+        plantName: value,
         edit_plantName: value,
         errors: {
           code: errors.code,
@@ -155,8 +153,9 @@ class Addincoming extends Component {
     }
     // handle select for  supplier
     if (name === "supplier") {
+      console.log(value);
       this.setState({
-        supplierId: value,
+        supplierName: value,
         edit_supplier: value,
         errors: {
           code: errors.code,
@@ -170,7 +169,7 @@ class Addincoming extends Component {
     // handle select for  status
     if (name === "rawMaterial") {
       this.setState({
-        rawMaterialId: value,
+        rawMaterialName: value,
         edit_rawMaterialName: value,
         errors: {
           code: errors.code,
@@ -190,7 +189,7 @@ class Addincoming extends Component {
 
       if (res.data.results.Supplier.length > 0) {
         let supplierselect = res.data.results.Supplier.map((post, index) => {
-          console.log(post.name);
+          console.log(post.id);
           console.log("kkkkkkkkkk");
           return (
             <Option value={post.id} key={index}>
@@ -336,8 +335,8 @@ class Addincoming extends Component {
       if (this.state.type === "edit") {
         const data = {
           code: this.state.code,
-          date: this.state.date,
-          status: false,
+          date: moment(this.state.date).format("YYYY-MM-DD"),
+          status: this.state.status,
           supplierId: this.state.supplierId,
           plantCode: this.state.plantCode,
           vehicleNo: this.state.vehicleNo,
@@ -378,11 +377,11 @@ class Addincoming extends Component {
         const data = {
           code: this.state.code,
           date: moment(this.state.date).format("YYYY-MM-DD"),
-          status: this.state.status,
-          supplierId: this.state.supplierId,
-          plantCode: this.state.plantCode,
+          status: "NEW",
+          supplierId: this.state.supplierName,
+          plantCode: this.state.plantName,
           vehicleNo: this.state.vehicleNo,
-          rawMaterialId: this.state.rawMaterialId
+          rawMaterialId: this.state.rawMaterialName
         };
         console.log("hhhhhhhhhhhhhhh");
         console.log(data);
@@ -437,7 +436,7 @@ class Addincoming extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("gggg" + nextProps);
+    console.log(nextProps);
     this.setState({
       visible: nextProps.visible,
       code: nextProps.editPlantData.code,
@@ -456,12 +455,7 @@ class Addincoming extends Component {
       type: nextProps.type
     });
   }
-  componentDidMount() {
-    this.Selectsupplier();
-    this.getAllplant();
-    this.getallMaterial();
-    console.log(this.props.screen);
-  }
+
   render() {
     const { visible, loading, type, errors } = this.state;
 
@@ -524,7 +518,7 @@ class Addincoming extends Component {
             {/* Code */}
             <div className="input_wrapper">
               <label for="code" className="label">
-                Code:llll
+                Code:
               </label>
 
               <Input
@@ -546,11 +540,11 @@ class Addincoming extends Component {
 
               <Select
                 className="inputfield"
-                id=""
-                name="supplierId"
+                id="supplierName"
+                name="supplierName"
                 placeholder="Enter Supplier Name"
                 style={{ width: "180px" }}
-                value={this.state.edit_supplierName}
+                value={this.state.supplierName}
                 onChange={value => this.handleSelect("supplier", value)}
               >
                 {this.state.supplierselect}
@@ -572,7 +566,7 @@ class Addincoming extends Component {
                 name="rawMaterialId"
                 placeholder=" Raw Material"
                 style={{ width: 170 }}
-                value={this.state.edit_rawMaterialName}
+                value={this.state.rawMaterialName}
                 onChange={value => this.handleSelect("rawMaterial", value)}
               >
                 {this.state.SelectRaw}
@@ -628,7 +622,7 @@ class Addincoming extends Component {
                 id="plant"
                 name="plant"
                 placeholder="plant"
-                value={this.state.edit_plantName}
+                value={this.state.plantName}
                 onChange={value => this.handleSelect("plant", value)}
                 style={{ width: 170 }}
               >

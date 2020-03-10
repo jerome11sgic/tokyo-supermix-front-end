@@ -11,6 +11,7 @@ import Notificationfuc from "../../Constant/Notification";
 import { api } from "../../services/AxiosService";
 import HandelError from "../../Constant/HandleError";
 import { connect } from "react-redux";
+const { Option } = Select;
 
 const error = {
   color: "red",
@@ -18,6 +19,18 @@ const error = {
   width: "160px",
   height: "2px"
 };
+
+function onBlur() {
+  console.log("blur");
+}
+
+function onFocus() {
+  console.log("focus");
+}
+
+function onSearch(val) {
+  console.log("search:", val);
+}
 class AddProcessSample extends Component {
   constructor() {
     super();
@@ -26,20 +39,22 @@ class AddProcessSample extends Component {
       errorCount: 0,
       errors: {
         code: "",
-        incoming_sample_id: "",
-        materila_id: "",
+        incoming_sample: "",
         quantity: "",
-        remain_in_quantity: ""
+        unit: ""
       },
       loading: false,
       visible: false,
       processSample_code: "",
-      processSample_Incoming_sample: "",
-      processSample_material_id: "",
+      incoming_sample_id: "",
+      material_id: "",
       processSample_quantity: "",
-      processSample_remain_in_qunatity: "",
+      unit_id: "",
       errormgs: "",
-      type: "add"
+      type: "add",
+      incomingSampleEdit: "",
+      materialEdit: "",
+      unitEdit: ""
     };
   }
 
@@ -74,7 +89,18 @@ class AddProcessSample extends Component {
       visible: true
     });
   };
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
 
+    this.setState({
+      visible: nextProps.visible,
+      processSample_code: nextProps.editPlantData.code,
+      incoming_sample_id: nextProps.editPlantData.incomingSample.code,
+      processSample_quantity: nextProps.editPlantData.quantity,
+      unit_id: nextProps.editPlantData.unitId,
+      type: nextProps.type
+    });
+  }
   handleOk = () => {
     this.setState({ loading: true });
     setTimeout(() => {
@@ -83,23 +109,36 @@ class AddProcessSample extends Component {
   };
 
   handleCancel = () => {
-    this.setState({ visible: false });
-  };
+    if (this.state.type === "edit") {
+      this.props.setProessVisiblity();
+    }
 
-  handleSubmit = e => {
-    console.log(e);
-    console.log(this.props.form);
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log("Received values of form: ", values);
-        this.setState({ loading: true });
-        setTimeout(() => {
-          this.setState({ loading: false, visible: false });
-        }, 3000);
-      }
+    this.setState({
+      visible: false,
+      type: "add",
+      processSample_code: "",
+      incoming_sample_id: "",
+      material_id: "",
+      processSample_quantity: "",
+      unit_id: "",
+      errormgs: ""
     });
   };
+
+  // handleSubmit = e => {
+  //   console.log(e);
+  //   console.log(this.props.form);
+  //   e.preventDefault();
+  //   this.props.form.validateFields((err, values) => {
+  //     if (!err) {
+  //       console.log("Received values of form: ", values);
+  //       this.setState({ loading: true });
+  //       setTimeout(() => {
+  //         this.setState({ loading: false, visible: false });
+  //       }, 3000);
+  //     }
+  //   });
+  // };
 
   handleChange = (event, field) => {
     this.setState({ [field]: event.target.value });
@@ -117,8 +156,8 @@ class AddProcessSample extends Component {
             ? "Code must be one characters long!"
             : "";
         break;
-      case "processSample_Incoming_sample":
-        errors.incoming_sample_id =
+      case "incoming_sample_id":
+        errors.incoming_sample =
           value.length === 0
             ? "Incoming Sample can't be empty"
             : value.length < 3
@@ -127,14 +166,7 @@ class AddProcessSample extends Component {
             ? "Incoming Sample allow only letters"
             : "";
         break;
-      case "processSample_material_id":
-        errors.materila_id =
-          value.length === 0
-            ? "Material can't be empty"
-            : value.length < 3
-            ? "Material must be 3 characters long!"
-            : "";
-        break;
+
       case "processSample_quantity":
         errors.quantity = isNaN(value)
           ? `Quantity must be a number`
@@ -142,11 +174,11 @@ class AddProcessSample extends Component {
           ? "Quantity  can't be empty"
           : "";
         break;
-      case "processSample_remain_in_qunatity":
-        errors.remain_in_quantity = isNaN(value)
-          ? `Remain Quantity must be a number`
+      case "unit_id":
+        errors.unit = isNaN(value)
+          ? `Unit must be a number`
           : value.length === 0
-          ? " RemainQuantity  can't be empty"
+          ? " Unit  can't be empty"
           : "";
 
         break;
@@ -161,18 +193,17 @@ class AddProcessSample extends Component {
     event.preventDefault();
     if (
       this.state.processSample_code.length === 0 &&
-      this.state.processSample_Incoming_sample.length === 0 &&
-      this.state.processSample_material_id.length === 0 &&
+      this.state.incoming_sample_id.length === 0 &&
       this.state.processSample_quantity.length === 0 &&
-      this.state.processSample_remain_in_qunatity.length === 0
+      this.state.unit_id.length === 0
     ) {
       this.setState({
         errors: {
           code: "Code can't be empty",
-          incoming_sample_id: "Incoming Sample can't be empty",
-          materila_id: "Material can't be empty",
+          incoming_sample: "Incoming Sample can't be empty",
+
           quantity: "Quantity can't be empty",
-          remain_in_quantity: "Remain Quantity can't be empty"
+          unit: "Remain Quantity can't be empty"
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
@@ -184,43 +215,27 @@ class AddProcessSample extends Component {
       this.setState({
         errors: {
           code: this.state.errors.code || "Code can't be empty",
-          incoming_sample_id: this.state.errors.incoming_sample_id,
-          materila_id: this.state.errors.materila_id,
+          incoming_sample: this.state.errors.incoming_sample,
+
           quantity: this.state.errors.quantity,
-          remain_in_quantity: this.state.errors.remain_in_quantity
+          unit: this.state.errors.unit
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
       });
     } else if (
-      this.state.processSample_Incoming_sample.length === 0 &&
-      this.state.errors.incoming_sample_id.length === 0
+      this.state.incoming_sample_id.length === 0 &&
+      this.state.errors.incoming_sample.length === 0
     ) {
       this.setState({
         errors: {
           code: this.state.errors.code,
-          incoming_sample_id:
-            this.state.errors.incoming_sample_id ||
+          incoming_sample:
+            this.state.errors.incoming_sample ||
             "Incoming Sample can't be empty",
-          materila_id: this.state.errors.materila_id,
+
           quantity: this.state.errors.quantity,
-          remain_in_quantity: this.state.errors.remain_in_quantity
-        },
-        formValid: this.validateForm(this.state.errors),
-        errorCount: this.countErrors(this.state.errors)
-      });
-    } else if (
-      this.state.processSample_material_id.length === 0 &&
-      this.state.errors.materila_id.length === 0
-    ) {
-      this.setState({
-        errors: {
-          code: this.state.errors.code,
-          incoming_sample_id: this.state.errors.incoming_sample_id,
-          materila_id:
-            this.state.errors.materila_id || "Material can't be empty",
-          quantity: this.state.errors.quantity,
-          remain_in_quantity: this.state.errors.remain_in_quantity
+          unit: this.state.errors.unit
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
@@ -232,53 +247,52 @@ class AddProcessSample extends Component {
       this.setState({
         errors: {
           code: this.state.errors.code,
-          incoming_sample_id: this.state.errors.incoming_sample_id,
-          materila_id: this.state.errors.materila_id,
+          incoming_sample: this.state.errors.incoming_sample,
+
           quantity: this.state.errors.quantity || "Quantity can't be empty",
-          remain_in_quantity: this.state.errors.remain_in_quantity
+          unit: this.state.errors.unit
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
       });
     } else if (
-      this.state.processSample_remain_in_qunatity.length === 0 &&
-      this.state.errors.remain_in_quantity.length === 0
+      this.state.unit_id.length === 0 &&
+      this.state.errors.unit.length === 0
     ) {
       this.setState({
         errors: {
           code: this.state.errors.code,
-          incoming_sample_id: this.state.errors.incoming_sample_id,
-          materila_id: this.state.errors.materila_id,
+          incoming_sample: this.state.errors.incoming_sample,
+
           quantity: this.state.errors.quantity,
-          remain_in_quantity:
-            this.state.errors.remain_in_quantity ||
-            "Remain Quantity can't be empty"
+          unit: this.state.errors.unit || "Unit can't be empty"
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
       });
     } else if (
-      this.state.code.length === 0 &&
-      this.state.incoming_sample_id.length === 0 &&
-      this.state.materila_id.length === 0 &&
-      this.state.quantity.length === 0 &&
-      this.state.remain_in_quantity.length === 0
+      this.state.errors.code.length === 0 &&
+      this.state.errors.incoming_sample.length === 0 &&
+      this.state.errors.quantity.length === 0 &&
+      this.state.errors.unit.length === 0
     ) {
+      console.log("form is valid");
       console.log(this.state.errors);
       this.setState({ formValid: this.validateForm(this.state.errors) });
       this.setState({ errorCount: this.countErrors(this.state.errors) });
       console.log(this.state.formValid);
       console.log(this.state.errorCount);
 
-      const data = {
-        code: this.state.plant_code,
-        incoming_sample_id: this.state.processSample_Incoming_sample,
-        materila_id: this.state.processSample_material_id,
-        quantity: this.state.processSample_quantity,
-        remain_in_quantity: this.state.processSample_remain_in_qunatity
-      };
       if (this.state.type === "add") {
-        api("POST", "supermix", "/processsample", "", data, "")
+        const data = {
+          code: this.state.processSample_code,
+          incomingSampleCode: this.state.incoming_sample_id,
+
+          quantity: this.state.processSample_quantity,
+          unitId: this.state.unit_id
+        };
+        console.log(data);
+        api("POST", "supermix", "/process-sample", "", data, "")
           .then(
             res => {
               console.log(res.data);
@@ -291,10 +305,10 @@ class AddProcessSample extends Component {
                 this.setState({ loading: true });
                 this.setState({
                   processSample_code: "",
-                  processSample_Incoming_sample: "",
-                  processSample_material_id: "",
+                  incoming_sample_id: "",
+                  material_id: "",
                   processSample_quantity: "",
-                  processSample_remain_in_qunatity: "",
+                  unit_id: "",
                   errormgs: ""
                 });
                 setTimeout(() => {
@@ -318,13 +332,14 @@ class AddProcessSample extends Component {
           });
       } else {
         const data = {
-          code: this.state.plant_code,
-          incoming_sample_id: this.state.processSample_Incoming_sample,
-          materila_id: this.state.processSample_material_id,
+          code: this.state.processSample_code,
+          incomingSampleCode: this.state.incoming_sample_id,
+
           quantity: this.state.processSample_quantity,
-          remain_in_quantity: this.state.processSample_remain_in_qunatity
+          unitId: this.state.unit_id
         };
-        api("PUT", "supermix", "/processsample", "", data, "")
+        console.log(data);
+        api("PUT", "supermix", "/process-sample", "", data, "")
           .then(
             res => {
               console.log(res.data);
@@ -338,10 +353,10 @@ class AddProcessSample extends Component {
                 this.setState({ loading: true });
                 this.setState({
                   processSample_code: "",
-                  processSample_Incoming_sample: "",
-                  processSample_material_id: "",
+                  incoming_sample_id: "",
+                  material_id: "",
                   processSample_quantity: "",
-                  processSample_remain_in_qunatity: "",
+                  unit_id: "",
                   errormgs: ""
                 });
                 setTimeout(() => {
@@ -364,7 +379,7 @@ class AddProcessSample extends Component {
             // console.log(error.response.data);
           });
       }
-      console.log(data);
+
       console.log("form is valid");
     }
   };
@@ -373,17 +388,125 @@ class AddProcessSample extends Component {
     this.setState({
       visible: true,
       processSample_code: "",
-      processSample_Incoming_sample: "",
-      processSample_material_id: "",
+      incoming_sample_id: "",
+      material_id: "",
       processSample_quantity: "",
-      processSample_remain_in_qunatity: ""
+      unit_id: ""
+    });
+  };
+
+  handleSelect = (name, value) => {
+    console.log(name);
+    console.log(value);
+    // handle select for  plant
+    if (name === "incoming_sample_id") {
+      this.setState({
+        incoming_sample_id: value,
+        incomingSampleEdit: value
+      });
+
+      if (value.length !== 0) {
+        this.setState({
+          errors: {
+            // code: this.state.errors.code,
+            code: this.state.errors.code,
+
+            incoming_sample: "",
+            quantity: this.state.errors.quantity,
+            unit: this.state.errors.unit
+          }
+        });
+      }
+    }
+
+    //handle select for designation
+
+    if (name === "unit_id") {
+      this.setState({
+        unit_id: value,
+        unitEdit: value
+      });
+
+      if (value.length !== 0) {
+        this.setState({
+          errors: {
+            // code: this.state.errors.code,
+            code: this.state.errors.code,
+
+            incoming_sample: this.state.errors.incoming_sample,
+            quantity: this.state.errors.quantity,
+            unit: ""
+          }
+        });
+      }
+    }
+  };
+
+  //dropdown data
+  getAllincomingSample() {
+    api("GET", "supermix", "/incoming-samples", "", "", "").then(res => {
+      console.log(res.data);
+      if (res.data.results.incomingSamples.length > 0) {
+        let SelectIncomingSamples = res.data.results.incomingSamples.map(
+          (post, index) => {
+            return (
+              <Option value={post.code} key={index}>
+                {post.code}
+              </Option>
+            );
+          }
+        );
+        this.setState({
+          SelectIncomingSamples
+        });
+      }
+    });
+  }
+
+  getallMaterial = () => {
+    console.log("api");
+
+    api("GET", "supermix", "/raw-materials", "", "", "").then(res => {
+      console.log(res);
+
+      if (res.data.results.rawMaterial.length > 0) {
+        console.log("ggg");
+        let SelectRaw = res.data.results.rawMaterial.map((post, index) => {
+          return (
+            <Option value={post.id} key={index}>
+              {post.name}
+            </Option>
+          );
+        });
+        this.setState({
+          SelectRaw
+        });
+      }
+    });
+  };
+
+  getallunit = () => {
+    api("GET", "supermix", "/units", "", "", "").then(res => {
+      console.log(res.data);
+      if (res.data.results.units.length > 0) {
+        let SelectUnit = res.data.results.units.map((post, index) => {
+          return (
+            <Option value={post.id} key={index}>
+              {post.unit}
+            </Option>
+          );
+        });
+        this.setState({
+          SelectUnit
+        });
+      }
     });
   };
 
   handleCancel = () => {
     if (this.state.type === "edit") {
       // we call the redux function to dispatch and delete all the global redux state to close the modal
-      this.props.setPlantVisiblity();
+      this.props.setProessVisiblity();
     }
 
     this.setState({
@@ -391,21 +514,23 @@ class AddProcessSample extends Component {
       formValid: false,
       errors: {
         code: "",
-        incoming_sample_id: "",
-        materila_id: "",
+        incoming_sample: "",
+        material: "",
         quantity: "",
-        remain_in_quantity: ""
+        unit: ""
       },
       processSample_code: "",
-      processSample_Incoming_sample: "",
-      processSample_material_id: "",
+      incoming_sample_id: "",
       processSample_quantity: "",
-      processSample_remain_in_qunatity: "",
+      unit_id: "",
       errormgs: ""
     });
   };
 
   componentDidMount() {
+    this.getAllincomingSample();
+    this.getallMaterial();
+    this.getallunit();
     console.log(this.props.screen);
   }
 
@@ -428,18 +553,18 @@ class AddProcessSample extends Component {
           Add Processing Sample
         </PrimaryButton>
         <Modal
-          width='500px'
+          width="500px"
           visible={visible}
-          okType='default'
+          okType="default"
           closable={false}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[
-            <Button key='back' onClick={this.handleCancel}>
+            <Button key="back" onClick={this.handleCancel}>
               Return
             </Button>,
             <PrimaryButton
-              key='submit'
+              key="submit"
               // loading={loading}
               onClick={this.handleSubmit}
               style={{ background: "#001328", color: "white", border: "none" }}
@@ -457,7 +582,7 @@ class AddProcessSample extends Component {
                 Add Processing Sample
               </p>
               <Icon
-                type='close-circle'
+                type="close-circle"
                 onClick={this.handleCancel}
                 style={{
                   color: "white"
@@ -468,16 +593,16 @@ class AddProcessSample extends Component {
         >
           <MasterLevelForm>
             {/* Code */}
-            <div className='input_wrapper'>
-              <label for='processSample_code' className='label'>
+            <div className="input_wrapper">
+              <label for="processSample_code" className="label">
                 Code:
               </label>
 
               <Input
-                id='processSample_code'
-                name='processSample_code'
+                id="processSample_code"
+                name="processSample_code"
                 onChange={this.handleChange}
-                placeholder='Enter the Code'
+                placeholder="Enter the Code"
                 value={this.state.processSample_code}
               />
 
@@ -492,56 +617,55 @@ class AddProcessSample extends Component {
             </div>
 
             {/* Plant Name */}
-            <div className='input_wrapper'>
-              <label for='processSample_Incoming_sample' className='label'>
+            <div className="input_wrapper">
+              <label for="incoming_sample_id" className="label">
                 Incoming Sample:
               </label>
 
               <Select
                 showSearch
                 style={{ width: 180 }}
-                id='processSample_Incoming_sample'
-                name='processSample_Incoming_sample'
-                placeholder='Select the Incoming Sample'
-                optionFilterProp='children'
-                onChange={this.handleChange}
-                value={this.state.plantEdit}
+                id="incoming_sample_id"
+                name="incoming_sample_id"
+                placeholder="Select a Incoming Sample"
+                optionFilterProp="children"
+                onChange={value =>
+                  this.handleSelect("incoming_sample_id", value)
+                }
+                onFocus={onFocus}
+                value={this.state.incomingSampleEdit}
+                onBlur={onBlur}
+                onSearch={onSearch}
               >
-                {this.state.SelectPlants}
+                {this.state.SelectIncomingSamples}
               </Select>
-
-              {errors.incoming_sample_id.length > 0 && (
-                <div style={error}>{errors.incoming_sample_id}</div>
-              )}
-              {this.state.errormgs.message == "proccesSample Code" ? (
-                <div style={error}>{HandelError(this.state.errormgs)}</div>
-              ) : (
-                ""
+              {errors.incoming_sample.length > 0 && (
+                <div style={error}>{errors.incoming_sample}</div>
               )}
 
               <div style={{ height: "12px" }}></div>
             </div>
 
             {/* Place */}
-            <div className='input_wrapper'>
-              <label for='processSample_material_id' className='label'>
+            {/* <div className="input_wrapper">
+              <label for="material_id" className="label">
                 Material:
               </label>
 
               <Select
                 showSearch
                 style={{ width: 180 }}
-                id='processSample_material_id'
-                name='processSample_material_id'
-                placeholder='Select the Material'
-                optionFilterProp='children'
-                onChange={this.handleChange}
-                value={this.state.plantEdit}
+                id="material_id"
+                name="material_id"
+                placeholder="Select the Material"
+                optionFilterProp="children"
+                value={this.state.materialEdit}
+                onChange={value => this.handleSelect("material_id", value)}
               >
-                {this.state.SelectPlants}
+                {this.state.SelectRaw}
               </Select>
-              {errors.materila_id.length > 0 && (
-                <div style={error}>{errors.materila_id}</div>
+              {errors.material.length > 0 && (
+                <div style={error}>{errors.material}</div>
               )}
               {this.state.errormgs.message == "proccesSample Code" ? (
                 <div style={error}>{HandelError(this.state.errormgs)}</div>
@@ -550,18 +674,18 @@ class AddProcessSample extends Component {
               )}
 
               <div style={{ height: "12px" }}></div>
-            </div>
+            </div> */}
 
             {/* T.P No */}
-            <div className='input_wrapper'>
-              <label for='processSample_quantity' className='label'>
+            <div className="input_wrapper">
+              <label for="processSample_quantity" className="label">
                 Quantity:
               </label>
 
               <Input
-                id='processSample_quantity'
-                name='processSample_quantity'
-                placeholder='Enter the Quantity'
+                id="processSample_quantity"
+                name="processSample_quantity"
+                placeholder="Enter the Quantity"
                 onChange={this.handleChange}
                 value={this.state.processSample_quantity}
               />
@@ -578,22 +702,24 @@ class AddProcessSample extends Component {
               <div style={{ height: "12px" }}></div>
             </div>
 
-            <div className='input_wrapper'>
-              <label for='processSample_remain_in_qunatity' className='label'>
-                Remain Quantity:
+            <div className="input_wrapper">
+              <label for="unit" className="label">
+                Unit:
               </label>
 
-              <Input
-                id='processSample_remain_in_qunatity'
-                name='processSample_remain_in_qunatity'
-                placeholder='Enter the Remain Quantity'
-                onChange={this.handleChange}
-                value={this.state.processSample_remain_in_qunatity}
-              />
-
-              {errors.remain_in_quantity.length > 0 && (
-                <div style={error}>{errors.remain_in_quantity}</div>
-              )}
+              <Select
+                showSearch
+                style={{ width: 180 }}
+                id="unit_id"
+                name="unit_id"
+                placeholder="Select the Material"
+                optionFilterProp="children"
+                value={this.state.unitEdit}
+                onChange={value => this.handleSelect("unit_id", value)}
+              >
+                {this.state.SelectUnit}
+              </Select>
+              {errors.unit.length > 0 && <div style={error}>{errors.unit}</div>}
               {this.state.errormgs.message == "proccesSample Code" ? (
                 <div style={error}>{HandelError(this.state.errormgs)}</div>
               ) : (
@@ -621,7 +747,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     // setting visible to false if we close the modal .. and all state data will be deleted if this function is dispatched
-    setPlantVisiblity: () => {
+    setProessVisiblity: () => {
       dispatch({ type: DISABLE_EDIT_MODE });
       console.log("edit modal closed");
     }

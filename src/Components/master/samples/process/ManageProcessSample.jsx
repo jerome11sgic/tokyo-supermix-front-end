@@ -1,14 +1,33 @@
 import React, { Component } from "react";
-import { Table, Icon, Popconfirm, Divider } from "antd";
-import "./styleProcess.css";
+import { Icon, Popconfirm, Divider } from "antd";
+import { AntTable } from "../../styledcomponents/table/AntTabl";
+import ManageProcessSampleTitle from "../titles/ManageProcessSampleTitle";
+import { api } from "../../services/AxiosService";
+import { SWITCH_TO_EDIT_MODE } from "../../../redux/action/master/plantlevel/PlantLevel";
+import { connect } from "react-redux";
 
-export default class ManageProcessSample extends Component {
+class ManageProcessSample extends Component {
   state = {
     filteredInfo: null,
     sortedInfo: null,
     searchText: "",
-    visible: false
+    visible: false,
+    size: "small",
+    data: ""
   };
+
+  componentWillMount() {
+    if (window.screen.width > 1900) {
+      console.log("hooray");
+      this.setState({
+        size: "large"
+      });
+    } else if (window.screen.width < 1440) {
+      this.setState({
+        size: "small"
+      });
+    }
+  }
 
   showModal = () => {
     this.setState({
@@ -61,6 +80,32 @@ export default class ManageProcessSample extends Component {
   onChange(pageNumber) {
     console.log("Page: ", pageNumber);
   }
+
+  componentDidMount() {
+    this.getallProcessSample();
+  }
+
+  getallProcessSample = () => {
+    api("GET", "supermix", "/process-samples", "", "", "").then(res => {
+      console.log(res.data);
+      this.setState({
+        data: res.data.results.processSamples
+      });
+    });
+  };
+
+  onConfirmdelete(id) {
+    console.log(id);
+    let mesg = "process Sample delete";
+
+    api("DELETE", "supermix", "/process-samples", "", "", id).then(res => {
+      console.log(res.data);
+      this.getallProcessSample();
+      Notification("success", res.data.message);
+    });
+    console.log(this.state.id);
+  }
+
   render() {
     let { sortedInfo, filteredInfo } = this.state;
     sortedInfo = sortedInfo || {};
@@ -68,79 +113,63 @@ export default class ManageProcessSample extends Component {
     const columns = [
       {
         title: " Code",
-        dataIndex: "id",
+        dataIndex: "code",
         width: "8%",
-        key: "id",
-        sorter: (a, b) => a.id - b.id,
-        sortOrder: sortedInfo.columnKey === "id" && sortedInfo.order
+        key: "code"
       },
       {
-        title: "Process Name",
-        dataIndex: "date",
+        title: "Incoming Sample",
+        dataIndex: "incomingSampleCode",
         width: "12%",
-        key: "id",
-        sorter: (a, b) => a.id - b.id,
-        sortOrder: sortedInfo.columnKey === "id" && sortedInfo.order
+        key: "incomingSampleCode"
       },
       {
-        title: "  Raw Material",
-        dataIndex: "name",
-        key: "name",
-        width: "12%",
-        filters: [
-          { text: "Joe", value: "Joe" },
-          { text: "Jim", value: "Jim" }
-        ],
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.name.length - b.name.length,
-        sortOrder: sortedInfo.columnKey === "name" && sortedInfo.order
+        title: "  Material",
+        dataIndex: "rawMaterialId",
+        key: "material",
+        width: "12%"
       },
       {
-        title: "Plant",
-        dataIndex: "role",
-        key: "role",
-        width: "12%",
-        filters: [
-          { text: "Vechical1", value: "Vechical1" },
-          { text: "Vechical2", value: " Vechical2" },
-          { text: "Vechical3", value: "Vechical3" },
-          { text: "Vechical4", value: "Vechical4" }
-        ],
-        filteredValue: filteredInfo.role || null,
-        onFilter: (value, record) => record.role.includes(value),
-        sorter: (a, b) => a.role.length - b.role.length,
-        sortOrder: sortedInfo.columnKey === "role" && sortedInfo.order
+        title: "Quantity",
+        dataIndex: "quantity",
+        key: "quantity",
+        width: "12%"
       },
 
       {
-        title: "Date/Time",
-        dataIndex: "date",
+        title: "Unit",
+        dataIndex: "unit",
         width: "12%",
-        key: "id",
-        sorter: (a, b) => a.id - b.id,
-        sortOrder: sortedInfo.columnKey === "id" && sortedInfo.order
+        key: "unit"
       },
 
       {
-        title: "Action",
+        title: "Edit & Delete",
         key: "action",
-        width: "8%",
+        width: "10%",
         render: (text, record) => (
           <span>
             <a>
-              <Icon type='edit' />
+              <Icon
+                type="edit"
+                style={{ fontSize: "1.2em" }}
+                onClick={this.props.passEditProcessSampleRecordToModal.bind(
+                  this,
+                  record
+                )}
+              />
             </a>
-            <Divider type='vertical' />
+            <Divider type="vertical" />
             <a>
               <Popconfirm
-                title='Are you sure you want to Delete this?'
+                title="Are you sure you want to Delete this?"
                 icon={
-                  <Icon type='question-circle-o' style={{ color: "red" }} />
+                  <Icon type="question-circle-o" style={{ color: "red" }} />
                 }
+                onConfirm={this.onConfirmdelete.bind(this, record.id)}
               >
-                <a href='#'>
-                  <Icon type='delete'></Icon>
+                <a href="#">
+                  <Icon type="delete"></Icon>
                 </a>
               </Popconfirm>
             </a>
@@ -149,14 +178,34 @@ export default class ManageProcessSample extends Component {
       }
     ];
     return (
-      <div className='processTableWrapper'>
-        <Table
-          columns={columns}
-          onChange={this.handleChange}
-          size='small'
-          className='processTable'
-        />
-      </div>
+      <AntTable
+        title={() => (
+          <ManageProcessSampleTitle reload={this.getallProcessSample} />
+        )}
+        length
+        nomargin
+        dataSource={this.state.data}
+        columns={columns}
+        onChange={this.handleChange}
+        size={this.state.size}
+      />
     );
   }
 }
+
+const mapStateToProps = state => null;
+
+const mapDispatchToProps = dispatch => {
+  return {
+    passEditProcessSampleRecordToModal: record => {
+      //this payload is the data we pass into redux which is in the row which we clicked
+      dispatch({ type: SWITCH_TO_EDIT_MODE, payload: record });
+      console.log(record);
+    }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ManageProcessSample);

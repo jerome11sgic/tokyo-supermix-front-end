@@ -28,11 +28,11 @@ class ManageProcessSampleTitle extends Component {
             color: "white",
             border: "none"
           }}
-          href='#/samples/viewprocessstatus'
+          href="#/samples/viewprocessstatus"
         >
           View Test
         </PrimaryButton>
-        <AddProcessSample />
+        <AddProcessSample reload={this.props.reload} />
       </FlexContainer>
     );
   }
