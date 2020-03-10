@@ -4,7 +4,7 @@ import {
 } from "../../action/testconfiguration/TestConfiguration";
 
 const initialState = {
-  visible: true,
+  visible: false,
   icon: "+",
   togglable: "yes"
 };

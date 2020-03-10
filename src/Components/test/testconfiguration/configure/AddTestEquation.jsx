@@ -9,7 +9,8 @@ import { PrimaryButton } from "../../../styledcomponents/button/button";
 import { connect } from "react-redux";
 import {
   ADD_EQUATION_SYMBOLS,
-  ADD_TEXT_BODY_WITH_KEYPRESS
+  ADD_TEXT_BODY_WITH_KEYPRESS,
+  ADD_PARAMETERS
 } from "../../../../redux/action/testconfiguration/TestConfiguration";
 
 class AddTestEquation extends Component {
@@ -24,28 +25,21 @@ class AddTestEquation extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps.textBody);
-    console.log(nextProps.cards);
     this.setState({
-      textBoxEquation: nextProps.textBody,
-      cards: nextProps.cards
+      textBoxEquation: nextProps.textBody
     });
   }
 
-  // componentDidMount() {
-  //   this.renderMiniCards();
-  // }
-
   //render mini cards as per cards in the redux state
-  renderMiniCards = () => {
-    this.state.cards.map((post, index) => {
-      return (
-        <MiniCard letters key={index}>
-          <Paragraph className='backImg'>{post}</Paragraph>
-        </MiniCard>
-      );
-    });
-  };
+  // renderMiniCards = () => {
+  //   this.state.cards.map((post, index) => {
+  //     return (
+  //       <MiniCard letters key={index}>
+  //         <Paragraph className='backImg'>{post}</Paragraph>
+  //       </MiniCard>
+  //     );
+  //   });
+  // };
 
   // sum = (a, b) => {
   //   return `${a} ${b}`;
@@ -185,13 +179,19 @@ class AddTestEquation extends Component {
             ></MiniCard>
           </div>
         </FlexContainer>
+
         <FlexContainer className='letters_area'>
-          {/* {this.state.cards.map((post, index) => (
-            <MiniCard letters key={index}>
+          {this.props.cards.map((post, index) => (
+            <MiniCard
+              letters
+              key={index}
+              name={post}
+              onClick={name => this.props.selectParameters(post, name)}
+            >
               <Paragraph className='backImg'>{post}</Paragraph>
             </MiniCard>
-          ))} */}
-          {this.renderMiniCards()}
+          ))}
+          {/* {this.renderMiniCards()} */}
         </FlexContainer>
       </FlexContainer>
     );
@@ -218,7 +218,13 @@ const mapDispatchToProps = dispatch => {
         payload: event.target.value
       });
       // console.log(event.target.value);
+    },
+    selectParameters: post => {
+      console.log(post);
+      dispatch({ type: ADD_PARAMETERS, payload: post });
+      console.log("record pushed " + post);
     }
+    //test parameter
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(AddTestEquation);

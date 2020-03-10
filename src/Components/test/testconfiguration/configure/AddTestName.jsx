@@ -19,16 +19,29 @@ import { api } from "../../../services/AxiosService";
 
 const { Option } = Select;
 
-const children = [
-  { id: 0, name: "Peliyagoda" },
-  { id: 1, name: "Trincomalee" },
-  { id: 2, name: "Jaffna" }
+const childrenEquation = [
+  { id: 0, name: "(A+B)" },
+  { id: 1, name: "(A-B)/100" },
+  { id: 2, name: "A*C" }
+];
+
+const childrenTestType = [
+  { id: 0, name: "type1" },
+  { id: 1, name: "type1" },
+  { id: 2, name: "type3" }
 ];
 
 const error = {
   color: "red",
   fontSize: "12px",
   width: "170px",
+  height: "0.2px"
+};
+
+const error2 = {
+  color: "red",
+  fontSize: "12px",
+  width: "140px",
   height: "0.2px"
 };
 
@@ -46,8 +59,7 @@ class AddTestName extends Component {
       errors: {
         test_name: "",
         equation: "",
-        test_type: "",
-        plant: ""
+        test_type: ""
       },
       errormsgs: ""
     };
@@ -148,25 +160,14 @@ class AddTestName extends Component {
   handleSelect = (name, value) => {
     const { errors } = this.state;
     console.log(value);
-    if (name === "plant") {
-      this.setState({
-        plant: value,
-        errors: {
-          test_name: errors.test_name,
-          equation: errors.equation,
-          test_type: errors.test_type,
-          plant: ""
-        }
-      });
-    }
+
     if (name === "equation") {
       this.setState({
         equation: value,
         errors: {
           test_name: errors.test_name,
           equation: "",
-          test_type: errors.test_type,
-          plant: errors.plant
+          test_type: errors.test_type
         }
       });
     }
@@ -176,8 +177,7 @@ class AddTestName extends Component {
         errors: {
           test_name: errors.test_name,
           equation: errors.equation,
-          test_type: "",
-          plant: errors.plant
+          test_type: ""
         }
       });
     }
@@ -185,20 +185,18 @@ class AddTestName extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const { errors, test_name, test_type, equation, plant } = this.state;
+    const { errors, test_name, test_type, equation } = this.state;
     if (
       test_name.length === 0 &&
       test_type.length === 0 &&
-      equation.length === 0 &&
-      plant.length === 0
+      equation.length === 0
     ) {
       console.log("form is not valid");
       this.setState({
         errors: {
           test_name: "test name can't be empty",
           equation: "equation can't be empty",
-          test_type: "test type can't be empty",
-          plant: "plant can't be empty"
+          test_type: "test type can't be empty"
         }
       });
     } else if (test_name.length === 0 && errors.test_name.length === 0) {
@@ -206,8 +204,7 @@ class AddTestName extends Component {
         errors: {
           test_name: errors.test_name || "test name can't be empty",
           equation: errors.equation,
-          test_type: errors.test_type,
-          plant: errors.plant
+          test_type: errors.test_type
         }
       });
     } else if (equation.length === 0 && errors.equation.length === 0) {
@@ -215,8 +212,7 @@ class AddTestName extends Component {
         errors: {
           test_name: errors.test_name,
           equation: errors.equation || "equation can't be empty",
-          test_type: errors.test_type,
-          plant: errors.plant
+          test_type: errors.test_type
         }
       });
     } else if (test_type.length === 0 && errors.test_type.length === 0) {
@@ -224,26 +220,21 @@ class AddTestName extends Component {
         errors: {
           test_name: errors.test_name,
           equation: errors.equation,
-          test_type: errors.test_type || "test type can't be empty",
-          plant: errors.plant
-        }
-      });
-    } else if (plant.length === 0 && errors.plant.length === 0) {
-      this.setState({
-        errors: {
-          test_name: errors.test_name,
-          equation: errors.equation,
-          test_type: errors.test_type,
-          plant: errors.plant || "plant can't be empty"
+          test_type: errors.test_type || "test type can't be empty"
         }
       });
     } else if (
       errors.test_name.length === 0 &&
       errors.equation.length === 0 &&
-      errors.plant.length === 0 &&
       errors.test_type.length === 0
     ) {
       console.log("form is valid");
+      const data = {
+        name: test_name,
+        equation_id: equation,
+        test_type_id: test_type
+      };
+      console.log(data);
     }
   };
 
@@ -277,7 +268,7 @@ class AddTestName extends Component {
             onChange={this.handleChange}
           />
           {errors.test_name.length > 0 && (
-            <div style={error}>{errors.test_name}</div>
+            <div style={error2}>{errors.test_name}</div>
           )}
           <div style={{ height: "6px" }}></div>
         </div>
@@ -296,7 +287,12 @@ class AddTestName extends Component {
               value={equation}
               onChange={value => this.handleSelect("equation", value)}
             >
-              {this.state.SelectEquation}
+              {/* {this.state.SelectEquation} */}
+              {childrenEquation.map((post, index) => (
+                <Option value={post.id} key={index}>
+                  {post.name}
+                </Option>
+              ))}
             </Select>
 
             <div style={{ height: "6px" }}></div>
@@ -316,7 +312,7 @@ class AddTestName extends Component {
             </PrimaryButton>
           </FlexContainer>
           {errors.equation.length > 0 && (
-            <div style={error}>{errors.equation}</div>
+            <div style={error2}>{errors.equation}</div>
           )}
           <div style={{ height: "6px", width: "auto" }}></div>
         </div>
@@ -334,16 +330,21 @@ class AddTestName extends Component {
             value={test_type}
             onChange={value => this.handleSelect("test_type", value)}
           >
-            {this.state.SelectTestType}
+            {/* {this.state.SelectTestType} */}
+            {childrenTestType.map((post, index) => (
+              <Option value={post.id} key={index}>
+                {post.name}
+              </Option>
+            ))}
           </Select>
           {errors.test_type.length > 0 && (
-            <div style={error}>{errors.test_type}</div>
+            <div style={error2}>{errors.test_type}</div>
           )}
           <div style={{ height: "6px" }}></div>
         </div>
 
         {/* Plant Multiselect */}
-        <div className='input_wrapper'>
+        {/* <div className='input_wrapper'>
           <label className='label' style={{ position: "relative" }}>
             Plant
           </label>
@@ -356,17 +357,14 @@ class AddTestName extends Component {
             value={plant}
             onChange={value => this.handleSelect("plant", value)}
           >
-            {/* {children.map(post => (
-              <Option value={post.id}>{post.name}</Option>
-            ))} */}
             {this.state.SelectPlants}
           </Select>
           {errors.plant.length > 0 && <div style={error}>{errors.plant}</div>}
           <div style={{ height: "6px" }}></div>
-        </div>
+        </div> */}
 
         {/* Description  */}
-        <div className='input_wrapper'>
+        {/* <div className='input_wrapper'>
           <label for='description' className='label'>
             Description
           </label>
@@ -376,10 +374,10 @@ class AddTestName extends Component {
             name='description'
             placeholder=''
           />
-        </div>
+        </div> */}
 
         {/* Procedure */}
-        <div className='input_wrapper'>
+        {/* <div className='input_wrapper'>
           <label for='procedure' className='label'>
             Procedure
           </label>
@@ -390,7 +388,7 @@ class AddTestName extends Component {
             name='procedure'
             placeholder='Enter Procedure'
           />
-        </div>
+        </div> */}
         <div
           style={{
             marginTop: "30px",

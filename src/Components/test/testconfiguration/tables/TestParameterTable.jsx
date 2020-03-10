@@ -7,6 +7,7 @@ import {
   POP_PARAMETERS
 } from "../../../../redux/action/testconfiguration/TestConfiguration";
 import { connect } from "react-redux";
+import theme from "../../../../theme";
 
 class TestParameterTable extends Component {
   state = {
@@ -59,9 +60,7 @@ class TestParameterTable extends Component {
         title: "Relevant",
         dataIndex: "action",
         key: "action",
-        render: (text, record = this.state.testParameterData) => (
-          <Checkbox onChange={this.props.selectParameters.bind(this, record)} />
-        )
+        render: (text, record = this.state.testParameterData) => <Checkbox />
       }
     ];
     return (
@@ -70,12 +69,29 @@ class TestParameterTable extends Component {
         size={this.state.size}
         bordered={false}
         columns={testParameterColumns}
-        title={() => <h3 style={{ height: "10px" }}>Test Parameter</h3>}
+        title={() => (
+          <div
+            style={{
+              background: theme.colors.primary,
+              color: "white",
+              height: "40px",
+              fontSize: "16px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              margin: "-10px",
+              borderTopLeftRadius: "15px",
+              borderTopRightRadius: "15px"
+            }}
+          >
+            Test Parameter
+          </div>
+        )}
         showHeader={true}
         pagination={{ defaultPageSize: 6 }}
         style={{
           height: "auto",
-          width: `calc(100% +  0px)`
+          width: "50%"
         }}
       />
     );

@@ -4,7 +4,8 @@ import {
   ADD_PARAMETERS,
   POP_PARAMETERS,
   CREATE_MINI_CARD,
-  REMOVE_MINI_CARD
+  REMOVE_MINI_CARD,
+  CLEAR_STATES_WHILE_CANCEL
 } from "../../action/testconfiguration/TestConfiguration";
 
 const initialState = {
@@ -12,7 +13,10 @@ const initialState = {
   regex: /[^=+-/.()√π<>²\d*]/gi,
   acceptedIndexes: [],
   //creation of mini cards
-  cards: []
+  cards: [],
+  tmp: [],
+  //storing payload for api call
+  paramsData: ""
 };
 
 export const EquationConfigurationReducer = (state = initialState, action) => {
@@ -34,9 +38,10 @@ export const EquationConfigurationReducer = (state = initialState, action) => {
       return {
         ...state,
         regex: (state.regex = new RegExp(
-          "[^" + state.acceptedIndexes + "0-9=+-/.()√π<>²d*]",
+          "[^" + state.acceptedIndexes + "0-9=+-/.()√π<>²\\d*]",
           "g"
-        ))
+        )),
+        textBody: state.textBody + action.payload
       };
 
     case POP_PARAMETERS:
@@ -51,33 +56,52 @@ export const EquationConfigurationReducer = (state = initialState, action) => {
       return {
         ...state,
         regex: (state.regex = new RegExp(
-          "[^" + state.acceptedIndexes + "0-9=+-/.()√π<>²d*]",
+          "[^" + state.acceptedIndexes + "0-9=+-/.()√π<>²\\d*]",
           "g"
         ))
       };
 
     case CREATE_MINI_CARD:
-      console.log(action.payload.parameterAbbr);
-      state.cards.push(action.payload.parameterAbbr);
-      console.log(state.cards);
-
+      state.acceptedIndexes.push(action.payload.parameterAbbr);
+      console.log(state.acceptedIndexes[0]);
       return {
         ...state,
-        cards: state.cards
+        cards: [...state.cards, action.payload.parameterAbbr],
+        regex: (state.regex = new RegExp(
+          "[^" + state.acceptedIndexes + "0-9=+-/.()√π<>²\\d*]",
+          "g"
+        )),
+        paramsData: action.payload.parameterId
       };
 
     case REMOVE_MINI_CARD:
-      console.log(action.payload.parameterAbbr);
-      for (let i = 0; i < state.cards.length; i++) {
-        if (state.cards[i] === action.payload.parameterAbbr) {
-          console.log(state.cards[i]);
-          state.cards.splice(i, 1);
-        }
-      }
-      console.log(state.cards);
+      const newState = state.cards.filter(
+        val => val !== action.payload.parameterAbbr
+      );
+      console.log("DEBUG1234: ", newState);
+      console.log(
+        "DEBUG SEARCH CHAR: " +
+          state.textBody.replace(action.payload.parameterAbbr, "")
+      );
+
       return {
         ...state,
-        cards: state.cards
+        cards: newState,
+        regex: (state.regex = new RegExp(
+          "[^" + newState + "0-9=+-/.()√π<>²\\d*]",
+          "g"
+        )),
+        textBody: state.textBody.replace(action.payload.parameterAbbr, "")
+      };
+
+    case CLEAR_STATES_WHILE_CANCEL:
+      return {
+        ...state,
+        cards: [],
+        regex: /[^=+-/.()√π<>²\d*]/gi,
+        acceptedIndexes: [],
+        textBody: "",
+        paramsData: ""
       };
 
     default:

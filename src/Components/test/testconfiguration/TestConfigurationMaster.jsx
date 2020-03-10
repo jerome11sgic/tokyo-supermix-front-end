@@ -12,6 +12,7 @@ import AddTestParameter from "./configure/AddTestParameter";
 import AddTestEquation from "./configure/AddTestEquation";
 import AddTestAcceptedValue from "./configure/AddTestAcceptedValue";
 import Step01 from "./configuretest/Step01";
+import Step02 from "./configuretest/Step02";
 
 const { Step } = Steps;
 
@@ -22,6 +23,10 @@ const steps = [
   },
   {
     title: "Second",
+    content: <Step02 />
+  },
+  {
+    title: "Third",
     content: <AddTestAcceptedValue />
   },
   {
