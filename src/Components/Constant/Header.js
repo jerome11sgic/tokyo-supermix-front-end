@@ -55,19 +55,19 @@ class HeaderComponent extends React.Component {
     if (this.props.navpath === "/master") {
       return (
         <TopNavMenu
-          theme='dark'
-          mode='horizontal'
-          position='right'
+          theme="dark"
+          mode="horizontal"
+          position="right"
           defaultSelectedKeys={["100"]}
           selectedKeys={this.props.masterkeys}
           onClick={this.props.toggleBetweenMasterLevels}
         >
-          <NavigationLink to='#' style={{ cursor: "default" }}>
-            <div className='logo' />
+          <NavigationLink to="#" style={{ cursor: "default" }}>
+            <div className="logo" />
           </NavigationLink>
 
-          <NavigationLink to='/' style={{ marginLeft: "10px" }}>
-            <div className='homebtn' />
+          <NavigationLink to="/" style={{ marginLeft: "10px" }}>
+            <div className="homebtn" />
           </NavigationLink>
 
           {/* <SubMenu
@@ -79,50 +79,50 @@ class HeaderComponent extends React.Component {
             }
           /> */}
           <Menu.Item
-            key='plantlevel'
+            key="plantlevel"
             style={{
               marginLeft: "8px"
             }}
           >
-            <NavigationLink to='/master/plantlevel'>
-              <Icon type='dropbox' />
+            <NavigationLink to="/master/plantlevel">
+              <Icon type="dropbox" />
               <span>Plant</span>
             </NavigationLink>
           </Menu.Item>
 
-          <Menu.Item key='categorylevel' style={{}}>
-            <NavigationLink to='/master/categorylevel'>
-              <Icon type='dropbox' /> <span>Category</span>
+          <Menu.Item key="categorylevel" style={{}}>
+            <NavigationLink to="/master/categorylevel">
+              <Icon type="dropbox" /> <span>Category</span>
             </NavigationLink>
           </Menu.Item>
 
-          <Menu.Item key='unitlevel' style={{}}>
-            <NavigationLink to='/master/unitlevel'>
-              <Icon type='dropbox' /> <span>Unit</span>
+          <Menu.Item key="unitlevel" style={{}}>
+            <NavigationLink to="/master/unitlevel">
+              <Icon type="dropbox" /> <span>Unit</span>
             </NavigationLink>
           </Menu.Item>
 
-          <Menu.Item key='materiallevel' style={{}}>
-            <NavigationLink to='/master/materiallevel'>
-              <Icon type='dropbox' /> <span>Material</span>
+          <Menu.Item key="materiallevel" style={{}}>
+            <NavigationLink to="/master/materiallevel">
+              <Icon type="dropbox" /> <span>Material</span>
             </NavigationLink>
           </Menu.Item>
 
-          <Menu.Item key='equipmentlevel' style={{}}>
-            <NavigationLink to='/master/equipmentlevel'>
-              <Icon type='dropbox' /> <span>Equipment</span>
+          <Menu.Item key="equipmentlevel" style={{}}>
+            <NavigationLink to="/master/equipmentlevel">
+              <Icon type="dropbox" /> <span>Equipment</span>
             </NavigationLink>
           </Menu.Item>
 
-          <Menu.Item key='testlevel' style={{}}>
-            <NavigationLink to='/master/testlevel'>
-              <Icon type='dropbox' /> <span>Test</span>
+          <Menu.Item key="testlevel" style={{}}>
+            <NavigationLink to="/master/testlevel">
+              <Icon type="dropbox" /> <span>Test</span>
             </NavigationLink>
           </Menu.Item>
 
-          <Menu.Item key='parameterlevel' style={{}}>
-            <NavigationLink to='/master/parameterlevel'>
-              <Icon type='dropbox' /> <span>Parameter</span>
+          <Menu.Item key="parameterlevel" style={{}}>
+            <NavigationLink to="/master/parameterlevel">
+              <Icon type="dropbox" /> <span>Parameter</span>
             </NavigationLink>
           </Menu.Item>
 
@@ -132,20 +132,20 @@ class HeaderComponent extends React.Component {
             </NavigationLink>
           </Menu.Item> */}
 
-          <Menu.Item key='sitelevel' style={{}}>
-            <NavigationLink to='/master/sitelevel'>
-              <Icon type='dropbox' /> <span>Site</span>
+          <Menu.Item key="sitelevel" style={{}}>
+            <NavigationLink to="/master/sitelevel">
+              <Icon type="dropbox" /> <span>Site</span>
             </NavigationLink>
           </Menu.Item>
 
-          <div className='master_logo_gap' />
+          <div className="master_logo_gap" />
           <SubMenu
-            key='masterprofilemenu'
+            key="masterprofilemenu"
             title={
-              <span className='submenu-title-wrapper'>
-                <Avatar size='large'>
+              <span className="submenu-title-wrapper">
+                <Avatar size="large">
                   <Icon
-                    type='user'
+                    type="user"
                     style={{
                       fontSize: "24px",
                       textAlign: "center",
@@ -157,24 +157,24 @@ class HeaderComponent extends React.Component {
               </span>
             }
           >
-            <Menu.Item key='15'>
-              <Link to='/profile'>
-                <Icon type='user' />
+            <Menu.Item key="15">
+              <Link to="/profile">
+                <Icon type="user" />
                 Profile
               </Link>
             </Menu.Item>
-            <Menu.Item key='16'>
+            <Menu.Item key="16">
               <Link
-                to='/settings/priviledges'
+                to="/settings/priviledges"
                 onClick={this.props.toggleSettingsNavigation}
               >
                 <SettingOutlined />
                 Settings
               </Link>
             </Menu.Item>
-            <Menu.Item key='17'>
-              <Link to='/logout'>
-                <Icon type='logout' theme='outlined' twoToneColor />
+            <Menu.Item key="17">
+              <Link to="/logout">
+                <Icon type="logout" theme="outlined" twoToneColor />
                 Log Out
               </Link>
             </Menu.Item>
@@ -184,27 +184,27 @@ class HeaderComponent extends React.Component {
     } else if (this.props.navpath === "/samples") {
       return (
         <TopNavMenu
-          theme='dark'
-          mode='horizontal'
-          position='right'
+          theme="dark"
+          mode="horizontal"
+          position="right"
           defaultSelectedKeys={["1"]}
         >
-          <NavigationLink to='#' style={{ cursor: "default" }}>
-            <div className='logo' />
+          <NavigationLink to="#" style={{ cursor: "default" }}>
+            <div className="logo" />
           </NavigationLink>
 
-          <NavigationLink to='/' style={{ marginLeft: "10px" }}>
-            <div className='homebtn' />
+          <NavigationLink to="/" style={{ marginLeft: "10px" }}>
+            <div className="homebtn" />
           </NavigationLink>
 
-          <div className='samples_logo_gap' />
+          <div className="samples_logo_gap" />
           <SubMenu
-            key='sprof'
+            key="sprof"
             title={
-              <span className='submenu-title-wrapper'>
-                <Avatar size='large'>
+              <span className="submenu-title-wrapper">
+                <Avatar size="large">
                   <Icon
-                    type='user'
+                    type="user"
                     style={{
                       fontSize: "24px",
                       textAlign: "center",
@@ -216,24 +216,24 @@ class HeaderComponent extends React.Component {
               </span>
             }
           >
-            <Menu.Item key='15'>
-              <Link to='/profile'>
-                <Icon type='user' />
+            <Menu.Item key="15">
+              <Link to="/profile">
+                <Icon type="user" />
                 Profile
               </Link>
             </Menu.Item>
-            <Menu.Item key='16'>
+            <Menu.Item key="16">
               <Link
-                to='/settings/priviledges'
+                to="/settings/priviledges"
                 onClick={this.props.toggleSettingsNavigation}
               >
                 <SettingOutlined />
                 Settings
               </Link>
             </Menu.Item>
-            <Menu.Item key='17'>
-              <Link to='/logout'>
-                <Icon type='logout' theme='outlined' twoToneColor />
+            <Menu.Item key="17">
+              <Link to="/logout">
+                <Icon type="logout" theme="outlined" twoToneColor />
                 Log Out
               </Link>
             </Menu.Item>
@@ -243,34 +243,34 @@ class HeaderComponent extends React.Component {
     } else if (this.props.navpath === "/homescreen") {
       return (
         <TopNavMenu
-          theme='dark'
-          mode='horizontal'
-          position='right'
+          theme="dark"
+          mode="horizontal"
+          position="right"
           defaultSelectedKeys={["0"]}
         >
-          <NavigationLink to='/'>
-            <div className='logo' />
+          <NavigationLink to="/">
+            <div className="logo" />
           </NavigationLink>
           <SubMenu
             key={"1"}
             title={
-              <span className='submenu-title-wrapper'>
+              <span className="submenu-title-wrapper">
                 <NavigationLink
-                  to='/dashboard'
+                  to="/dashboard"
                   onClick={this.props.toggleDashboard}
                 >
-                  <Icon type='pie-chart' /> Dashboard
+                  <Icon type="pie-chart" /> Dashboard
                 </NavigationLink>
               </span>
             }
           />
-          <div className='homescreen_logo_gap' />
+          <div className="homescreen_logo_gap" />
           <SubMenu
             title={
-              <span className='submenu-title-wrapper'>
-                <Avatar size='large'>
+              <span className="submenu-title-wrapper">
+                <Avatar size="large">
                   <Icon
-                    type='user'
+                    type="user"
                     style={{
                       fontSize: "24px",
                       textAlign: "center",
@@ -282,24 +282,24 @@ class HeaderComponent extends React.Component {
               </span>
             }
           >
-            <Menu.Item key='15'>
-              <Link to='/profile'>
-                <Icon type='user' />
+            <Menu.Item key="15">
+              <Link to="/profile">
+                <Icon type="user" />
                 Profile
               </Link>
             </Menu.Item>
-            <Menu.Item key='16'>
+            <Menu.Item key="16">
               <Link
-                to='/settings/priviledges'
+                to="/settings/priviledges"
                 onClick={this.props.toggleSettingsNavigation}
               >
                 <SettingOutlined />
                 Settings
               </Link>
             </Menu.Item>
-            <Menu.Item key='17'>
-              <Link to='/logout'>
-                <Icon type='logout' theme='outlined' twoToneColor />
+            <Menu.Item key="17">
+              <Link to="/logout">
+                <Icon type="logout" theme="outlined" twoToneColor />
                 Log Out
               </Link>
             </Menu.Item>
@@ -312,26 +312,26 @@ class HeaderComponent extends React.Component {
     ) {
       return (
         <TopNavMenu
-          theme='dark'
-          mode='horizontal'
-          position='right'
+          theme="dark"
+          mode="horizontal"
+          position="right"
           defaultSelectedKeys={["1"]}
         >
-          <NavigationLink to='#' style={{ cursor: "default" }}>
-            <div className='logo' />
+          <NavigationLink to="#" style={{ cursor: "default" }}>
+            <div className="logo" />
           </NavigationLink>
 
-          <NavigationLink to='/' style={{ marginLeft: "10px" }}>
-            <div className='homebtn' />
+          <NavigationLink to="/" style={{ marginLeft: "10px" }}>
+            <div className="homebtn" />
           </NavigationLink>
 
-          <div className='testrials_logo_gap' />
+          <div className="testrials_logo_gap" />
           <SubMenu
             title={
-              <span className='submenu-title-wrapper'>
-                <Avatar size='large'>
+              <span className="submenu-title-wrapper">
+                <Avatar size="large">
                   <Icon
-                    type='user'
+                    type="user"
                     style={{
                       fontSize: "24px",
                       textAlign: "center",
@@ -343,24 +343,24 @@ class HeaderComponent extends React.Component {
               </span>
             }
           >
-            <Menu.Item key='15'>
-              <Link to='/profile'>
-                <Icon type='user' />
+            <Menu.Item key="15">
+              <Link to="/profile">
+                <Icon type="user" />
                 Profile
               </Link>
             </Menu.Item>
-            <Menu.Item key='16'>
+            <Menu.Item key="16">
               <Link
-                to='/settings/priviledges'
+                to="/settings/priviledges"
                 onClick={this.props.toggleSettingsNavigation}
               >
                 <SettingOutlined />
                 Settings
               </Link>
             </Menu.Item>
-            <Menu.Item key='17'>
-              <Link to='/logout'>
-                <Icon type='logout' theme='outlined' twoToneColor />
+            <Menu.Item key="17">
+              <Link to="/logout">
+                <Icon type="logout" theme="outlined" twoToneColor />
                 Log Out
               </Link>
             </Menu.Item>
@@ -370,26 +370,26 @@ class HeaderComponent extends React.Component {
     } else if (this.props.navpath === "/testconfiguration") {
       return (
         <TopNavMenu
-          theme='dark'
-          mode='horizontal'
-          position='right'
+          theme="dark"
+          mode="horizontal"
+          position="right"
           defaultSelectedKeys={["1"]}
         >
-          <NavigationLink to='#' style={{ cursor: "default" }}>
-            <div className='logo' />
+          <NavigationLink to="#" style={{ cursor: "default" }}>
+            <div className="logo" />
           </NavigationLink>
 
-          <NavigationLink to='/' style={{ marginLeft: "10px" }}>
-            <div className='homebtn' />
+          <NavigationLink to="/" style={{ marginLeft: "10px" }}>
+            <div className="homebtn" />
           </NavigationLink>
 
-          <div className='testrials_logo_gap' />
+          <div className="testrials_logo_gap" />
           <SubMenu
             title={
-              <span className='submenu-title-wrapper'>
-                <Avatar size='large'>
+              <span className="submenu-title-wrapper">
+                <Avatar size="large">
                   <Icon
-                    type='user'
+                    type="user"
                     style={{
                       fontSize: "24px",
                       textAlign: "center",
@@ -401,24 +401,24 @@ class HeaderComponent extends React.Component {
               </span>
             }
           >
-            <Menu.Item key='15'>
-              <Link to='/profile'>
-                <Icon type='user' />
+            <Menu.Item key="15">
+              <Link to="/profile">
+                <Icon type="user" />
                 Profile
               </Link>
             </Menu.Item>
-            <Menu.Item key='16'>
+            <Menu.Item key="16">
               <Link
-                to='/settings/priviledges'
+                to="/settings/priviledges"
                 onClick={this.props.toggleSettingsNavigation}
               >
                 <SettingOutlined />
                 Settings
               </Link>
             </Menu.Item>
-            <Menu.Item key='17'>
-              <Link to='/logout'>
-                <Icon type='logout' theme='outlined' twoToneColor />
+            <Menu.Item key="17">
+              <Link to="/logout">
+                <Icon type="logout" theme="outlined" twoToneColor />
                 Log Out
               </Link>
             </Menu.Item>
@@ -428,39 +428,39 @@ class HeaderComponent extends React.Component {
     } else if (this.props.navpath === "/priviledges") {
       return (
         <TopNavMenu
-          theme='dark'
-          mode='horizontal'
-          position='right'
+          theme="dark"
+          mode="horizontal"
+          position="right"
           selectedKeys={this.props.priviledgeKeys}
           onClick={this.props.toggleBetweenPriviledgeLevels}
         >
-          <NavigationLink to='#' style={{ cursor: "default" }}>
-            <div className='logo' />
+          <NavigationLink to="#" style={{ cursor: "default" }}>
+            <div className="logo" />
           </NavigationLink>
 
-          <NavigationLink to='/' style={{ marginLeft: "10px" }}>
-            <div className='homebtn' />
+          <NavigationLink to="/" style={{ marginLeft: "10px" }}>
+            <div className="homebtn" />
           </NavigationLink>
 
-          <Menu.Item key='priviledges' style={{ marginLeft: "10px" }}>
-            <NavigationLink to='/settings/priviledges'>
-              <Icon type='dropbox' /> <span>Priviledges</span>
+          <Menu.Item key="priviledges" style={{ marginLeft: "10px" }}>
+            <NavigationLink to="/settings/priviledges">
+              <Icon type="dropbox" /> <span>Priviledges</span>
             </NavigationLink>
           </Menu.Item>
 
-          <Menu.Item key='auditlog'>
-            <NavigationLink to='/settings/auditlog'>
-              <Icon type='dropbox' /> <span>Audit Log</span>
+          <Menu.Item key="auditlog">
+            <NavigationLink to="/settings/auditlog">
+              <Icon type="dropbox" /> <span>Audit Log</span>
             </NavigationLink>
           </Menu.Item>
 
-          <div className='configuration_logo_gap' />
+          <div className="configuration_logo_gap" />
           <SubMenu
             title={
-              <span className='submenu-title-wrapper'>
-                <Avatar size='large'>
+              <span className="submenu-title-wrapper">
+                <Avatar size="large">
                   <Icon
-                    type='user'
+                    type="user"
                     style={{
                       fontSize: "24px",
                       textAlign: "center",
@@ -472,24 +472,24 @@ class HeaderComponent extends React.Component {
               </span>
             }
           >
-            <Menu.Item key='15'>
-              <Link to='/profile'>
-                <Icon type='user' />
+            <Menu.Item key="15">
+              <Link to="/profile">
+                <Icon type="user" />
                 Profile
               </Link>
             </Menu.Item>
-            <Menu.Item key='16'>
+            <Menu.Item key="16">
               <Link
-                to='/settings/priviledges'
+                to="/settings/priviledges"
                 onClick={this.props.toggleSettingsNavigation}
               >
                 <SettingOutlined />
                 Settings
               </Link>
             </Menu.Item>
-            <Menu.Item key='17'>
-              <Link to='/logout'>
-                <Icon type='logout' theme='outlined' twoToneColor />
+            <Menu.Item key="17">
+              <Link to="/logout">
+                <Icon type="logout" theme="outlined" twoToneColor />
                 Log Out
               </Link>
             </Menu.Item>
@@ -499,27 +499,27 @@ class HeaderComponent extends React.Component {
     } else if (this.props.navpath === "/mixdesign") {
       return (
         <TopNavMenu
-          theme='dark'
-          mode='horizontal'
-          position='right'
+          theme="dark"
+          mode="horizontal"
+          position="right"
           defaultSelectedKeys={["1"]}
           onClick={this.props.toggleBetweenPriviledgeLevels}
         >
-          <NavigationLink to='#' style={{ cursor: "default" }}>
-            <div className='logo' />
+          <NavigationLink to="#" style={{ cursor: "default" }}>
+            <div className="logo" />
           </NavigationLink>
 
-          <NavigationLink to='/' style={{ marginLeft: "10px" }}>
-            <div className='homebtn' />
+          <NavigationLink to="/" style={{ marginLeft: "10px" }}>
+            <div className="homebtn" />
           </NavigationLink>
 
-          <div className='testrials_logo_gap' />
+          <div className="testrials_logo_gap" />
           <SubMenu
             title={
-              <span className='submenu-title-wrapper'>
-                <Avatar size='large'>
+              <span className="submenu-title-wrapper">
+                <Avatar size="large">
                   <Icon
-                    type='user'
+                    type="user"
                     style={{
                       fontSize: "24px",
                       textAlign: "center",
@@ -531,24 +531,24 @@ class HeaderComponent extends React.Component {
               </span>
             }
           >
-            <Menu.Item key='15'>
-              <Link to='/profile'>
-                <Icon type='user' />
+            <Menu.Item key="15">
+              <Link to="/profile">
+                <Icon type="user" />
                 Profile
               </Link>
             </Menu.Item>
-            <Menu.Item key='16'>
+            <Menu.Item key="16">
               <Link
-                to='/settings/priviledges'
+                to="/settings/priviledges"
                 onClick={this.props.toggleSettingsNavigation}
               >
                 <SettingOutlined />
                 Settings
               </Link>
             </Menu.Item>
-            <Menu.Item key='17'>
-              <Link to='/logout'>
-                <Icon type='logout' theme='outlined' twoToneColor />
+            <Menu.Item key="17">
+              <Link to="/logout">
+                <Icon type="logout" theme="outlined" twoToneColor />
                 Log Out
               </Link>
             </Menu.Item>
@@ -558,26 +558,26 @@ class HeaderComponent extends React.Component {
     } else if (this.props.navpath === "/testresults") {
       return (
         <TopNavMenu
-          theme='dark'
-          mode='horizontal'
-          position='right'
+          theme="dark"
+          mode="horizontal"
+          position="right"
           defaultSelectedKeys={["1"]}
         >
-          <NavigationLink to='#' style={{ cursor: "default" }}>
-            <div className='logo' />
+          <NavigationLink to="#" style={{ cursor: "default" }}>
+            <div className="logo" />
           </NavigationLink>
 
-          <NavigationLink to='/' style={{ marginLeft: "10px" }}>
-            <div className='homebtn' />
+          <NavigationLink to="/" style={{ marginLeft: "10px" }}>
+            <div className="homebtn" />
           </NavigationLink>
 
-          <div className='testrials_logo_gap' />
+          <div className="testrials_logo_gap" />
           <SubMenu
             title={
-              <span className='submenu-title-wrapper'>
-                <Avatar size='large'>
+              <span className="submenu-title-wrapper">
+                <Avatar size="large">
                   <Icon
-                    type='user'
+                    type="user"
                     style={{
                       fontSize: "24px",
                       textAlign: "center",
@@ -589,24 +589,24 @@ class HeaderComponent extends React.Component {
               </span>
             }
           >
-            <Menu.Item key='15'>
-              <Link to='/profile'>
-                <Icon type='user' />
+            <Menu.Item key="15">
+              <Link to="/profile">
+                <Icon type="user" />
                 Profile
               </Link>
             </Menu.Item>
-            <Menu.Item key='16'>
+            <Menu.Item key="16">
               <Link
-                to='/settings/priviledges'
+                to="/settings/priviledges"
                 onClick={this.props.toggleSettingsNavigation}
               >
                 <SettingOutlined />
                 Settings
               </Link>
             </Menu.Item>
-            <Menu.Item key='17'>
-              <Link to='/logout'>
-                <Icon type='logout' theme='outlined' twoToneColor />
+            <Menu.Item key="17">
+              <Link to="/logout">
+                <Icon type="logout" theme="outlined" twoToneColor />
                 Log Out
               </Link>
             </Menu.Item>
@@ -618,7 +618,7 @@ class HeaderComponent extends React.Component {
   render() {
     return (
       <Header
-        theme='dark'
+        theme="dark"
         style={{
           paddingLeft: "14px",
           height: "55px",

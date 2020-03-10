@@ -140,24 +140,24 @@ class ManagePour extends Component {
           <span>
             <a>
               <Icon
-                type='edit'
+                type="edit"
                 onClick={this.props.passEditPourRecordToModal.bind(
                   this,
                   record
                 )}
               />
             </a>
-            <Divider type='vertical' />
+            <Divider type="vertical" />
             <a>
               <Popconfirm
-                title='Are you sure you want to Delete this?'
+                title="Are you sure you want to Delete this?"
                 icon={
-                  <Icon type='question-circle-o' style={{ color: "red" }} />
+                  <Icon type="question-circle-o" style={{ color: "red" }} />
                 }
                 onConfirm={this.onConfirmdelete.bind(this, record.id)}
               >
-                <a href='#'>
-                  <Icon type='delete' style={{ color: "red" }}></Icon>
+                <a href="#">
+                  <Icon type="delete" style={{ color: "red" }}></Icon>
                 </a>
               </Popconfirm>
             </a>
@@ -169,7 +169,7 @@ class ManagePour extends Component {
     return (
       <AntTable
         maxlength
-        title={() => <ManagePourMasterTitle />}
+        title={() => <ManagePourMasterTitle reload={this.getAllPour} />}
         columns={columns}
         dataSource={this.state.poursList}
         onChange={this.handleChange}

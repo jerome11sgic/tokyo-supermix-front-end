@@ -546,7 +546,7 @@ class Addincoming extends Component {
 
               <Select
                 className='inputfield'
-                id='supplierId'
+                id=''
                 name='supplierId'
                 placeholder='Enter Supplier Name'
                 style={{ width: "180px" }}

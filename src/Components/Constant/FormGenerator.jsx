@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import flatten from "flatten";
 import { PrimaryButton } from "../styledcomponents/button/button";
-import { Input, Form } from "antd";
+import { Input, Form, Select } from "antd";
 import { FlexContainer } from "../styledcomponents/container/FlexGrid";
 
 export default class FormGenerator extends Component {
@@ -16,6 +16,7 @@ export default class FormGenerator extends Component {
       validationErrors: {},
       randomisedFields: {}
     };
+    // this.reset();
 
     this.filterRules = {
       numeric: value => /^$|^[0-9]+$/.test(value),
@@ -52,6 +53,11 @@ export default class FormGenerator extends Component {
     this.propagateChange = this.propagateChange.bind(this);
   }
 
+  // reset = () => {
+  //   this.setState({
+  //     form: {}
+  //   });
+  // };
   static flatInputs(entity) {
     return flatten(entity);
   }
@@ -281,7 +287,7 @@ export default class FormGenerator extends Component {
     }
 
     let value = event.target.value;
-
+    console.log(value);
     if (input.type === "checkbox") {
       value = event.target.checked;
     }
@@ -409,6 +415,9 @@ export default class FormGenerator extends Component {
           validationErrors
         }
       });
+      this.setState({
+        form: {}
+      });
       // renderSubmit({
       //   valid: valid,
       //   data: {
@@ -451,7 +460,7 @@ export default class FormGenerator extends Component {
     if (input.constructor === Array) {
       return this.renderInputs(input);
     }
-
+    console.log("DEBUGasdfj: ", input);
     const { form, validationErrors, randomisedFields } = this.state;
 
     const {
@@ -478,7 +487,7 @@ export default class FormGenerator extends Component {
           : ""
       }`,
       name: randomisedFields[input.name] || input.name,
-      value: form[input.name] || input.defaultValue || "",
+      value: form[input.name] || input.defaultValue || input.value || "",
       placeholder: input.placeholder,
       id: input.name,
       onChange: this.handleInput.bind(this, input),
@@ -503,7 +512,16 @@ export default class FormGenerator extends Component {
         );
       case "select":
         return (
-          <select {...props}>
+          <select
+            {...props}
+            style={{
+              width: "80px",
+              boxShadow: "1px 2px 8px 1px rgba(0,0,0,0.08)",
+              borderRadius: "6px",
+              height: "32px"
+              // marginTop: "-10px"
+            }}
+          >
             {input.defaultOptionText && (
               <option hidden selected value>
                 {input.defaultOptionText}
@@ -621,6 +639,7 @@ export default class FormGenerator extends Component {
     inputs = inputs.filter(
       input => canRender.includes(input.name) || input.constructor === Array
     );
+    console.log("DEBUG545: ", inputs);
     const { lableStyle } = this.props;
     return (
       <div
@@ -638,7 +657,7 @@ export default class FormGenerator extends Component {
             : `${classPrefix}-${input.containerClass ||
                 defaultContainerClass ||
                 ""}`;
-
+          console.log("DEBUG3: ", input);
           return (
             <div>
               <FlexContainer style={{ height: "auto" }} key={i}>

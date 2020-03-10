@@ -85,7 +85,7 @@ class AddMainCategoryForm extends Component {
         errors.sub_category =
           value.length === 0
             ? "Category can't be empty"
-            : value.length < 6
+            : value.length < 1
             ? "Category \n must be 6 characters long!"
             : value.length > 20
             ? "Category \n must not be exceeded than 20 characters"
@@ -241,7 +241,7 @@ class AddMainCategoryForm extends Component {
     } else {
       const data = {
         name: this.state.subcategory_name,
-        materialCategoryId: 1
+        materialCategoryId: this.state.material_category
       };
       console.log(data);
       api("POST", "supermix", "/material-sub-category", "", data, "").then(

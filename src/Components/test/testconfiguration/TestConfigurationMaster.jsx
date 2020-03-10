@@ -11,28 +11,26 @@ import AddTestName from "./configure/AddTestName";
 import AddTestParameter from "./configure/AddTestParameter";
 import AddTestEquation from "./configure/AddTestEquation";
 import AddTestAcceptedValue from "./configure/AddTestAcceptedValue";
+import Step01 from "./configuretest/Step01";
+import Step02 from "./configuretest/Step02";
 
 const { Step } = Steps;
 
 const steps = [
   {
     title: "First",
-    content: <AddTestName />
+    content: <Step01 />
   },
   {
     title: "Second",
-    content: <AddTestParameter />
+    content: <Step02 />
   },
   {
     title: "Third",
-    content: <AddTestEquation />
-  },
-  {
-    title: "Fourth",
     content: <AddTestAcceptedValue />
   },
   {
-    title: "Fifth",
+    title: "Third",
     content: <GraphConfiguration />
   },
   {
@@ -45,7 +43,7 @@ export default class TestConfigurationMaster extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      current: 2
+      current: 0
     };
   }
 

@@ -1,18 +1,19 @@
 .equation_wrapper {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
-  justify-content: space-evenly;
-  height: auto;
+  justify-content: space-around;
+  height: 280px;
   align-self: center;
-  width: 1250px;
+  width: auto;
   padding: 10px;
   background-color: rgba(220, 220, 220, 0.9);
   border-radius: 15px;
 }
 .equation_playground {
   display: flex;
-  width: 600px;
+  width: auto;
+  height: auto;
   border-radius: 15px;
 }
 
@@ -26,12 +27,11 @@
   flex-wrap: wrap;
   flex-direction: row;
   border-radius: 15px;
-  justify-content: space-evenly;
-  background-color: white;
-  width: 400px;
-  height: 150px;
-  padding: 10px;
   justify-content: space-between;
+  background-color: white;
+  width: 470px;
+  height: 180px;
+  padding: 10px;
 }
 
 .backImg {
@@ -41,4 +41,26 @@
   color: #001422;
   vertical-align: middle;
   margin-top: -4px;
+}
+
+.letter {
+  display: flex;
+  font-size: 38px;
+  font-weight: bold;
+  color: #001422;
+  vertical-align: middle;
+  margin-top: -4px;
+}
+
+.letters_area {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  border-radius: 15px;
+  justify-content: flex-start;
+  background-color: rgba(220, 220, 220, 0.9);
+  /* background-color: white; */
+  width: auto;
+  height: auto;
+  padding: 10px;
 }

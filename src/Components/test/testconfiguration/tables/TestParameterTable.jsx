@@ -7,6 +7,7 @@ import {
   POP_PARAMETERS
 } from "../../../../redux/action/testconfiguration/TestConfiguration";
 import { connect } from "react-redux";
+import theme from "../../../../theme";
 
 class TestParameterTable extends Component {
   state = {
@@ -59,23 +60,38 @@ class TestParameterTable extends Component {
         title: "Relevant",
         dataIndex: "action",
         key: "action",
-        render: (text, record = this.state.testParameterData) => (
-          <Checkbox onChange={this.props.selectParameters.bind(this, record)} />
-        )
+        render: (text, record = this.state.testParameterData) => <Checkbox />
       }
     ];
     return (
       <AntTable
-        maxlength
         dataSource={this.state.testParameterData}
         size={this.state.size}
         bordered={false}
         columns={testParameterColumns}
-        title={() => <h3 style={{ height: "10px" }}>Test Parameter</h3>}
+        title={() => (
+          <div
+            style={{
+              background: theme.colors.primary,
+              color: "white",
+              height: "40px",
+              fontSize: "16px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              margin: "-10px",
+              borderTopLeftRadius: "15px",
+              borderTopRightRadius: "15px"
+            }}
+          >
+            Test Parameter
+          </div>
+        )}
         showHeader={true}
         pagination={{ defaultPageSize: 6 }}
         style={{
-          height: "200px"
+          height: "auto",
+          width: "50%"
         }}
       />
     );
@@ -91,17 +107,17 @@ class TestParameterTable extends Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    selectParameters: (record, event) => {
-      console.log(event.target.checked);
-      if (event.target.checked === true) {
-        dispatch({ type: ADD_PARAMETERS, payload: record.unitName });
-        console.log("record pushed " + record.unitName);
-      }
-      if (event.target.checked === false) {
-        dispatch({ type: POP_PARAMETERS, payload: record.unitName });
-        console.log("record spliced " + record.unitName);
-      }
-    }
+    // selectParameters: (record, event) => {
+    //   console.log(event.target.checked);
+    //   if (event.target.checked === true) {
+    //     dispatch({ type: ADD_PARAMETERS, payload: record.unitName });
+    //     console.log("record pushed " + record.unitName);
+    //   }
+    //   if (event.target.checked === false) {
+    //     dispatch({ type: POP_PARAMETERS, payload: record.unitName });
+    //     console.log("record spliced " + record.unitName);
+    //   }
+    // }
   };
 };
 export default connect(null, mapDispatchToProps)(TestParameterTable);

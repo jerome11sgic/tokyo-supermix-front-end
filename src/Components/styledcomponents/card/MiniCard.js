@@ -18,6 +18,7 @@ export const MiniCard = styled.div`
   height: 50px;
   width: 50px;
   display: flex;
+  margin: 5px;
   /* border-top-left-radius: ${props => (props.topLeft ? "20px" : "")};
   border-top-right-radius: ${props => (props.topRight ? "20px" : "")};
   border-bottom-left-radius: ${props => (props.bottomLeft ? "20px" : "")};
@@ -25,10 +26,15 @@ export const MiniCard = styled.div`
   justify-content: center;
   cursor: pointer;
   
-  /* border: 2px solid #001016; */
+  /* border: 1px solid #001016; */
   border-radius: 20px;
   box-shadow: 1px 4px 2px 2px rgba(0, 0, 0, 0.05);
  
+  ${props =>
+    props.letters &&
+    css`
+      background: white;
+    `}
   /* ${props =>
     props.add &&
     css`
