@@ -76,7 +76,7 @@ class AddTestEquation extends Component {
     const { textBoxEquation } = this.state;
     console.log(this.props.cards);
     return (
-      <FlexContainer style={{ width: "600px" }}>
+      <FlexContainer style={{ width: "700px" }}>
         <FlexContainer normal className='equation_wrapper'>
           <TextArea
             className='equation_playground textEmph'

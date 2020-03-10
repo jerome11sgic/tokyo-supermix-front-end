@@ -5,7 +5,7 @@ import AddTestEquation from "../configure/AddTestEquation";
 import TestParameterTable from "../tables/TestParameterTable";
 import { connect } from "react-redux";
 import { Modal, Button } from "antd";
-
+import HandelError from "../../../Constant/HandleError";
 import theme from "../../../../theme";
 import {
   TRIGGER_BACK_EQUATIONS_AREA,
@@ -13,6 +13,8 @@ import {
 } from "../../../../redux/action/testconfiguration/TestConfiguration";
 import AddTestParameter from "../configure/AddTestParameter";
 import { PrimaryButton } from "../../../styledcomponents/button/button";
+import { api } from "../../../services/AxiosService";
+import Notification from "../../../Constant/Notification";
 
 class Step01 extends Component {
   constructor(props) {
@@ -21,20 +23,125 @@ class Step01 extends Component {
     this.state = {
       justifyStyle: "center",
       showSecondColumn: false,
-      visible: false
+      visible: false,
+      lastIndexOfEquation: "",
+      parameterData: this.props.paramsData
     };
   }
 
+  // api("POST", "supermix", "/test", "", data, "").then(
+  //   res => {
+  //     console.log(res.data);
+  //     if (res.data.status === "VALIDATION_FAILURE") {
+  //       console.log("add");
+  //       this.responeserror(res.data.results.name.message);
+  //     } else {
+  //       Notification("success", res.data.message);
+  //       // this.props.reload();
+
+  //       this.setState({
+  //         test_name: "",
+  //         equation: "",
+  //         test_type: "",
+  //         plant: [],
+  //         errors: {
+  //           test_name: "",
+  //           equation: "",
+  //           test_type: ""
+  //         },
+  //         errormsgs: ""
+  //       });
+  //     }
+  //   },
+  //   error => {
+  //     this.setState({
+  //       errorvalmegss: error.validationFailures[0]
+  //     });
+  //     console.log("DEBUG34: ", error);
+  //     console.log(HandelError(error.validationFailures[0]));
+  //   }
+  // );
+
   handleSubmit = () => {
-    const saveEquation = {
+    let testParameter = [];
+    let lastEquationData;
+    const saveEquations = {
       formula: this.props.textBody
     };
-    const testParameter = {
-      equation_id: 1,
-      parameter_id: this.props.paramsData
-    };
-    console.log(saveEquation);
+    // const testParameter = {
+    //   equationId: 1,
+    //   parameterId: 61
+    // };
+
     console.log(testParameter);
+    const { parameterData } = this.state;
+    function saveEquationParameterAfterAwait() {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          api("GET", "supermix", "/equations", "", "", "").then(res => {
+            console.log(res.data.results.equations);
+            console.log(res.data.results.equations.length);
+            console.log(
+              res.data.results.equations[res.data.results.equations.length - 1]
+                .id
+            );
+
+            lastEquationData =
+              res.data.results.equations[res.data.results.equations.length - 1]
+                .id;
+            for (let k = 0; k < parameterData.length; k++) {
+              testParameter.push({
+                equationId: lastEquationData,
+                parameterId: parameterData[k]
+              });
+            }
+            api(
+              "POST",
+              "supermix",
+              "/equation-parameter",
+              "",
+              testParameter,
+              ""
+            ).then(res => {
+              console.log(res.data);
+              Notification("success", res.data.message);
+              // this.props.reload();
+              // this.setState({});
+            });
+            // res.data
+            // for (let j = 0; j < res.data.results.equations.length; j++) {
+
+            // }
+          });
+
+          resolve("resolved");
+        }, 4000);
+      });
+    }
+
+    async function saveEquation() {
+      console.log("calling");
+
+      console.log(saveEquations);
+      api("POST", "supermix", "/equation", "", saveEquations, "").then(res => {
+        console.log(res.data);
+        Notification("success", res.data.message);
+
+        // this.props.reload();
+        // this.setState({});
+      });
+      const result = await saveEquationParameterAfterAwait();
+      console.log(result);
+
+      // expected output: 'resolved'
+    }
+
+    saveEquation();
+    if (saveEquation) {
+      setTimeout(() => {
+        this.props.handleCancelEquationArea();
+      }, 5000);
+    }
   };
 
   render() {
@@ -70,7 +177,7 @@ class Step01 extends Component {
 
           <AddTestName />
           <Modal
-            width='800px'
+            width='1250px'
             style={{ height: "auto", marginTop: "-40px" }}
             title='Equation Area'
             visible={this.props.visible}
@@ -92,7 +199,7 @@ class Step01 extends Component {
               </PrimaryButton>
             ]}
           >
-            <FlexContainer>
+            <FlexContainer normal style={{ width: "100%" }}>
               <AddTestParameter />
               <AddTestEquation />
             </FlexContainer>

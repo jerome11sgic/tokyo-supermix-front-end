@@ -16,7 +16,7 @@ const initialState = {
   cards: [],
   tmp: [],
   //storing payload for api call
-  paramsData: ""
+  paramsData: []
 };
 
 export const EquationConfigurationReducer = (state = initialState, action) => {
@@ -62,26 +62,29 @@ export const EquationConfigurationReducer = (state = initialState, action) => {
       };
 
     case CREATE_MINI_CARD:
-      state.acceptedIndexes.push(action.payload.parameterAbbr);
+      state.acceptedIndexes.push(action.payload.abbreviation);
       console.log(state.acceptedIndexes[0]);
+      state.paramsData.push(action.payload.id);
+      console.log(
+        "DEBUG-ParamsData:" + state.paramsData.map((post, index) => post)
+      );
       return {
         ...state,
-        cards: [...state.cards, action.payload.parameterAbbr],
+        cards: [...state.cards, action.payload.abbreviation],
         regex: (state.regex = new RegExp(
           "[^" + state.acceptedIndexes + "0-9=+-/.()√π<>²\\d*]",
           "g"
-        )),
-        paramsData: action.payload.parameterId
+        ))
       };
 
     case REMOVE_MINI_CARD:
       const newState = state.cards.filter(
-        val => val !== action.payload.parameterAbbr
+        val => val !== action.payload.abbreviation
       );
       console.log("DEBUG1234: ", newState);
       console.log(
         "DEBUG SEARCH CHAR: " +
-          state.textBody.replace(action.payload.parameterAbbr, "")
+          state.textBody.replace(action.payload.abbreviation, "")
       );
 
       return {
@@ -91,7 +94,7 @@ export const EquationConfigurationReducer = (state = initialState, action) => {
           "[^" + newState + "0-9=+-/.()√π<>²\\d*]",
           "g"
         )),
-        textBody: state.textBody.replace(action.payload.parameterAbbr, "")
+        textBody: state.textBody.replace(action.payload.abbreviation, "")
       };
 
     case CLEAR_STATES_WHILE_CANCEL:
@@ -100,8 +103,7 @@ export const EquationConfigurationReducer = (state = initialState, action) => {
         cards: [],
         regex: /[^=+-/.()√π<>²\d*]/gi,
         acceptedIndexes: [],
-        textBody: "",
-        paramsData: ""
+        textBody: ""
       };
 
     default:
