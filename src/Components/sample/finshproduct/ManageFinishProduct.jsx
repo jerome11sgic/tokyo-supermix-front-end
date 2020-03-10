@@ -4,16 +4,19 @@ import { Popconfirm, Divider, Icon } from "antd";
 
 import { AntTable } from "../../styledcomponents/table/AntTabl";
 import ManageFinishProductSampleTitle from "../titles/ManageFinishProductSampleTitle";
+import Notification from "../../Constant/Notification";
+import { api } from "../../services/AxiosService";
+import { SWITCH_TO_EDIT_MODE } from "../../../redux/action/master/plantlevel/PlantLevel";
+import { connect } from "react-redux";
 
-const data = [];
-
-export default class ManageFinishProduct extends Component {
+class ManageFinishProduct extends Component {
   state = {
     filteredInfo: null,
     sortedInfo: null,
     searchText: "",
     visible: false,
-    size: "small"
+    size: "small",
+    datalist: ""
   };
 
   componentWillMount() {
@@ -80,86 +83,83 @@ export default class ManageFinishProduct extends Component {
   onChange(pageNumber) {
     console.log("Page: ", pageNumber);
   }
+  componentDidMount() {
+    this.getallfinshProduct();
+  }
+
+  getallfinshProduct = () => {
+    api("GET", "supermix", "/finish-products", "", "", "").then(res => {
+      console.log(res.data.results.FinishProducts);
+
+      this.setState({
+        datalist: res.data.results.FinishProducts
+      });
+    });
+  };
+  onConfirmdelete(id) {
+    console.log("ddddd");
+    console.log(id);
+
+    api("DELETE", "supermix", "/finish-product", "", "", id).then(res => {
+      console.log(res.data);
+      this.getallfinshProduct();
+      Notification("success", res.data.message);
+    });
+    console.log(this.state.id);
+  }
 
   render() {
     let { sortedInfo, filteredInfo } = this.state;
     sortedInfo = sortedInfo || {};
     filteredInfo = filteredInfo || {};
     const columns = [
-      // {
-      //   title: "ID",
-      //   dataIndex: "id",
-      //   key: "Id",
-
-      //   filters: [
-      //     { text: "Joe", value: "Joe" },
-      //     { text: "Jim", value: "Jim" }
-      //   ],
-      //   filteredValue: filteredInfo.name || null,
-      //   onFilter: (value, record) => record.name.includes(value),
-      //   sorter: (a, b) => a.code - b.code,
-      //   sortOrder: sortedInfo.columnKey === "code" && sortedInfo.order
-      // },
       {
         title: "Mix Design",
-        dataIndex: "mixdesign",
-        key: "mixdesign",
-
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        dataIndex: "mixDesignCode",
+        key: "mixdesign"
       },
       {
         title: "Project",
-        dataIndex: "project",
-        key: "project",
-
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        dataIndex: "projectName",
+        key: "project"
       },
       {
         title: "Pour",
-        dataIndex: "pour",
-        key: "pour",
-
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        dataIndex: "pourName",
+        key: "pour"
       },
       {
         title: " Date",
         dataIndex: "date",
-        key: "date",
-
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        key: "date"
       },
 
       {
         title: "Edit & Delete",
         key: "action",
-        width: "10%",
-        render: (text, record) => (
+        width: "7%",
+        render: (text, record = this.state.datalist) => (
           <span>
             <a>
-              <Icon type='edit' />
+              <Icon
+                type="edit"
+                onClick={this.props.passEditFinishProductToModal.bind(
+                  this,
+                  record
+                )}
+              />
             </a>
-            <Divider type='vertical' />
+            <Divider type="vertical" />
             <a>
               <Popconfirm
-                title='Are you sure you want to Delete this?'
+                title="Are you sure you want to Delete this?"
                 icon={
-                  <Icon type='question-circle-o' style={{ color: "red" }} />
+                  <Icon type="question-circle-o" style={{ color: "red" }} />
                 }
+                onConfirm={this.onConfirmdelete.bind(this, record.id)}
               >
-                <a href='#'>
-                  <Icon type='delete'></Icon>
+                <a href="#">
+                  <Icon type="delete" style={{ color: "red" }}></Icon>
                 </a>
               </Popconfirm>
             </a>
@@ -173,9 +173,11 @@ export default class ManageFinishProduct extends Component {
         <AntTable
           maxlength
           nomargin
-          title={() => <ManageFinishProductSampleTitle />}
+          title={() => (
+            <ManageFinishProductSampleTitle reload={this.getallfinshProduct} />
+          )}
           columns={columns}
-          dataSource={data}
+          dataSource={this.state.datalist}
           onChange={this.handleChange}
           pagination={{ defaultPageSize: 3 }}
           size={this.state.size}
@@ -184,3 +186,15 @@ export default class ManageFinishProduct extends Component {
     );
   }
 }
+const mapDispatchToProps = dispatch => {
+  return {
+    // if this function dispatches modal will be shown and the data will be drawn :)
+    passEditFinishProductToModal: record => {
+      //this payload is the data we pass into redux which is in the row which we clicked
+      dispatch({ type: SWITCH_TO_EDIT_MODE, payload: record });
+      console.log(record);
+    }
+  };
+};
+
+export default connect(null, mapDispatchToProps)(ManageFinishProduct);

@@ -95,22 +95,19 @@ class ManageNature extends Component {
   }
   render() {
     const columns = [
-      // {
-      //   title: "Code",
-      //   dataIndex: "code",
-      //   key: "code"
-      //   // width: "10%"
-      // },
+      {
+        width: "3%"
+      },
       {
         title: "Material State",
         dataIndex: "materialState",
-        key: "materialState"
-        // width: "20%"
+        key: "materialState",
+        width: "8%"
       },
       {
         title: "Edit & Delete",
         key: "action",
-        width: "17%",
+        width: "6%",
         render: (text, record = this.state.data) => (
           <span>
             <a>
@@ -143,12 +140,11 @@ class ManageNature extends Component {
 
     return (
       <AntTable
-        length
         title={() => <NatureTitle reload={this.getallMaterialStates} />}
         columns={columns}
         dataSource={this.state.data}
         onChange={this.handleChange}
-        pagination={{ defaultPageSize: 3 }}
+        pagination={{ defaultPageSize: 8 }}
         size={this.state.size}
       />
     );

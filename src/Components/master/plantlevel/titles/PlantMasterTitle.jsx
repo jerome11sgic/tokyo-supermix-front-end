@@ -19,7 +19,7 @@ export default class PlantMasterTitle extends Component {
   render() {
     return (
       <FlexContainer titles leveltitles>
-        <Paragraph style={style}>Plant Master</Paragraph>
+        <Paragraph style={style}>Plant </Paragraph>
         <PlantAddForm reload={this.getallplant} />
       </FlexContainer>
     );

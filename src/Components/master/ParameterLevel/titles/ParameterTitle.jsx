@@ -15,7 +15,7 @@ export default class ParameterTitle extends Component {
   render() {
     return (
       <FlexContainer titles leveltitles>
-        <Paragraph style={style}>Parameter Master</Paragraph>
+        <Paragraph style={style}>Parameter </Paragraph>
         <AddParameter reload={this.props.reload} />
       </FlexContainer>
     );

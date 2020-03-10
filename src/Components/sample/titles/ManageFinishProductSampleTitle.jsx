@@ -27,11 +27,11 @@ class ManageFinishProductSampleTitle extends Component {
             color: "white",
             border: "none"
           }}
-          href='#/samples/viewfpstatus'
+          href="#/samples/viewfpstatus"
         >
           View Test
         </PrimaryButton>
-        <AddFinishProduct />
+        <AddFinishProduct reload={this.props.reload} />
       </FlexContainer>
     );
   }

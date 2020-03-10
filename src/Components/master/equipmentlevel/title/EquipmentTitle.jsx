@@ -18,7 +18,7 @@ export default class EquipmentTitle extends Component {
   render() {
     return (
       <FlexContainer titles leveltitles>
-        <Paragraph style={style}>Equipment Master</Paragraph>
+        <Paragraph style={style}>Equipment </Paragraph>
         <AddEquipment reload={this.getallequpiment} />
       </FlexContainer>
     );

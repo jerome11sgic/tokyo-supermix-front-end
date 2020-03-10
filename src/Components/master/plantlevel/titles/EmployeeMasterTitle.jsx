@@ -20,7 +20,7 @@ export default class EmployeeMasterTitle extends Component {
   render() {
     return (
       <FlexContainer titles leveltitles>
-        <Paragraph style={style}>Employee Master</Paragraph>
+        <Paragraph style={style}>Employee </Paragraph>
         <div style={{ display: "flex" }}>
           <Search
             placeholder="Search Employee"
@@ -29,7 +29,6 @@ export default class EmployeeMasterTitle extends Component {
           />
           <EmployeeAddForm reload={this.getallEmployee} />
         </div>
-
       </FlexContainer>
     );
   }

@@ -16,7 +16,7 @@ export default class CustomerMasterTitle extends Component {
   render() {
     return (
       <FlexContainer titles leveltitles>
-        <Paragraph style={style}>Customer Master</Paragraph>
+        <Paragraph style={style}>Customer </Paragraph>
         <CustomerAddForm reload={this.props.reload} />
       </FlexContainer>
     );

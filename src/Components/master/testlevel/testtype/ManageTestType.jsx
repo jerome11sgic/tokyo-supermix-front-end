@@ -84,44 +84,41 @@ class ManageTestType extends Component {
   render() {
     const columns = [
       {
-        title: "Code",
-        dataIndex: "id",
-        key: "id"
-        // width: "4%",
+        width: "4%"
       },
       {
         title: "Type",
         dataIndex: "type",
-        key: "type"
-        // width: "6%",
+        key: "type",
+        width: "8%"
       },
 
       {
         title: "Edit & Delete",
         key: "action",
-        width: "17%",
+        width: "6%",
         render: (text, record = this.state.testTypeList) => (
           <span>
             <a>
               <Icon
-                type='edit'
+                type="edit"
                 onClick={this.props.passEditTestTypeRecordToModal.bind(
                   this,
                   record
                 )}
               />
             </a>
-            <Divider type='vertical' />
+            <Divider type="vertical" />
             <a>
               <Popconfirm
-                title='Are you sure you want to Delete this?'
+                title="Are you sure you want to Delete this?"
                 icon={
-                  <Icon type='question-circle-o' style={{ color: "red" }} />
+                  <Icon type="question-circle-o" style={{ color: "red" }} />
                 }
                 onConfirm={this.onConfirmdelete.bind(this, record.id)}
               >
-                <a href='#'>
-                  <Icon type='delete' style={{ color: "red" }}></Icon>
+                <a href="#">
+                  <Icon type="delete" style={{ color: "red" }}></Icon>
                 </a>
               </Popconfirm>
             </a>
@@ -132,7 +129,6 @@ class ManageTestType extends Component {
 
     return (
       <AntTable
-        length
         title={() => <TestLevelTitle reload={this.getAllTestType} />}
         columns={columns}
         dataSource={this.state.testTypeList}

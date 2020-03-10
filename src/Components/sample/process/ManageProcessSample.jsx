@@ -86,10 +86,23 @@ class ManageProcessSample extends Component {
   }
 
   getallProcessSample = () => {
+    const dataSample = [];
     api("GET", "supermix", "/process-samples", "", "", "").then(res => {
       console.log(res.data);
+
+      res.data.results.processSamples.map((post, index) => {
+        dataSample.push({
+          code: post.code,
+          quantity: post.quantity,
+          unitId: post.unitId,
+          unit: post.unit,
+          rawMaterialId: post.rawMaterialId,
+          rawMaterialName: post.rawMaterialName,
+          incomingSample_code: post.incomingSample.code
+        });
+      });
       this.setState({
-        data: res.data.results.processSamples
+        data: dataSample
       });
     });
   };
@@ -125,7 +138,7 @@ class ManageProcessSample extends Component {
       // },
       {
         title: "  Incoming Sample",
-        dataIndex: "rawMaterialId",
+        dataIndex: "rawMaterialName",
         key: "material",
         width: "12%"
       },
