@@ -33,7 +33,7 @@ class Addincoming extends Component {
     vehicleNo: "",
     rawMaterialId: "",
     supplierselect: "",
-    SelectPlants: "",
+
     SelectRaw: "",
     plantName: "",
     supplierName: "",
@@ -205,7 +205,7 @@ class Addincoming extends Component {
     });
   };
 
-  getAllplant = () => {
+  getAllplant() {
     api("GET", "supermix", "/plants", "", "", "").then(res => {
       console.log(res.data.results.plants.length);
       if (res.data.results.plants.length > 0) {
@@ -222,7 +222,7 @@ class Addincoming extends Component {
         });
       }
     });
-  };
+  }
 
   getallMaterial = () => {
     console.log("api");
@@ -240,7 +240,7 @@ class Addincoming extends Component {
           );
         });
         this.setState({
-          SelectRaw
+          SelectRaw: SelectRaw
         });
       }
     });
@@ -480,18 +480,18 @@ class Addincoming extends Component {
           Add Incoming Sample
         </PrimaryButton>
         <Modal
-          width='500px'
-          className='addsubcategorymodal'
+          width="500px"
+          className="addsubcategorymodal"
           visible={visible}
           closable={false}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[
-            <Button key='back' onClick={this.handleCancel}>
+            <Button key="back" onClick={this.handleCancel}>
               Cancel
             </Button>,
             <PrimaryButton
-              key='submit'
+              key="submit"
               loading={loading}
               onClick={this.handleSubmit}
               style={{ background: "#001328", color: "white", border: "none" }}
@@ -511,7 +511,7 @@ class Addincoming extends Component {
                   : "Add Incoming Sample"}
               </p>
               <Icon
-                type='close-circle'
+                type="close-circle"
                 onClick={this.handleCancel}
                 style={{
                   color: "white"
@@ -522,14 +522,14 @@ class Addincoming extends Component {
         >
           <MasterLevelForm>
             {/* Code */}
-            <div className='input_wrapper'>
-              <label for='code' className='label'>
-                Code:
+            <div className="input_wrapper">
+              <label for="code" className="label">
+                Code:llll
               </label>
 
               <Input
-                id='code'
-                name='code'
+                id="code"
+                name="code"
                 value={this.state.code}
                 onChange={this.handleChange}
                 disabled={this.state.type === "edit" ? true : false}
@@ -539,16 +539,16 @@ class Addincoming extends Component {
             </div>
 
             {/* Plant Name */}
-            <div className='input_wrapper'>
-              <label for='supplierId' className='label'>
+            <div className="input_wrapper">
+              <label for="supplierId" className="label">
                 Supplier Name:
               </label>
 
               <Select
-                className='inputfield'
-                id=''
-                name='supplierId'
-                placeholder='Enter Supplier Name'
+                className="inputfield"
+                id=""
+                name="supplierId"
+                placeholder="Enter Supplier Name"
                 style={{ width: "180px" }}
                 value={this.state.edit_supplierName}
                 onChange={value => this.handleSelect("supplier", value)}
@@ -562,15 +562,15 @@ class Addincoming extends Component {
             </div>
 
             {/* Place */}
-            <div className='input_wrapper'>
-              <label for='rawMaterialId' className='label'>
+            <div className="input_wrapper">
+              <label for="rawMaterialId" className="label">
                 Raw Material
               </label>
 
               <Select
-                id='rawMaterialId'
-                name='rawMaterialId'
-                placeholder=' Raw Material'
+                id="rawMaterialId"
+                name="rawMaterialId"
+                placeholder=" Raw Material"
                 style={{ width: 170 }}
                 value={this.state.edit_rawMaterialName}
                 onChange={value => this.handleSelect("rawMaterial", value)}
@@ -584,14 +584,14 @@ class Addincoming extends Component {
             </div>
 
             {/* T.P No */}
-            <div className='input_wrapper'>
-              <label for='date' className='label'>
+            <div className="input_wrapper">
+              <label for="date" className="label">
                 Delivered Date
               </label>
 
               <DatePicker
-                id='date'
-                name='date'
+                id="date"
+                name="date"
                 format={"YYYY-MM-DD"}
                 style={{ width: 170 }}
                 value={this.state.date}
@@ -605,29 +605,29 @@ class Addincoming extends Component {
             </div>
 
             {/* Description  */}
-            <div className='input_wrapper'>
-              <label for='vechical_no' className='label'>
+            <div className="input_wrapper">
+              <label for="vechical_no" className="label">
                 Vechical No
               </label>
 
               <Input
-                id='vehicleNo'
-                name='vehicleNo'
-                placeholder='Vechical No'
+                id="vehicleNo"
+                name="vehicleNo"
+                placeholder="Vechical No"
                 value={this.state.vehicleNo}
                 onChange={this.handleChange}
               />
               <div style={{ height: "12px" }} />
             </div>
 
-            <div className='input_wrapper'>
-              <label for='description' className='label'>
+            <div className="input_wrapper">
+              <label for="description" className="label">
                 Plant
               </label>
               <Select
-                id='plant'
-                name='plant'
-                placeholder='plant'
+                id="plant"
+                name="plant"
+                placeholder="plant"
                 value={this.state.edit_plantName}
                 onChange={value => this.handleSelect("plant", value)}
                 style={{ width: 170 }}
@@ -639,15 +639,15 @@ class Addincoming extends Component {
               )}
               <div style={{ height: "12px" }} />
             </div>
-            <div className='input_wrapper'>
-              <label for='status' className='label'>
+            <div className="input_wrapper">
+              <label for="status" className="label">
                 Status
               </label>
 
               <Input
-                id='status'
-                name='status'
-                placeholder='status'
+                id="status"
+                name="status"
+                placeholder="status"
                 value={this.state.status}
                 onChange={this.handleChange}
                 disabled

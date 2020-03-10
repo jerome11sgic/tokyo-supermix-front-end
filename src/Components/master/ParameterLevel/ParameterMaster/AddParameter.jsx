@@ -99,7 +99,7 @@ class AddParameter extends Component {
         errors.abbrivation =
           value.length === 0
             ? "Abbrivation can't be empty"
-            : value.length < 3
+            : value.length < 1
             ? "Abbrivation \n must be 3 characters long!"
             : "";
         break;
