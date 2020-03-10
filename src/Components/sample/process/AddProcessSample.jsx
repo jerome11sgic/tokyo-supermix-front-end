@@ -11,6 +11,7 @@ import Notificationfuc from "../../Constant/Notification";
 import { api } from "../../services/AxiosService";
 import HandelError from "../../Constant/HandleError";
 import { connect } from "react-redux";
+const { Option } = Select;
 
 const error = {
   color: "red",
@@ -18,6 +19,18 @@ const error = {
   width: "160px",
   height: "2px"
 };
+
+function onBlur() {
+  console.log("blur");
+}
+
+function onFocus() {
+  console.log("focus");
+}
+
+function onSearch(val) {
+  console.log("search:", val);
+}
 class AddProcessSample extends Component {
   constructor() {
     super();
@@ -26,20 +39,23 @@ class AddProcessSample extends Component {
       errorCount: 0,
       errors: {
         code: "",
-        incoming_sample_id: "",
-        materila_id: "",
+        incoming_sample: "",
+        material: "",
         quantity: "",
-        remain_in_quantity: ""
+        unit: ""
       },
       loading: false,
       visible: false,
       processSample_code: "",
-      processSample_Incoming_sample: "",
-      processSample_material_id: "",
+      incoming_sample_id: "",
+      material_id: "",
       processSample_quantity: "",
-      processSample_remain_in_qunatity: "",
+      unit_id: "",
       errormgs: "",
-      type: "add"
+      type: "add",
+      incomingSampleEdit: "",
+      materialEdit: "",
+      unitEdit: ""
     };
   }
 
@@ -117,8 +133,8 @@ class AddProcessSample extends Component {
             ? "Code must be one characters long!"
             : "";
         break;
-      case "processSample_Incoming_sample":
-        errors.incoming_sample_id =
+      case "incoming_sample_id":
+        errors.incoming_sample =
           value.length === 0
             ? "Incoming Sample can't be empty"
             : value.length < 3
@@ -127,8 +143,8 @@ class AddProcessSample extends Component {
             ? "Incoming Sample allow only letters"
             : "";
         break;
-      case "processSample_material_id":
-        errors.materila_id =
+      case "material_id":
+        errors.material =
           value.length === 0
             ? "Material can't be empty"
             : value.length < 3
@@ -142,11 +158,11 @@ class AddProcessSample extends Component {
           ? "Quantity  can't be empty"
           : "";
         break;
-      case "processSample_remain_in_qunatity":
-        errors.remain_in_quantity = isNaN(value)
-          ? `Remain Quantity must be a number`
+      case "unit_id":
+        errors.unit = isNaN(value)
+          ? `Unit must be a number`
           : value.length === 0
-          ? " RemainQuantity  can't be empty"
+          ? " Unit  can't be empty"
           : "";
 
         break;
@@ -161,18 +177,18 @@ class AddProcessSample extends Component {
     event.preventDefault();
     if (
       this.state.processSample_code.length === 0 &&
-      this.state.processSample_Incoming_sample.length === 0 &&
-      this.state.processSample_material_id.length === 0 &&
+      this.state.incoming_sample_id.length === 0 &&
+      this.state.material_id.length === 0 &&
       this.state.processSample_quantity.length === 0 &&
-      this.state.processSample_remain_in_qunatity.length === 0
+      this.state.unit_id.length === 0
     ) {
       this.setState({
         errors: {
           code: "Code can't be empty",
-          incoming_sample_id: "Incoming Sample can't be empty",
-          materila_id: "Material can't be empty",
+          incoming_sample: "Incoming Sample can't be empty",
+          material: "Material can't be empty",
           quantity: "Quantity can't be empty",
-          remain_in_quantity: "Remain Quantity can't be empty"
+          unit: "Remain Quantity can't be empty"
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
@@ -184,43 +200,42 @@ class AddProcessSample extends Component {
       this.setState({
         errors: {
           code: this.state.errors.code || "Code can't be empty",
-          incoming_sample_id: this.state.errors.incoming_sample_id,
-          materila_id: this.state.errors.materila_id,
+          incoming_sample: this.state.errors.incoming_sample,
+          material: this.state.errors.material,
           quantity: this.state.errors.quantity,
-          remain_in_quantity: this.state.errors.remain_in_quantity
+          unit: this.state.errors.unit
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
       });
     } else if (
-      this.state.processSample_Incoming_sample.length === 0 &&
-      this.state.errors.incoming_sample_id.length === 0
+      this.state.incoming_sample_id.length === 0 &&
+      this.state.errors.incoming_sample.length === 0
     ) {
       this.setState({
         errors: {
           code: this.state.errors.code,
-          incoming_sample_id:
-            this.state.errors.incoming_sample_id ||
+          incoming_sample:
+            this.state.errors.incoming_sample ||
             "Incoming Sample can't be empty",
-          materila_id: this.state.errors.materila_id,
+          material: this.state.errors.material,
           quantity: this.state.errors.quantity,
-          remain_in_quantity: this.state.errors.remain_in_quantity
+          unit: this.state.errors.unit
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
       });
     } else if (
-      this.state.processSample_material_id.length === 0 &&
-      this.state.errors.materila_id.length === 0
+      this.state.material_id.length === 0 &&
+      this.state.errors.material.length === 0
     ) {
       this.setState({
         errors: {
           code: this.state.errors.code,
-          incoming_sample_id: this.state.errors.incoming_sample_id,
-          materila_id:
-            this.state.errors.materila_id || "Material can't be empty",
+          incoming_sample: this.state.errors.incoming_sample,
+          material: this.state.errors.material || "Material can't be empty",
           quantity: this.state.errors.quantity,
-          remain_in_quantity: this.state.errors.remain_in_quantity
+          unit: this.state.errors.unit
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
@@ -232,37 +247,35 @@ class AddProcessSample extends Component {
       this.setState({
         errors: {
           code: this.state.errors.code,
-          incoming_sample_id: this.state.errors.incoming_sample_id,
-          materila_id: this.state.errors.materila_id,
+          incoming_sample: this.state.errors.incoming_sample,
+          material: this.state.errors.material,
           quantity: this.state.errors.quantity || "Quantity can't be empty",
-          remain_in_quantity: this.state.errors.remain_in_quantity
+          unit: this.state.errors.unit
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
       });
     } else if (
-      this.state.processSample_remain_in_qunatity.length === 0 &&
-      this.state.errors.remain_in_quantity.length === 0
+      this.state.unit_id.length === 0 &&
+      this.state.errors.unit.length === 0
     ) {
       this.setState({
         errors: {
           code: this.state.errors.code,
-          incoming_sample_id: this.state.errors.incoming_sample_id,
-          materila_id: this.state.errors.materila_id,
+          incoming_sample: this.state.errors.incoming_sample,
+          material: this.state.errors.material,
           quantity: this.state.errors.quantity,
-          remain_in_quantity:
-            this.state.errors.remain_in_quantity ||
-            "Remain Quantity can't be empty"
+          unit: this.state.errors.unit || "Unit can't be empty"
         },
         formValid: this.validateForm(this.state.errors),
         errorCount: this.countErrors(this.state.errors)
       });
     } else if (
       this.state.code.length === 0 &&
-      this.state.incoming_sample_id.length === 0 &&
-      this.state.materila_id.length === 0 &&
+      this.state.incoming_sample.length === 0 &&
+      this.state.material.length === 0 &&
       this.state.quantity.length === 0 &&
-      this.state.remain_in_quantity.length === 0
+      this.state.unit.length === 0
     ) {
       console.log(this.state.errors);
       this.setState({ formValid: this.validateForm(this.state.errors) });
@@ -271,14 +284,14 @@ class AddProcessSample extends Component {
       console.log(this.state.errorCount);
 
       const data = {
-        code: this.state.plant_code,
-        incoming_sample_id: this.state.processSample_Incoming_sample,
-        materila_id: this.state.processSample_material_id,
+        code: this.state.processSample_code,
+        incoming_sample: this.state.incoming_sample_id,
+        material: this.state.material_id,
         quantity: this.state.processSample_quantity,
-        remain_in_quantity: this.state.processSample_remain_in_qunatity
+        unit: this.state.unit_id
       };
       if (this.state.type === "add") {
-        api("POST", "supermix", "/processsample", "", data, "")
+        api("POST", "supermix", "/process-sample", "", data, "")
           .then(
             res => {
               console.log(res.data);
@@ -291,10 +304,10 @@ class AddProcessSample extends Component {
                 this.setState({ loading: true });
                 this.setState({
                   processSample_code: "",
-                  processSample_Incoming_sample: "",
-                  processSample_material_id: "",
+                  incoming_sample_id: "",
+                  material_id: "",
                   processSample_quantity: "",
-                  processSample_remain_in_qunatity: "",
+                  unit_id: "",
                   errormgs: ""
                 });
                 setTimeout(() => {
@@ -318,13 +331,13 @@ class AddProcessSample extends Component {
           });
       } else {
         const data = {
-          code: this.state.plant_code,
-          incoming_sample_id: this.state.processSample_Incoming_sample,
-          materila_id: this.state.processSample_material_id,
+          code: this.state.processSample_code,
+          incoming_sample: this.state.incoming_sample_id,
+          material: this.state.material_id,
           quantity: this.state.processSample_quantity,
-          remain_in_quantity: this.state.processSample_remain_in_qunatity
+          unit: this.state.unit_id
         };
-        api("PUT", "supermix", "/processsample", "", data, "")
+        api("PUT", "supermix", "/process-sample", "", data, "")
           .then(
             res => {
               console.log(res.data);
@@ -338,10 +351,10 @@ class AddProcessSample extends Component {
                 this.setState({ loading: true });
                 this.setState({
                   processSample_code: "",
-                  processSample_Incoming_sample: "",
-                  processSample_material_id: "",
+                  incoming_sample_id: "",
+                  material_id: "",
                   processSample_quantity: "",
-                  processSample_remain_in_qunatity: "",
+                  unit_id: "",
                   errormgs: ""
                 });
                 setTimeout(() => {
@@ -373,10 +386,136 @@ class AddProcessSample extends Component {
     this.setState({
       visible: true,
       processSample_code: "",
-      processSample_Incoming_sample: "",
-      processSample_material_id: "",
+      incoming_sample_id: "",
+      material_id: "",
       processSample_quantity: "",
-      processSample_remain_in_qunatity: ""
+      unit_id: ""
+    });
+  };
+
+  handleSelect = (name, value) => {
+    console.log(name);
+    console.log(value);
+    // handle select for  plant
+    if (name === "incoming_sample_id") {
+      this.setState({
+        incoming_sample_id: value,
+        incomingSampleEdit: value
+      });
+
+      if (value.length !== 0) {
+        this.setState({
+          errors: {
+            // code: this.state.errors.code,
+            code: this.state.errors.code,
+            material: this.state.errors.material,
+            incoming_sample: "",
+            quantity: this.state.errors.quantity,
+            unit: this.state.errors.unit
+          }
+        });
+      }
+    }
+
+    //handle select for designation
+    if (name === "material_id") {
+      this.setState({
+        material_id: value,
+        materialEdit: value
+      });
+
+      if (value.length !== 0) {
+        this.setState({
+          errors: {
+            // code: this.state.errors.code,
+            code: this.state.errors.code,
+            material: "",
+            incoming_sample: this.state.errors.incoming_sample,
+            quantity: this.state.errors.quantity,
+            unit: this.state.errors.unit
+          }
+        });
+      }
+    }
+
+    if (name === "unit_id") {
+      this.setState({
+        unit_id: value,
+        unitEdit: value
+      });
+
+      if (value.length !== 0) {
+        this.setState({
+          errors: {
+            // code: this.state.errors.code,
+            code: this.state.errors.code,
+            material: this.state.errors.material,
+            incoming_sample: this.state.errors.incoming_sample,
+            quantity: this.state.errors.quantity,
+            unit: ""
+          }
+        });
+      }
+    }
+  };
+
+  //dropdown data
+  getAllincomingSample() {
+    api("GET", "supermix", "/incoming-samples", "", "", "").then(res => {
+      if (res.data.results.incomingSamples.length > 0) {
+        let SelectIncomingSamples = res.data.results.incomingSamples.map(
+          (post, index) => {
+            return (
+              <Option value={post.code} key={index}>
+                {post.name}
+              </Option>
+            );
+          }
+        );
+        this.setState({
+          SelectIncomingSamples
+        });
+      }
+    });
+  }
+
+  getallMaterial = () => {
+    console.log("api");
+
+    api("GET", "supermix", "/raw-materials", "", "", "").then(res => {
+      console.log(res);
+
+      if (res.data.results.rawMaterial.length > 0) {
+        console.log("ggg");
+        let SelectRaw = res.data.results.rawMaterial.map((post, index) => {
+          return (
+            <Option value={post.id} key={index}>
+              {post.name}
+            </Option>
+          );
+        });
+        this.setState({
+          SelectRaw
+        });
+      }
+    });
+  };
+
+  getallunit = () => {
+    api("GET", "supermix", "/units", "", "", "").then(res => {
+      console.log(res.data);
+      if (res.data.results.units.length > 0) {
+        let SelectUnit = res.data.results.units.map((post, index) => {
+          return (
+            <Option value={post.id} key={index}>
+              {post.name}
+            </Option>
+          );
+        });
+        this.setState({
+          SelectUnit
+        });
+      }
     });
   };
 
@@ -391,21 +530,24 @@ class AddProcessSample extends Component {
       formValid: false,
       errors: {
         code: "",
-        incoming_sample_id: "",
-        materila_id: "",
+        incoming_sample: "",
+        material: "",
         quantity: "",
-        remain_in_quantity: ""
+        unit: ""
       },
       processSample_code: "",
-      processSample_Incoming_sample: "",
-      processSample_material_id: "",
+      incoming_sample_id: "",
+      material_id: "",
       processSample_quantity: "",
-      processSample_remain_in_qunatity: "",
+      unit_id: "",
       errormgs: ""
     });
   };
 
   componentDidMount() {
+    this.getAllincomingSample();
+    this.getallMaterial();
+    this.getallunit();
     console.log(this.props.screen);
   }
 
@@ -493,55 +635,54 @@ class AddProcessSample extends Component {
 
             {/* Plant Name */}
             <div className='input_wrapper'>
-              <label for='processSample_Incoming_sample' className='label'>
+              <label for='incoming_sample_id' className='label'>
                 Incoming Sample:
               </label>
 
               <Select
                 showSearch
                 style={{ width: 180 }}
-                id='processSample_Incoming_sample'
-                name='processSample_Incoming_sample'
-                placeholder='Select the Incoming Sample'
+                id='incoming_sample_id'
+                name='incoming_sample_id'
+                placeholder='Select a Incoming Sample'
                 optionFilterProp='children'
-                onChange={this.handleChange}
-                value={this.state.plantEdit}
+                onChange={value =>
+                  this.handleSelect("incoming_sample_id", value)
+                }
+                onFocus={onFocus}
+                value={this.state.incomingSampleEdit}
+                onBlur={onBlur}
+                onSearch={onSearch}
               >
-                {this.state.SelectPlants}
+                {this.state.SelectIncomingSamples}
               </Select>
-
-              {errors.incoming_sample_id.length > 0 && (
-                <div style={error}>{errors.incoming_sample_id}</div>
+              {errors.incoming_sample.length > 0 && (
+                <div style={error}>{errors.incoming_sample}</div>
               )}
-              {this.state.errormgs.message == "proccesSample Code" ? (
-                <div style={error}>{HandelError(this.state.errormgs)}</div>
-              ) : (
-                ""
-              )}
-
+              <div style={error}>{this.state.errormgs}</div>
               <div style={{ height: "12px" }}></div>
             </div>
 
             {/* Place */}
             <div className='input_wrapper'>
-              <label for='processSample_material_id' className='label'>
+              <label for='material_id' className='label'>
                 Material:
               </label>
 
               <Select
                 showSearch
                 style={{ width: 180 }}
-                id='processSample_material_id'
-                name='processSample_material_id'
+                id='material_id'
+                name='material_id'
                 placeholder='Select the Material'
                 optionFilterProp='children'
                 onChange={this.handleChange}
-                value={this.state.plantEdit}
+                value={this.state.materialEdit}
               >
-                {this.state.SelectPlants}
+                {this.state.SelectRaw}
               </Select>
-              {errors.materila_id.length > 0 && (
-                <div style={error}>{errors.materila_id}</div>
+              {errors.material.length > 0 && (
+                <div style={error}>{errors.material}</div>
               )}
               {this.state.errormgs.message == "proccesSample Code" ? (
                 <div style={error}>{HandelError(this.state.errormgs)}</div>
@@ -579,21 +720,23 @@ class AddProcessSample extends Component {
             </div>
 
             <div className='input_wrapper'>
-              <label for='processSample_remain_in_qunatity' className='label'>
-                Remain Quantity:
+              <label for='unit' className='label'>
+                Unit:
               </label>
 
-              <Input
-                id='processSample_remain_in_qunatity'
-                name='processSample_remain_in_qunatity'
-                placeholder='Enter the Remain Quantity'
+              <Select
+                showSearch
+                style={{ width: 180 }}
+                id='unit'
+                name='unit'
+                placeholder='Select the Material'
+                optionFilterProp='children'
                 onChange={this.handleChange}
-                value={this.state.processSample_remain_in_qunatity}
-              />
-
-              {errors.remain_in_quantity.length > 0 && (
-                <div style={error}>{errors.remain_in_quantity}</div>
-              )}
+                value={this.state.unitEdit}
+              >
+                {this.state.SelectUnit}
+              </Select>
+              {errors.unit.length > 0 && <div style={error}>{errors.unit}</div>}
               {this.state.errormgs.message == "proccesSample Code" ? (
                 <div style={error}>{HandelError(this.state.errormgs)}</div>
               ) : (

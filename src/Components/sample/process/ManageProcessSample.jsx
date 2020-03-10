@@ -3,23 +3,18 @@ import React, { Component } from "react";
 import { Icon, Popconfirm, Divider } from "antd";
 import { AntTable } from "../../styledcomponents/table/AntTabl";
 import ManageProcessSampleTitle from "../titles/ManageProcessSampleTitle";
+import { api } from "../../services/AxiosService";
+import { SWITCH_TO_EDIT_MODE } from "../../../redux/action/master/plantlevel/PlantLevel";
+import { connect } from "react-redux";
 
-export default class ManageProcessSample extends Component {
+class ManageProcessSample extends Component {
   state = {
     filteredInfo: null,
     sortedInfo: null,
     searchText: "",
     visible: false,
     size: "small",
-    data: [
-      {
-        code: "fsf",
-        Incomingsample: "fdf",
-        material: "dDWDD",
-        quantity: "ffrw",
-        remainQuantity: "ffrw"
-      }
-    ]
+    data: ""
   };
 
   componentWillMount() {
@@ -87,6 +82,31 @@ export default class ManageProcessSample extends Component {
     console.log("Page: ", pageNumber);
   }
 
+  componentDidMount() {
+    this.getallProcessSample();
+  }
+
+  getallProcessSample = () => {
+    api("GET", "supermix", "/process-samples", "", "", "").then(res => {
+      console.log(res.data);
+      this.setState({
+        data: res.data.results.processSamples
+      });
+    });
+  };
+
+  onConfirmdelete(id) {
+    console.log(id);
+    let mesg = "process Sample delete";
+
+    api("DELETE", "supermix", "/process-samples", "", "", id).then(res => {
+      console.log(res.data);
+      this.getallProcessSample();
+      Notification("success", res.data.message);
+    });
+    console.log(this.state.id);
+  }
+
   render() {
     let { sortedInfo, filteredInfo } = this.state;
     sortedInfo = sortedInfo || {};
@@ -96,56 +116,32 @@ export default class ManageProcessSample extends Component {
         title: " Code",
         dataIndex: "code",
         width: "8%",
-        key: "code",
-        sorter: (a, b) => a.id - b.id,
-        sortOrder: sortedInfo.columnKey === "id" && sortedInfo.order
+        key: "code"
       },
       {
         title: "Incoming Sample",
-        dataIndex: "Incomingsample",
+        dataIndex: "incomingSampleCode",
         width: "12%",
-        key: "Incomingsample",
-        sorter: (a, b) => a.id - b.id,
-        sortOrder: sortedInfo.columnKey === "id" && sortedInfo.order
+        key: "incomingSampleCode"
       },
       {
         title: "  Material",
-        dataIndex: "material",
+        dataIndex: "rawMaterialId",
         key: "material",
-        width: "12%",
-        filters: [
-          { text: "Joe", value: "Joe" },
-          { text: "Jim", value: "Jim" }
-        ],
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.name.length - b.name.length,
-        sortOrder: sortedInfo.columnKey === "name" && sortedInfo.order
+        width: "12%"
       },
       {
         title: "Quantity",
         dataIndex: "quantity",
         key: "quantity",
-        width: "12%",
-        filters: [
-          { text: "Vechical1", value: "Vechical1" },
-          { text: "Vechical2", value: " Vechical2" },
-          { text: "Vechical3", value: "Vechical3" },
-          { text: "Vechical4", value: "Vechical4" }
-        ],
-        filteredValue: filteredInfo.role || null,
-        onFilter: (value, record) => record.role.includes(value),
-        sorter: (a, b) => a.role.length - b.role.length,
-        sortOrder: sortedInfo.columnKey === "role" && sortedInfo.order
+        width: "12%"
       },
 
       {
-        title: "Remain Quantity",
-        dataIndex: "remainQuantity",
+        title: "Unit",
+        dataIndex: "unit",
         width: "12%",
-        key: "remainQuantity",
-        sorter: (a, b) => a.id - b.id,
-        sortOrder: sortedInfo.columnKey === "id" && sortedInfo.order
+        key: "unit"
       },
 
       {
@@ -155,7 +151,14 @@ export default class ManageProcessSample extends Component {
         render: (text, record) => (
           <span>
             <a>
-              <Icon type='edit' />
+              <Icon
+                type='edit'
+                style={{ fontSize: "1.2em" }}
+                onClick={this.props.passEditProcessSampleRecordToModal.bind(
+                  this,
+                  record
+                )}
+              />
             </a>
             <Divider type='vertical' />
             <a>
@@ -164,6 +167,7 @@ export default class ManageProcessSample extends Component {
                 icon={
                   <Icon type='question-circle-o' style={{ color: "red" }} />
                 }
+                onConfirm={this.onConfirmdelete.bind(this, record.id)}
               >
                 <a href='#'>
                   <Icon type='delete'></Icon>
@@ -176,7 +180,9 @@ export default class ManageProcessSample extends Component {
     ];
     return (
       <AntTable
-        title={() => <ManageProcessSampleTitle />}
+        title={() => (
+          <ManageProcessSampleTitle reload={this.getallProcessSample} />
+        )}
         length
         nomargin
         dataSource={this.state.data}
@@ -187,3 +193,20 @@ export default class ManageProcessSample extends Component {
     );
   }
 }
+
+const mapStateToProps = state => null;
+
+const mapDispatchToProps = dispatch => {
+  return {
+    passEditProcessSampleRecordToModal: record => {
+      //this payload is the data we pass into redux which is in the row which we clicked
+      dispatch({ type: SWITCH_TO_EDIT_MODE, payload: record });
+      console.log(record);
+    }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ManageProcessSample);

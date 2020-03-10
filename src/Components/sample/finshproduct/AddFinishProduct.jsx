@@ -11,7 +11,7 @@ import {
 } from "../../styledcomponents/form/MasterLevelForms";
 import { connect } from "react-redux";
 import { DISABLE_EDIT_MODE } from "../../../redux/action/master/plantlevel/PlantLevel";
-
+const { Option } = Select;
 const error = {
   color: "red",
   fontSize: "12px",
@@ -38,6 +38,9 @@ class AddFinishProduct extends Component {
       finish_product_project_code: "",
       finsih_product_pour_id: "",
       finsih_product_mixdesign_code: "",
+      projectEdit: "",
+      pourEdit: "",
+      mixdesignEdit: "",
       errormgs: "",
       type: "add"
     };
@@ -140,6 +143,128 @@ class AddFinishProduct extends Component {
     }
 
     this.setState({ errors, [name]: value });
+  };
+
+  handleSelect = (name, value) => {
+    console.log(name);
+    console.log(value);
+    // handle select for  plant
+    if (name === "project_code") {
+      this.setState({
+        project_code: value,
+        projectEdit: value
+      });
+
+      if (value.length !== 0) {
+        this.setState({
+          errors: {
+            // code: this.state.errors.code,
+            // code: this.state.errors.code,
+            project_code: "",
+            pour_id: this.state.errors.pour_id,
+            mixdesign_code: this.state.errors.mixdesign_code,
+            date: this.state.errors.date
+          }
+        });
+      }
+    }
+
+    //handle select for designation
+    if (name === "pour_id") {
+      this.setState({
+        pour_id: value,
+        pourEdit: value
+      });
+
+      if (value.length !== 0) {
+        this.setState({
+          errors: {
+            // code: this.state.errors.code,
+            project_code: this.state.errors.project_code,
+            pour_id: "",
+            mixdesign_code: this.state.errors.mixdesign_code,
+            date: this.state.errors.date
+          }
+        });
+      }
+    }
+
+    if (name === "mixdesign_code") {
+      this.setState({
+        mixdesign_code: value,
+        mixdesignEdit: value
+      });
+
+      if (value.length !== 0) {
+        this.setState({
+          errors: {
+            // code: this.state.errors.code,
+            project_code: this.state.errors.project_code,
+            pour_id: this.state.errors.pour_id,
+            mixdesign_code: "",
+            date: this.state.errors.date
+          }
+        });
+      }
+    }
+  };
+
+  //dropdown data
+  getAllproject() {
+    api("GET", "supermix", "/projects", "", "", "").then(res => {
+      if (res.data.results.projects.length > 0) {
+        let SelectProject = res.data.results.projects.map((post, index) => {
+          return (
+            <Option value={post.code} key={index}>
+              {post.name}
+            </Option>
+          );
+        });
+        this.setState({
+          SelectProject
+        });
+      }
+    });
+  }
+
+  getallPour = () => {
+    console.log("api");
+
+    api("GET", "supermix", "/pours", "", "", "").then(res => {
+      console.log(res);
+
+      if (res.data.results.pours.length > 0) {
+        console.log("ggg");
+        let SelectPour = res.data.results.pours.map((post, index) => {
+          return (
+            <Option value={post.id} key={index}>
+              {post.name}
+            </Option>
+          );
+        });
+        this.setState({
+          SelectPour
+        });
+      }
+    });
+  };
+
+  getallmixdesign = () => {
+    api("GET", "supermix", "/mixdesigns", "", "", "").then(res => {
+      console.log(res.data);
+      if (res.data.results.mixdesigns.length > 0) {
+        let SelectMixDesign = res.data.results.mixdesign.map((post, index) => {
+          return (
+            <Option value={post.id} key={index}>
+              {post.name}
+            </Option>
+          );
+        });
+        this.setState({
+          SelectMixDesign
+        });
+      }
+    });
   };
 
   handleCancel = () => {
@@ -381,6 +506,13 @@ class AddFinishProduct extends Component {
       }
     });
   }
+
+  componentDidMount() {
+    this.getAllproject();
+    this.getallPour();
+    this.getallmixdesign();
+    console.log(this.props.screen);
+  }
   render() {
     const {
       visible,
@@ -483,11 +615,11 @@ class AddFinishProduct extends Component {
                 optionFilterProp='children'
                 onChange={value => this.handleSelect("plant", value)}
                 // onFocus={onFocus}
-                value={this.state.plantEdit}
+                value={this.state.mixdesignEdit}
                 // onBlur={onBlur}
                 // onSearch={onSearch}
               >
-                {this.state.SelectPlants}
+                {this.state.SelectMixDesign}
               </Select>
               {errors.mixdesign_code.length > 0 && (
                 <div style={error}>{errors.mixdesign_code}</div>
@@ -510,11 +642,11 @@ class AddFinishProduct extends Component {
                 optionFilterProp='children'
                 onChange={value => this.handleSelect("plant", value)}
                 // onFocus={onFocus}
-                value={this.state.plantEdit}
+                value={this.state.projectEdit}
                 // onBlur={onBlur}
                 // onSearch={onSearch}
               >
-                {this.state.SelectPlants}
+                {this.state.SelectProject}
               </Select>
               {errors.project_code.length > 0 && (
                 <div style={error}>{errors.project_code}</div>
@@ -537,10 +669,12 @@ class AddFinishProduct extends Component {
                 optionFilterProp='children'
                 onChange={value => this.handleSelect("plant", value)}
                 // onFocus={onFocus}
-                value={this.state.plantEdit}
+                value={this.state.pourEdit}
                 // onBlur={onBlur}
                 // onSearch={onSearch}
-              ></Select>
+              >
+                {this.state.SelectPour}
+              </Select>
               {errors.pour_id.length > 0 && (
                 <div style={error}>{errors.pour_id}</div>
               )}
