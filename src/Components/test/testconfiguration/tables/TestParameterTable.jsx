@@ -20,7 +20,8 @@ class TestParameterTable extends Component {
     parameterList: [],
     selectedTestParams: [],
     test_name: "",
-    addToTestParams: []
+    addToTestParams: [],
+    unitsList: ""
   };
   componentWillMount() {
     if (window.screen.width > 1900) {
@@ -63,10 +64,19 @@ class TestParameterTable extends Component {
       });
     });
   };
+  getAllUnits = () => {
+    api("GET", "supermix", "/units", "", "", "").then(res => {
+      console.log(res.data.results);
+      this.setState({
+        unitsList: res.data.results.units[res.data.results.units.length - 1].id
+      });
+    });
+  };
 
   componentDidMount() {
     this.getAllParameters();
     this.getAllTests();
+    this.getAllUnits();
   }
 
   handleCheck = (record, event) => {
@@ -93,13 +103,18 @@ class TestParameterTable extends Component {
   };
 
   handleSubmit = e => {
-    const { selectedTestParams, addToTestParams, test_name } = this.state;
+    const {
+      selectedTestParams,
+      addToTestParams,
+      test_name,
+      unitsList
+    } = this.state;
     e.preventDefault();
     for (let k = 0; k < selectedTestParams.length; k++) {
       addToTestParams.push({
         testId: test_name,
         parameterId: selectedTestParams[k].id,
-        unitId: 1
+        unitId: unitsList
       });
     }
     console.log(addToTestParams);

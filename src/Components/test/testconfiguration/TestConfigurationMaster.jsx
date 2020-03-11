@@ -43,7 +43,7 @@ export default class TestConfigurationMaster extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      current: 4
+      current: 0
     };
   }
 
