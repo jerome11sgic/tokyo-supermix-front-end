@@ -16,7 +16,7 @@ export default class ManageSampleCategoryMasterTitle extends Component {
   render() {
     return (
       <FlexContainer titles leveltitles>
-        <Paragraph style={style}>Sample Category Master</Paragraph>
+        <Paragraph style={style}>Sample Category </Paragraph>
         <AddSampleCategory />
       </FlexContainer>
     );

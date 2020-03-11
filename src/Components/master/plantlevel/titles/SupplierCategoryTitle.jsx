@@ -19,7 +19,7 @@ export default class SupplierCategoryTitle extends Component {
   render() {
     return (
       <FlexContainer titles leveltitles>
-        <Paragraph style={style}>Supplier Category</Paragraph>
+        <Paragraph style={style}>Supplier </Paragraph>
         <AddSupplierCategory reload={this.getallsupplireCategory} />
       </FlexContainer>
     );

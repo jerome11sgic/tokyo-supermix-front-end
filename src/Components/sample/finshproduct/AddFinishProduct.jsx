@@ -10,6 +10,7 @@ import {
   MasterLevelForm
 } from "../../styledcomponents/form/MasterLevelForms";
 import { connect } from "react-redux";
+import Notification from "../../Constant/Notification";
 import { DISABLE_EDIT_MODE } from "../../../redux/action/master/plantlevel/PlantLevel";
 const { Option } = Select;
 const error = {
@@ -33,6 +34,7 @@ class AddFinishProduct extends Component {
       },
       loading: false,
       visible: false,
+      finish_product_id: "",
       finish_product_code: "",
       finish_product_date: "",
       finish_product_project_code: "",
@@ -149,9 +151,9 @@ class AddFinishProduct extends Component {
     console.log(name);
     console.log(value);
     // handle select for  plant
-    if (name === "finish_product_code") {
+    if (name === "finish_product_project_code") {
       this.setState({
-        finish_product_code: value
+        finish_product_project_code: value
         // projectEdit: value
       });
 
@@ -177,7 +179,6 @@ class AddFinishProduct extends Component {
       if (value.length !== 0) {
         this.setState({
           errors: {
-            // code: this.state.errors.code,
             project_code: this.state.errors.project_code,
             pour_id: "",
             mixdesign_code: this.state.errors.mixdesign_code,
@@ -196,7 +197,6 @@ class AddFinishProduct extends Component {
       if (value.length !== 0) {
         this.setState({
           errors: {
-            // code: this.state.errors.code,
             project_code: this.state.errors.project_code,
             pour_id: this.state.errors.pour_id,
             mixdesign_code: "",
@@ -253,7 +253,7 @@ class AddFinishProduct extends Component {
       if (res.data.results.mixDesigns.length > 0) {
         let SelectMixDesign = res.data.results.mixDesigns.map((post, index) => {
           return (
-            <Option value={post.id} key={index}>
+            <Option value={post.code} key={index}>
               {post.code}
             </Option>
           );
@@ -363,31 +363,31 @@ class AddFinishProduct extends Component {
         errorCount: this.countErrors(this.state.errors)
       });
     } else if (
-      this.state.finish_product_date.length === 0 &&
-      this.state.finish_product_project_code.length === 0 &&
-      this.state.finsih_product_pour_id.length === 0 &&
-      this.state.finsih_product_mixdesign_code.length === 0
+      this.state.errors.date.length === 0 &&
+      this.state.errors.project_code.length === 0 &&
+      this.state.errors.pour_id.length === 0 &&
+      this.state.errors.mixdesign_code.length === 0
     ) {
       this.setState({ formValid: this.validateForm(this.state.errors) });
       this.setState({ errorCount: this.countErrors(this.state.errors) });
       console.log(this.state.designation_name);
-      const data = {
-        // i: this.state.designation_code,
-        date: this.state.finish_product_date,
-        project_code: this.state.finish_product_project_code,
-        pour_id: this.state.finsih_product_pour_id,
-        mixdesign_code: this.state.finsih_product_mixdesign_code
-      };
+      // const data = {
+      //   // i: this.state.designation_code,
+      //   date: this.state.finish_product_date,
+      //   project_code: this.state.finish_product_project_code,
+      //   pour_id: this.state.finsih_product_pour_id,
+      //   mixdesign_code: this.state.finsih_product_mixdesign_code
+      // };
       if (this.state.type === "edit") {
         const data = {
-          id: this.state.finish_product_code,
-          date: this.state.finish_product_date,
-          project_code: this.state.finish_product_project_code,
-          pour_id: this.state.finsih_product_pour_id,
-          mixdesign_code: this.state.finsih_product_mixdesign_code
+          id: this.state.finish_product_id,
+          date: moment(this.state.finish_product_date).format("YYYY-MM-DD"),
+          projectCode: this.state.finish_product_project_code,
+          pourId: this.state.finsih_product_pour_id,
+          mixDesignCode: this.state.finsih_product_mixdesign_code
         };
         console.log(data);
-        api("PUT", "supermix", "/finishProduct", "", data, "").then(
+        api("PUT", "supermix", "/finish-product", "", data, "").then(
           res => {
             console.log(res.data);
 
@@ -396,7 +396,7 @@ class AddFinishProduct extends Component {
               this.responeserror(res.data.results.name.message);
             } else {
               Notification("success", res.data.message);
-              this.props.reloadrole();
+              this.props.reload();
               this.setState({ loading: true });
               this.setState({
                 finish_product_code: "",
@@ -404,7 +404,7 @@ class AddFinishProduct extends Component {
                 finish_product_date: "",
                 finsih_product_pour_id: "",
                 finsih_product_mixdesign_code: "",
-
+                type: "add",
                 errormgs: ""
               });
               setTimeout(() => {
@@ -422,25 +422,24 @@ class AddFinishProduct extends Component {
         );
       } else {
         const data = {
-          id: this.state.finish_product_code,
-          date: this.state.finish_product_date,
-          project_code: this.state.finish_product_project_code,
-          pour_id: this.state.finsih_product_pour_id,
-          mixdesign_code: this.state.finsih_product_mixdesign_code
+          date: moment(this.state.finish_product_date).format("YYYY-MM-DD"),
+          projectCode: this.state.finish_product_project_code,
+          pourId: this.state.finsih_product_pour_id,
+          mixDesignCode: this.state.finsih_product_mixdesign_code
         };
         console.log(data);
-        api("POST", "supermix", "/finishproduct", "", data, "")
+        api("POST", "supermix", "/finish-product", "", data, "")
           .then(
             res => {
               console.log(this.state.type);
               console.log(res.data);
               if (res.data.status === "VALIDATION_FAILURE") {
                 console.log("jjjj");
-                this.responeserror(res.data.results.name.message);
+                // this.responeserror(res.data.results.name.message);
               } else {
                 Notification("success", res.data.message);
-                this.props.reloadrole();
-                // this.props.reload();
+                this.props.reload();
+
                 this.setState({ loading: true });
                 this.setState({
                   finish_product_code: "",
@@ -448,6 +447,7 @@ class AddFinishProduct extends Component {
                   finish_product_project_code: "",
                   finsih_product_pour_id: "",
                   finsih_product_mixdesign_code: "",
+                  type: "add",
                   errormgs: ""
                 });
                 setTimeout(() => {
@@ -468,7 +468,6 @@ class AddFinishProduct extends Component {
           });
       }
 
-      console.log(data);
       console.log("form is valid");
     }
   };
@@ -477,11 +476,11 @@ class AddFinishProduct extends Component {
     console.log(nextProps.editPlantData);
     this.setState({
       visible: nextProps.visible,
-
+      finish_product_id: nextProps.editPlantData.id,
       finish_product_date: moment(nextProps.editPlantData.date, "DD-MM-YYYY"),
-      finish_product_project_code: nextProps.editPlantData.project_code,
-      finsih_product_pour_id: nextProps.editPlantData.pour_id,
-      finsih_product_mixdesign_code: nextProps.editPlantData.mixdesign_code,
+      finish_product_project_code: nextProps.editPlantData.projectCode,
+      finsih_product_pour_id: nextProps.editPlantData.pourId,
+      finsih_product_mixdesign_code: nextProps.editPlantData.mixDesignCode,
       type: nextProps.type
     });
   }
@@ -495,7 +494,7 @@ class AddFinishProduct extends Component {
     const { errors } = this.state;
 
     this.setState({
-      date: dateString,
+      finish_product_date: dateString,
       errors: {
         pour_id: errors.pour_id,
         project_code: errors.project_code,
@@ -580,25 +579,6 @@ class AddFinishProduct extends Component {
           }
         >
           <MasterLevelForm>
-            {/* Code */}
-            {/* <div className='input_wrapper'>
-              <label for='code' className='label'>
-                Code:
-              </label>
-              <Form.Item>
-                {getFieldDecorator("code", {
-                  // rules: [{ required: true, message: "Please enter a code!" }]
-                })(
-                  <Input
-                    id='code'
-                    name='code'
-                    // placeholder='Enter the Code '
-                    disabled
-                  />
-                )}
-              </Form.Item>
-            </div> */}
-
             <div className="input_wrapper">
               <label for="finsih_product_mixdesign_code" className="label">
                 Mix Design:
@@ -610,21 +590,17 @@ class AddFinishProduct extends Component {
                 id="finsih_product_mixdesign_code"
                 name="finsih_product_mixdesign_code"
                 placeholder="Select a Mix Design"
-                optionFilterProp="children"
+                value={this.state.finsih_product_mixdesign_code}
                 onChange={value =>
                   this.handleSelect("finsih_product_mixdesign_code", value)
                 }
-                // onFocus={onFocus}
-                value={this.state.mixdesignEdit}
-                // onBlur={onBlur}
-                // onSearch={onSearch}
               >
                 {this.state.SelectMixDesign}
               </Select>
               {errors.mixdesign_code.length > 0 && (
                 <div style={error}>{errors.mixdesign_code}</div>
               )}
-              <div style={error}>{this.state.errormgs}</div>
+
               <div style={{ height: "12px" }}></div>
             </div>
 
@@ -640,20 +616,17 @@ class AddFinishProduct extends Component {
                 name="finish_product_project_code"
                 placeholder="Select a Project"
                 optionFilterProp="children"
+                value={this.state.finish_product_project_code}
                 onChange={value =>
                   this.handleSelect("finish_product_project_code", value)
                 }
-                // onFocus={onFocus}
-                value={this.state.projectEdit}
-                // onBlur={onBlur}
-                // onSearch={onSearch}
               >
                 {this.state.SelectProject}
               </Select>
               {errors.project_code.length > 0 && (
                 <div style={error}>{errors.project_code}</div>
               )}
-              <div style={error}>{this.state.errormgs}</div>
+
               <div style={{ height: "12px" }}></div>
             </div>
 
@@ -669,20 +642,17 @@ class AddFinishProduct extends Component {
                 name="finsih_product_pour_id"
                 placeholder="Select a Pour"
                 optionFilterProp="children"
+                value={this.state.finsih_product_pour_id}
                 onChange={value =>
                   this.handleSelect("finsih_product_pour_id", value)
                 }
-                // onFocus={onFocus}
-                value={this.state.pourEdit}
-                // onBlur={onBlur}
-                // onSearch={onSearch}
               >
                 {this.state.SelectPour}
               </Select>
               {errors.pour_id.length > 0 && (
                 <div style={error}>{errors.pour_id}</div>
               )}
-              <div style={error}>{this.state.errormgs}</div>
+
               <div style={{ height: "12px" }}></div>
             </div>
 
@@ -696,7 +666,7 @@ class AddFinishProduct extends Component {
                 name="finish_product_date"
                 format={"YYYY-MM-DD"}
                 style={{ width: 170 }}
-                value={this.state.date}
+                value={this.state.finish_product_date}
                 onChange={(dateString, field) =>
                   this.handleDates("finish_product_date", dateString, field)
                 }

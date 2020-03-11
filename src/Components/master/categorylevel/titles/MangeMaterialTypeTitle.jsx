@@ -19,7 +19,7 @@ export default class ManageMaterialTypeTitle extends Component {
   render() {
     return (
       <FlexContainer titles leveltitles>
-        <Paragraph style={style}>Material Category Master</Paragraph>
+        <Paragraph style={style}>Material Category </Paragraph>
         <AddType reload={this.getallcategory} />
       </FlexContainer>
     );

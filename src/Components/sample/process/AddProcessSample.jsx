@@ -95,7 +95,7 @@ class AddProcessSample extends Component {
     this.setState({
       visible: nextProps.visible,
       processSample_code: nextProps.editPlantData.code,
-      incoming_sample_id: nextProps.editPlantData.incomingSample.code,
+      incoming_sample_id: nextProps.editPlantData.incomingSample_code,
       processSample_quantity: nextProps.editPlantData.quantity,
       unit_id: nextProps.editPlantData.unitId,
       type: nextProps.type
@@ -629,11 +629,11 @@ class AddProcessSample extends Component {
                 name="incoming_sample_id"
                 placeholder="Select a Incoming Sample"
                 optionFilterProp="children"
+                value={this.state.incoming_sample_id}
                 onChange={value =>
                   this.handleSelect("incoming_sample_id", value)
                 }
                 onFocus={onFocus}
-                value={this.state.incomingSampleEdit}
                 onBlur={onBlur}
                 onSearch={onSearch}
               >
@@ -645,36 +645,6 @@ class AddProcessSample extends Component {
 
               <div style={{ height: "12px" }}></div>
             </div>
-
-            {/* Place */}
-            {/* <div className="input_wrapper">
-              <label for="material_id" className="label">
-                Material:
-              </label>
-
-              <Select
-                showSearch
-                style={{ width: 180 }}
-                id="material_id"
-                name="material_id"
-                placeholder="Select the Material"
-                optionFilterProp="children"
-                value={this.state.materialEdit}
-                onChange={value => this.handleSelect("material_id", value)}
-              >
-                {this.state.SelectRaw}
-              </Select>
-              {errors.material.length > 0 && (
-                <div style={error}>{errors.material}</div>
-              )}
-              {this.state.errormgs.message == "proccesSample Code" ? (
-                <div style={error}>{HandelError(this.state.errormgs)}</div>
-              ) : (
-                ""
-              )}
-
-              <div style={{ height: "12px" }}></div>
-            </div> */}
 
             {/* T.P No */}
             <div className="input_wrapper">

@@ -129,8 +129,8 @@ class ManageCalibration extends Component {
         key: "due_date"
       },
       {
-        title: "Calibrated By",
-        dataIndex: "userUsername",
+        title: "Calibrated Type",
+        dataIndex: "calibrationType",
         key: "calibrated_by"
       },
       {

@@ -19,7 +19,7 @@ export default class ManageMainCategoryMasterTitle extends Component {
   render() {
     return (
       <FlexContainer titles leveltitles>
-        <Paragraph style={style}>Material Sub Category Master</Paragraph>
+        <Paragraph style={style}>Material Sub Category </Paragraph>
         <AddMainCategoryForm reload={this.getallsubcategory} />
       </FlexContainer>
     );

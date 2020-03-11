@@ -115,26 +115,14 @@ class ManageUnit extends Component {
     sortedInfo = sortedInfo || {};
     filteredInfo = filteredInfo || {};
     const columns = [
-      // {
-      //   title: "Code",
-      //   dataIndex: "id",
-      //   key: "code",
-      //   width: "4%",
-
-      //   filteredValue: filteredInfo.name || null,
-      //   onFilter: (value, record) => record.name.includes(value),
-      //   sorter: (a, b) => a.code - b.code,
-      //   sortOrder: sortedInfo.columnKey === "code" && sortedInfo.order
-      // },
+      {
+        width: "3%"
+      },
       {
         title: "Unit",
         dataIndex: "unit",
         key: "unit",
-        width: "6%",
-        filteredValue: filteredInfo.designation || null,
-        onFilter: (value, record) => record.designation.includes(value),
-        sorter: (a, b) => a.designation - b.designation,
-        sortOrder: sortedInfo.columnKey === "unit" && sortedInfo.order
+        width: "8%"
       },
 
       {
@@ -177,10 +165,10 @@ class ManageUnit extends Component {
 
     return (
       <AntTable
-        length
         className="userRolesManageTable"
         title={() => <UnitMasterTitle reload={this.getallunit} />}
         columns={columns}
+        style={{ width: "600px" }}
         dataSource={this.state.listData}
         onChange={this.handleChange}
         pagination={{ defaultPageSize: 8 }}
