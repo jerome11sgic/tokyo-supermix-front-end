@@ -14,13 +14,16 @@ import { PrimaryButton } from "../../../styledcomponents/button/button";
 import Notification from "../../../Constant/Notification";
 
 const { Option } = Select;
+
 class TestParameterTable extends Component {
   state = {
     size: "small",
     parameterList: [],
     selectedTestParams: [],
     test_name: "",
-    addToTestParams: []
+    addToTestParams: [],
+    unit: "",
+    unitData: []
   };
   componentWillMount() {
     if (window.screen.width > 1900) {
@@ -55,6 +58,26 @@ class TestParameterTable extends Component {
     });
   }
 
+  //get all for units select
+  getAllUnits() {
+    api("GET", "supermix", "/units", "", "", "").then(res => {
+      console.log(res.data.results);
+      if (res.data.results.units.length > 0) {
+        console.log("got tests");
+        let SelectUnit = res.data.results.units.map((post, index) => {
+          return (
+            <Option value={post.id} key={index}>
+              {post.unit}
+            </Option>
+          );
+        });
+        this.setState({
+          SelectUnit
+        });
+      }
+    });
+  }
+
   getAllParameters = () => {
     api("GET", "supermix", "/parameters", "", "", "").then(res => {
       console.log(res.data.results);
@@ -67,6 +90,7 @@ class TestParameterTable extends Component {
   componentDidMount() {
     this.getAllParameters();
     this.getAllTests();
+    this.getAllUnits();
   }
 
   handleCheck = (record, event) => {
@@ -94,15 +118,18 @@ class TestParameterTable extends Component {
 
   handleSubmit = e => {
     const { selectedTestParams, addToTestParams, test_name } = this.state;
+
     e.preventDefault();
     for (let k = 0; k < selectedTestParams.length; k++) {
       addToTestParams.push({
         testId: test_name,
         parameterId: selectedTestParams[k].id,
-        unitId: 1
+        unitId: this.state.unitData[selectedTestParams[k].id]
       });
     }
     console.log(addToTestParams);
+    console.log(this.state.unitData[1]);
+
     api("POST", "supermix", "/test-parameter", "", addToTestParams, "").then(
       res => {
         console.log(res.data);
@@ -111,7 +138,8 @@ class TestParameterTable extends Component {
         this.setState({
           selectedTestParams: [],
           test_name: "",
-          addToTestParams: []
+          addToTestParams: [],
+          unitData: []
         });
       },
       error => {
@@ -121,8 +149,16 @@ class TestParameterTable extends Component {
 
     console.log("submitted");
   };
+  addunit = (record, value) => {
+    this.state.unitData[record.id] = value;
+  };
 
   render() {
+    // this.state.unitData[0] = this.this.state.length;
+    // console.log(this.state.unitData);
+
+    // console.log(this.state.1);
+
     const testParameterColumns = [
       {
         title: "Parameter",
@@ -140,10 +176,25 @@ class TestParameterTable extends Component {
         key: "action",
         render: (text, record = this.state.testParameterData) => (
           <Checkbox
-            id='check_relevant'
-            name='check_relevant'
+            id="check_relevant"
+            name="check_relevant"
             onChange={this.handleCheck.bind(this, record)}
           />
+        )
+      },
+      {
+        title: "Unit",
+        dataIndex: "unit",
+        key: "unit",
+        render: (text, record = this.state.testParameterData) => (
+          <Select
+            id="unit"
+            name="unit"
+            onChange={value => this.addunit(record, value)}
+            style={{ width: 80 }}
+          >
+            {this.state.SelectUnit}
+          </Select>
         )
       }
     ];
@@ -165,15 +216,15 @@ class TestParameterTable extends Component {
           }}
         >
           <div
-            className='input-wrapper'
+            className="input-wrapper"
             style={{ display: "flex", flexDirection: "column" }}
           >
-            <label className='label' for='test_name'>
+            <label className="label" for="test_name">
               Test
             </label>
             <Select
-              id='test_name'
-              name='test_name'
+              id="test_name"
+              name="test_name"
               value={this.state.test_name}
               onChange={value => this.handleSelect("test_name", value)}
               style={{ width: 170, marginLeft: "10px" }}

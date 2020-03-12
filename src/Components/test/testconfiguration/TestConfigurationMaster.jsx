@@ -43,7 +43,7 @@ export default class TestConfigurationMaster extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      current: 4
+      current: 1
     };
   }
 
@@ -67,10 +67,10 @@ export default class TestConfigurationMaster extends Component {
     return (
       <div>
         <Steps
-          labelPlacement='horizontal'
+          labelPlacement="horizontal"
           current={current}
-          size='default'
-          className='step-area'
+          size="default"
+          className="step-area"
           onChange={this.onChange}
         >
           {steps.map(item => (
@@ -82,10 +82,10 @@ export default class TestConfigurationMaster extends Component {
           ))}
         </Steps>
         <div>{steps[current].content}</div>
-        <div className='steps-action'>
+        <div className="steps-action">
           {current < steps.length - 1 && (
             <Button
-              type='primary'
+              type="primary"
               onClick={() => this.next()}
               style={{
                 backgroundColor: "#001328",
@@ -98,7 +98,7 @@ export default class TestConfigurationMaster extends Component {
           )}
           {current === steps.length - 1 && (
             <Button
-              type='primary'
+              type="primary"
               onClick={() => message.success("Processing complete!")}
               style={{
                 background: "#001328",
