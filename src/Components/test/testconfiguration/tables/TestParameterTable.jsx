@@ -86,6 +86,14 @@ class TestParameterTable extends Component {
       });
     });
   };
+  getAllUnits = () => {
+    api("GET", "supermix", "/units", "", "", "").then(res => {
+      console.log(res.data.results);
+      this.setState({
+        unitsList: res.data.results.units[res.data.results.units.length - 1].id
+      });
+    });
+  };
 
   componentDidMount() {
     this.getAllParameters();

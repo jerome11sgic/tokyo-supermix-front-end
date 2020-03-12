@@ -41,6 +41,7 @@ import IncomingViewStatus from "../../sample/incoming/IncomingViewStatus/Incomin
 import ConcreteTest from "../../test/concrete/ManageConcreteTest";
 import ConcreteStrengthTest from "../../test/concreteStrength/ManageStrength";
 import TestTrialHome from "../../test/testtrial/card/TestTrialHome";
+import MaterialTestTrial from "../../test/testtrial/trials/MaterialTestTrial";
 
 // import AddMixDesign from "../../ConfigurationLevel/MixDesign/AddMixDesign";
 // import MixDesign from "../../ConfigurationLevel/MixDesign/AddMixDesign";
@@ -176,6 +177,10 @@ class RouterContent extends React.Component {
                 path='/matrialtest/:sampleId'
                 component={MaterialTest}
               />
+
+              <Route exact path='/materialtesttrial'>
+                <MaterialTestTrial />
+              </Route>
 
               {/* Test Reports and Results */}
               <Route exact path='/testreport'>
