@@ -231,7 +231,7 @@ class MaterialNatureAddForm extends Component {
             marginLeft: "-10px"
           }}
         >
-          Add State
+          Add Material State
         </PrimaryButton>
         <Modal
           width='330px'
@@ -299,7 +299,7 @@ class MaterialNatureAddForm extends Component {
               <Input
                 id='material_state'
                 name='material_state'
-                placeholder='Enter Nature'
+                placeholder='Enter Material State'
                 value={material_state}
                 onChange={this.handleChange}
               />

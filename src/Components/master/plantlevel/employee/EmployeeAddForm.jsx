@@ -707,7 +707,7 @@ class EmployeeAddForm extends Component {
         >
           <MasterLevelForm>
             {/* Code */}
-            <div className='input_wrapper'>
+            {/* <div className='input_wrapper'>
               <label for='employee_code' className='label'>
                 Code:
               </label>
@@ -720,9 +720,9 @@ class EmployeeAddForm extends Component {
                 value={this.state.employee_code}
                 disabled={this.props.type === "edit" ? true : true}
               />
-              {/* {errors.code.length > 0 && <div style={error}>{errors.code}</div>} */}
+
               <div style={{ height: "12px" }}></div>
-            </div>
+            </div> */}
 
             {/* Plant Name */}
             <div className='input_wrapper'>

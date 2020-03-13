@@ -127,10 +127,7 @@ class HomeScreen extends Component {
             >
               <ImageCard reports>
                 <div>
-                  <h1
-                    className='h1'
-                    style={{ marginLeft: "-10px", marginTop: "20px" }}
-                  >
+                  <h1 className='h1' style={{ marginLeft: "-10px" }}>
                     {" "}
                     Test Result & Test Report{" "}
                   </h1>

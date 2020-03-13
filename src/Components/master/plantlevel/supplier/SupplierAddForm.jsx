@@ -515,17 +515,17 @@ class SupplierAddForm extends Component {
           Add Supplier
         </PrimaryButton>
         <Modal
-          width="500px"
+          width='500px'
           visible={visible}
           closable={false}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[
-            <Button key="back" onClick={this.handleCancel}>
+            <Button key='back' onClick={this.handleCancel}>
               Cancel
             </Button>,
             <PrimaryButton
-              key="submit"
+              key='submit'
               loading={loading}
               onClick={e => this.handleSubmit(e)}
               style={{ background: "#001328", color: "white", border: "none" }}
@@ -543,7 +543,7 @@ class SupplierAddForm extends Component {
                 {this.state.type === "edit" ? "Edit Supplier" : " Add Supplier"}
               </p>
               <Icon
-                type="close-circle"
+                type='close-circle'
                 onClick={this.handleCancel}
                 style={{
                   color: "white"
@@ -562,7 +562,7 @@ class SupplierAddForm extends Component {
               }}
             >
               {/* Code */}
-              <div className="input_wrapper">
+              {/* <div className="input_wrapper">
                 <label for="supplier_code" className="label">
                   Code:
                 </label>
@@ -575,22 +575,20 @@ class SupplierAddForm extends Component {
                   value={this.state.supplier_code}
                   disabled={this.state.type == "edit" ? true : true}
                 />
-                {/* {errors.code.length > 0 && (
-                  <div style={error}>{errors.code}</div>
-                )} */}
+              
                 <div style={{ height: "12px" }}></div>
-              </div>
+              </div> */}
 
               {/* Plant Name */}
-              <div className="input_wrapper">
-                <label for="supplier_name" className="label">
+              <div className='input_wrapper'>
+                <label for='supplier_name' className='label'>
                   Supplier Name:
                 </label>
 
                 <Input
-                  id="supplier_name"
-                  name="supplier_name"
-                  placeholder="Enter the Supplier"
+                  id='supplier_name'
+                  name='supplier_name'
+                  placeholder='Enter the Supplier'
                   onChange={this.handleChange}
                   value={this.state.supplier_name}
                 />
@@ -601,15 +599,15 @@ class SupplierAddForm extends Component {
               </div>
 
               {/* Company Name */}
-              <div className="input_wrapper">
-                <label for="supplier_company_name" className="label">
+              <div className='input_wrapper'>
+                <label for='supplier_company_name' className='label'>
                   Company Name:
                 </label>
 
                 <Input
-                  id="supplier_company_name"
-                  name="supplier_company_name"
-                  placeholder="Enter the Supplier"
+                  id='supplier_company_name'
+                  name='supplier_company_name'
+                  placeholder='Enter the Supplier'
                   onChange={this.handleChange}
                   value={this.state.supplier_company_name}
                 />
@@ -618,18 +616,18 @@ class SupplierAddForm extends Component {
                 )}
                 <div style={{ height: "12px" }}></div>
               </div>
-              <div className="input_wrapper">
-                <label for="supplier_category" className="label">
+              <div className='input_wrapper'>
+                <label for='supplier_category' className='label'>
                   Supplier Category:
                 </label>
 
                 <Select
                   showSearch
                   style={{ width: "170px" }}
-                  id="supplier_category"
-                  name="supplier_category"
-                  placeholder="Select Category "
-                  optionFilterProp="children"
+                  id='supplier_category'
+                  name='supplier_category'
+                  placeholder='Select Category '
+                  optionFilterProp='children'
                   onChange={this.handleSelect}
                   // defaultValue={this.state.supplier_category}
                   value={this.state.edit_supplier_category}
@@ -654,15 +652,15 @@ class SupplierAddForm extends Component {
               </div>
 
               {/* Place */}
-              <div className="input_wrapper">
-                <label for="supplier_address" className="label">
+              <div className='input_wrapper'>
+                <label for='supplier_address' className='label'>
                   Address:
                 </label>
 
                 <Input
-                  id="supplier_address"
-                  name="supplier_address"
-                  placeholder="Enter the Address"
+                  id='supplier_address'
+                  name='supplier_address'
+                  placeholder='Enter the Address'
                   onChange={this.handleChange}
                   value={this.state.supplier_address}
                 />
@@ -673,16 +671,16 @@ class SupplierAddForm extends Component {
               </div>
 
               {/* T.P No */}
-              <div className="input_wrapper">
-                <label for="supplier_contactno" className="label">
+              <div className='input_wrapper'>
+                <label for='supplier_contactno' className='label'>
                   Contact No:
                 </label>
 
                 <Input
-                  className="input_number"
-                  id="supplier_contactno"
-                  name="supplier_contactno"
-                  placeholder="Enter Contact No"
+                  className='input_number'
+                  id='supplier_contactno'
+                  name='supplier_contactno'
+                  placeholder='Enter Contact No'
                   onChange={this.handleChange}
                   value={this.state.supplier_contactno}
                 />
@@ -693,15 +691,15 @@ class SupplierAddForm extends Component {
               </div>
 
               {/* Description  */}
-              <div className="input_wrapper">
-                <label for="supplier_email" className="label">
+              <div className='input_wrapper'>
+                <label for='supplier_email' className='label'>
                   Email:
                 </label>
 
                 <Input
-                  id="supplier_email"
-                  name="supplier_email"
-                  placeholder="Enter the Email"
+                  id='supplier_email'
+                  name='supplier_email'
+                  placeholder='Enter the Email'
                   onChange={this.handleChange}
                   value={this.state.supplier_email}
                 />

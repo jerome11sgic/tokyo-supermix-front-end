@@ -22,7 +22,7 @@ class ManageProcessSampleTitle extends Component {
       <FlexContainer titles leveltitles>
         <Paragraph style={style}> Process Sample</Paragraph>
 
-        <PrimaryButton
+        {/* <PrimaryButton
           style={{
             background: "#001328",
             color: "white",
@@ -31,7 +31,7 @@ class ManageProcessSampleTitle extends Component {
           href="#/samples/viewprocessstatus"
         >
           View Test
-        </PrimaryButton>
+        </PrimaryButton> */}
         <AddProcessSample reload={this.props.reload} />
       </FlexContainer>
     );

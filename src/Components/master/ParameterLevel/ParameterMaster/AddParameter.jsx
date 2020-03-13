@@ -10,6 +10,7 @@ import {
 import Notificationfuc from "../../../Constant/Notification";
 import { connect } from "react-redux";
 import { DISABLE_EDIT_MODE } from "../../../../redux/action/master/plantlevel/PlantLevel";
+import TextArea from "antd/lib/input/TextArea";
 
 const error = {
   color: "red",
@@ -346,18 +347,18 @@ class AddParameter extends Component {
           Add Parameter
         </PrimaryButton>
         <Modal
-          width="260px"
-          className="addsubcategorymodal"
+          width='260px'
+          className='addsubcategorymodal'
           visible={visible}
           closable={false}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[
-            <Button key="back" onClick={this.handleCancel}>
+            <Button key='back' onClick={this.handleCancel}>
               Return
             </Button>,
             <PrimaryButton
-              key="submit"
+              key='submit'
               loading={loading}
               onClick={this.handleSubmit}
               style={{ background: "#001328", color: "white", border: "none" }}
@@ -377,7 +378,7 @@ class AddParameter extends Component {
                   : "Add Parameter"}
               </p>
               <Icon
-                type="close-circle"
+                type='close-circle'
                 onClick={this.handleCancel}
                 style={{
                   color: "white"
@@ -405,17 +406,18 @@ class AddParameter extends Component {
             {/* <div style={{ height: "12px" }}></div>
             </div> */}
             {/* Paramter Name */}
-            <div className="input_wrapper">
-              <label for="parameter_name" className="label">
+            <div className='input_wrapper'>
+              <label for='parameter_name' className='label'>
                 Parameter Name:
               </label>
 
-              <Input
-                id="parameter_name"
-                name="parameter_name"
-                placeholder="Enter Parameter Name"
+              <TextArea
+                id='parameter_name'
+                name='parameter_name'
+                placeholder='Enter Parameter Name'
                 onChange={this.handleChange}
                 value={this.state.parameter_name}
+                style={{ width: 170 }}
               />
               {errors.name.length > 0 && <div style={error}>{errors.name}</div>}
               {this.state.errormgs.message === "name" ? (
@@ -427,15 +429,15 @@ class AddParameter extends Component {
             </div>
 
             {/* Abbrivation */}
-            <div className="input_wrapper">
-              <label for="parameter_abbrivation" className="label">
+            <div className='input_wrapper'>
+              <label for='parameter_abbrivation' className='label'>
                 Abbrivation:
               </label>
 
               <Input
-                id="parameter_abbrivation"
-                name="parameter_abbrivation"
-                placeholder="Enter Abbrivation"
+                id='parameter_abbrivation'
+                name='parameter_abbrivation'
+                placeholder='Enter Abbrivation'
                 onChange={this.handleChange}
                 value={this.state.parameter_abbrivation}
               />

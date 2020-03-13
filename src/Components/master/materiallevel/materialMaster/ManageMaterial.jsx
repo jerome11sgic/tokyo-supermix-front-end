@@ -166,24 +166,24 @@ class ManageMaterial extends Component {
           <span>
             <a>
               <Icon
-                type="edit"
+                type='edit'
                 onClick={this.props.passEditMaterialRecordtoModal.bind(
                   this,
                   record
                 )}
               />
             </a>
-            <Divider type="vertical" />
+            <Divider type='vertical' />
             <a>
               <Popconfirm
-                title="Are you sure you want to Delete this?"
+                title='Are you sure you want to Delete this?'
                 icon={
-                  <Icon type="question-circle-o" style={{ color: "red" }} />
+                  <Icon type='question-circle-o' style={{ color: "red" }} />
                 }
                 onConfirm={this.onConfirmdelete.bind(this, record.id)}
               >
-                <a href="#">
-                  <Icon type="delete" style={{ color: "red" }}></Icon>
+                <a href='#'>
+                  <Icon type='delete' style={{ color: "red" }}></Icon>
                 </a>
               </Popconfirm>
             </a>
@@ -199,7 +199,7 @@ class ManageMaterial extends Component {
         columns={columns}
         dataSource={this.state.datalist}
         onChange={this.handleChange}
-        pagination={{ defaultPageSize: 4 }}
+        pagination={{ defaultPageSize: 8 }}
         size={this.state.size}
       />
     );

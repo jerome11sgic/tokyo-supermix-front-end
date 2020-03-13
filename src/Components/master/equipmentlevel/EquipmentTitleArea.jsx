@@ -31,7 +31,7 @@ export default class EquipmentTitleArea extends Component {
           hoverable={true}
           onClick={this.statusChange1}
         >
-          <TileAreaText testreport> Equipment</TileAreaText>
+          <TileAreaText testreport>Equipment</TileAreaText>
           <TileAreaAction>
             <Icon
               filled
@@ -47,7 +47,7 @@ export default class EquipmentTitleArea extends Component {
           hoverable={true}
           onClick={this.statusChange3}
         >
-          <TileAreaText testreport>Equipment Plant</TileAreaText>
+          <TileAreaText testreport>Plant Equipment</TileAreaText>
           <TileAreaAction>
             <Icon
               filled
@@ -64,7 +64,7 @@ export default class EquipmentTitleArea extends Component {
           onClick={this.statusChange2}
         >
           <TileAreaText testreport unit>
-            Equipment Plant Calibration
+            Plant Equipment Calibration
           </TileAreaText>
           <TileAreaAction>
             <Icon
