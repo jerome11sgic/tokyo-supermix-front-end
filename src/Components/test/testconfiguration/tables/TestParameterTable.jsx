@@ -19,7 +19,7 @@ class TestParameterTable extends Component {
     size: "small",
     parameterList: [],
     selectedTestParams: [],
-    test_name: "",
+    test_name: undefined,
     addToTestParams: [],
     unitsList: ""
   };
@@ -50,7 +50,8 @@ class TestParameterTable extends Component {
           );
         });
         this.setState({
-          SelectTest
+          SelectTest,
+          test_name: res.data.results.test[res.data.results.test.length - 1].id
         });
       }
     });
@@ -189,6 +190,7 @@ class TestParameterTable extends Component {
             <Select
               id='test_name'
               name='test_name'
+              placeholder='Select Test'
               value={this.state.test_name}
               onChange={value => this.handleSelect("test_name", value)}
               style={{ width: 170, marginLeft: "10px" }}

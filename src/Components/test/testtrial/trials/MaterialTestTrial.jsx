@@ -5,6 +5,13 @@ import { PrimaryButton } from "../../../styledcomponents/button/button";
 import theme from "../../../../theme";
 import moment from "moment";
 
+const selectStyle = {
+  // @media (min-width: 1920px)
+  // .ant-select-selection {
+  //     width: 170;
+  // }
+};
+
 const { Option } = Select;
 const error = {
   color: "red",

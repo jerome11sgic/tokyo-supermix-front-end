@@ -39,25 +39,25 @@ class HomeScreen extends Component {
   render() {
     return (
       <FlexContainer normal>
-        <div className="tiles_area">
+        <div className='tiles_area'>
           {/* tile column 1 start*/}
-          <div className="tile_col_1">
+          <div className='tile_col_1'>
             {/* column 1 tile 1 start*/}
             <NavigationLink
-              to="/master/plantlevel"
+              to='/master/plantlevel'
               onClick={this.props.toggleMasterNavigation}
             >
               <ImageCard master>
                 <div>
-                  <h1 className="h1">Master</h1>
+                  <h1 className='h1'>Master</h1>
                   <br></br>
                   <div style={{ height: "25px" }}></div>
-                  <div className="ani">
+                  <div className='ani'>
                     <h4
                       style={{
                         color: "#ffff"
                       }}
-                      className="ani1"
+                      className='ani1'
                     >
                       Plant Level
                     </h4>
@@ -89,22 +89,22 @@ class HomeScreen extends Component {
             {/* column 1 tile 1 end*/}
             {/* column 1 tile 2 start*/}
             <NavigationLink
-              to="/samples"
+              to='/samples'
               onClick={this.props.toggleSampleNavigation}
             >
               <ImageCard configuration>
                 <div>
-                  <h1 className="h1" style={{ marginLeft: "-120px" }}>
+                  <h1 className='h1' style={{ marginLeft: "-120px" }}>
                     Samples
                   </h1>
                   <br></br>
                   <div style={{ height: "25px" }}></div>
-                  <div className="ani">
+                  <div className='ani'>
                     <h4
                       style={{
                         color: "#ffff"
                       }}
-                      className="ani1"
+                      className='ani1'
                     >
                       Raw Materials
                     </h4>
@@ -122,25 +122,27 @@ class HomeScreen extends Component {
             {/* column 1 tile 2 end*/}
             {/* column 1 tile 3 start*/}
             <NavigationLink
-              to="/testreport"
+              to='/testreport'
               onClick={this.props.toggleTestResults}
             >
               <ImageCard reports>
                 <div>
-                  <h1 className="h1" style={{ marginLeft: "-90px" }}>
+                  <h1
+                    className='h1'
+                    style={{ marginLeft: "-10px", marginTop: "20px" }}
+                  >
                     {" "}
-                    Test Result & <br />
-                    Test Report{" "}
+                    Test Result & Test Report{" "}
                   </h1>
                   <br></br>
                   <div style={{ height: "25px" }}></div>
-                  <div className="ani" style={{ marginTop: "-20px" }}>
+                  <div className='ani' style={{ marginTop: "-10px" }}>
                     <h4
                       style={{
                         color: "#ffff",
-                        marginTop: "5px"
+                        marginTop: "25px"
                       }}
-                      className="ani1"
+                      className='ani1'
                     >
                       Samples
                     </h4>
@@ -160,25 +162,25 @@ class HomeScreen extends Component {
           {/* tile column 1 end*/}
 
           {/* tile column 2 start*/}
-          <div className="tile_col_2">
+          <div className='tile_col_2'>
             {/* column 2 tile 1 start*/}
             <NavigationLink
-              to="/testconfiguration"
+              to='/testconfiguration'
               onClick={this.props.toggleTestConfigurationNavigation}
             >
               <ImageCard testing>
                 <div>
-                  <h1 className="h1" style={{ marginLeft: "-45px" }}>
+                  <h1 className='h1' style={{ marginLeft: "-45px" }}>
                     Test Configuration
                   </h1>
                   <br></br>
                   <div style={{ height: "25px" }}></div>
-                  <div className="ani">
+                  <div className='ani'>
                     <h4
                       style={{
                         color: "#ffff"
                       }}
-                      className="ani1"
+                      className='ani1'
                     >
                       Raw Materials
                     </h4>
@@ -196,22 +198,22 @@ class HomeScreen extends Component {
             {/* column 2 tile 1 end*/}
             {/* column 2 tile 2 start*/}
             <NavigationLink
-              to="/trialcards"
+              to='/trialcards'
               onClick={this.props.toggleTestTrialsNavigation}
             >
               <ImageCard testTrial>
                 <div>
-                  <h1 className="h1" style={{ marginLeft: "-95px" }}>
+                  <h1 className='h1' style={{ marginLeft: "-95px" }}>
                     Test Trials
                   </h1>
                   <br></br>
                   <div style={{ height: "25px" }}></div>
-                  <div className="ani">
+                  <div className='ani'>
                     <h4
                       style={{
                         color: "#ffff"
                       }}
-                      className="ani1"
+                      className='ani1'
                     >
                       Raw Materials
                     </h4>
@@ -236,25 +238,25 @@ class HomeScreen extends Component {
             {/* column 2 tile 2 end*/}
             {/* column 2 tile 3 start*/}
             <NavigationLink
-              to="/mixdesign"
+              to='/mixdesign'
               onClick={this.props.toggleMixDesignNavigation}
             >
               <ImageCard mixDesign>
                 <div>
                   <h1
-                    className="h1"
+                    className='h1'
                     style={{ textAlign: "left", marginLeft: "2em" }}
                   >
                     Mix Design
                   </h1>
                   <br></br>
                   <div style={{ height: "25px" }}></div>
-                  <div className="ani">
+                  <div className='ani'>
                     <h4
                       style={{
                         color: "#ffff"
                       }}
-                      className="ani1"
+                      className='ani1'
                     >
                       Mix Design <br /> Proportion
                     </h4>

@@ -60,7 +60,6 @@ class AddTestName extends Component {
       plant: [],
       errors: {
         test_name: "",
-        equation: "",
         test_type: ""
       },
       errormsgs: ""
@@ -165,12 +164,7 @@ class AddTestName extends Component {
 
     if (name === "equation") {
       this.setState({
-        equation: value,
-        errors: {
-          test_name: errors.test_name,
-          equation: "",
-          test_type: errors.test_type
-        }
+        equation: value
       });
     }
     if (name === "test_type" || this.props.icon === "-") {
@@ -178,7 +172,6 @@ class AddTestName extends Component {
         test_type: value,
         errors: {
           test_name: errors.test_name,
-          equation: errors.equation,
           test_type: ""
         }
       });
@@ -188,16 +181,11 @@ class AddTestName extends Component {
   handleSubmit = e => {
     e.preventDefault();
     const { errors, test_name, test_type, equation } = this.state;
-    if (
-      test_name.length === 0 &&
-      test_type.length === 0 &&
-      equation.length === 0
-    ) {
+    if (test_name.length === 0 && test_type.length === 0) {
       console.log("form is not valid");
       this.setState({
         errors: {
           test_name: "test name can't be empty",
-          equation: "equation can't be empty",
           test_type: "test type can't be empty"
         }
       });
@@ -205,15 +193,6 @@ class AddTestName extends Component {
       this.setState({
         errors: {
           test_name: errors.test_name || "test name can't be empty",
-          equation: errors.equation,
-          test_type: errors.test_type
-        }
-      });
-    } else if (equation.length === 0 && errors.equation.length === 0) {
-      this.setState({
-        errors: {
-          test_name: errors.test_name,
-          equation: errors.equation || "equation can't be empty",
           test_type: errors.test_type
         }
       });
@@ -221,15 +200,11 @@ class AddTestName extends Component {
       this.setState({
         errors: {
           test_name: errors.test_name,
-          equation: errors.equation,
+
           test_type: errors.test_type || "test type can't be empty"
         }
       });
-    } else if (
-      errors.test_name.length === 0 &&
-      errors.equation.length === 0 &&
-      errors.test_type.length === 0
-    ) {
+    } else if (errors.test_name.length === 0 && errors.test_type.length === 0) {
       console.log("form is valid");
       const data = {
         name: test_name,
@@ -345,9 +320,9 @@ class AddTestName extends Component {
               {this.props.icon}
             </PrimaryButton>
           </FlexContainer>
-          {errors.equation.length > 0 && (
+          {/* {errors.equation.length > 0 && (
             <div style={error2}>{errors.equation}</div>
-          )}
+          )} */}
           <div style={{ height: "6px", width: "auto" }}></div>
         </div>
 
@@ -360,7 +335,7 @@ class AddTestName extends Component {
             id='test_type'
             name='test_type'
             placeholder='Select Test Type'
-            style={{ width: 150 }}
+            style={{ width: 180 }}
             value={test_type}
             onChange={value => this.handleSelect("test_type", value)}
           >
