@@ -39,6 +39,13 @@ const error = {
   height: "0.2px"
 };
 
+function isEmpty(obj) {
+  for (var key in obj) {
+    if (obj.hasOwnProperty(key)) return false;
+  }
+  return true;
+}
+
 class AddMixDesignForm extends Component {
   state = {
     loading: false,
@@ -81,7 +88,8 @@ class AddMixDesignForm extends Component {
     editunit: "",
     type: "add",
     a: [],
-    b: []
+    b: [],
+    MixDesignProportionData: ""
   };
 
   // *******************quantity edit part **********************
@@ -89,6 +97,7 @@ class AddMixDesignForm extends Component {
     console.log(nextProps.editPlantData.code);
     this.setState({
       visible: nextProps.visible,
+      // visible1: nextProps.visible,
       code: nextProps.editPlantData.code,
       plant: nextProps.editPlantData.plantCode,
       grade: nextProps.editPlantData.targetGrade,
@@ -432,10 +441,12 @@ class AddMixDesignForm extends Component {
       errors.plant.length === 0 &&
       errors.grade.length === 0 &&
       errors.actual_grade.length === 0 &&
-      errors.target_strength.length === 0
+      errors.target_strength.length === 0 &&
+      this.state.mixProportionData.length > 0
     ) {
       console.log("form is valid");
 
+      console.log(this.state.material_data);
       console.log(this.state.mixProportionData);
 
       if (this.state.type === "edit") {
@@ -459,55 +470,44 @@ class AddMixDesignForm extends Component {
             Notification("success", res.data.message);
             this.props.reload();
             // this.setState({ loading: true });
-            api(
-              "PUT",
-              "supermix",
-              "/mix-design-proportion",
-              "",
-              this.state.mixProportionData,
-              ""
-            ).then(res => {
-              console.log(res.data);
-              Notification("success", res.data.message);
-              // a.splice(0, a.length);
-              // b.splice(0, b.length);
+            for (let i = 0; i < this.state.mixProportionData.length; i++) {
+              api(
+                "PUT",
+                "supermix",
+                "/mix-design-proportion",
+                "",
+                this.state.mixProportionData[i],
+                ""
+              ).then(res => {
+                console.log(res.data);
+                Notification("success", res.data.message);
 
-              this.setState({
-                cement_data: [],
-                water_data: [],
-                flyash_data: [],
-                material_data: {},
-                code: "",
-                plant: "",
-                grade: "",
-                date: "",
-                target_strength: "",
-                actual_grade: "",
-                water_cement_ratio: 0,
-                water_binder_ratio: 0,
-                type: "add",
-                a: [],
-                b: []
+                this.setState({
+                  cement_data: [],
+                  water_data: [],
+                  flyash_data: [],
+                  material_data: {},
+                  code: "",
+                  plant: "",
+                  grade: "",
+                  date: "",
+                  target_strength: "",
+                  actual_grade: "",
+                  water_cement_ratio: 0,
+                  water_binder_ratio: 0,
+                  type: "add",
+                  a: [],
+                  b: []
+                });
+                setTimeout(() => {
+                  window.location.reload();
+                }, 500);
               });
-            });
-            // this.setState({
-            //   cement_data: [],
-            //   water_data: [],
-            //   flyash_data: [],
-            //   material_data: {},
-            //   code: "",
-            //   plant: "",
-            //   grade: "",
-            //   date: "",
-            //   target_strength: "",
-            //   actual_grade: "",
-            //   water_cement_ratio: 0,
-            //   water_binder_ratio: 0
-            // });
+            }
 
             setTimeout(() => {
               this.setState({ loading: false, visible: false });
-            }, 3000);
+            }, 200);
           },
           error => {
             // this.setState({
@@ -583,6 +583,15 @@ class AddMixDesignForm extends Component {
         );
       }
     }
+    if (
+      isEmpty(this.state.material_data) &&
+      this.state.mixProportionData.length
+    ) {
+      this.setState({
+        errormgs: "! mixProportion must be add"
+      });
+    }
+
     console.log("data hit");
   };
 
@@ -719,25 +728,46 @@ class AddMixDesignForm extends Component {
 
   quantityChange = form1 => {
     this.setState({ material_data: form1.data.form });
+    if (!isEmpty(form1.data.form)) {
+      this.setState({ errormgs: "" });
+    }
   };
-  setJson = () => {
+  setJson = form => {
+    console.log(form);
     // this.setState({ material_data: form1.data.form });
     this.setState({ visible1: false });
 
     const values = [];
-
-    for (let i = 0; i < this.state.a.length; i++) {
-      values.push({
-        mixDesignCode: this.state.code,
-        rawMaterialId: this.state.a[i].id,
-        unitId: this.state.unit[this.state.a[i].name],
-        quantity: this.state.material_data[this.state.a[i].name]
-      });
+    if (this.state.type === "add") {
+      for (let i = 0; i < this.state.a.length; i++) {
+        values.push({
+          mixDesignCode: this.state.code,
+          rawMaterialId: this.state.a[i].id,
+          unitId: this.state.unit[this.state.a[i].name],
+          quantity: form[this.state.a[i].name]
+        });
+      }
+      this.setState({ mixProportionData: values });
+      // console.log(values);
+    } else {
+      for (let i = 0; i < this.state.MixDesignProportionData.length; i++) {
+        values.push({
+          id: this.state.MixDesignProportionData[i].id,
+          mixDesignCode: this.state.MixDesignProportionData[i].mixDesignCode,
+          rawMaterialId: this.state.MixDesignProportionData[i].rawMaterialId,
+          unitId: this.state.MixDesignProportionData[i].unitId,
+          quantity: isEmpty(this.state.material_data)
+            ? this.state.MixDesignProportionData[i].quantity
+            : this.state.material_data[
+                this.state.MixDesignProportionData[i].rawMaterialName
+              ]
+        });
+      }
+      this.setState({ mixProportionData: values });
     }
-    this.setState({ mixProportionData: values });
     console.log(values);
 
-    Object.entries(this.state.material_data).map(([make, type]) => {
+    Object.entries(form).map(([make, type]) => {
       if (this.state.type === "add") {
         this.state.a.map((post, index) => {
           console.log(post.subCategoryName);
@@ -761,27 +791,23 @@ class AddMixDesignForm extends Component {
           }
         });
       } else {
-        this.state.MixDesignProportionData.map((post, index) => {
-          console.log(post.subCategoryName);
-          if (
-            post.name === make &&
-            post.subCategoryName.toLowerCase() === "water"
-          ) {
-            this.state.water_data.push(parseInt(type));
-          } else if (
-            post.name === make &&
-            post.subCategoryName.toLowerCase() === "cement"
-          ) {
-            this.state.cement_data.push(parseInt(type));
-          } else if (
-            post.name === make &&
-            post.subCategoryName.toLowerCase() === "flyash"
-          ) {
-            this.state.flyash_data.push(parseInt(type));
-          } else {
-            console.log("notfound");
-          }
-        });
+        console.log(this.state.MixDesignProportionData);
+        console.log(make);
+        console.log(type);
+
+        if (make === "water") {
+          console.log("water");
+
+          this.state.water_data.push(parseInt(type));
+        } else if (make.toLowerCase() === "cement") {
+          console.log(type);
+          this.state.cement_data.push(parseInt(type));
+        } else if (make.toLowerCase() === "flyash") {
+          console.log(type);
+          this.state.flyash_data.push(parseInt(type));
+        } else {
+          console.log("notfound");
+        }
       }
     });
     console.log(this.state.water_data);
@@ -823,16 +849,16 @@ class AddMixDesignForm extends Component {
     console.log(w);
     console.log(f);
     let w_b_r = (w / f) * 100;
-    if (this.state.type === "add")
-      this.setState({ water_binder_ratio: Number(w_b_r.toFixed(1)) });
+
+    this.setState({ water_binder_ratio: Number(w_b_r.toFixed(1)) });
 
     console.log(Number(w_b_r.toFixed(1)));
   };
 
   findWaterCementRatio = (w, c) => {
     let w_c_r = (w / c) * 100;
-    if (this.state.type === "add")
-      this.setState({ water_cement_ratio: Number(w_c_r.toFixed(1)) });
+
+    this.setState({ water_cement_ratio: Number(w_c_r.toFixed(1)) });
 
     console.log(Number(w_c_r.toFixed(1)));
   };
@@ -1158,6 +1184,7 @@ class AddMixDesignForm extends Component {
               >
                 {this.state.SubCategoriesselect}
               </Select>
+
               <Table
                 style={{ width: "500px" }}
                 columns={columns}
@@ -1167,6 +1194,7 @@ class AddMixDesignForm extends Component {
                 rowSelection={rowSelection}
                 pagination={false}
               />
+              <p style={{ color: "red" }}>{this.state.errormgs}</p>
             </div>
           </MasterLevelForm>
         </Modal>
@@ -1200,7 +1228,7 @@ class AddMixDesignForm extends Component {
                   this.quantityChange(form);
                 }}
                 onSubmit={form => {
-                  this.setJson(form);
+                  this.setJson(form.data.form);
                   console.log(form);
                 }}
                 inputStyle={instyle}
