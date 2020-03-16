@@ -127,7 +127,7 @@ export default class ManageTestConfiguration extends Component {
         key: "testParams",
         render: (text, record) => (
           <Icon
-            type='form'
+            type='container'
             style={{ color: "green" }}
             onClick={this.showTestParams.bind(this, record.id)}
           />

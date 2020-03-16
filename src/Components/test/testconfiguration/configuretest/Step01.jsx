@@ -153,7 +153,7 @@ class Step01 extends Component {
           style={{
             // backgroundColor: "rgba(220, 220, 220, 0.9)",
             padding: "10px",
-            width: "50%",
+            width: "55%",
             justifyContent: "center"
           }}
         >

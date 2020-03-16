@@ -19,6 +19,7 @@ export const TriggerEquationAreaReducer = (state = initialState, action) => {
         togglable: (state.togglerValue = "no")
       };
     case TRIGGER_BACK_EQUATIONS_AREA:
+      window.location.reload();
       return {
         ...state,
         visible: (state.visible = false),

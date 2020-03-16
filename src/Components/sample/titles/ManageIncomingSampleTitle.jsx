@@ -22,7 +22,7 @@ class ManageIncomingSampleTitle extends Component {
     return (
       <FlexContainer titles leveltitles>
         <Paragraph style={style}> Incoming Sample</Paragraph>
-        <PrimaryButton
+        {/* <PrimaryButton
           style={{
             background: "#001328",
             color: "white",
@@ -31,7 +31,7 @@ class ManageIncomingSampleTitle extends Component {
           href="#/samples/viewincomingstatus"
         >
           View Test
-        </PrimaryButton>
+        </PrimaryButton> */}
         <AddIncoming reload={this.props.reload} />
       </FlexContainer>
     );

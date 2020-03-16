@@ -45,6 +45,11 @@ export const ParameterConfigurationReducer = (state = initialState, action) => {
             parameterAbbr: action.payload.record.parameterAbbr,
             unit: state.unit
           });
+          state.newRecord.splice(1, 0, {
+            parameterName: action.payload.record.parameterName,
+            parameterAbbr: action.payload.record.parameterAbbr,
+            unit: state.unit
+          });
           break;
         }
       }

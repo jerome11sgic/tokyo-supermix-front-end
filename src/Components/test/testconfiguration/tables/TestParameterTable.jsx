@@ -20,7 +20,7 @@ class TestParameterTable extends Component {
     size: "small",
     parameterList: [],
     selectedTestParams: [],
-    test_name: "",
+    test_name: undefined,
     addToTestParams: [],
     unit: "",
     unitData: []
@@ -52,7 +52,8 @@ class TestParameterTable extends Component {
           );
         });
         this.setState({
-          SelectTest
+          SelectTest,
+          test_name: res.data.results.test[res.data.results.test.length - 1].id
         });
       }
     });
@@ -155,7 +156,7 @@ class TestParameterTable extends Component {
 
   render() {
     // this.state.unitData[0] = this.this.state.length;
-    // console.log(this.state.unitData);
+    // console.log(this.state.SelectUnit);
 
     // console.log(this.state.1);
 
@@ -176,8 +177,8 @@ class TestParameterTable extends Component {
         key: "action",
         render: (text, record = this.state.testParameterData) => (
           <Checkbox
-            id="check_relevant"
-            name="check_relevant"
+            id='check_relevant'
+            name='check_relevant'
             onChange={this.handleCheck.bind(this, record)}
           />
         )
@@ -188,8 +189,8 @@ class TestParameterTable extends Component {
         key: "unit",
         render: (text, record = this.state.testParameterData) => (
           <Select
-            id="unit"
-            name="unit"
+            id='unit'
+            name='unit'
             onChange={value => this.addunit(record, value)}
             style={{ width: 80 }}
           >
@@ -201,8 +202,8 @@ class TestParameterTable extends Component {
     return (
       <FlexContainer
         style={{
-          width: "800px",
-          background: "white",
+          width: "820px",
+          background: "rgba(0,0,0,0.4)",
           marginTop: "20px",
           borderRadius: "15px",
           padding: "10px"
@@ -215,23 +216,23 @@ class TestParameterTable extends Component {
             marginTop: "10px"
           }}
         >
-          <div
-            className="input-wrapper"
+          {/* <div
+            className='input-wrapper'
             style={{ display: "flex", flexDirection: "column" }}
           >
-            <label className="label" for="test_name">
+            <label className='label' for='test_name' style={{ color: "white" }}>
               Test
             </label>
             <Select
-              id="test_name"
-              name="test_name"
+              id='test_name'
+              name='test_name'
               value={this.state.test_name}
               onChange={value => this.handleSelect("test_name", value)}
               style={{ width: 170, marginLeft: "10px" }}
             >
               {this.state.SelectTest}
             </Select>
-          </div>
+          </div> */}
 
           {/* <PrimaryButton
             type={"ghost"}
@@ -265,17 +266,41 @@ class TestParameterTable extends Component {
                 justifyContent: "center",
                 margin: "-10px",
                 borderTopLeftRadius: "15px",
-                borderTopRightRadius: "15px"
+                borderTopRightRadius: "15px",
+                border: "none"
               }}
             >
-              Test Parameter
+              <FlexContainer style={{ width: "50%", marginLeft: "40px" }}>
+                <div className='input-wrapper'>
+                  <label
+                    className='label'
+                    for='test_name'
+                    style={{ color: "white" }}
+                  >
+                    Test
+                  </label>
+                  <Select
+                    id='test_name'
+                    name='test_name'
+                    value={this.state.test_name}
+                    onChange={value => this.handleSelect("test_name", value)}
+                    style={{ width: 170, marginLeft: "10px" }}
+                  >
+                    {this.state.SelectTest}
+                  </Select>
+                </div>
+                Test Parameter
+              </FlexContainer>
             </div>
           )}
           showHeader={true}
-          pagination={{ defaultPageSize: 6 }}
+          pagination={false}
+          scroll={{ y: 200 }}
           style={{
             height: "auto",
-            width: "770px"
+            width: "770px",
+            backgroundClip: "padding-box",
+            cellSpacing: "0"
           }}
         />
         <FlexContainer

@@ -445,7 +445,7 @@ class PlantAddForm extends Component {
             {/* Plant Name */}
             <div className='input_wrapper'>
               <label for='plant_name' className='label'>
-                Plant Name:
+                Plant:
               </label>
               <Input
                 id='plant_name'

@@ -21,7 +21,7 @@ class ManageFinishProductSampleTitle extends Component {
     return (
       <FlexContainer titles leveltitles>
         <Paragraph style={style}>Manage Finish Product Sample</Paragraph>
-        <PrimaryButton
+        {/* <PrimaryButton
           style={{
             background: "#001328",
             color: "white",
@@ -30,7 +30,7 @@ class ManageFinishProductSampleTitle extends Component {
           href="#/samples/viewfpstatus"
         >
           View Test
-        </PrimaryButton>
+        </PrimaryButton> */}
         <AddFinishProduct reload={this.props.reload} />
       </FlexContainer>
     );
