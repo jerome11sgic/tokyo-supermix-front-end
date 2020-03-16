@@ -10,10 +10,18 @@ export default class MaterialTest extends Component {
   callback(key) {
     console.log(key);
   }
+  componentDidMount() {
+    // const {
+    //   params: { testId, sampleId }
+    // } = this.match;
+    console.log("lllllllllllll");
+    console.log(this.props.match.params.testId);
+    console.log(this.props.match.params.sampleId);
+  }
   render() {
     return (
       <Tabs
-        defaultActiveKey='2'
+        defaultActiveKey="2"
         onChange={this.callback}
         tabBarStyle={{
           background: "#001328",
@@ -23,13 +31,13 @@ export default class MaterialTest extends Component {
         }}
         //  tabPosition="right"
       >
-        <TabPane tab='Quality Parameter' key='1'>
+        <TabPane tab="Quality Parameter" key="1">
           <QualityParameter samId={this.props.match.params.sampleId} />
         </TabPane>
-        <TabPane tab='Trial Results' key='2'>
+        <TabPane tab="Trial Results" key="2">
           <TestTrialResult />
         </TabPane>
-        <TabPane tab='Final Test Result' key='3'>
+        <TabPane tab="Final Test Result" key="3">
           <TestResults />
         </TabPane>
       </Tabs>

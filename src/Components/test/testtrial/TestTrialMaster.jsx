@@ -3,7 +3,8 @@ import BasicCard from "../../styledcomponents/card/BasicCard";
 import { FlexContainer } from "../../styledcomponents/container/FlexGrid";
 
 import imgObj from "../../../assets/labtesting.jpg";
-import { ManageTest, MaterialsType } from "./TestTrial";
+// import { ManageTest, MaterialsType } from "./TestTrial";
+import ManageTest from "./TestTrial";
 import { NavigationLink } from "../../styledcomponents/Link/NavLink";
 import { api } from "../../services/AxiosService";
 
@@ -15,10 +16,10 @@ export const TestPage = ({ match, location }) => {
   return (
     <div>
       {/* <div>{MaterialsType(testData[testId - 1].typeData)}</div>
-      <div style={{ height: "40px" }}></div>
+      <div style={{ height: "40px" }}></div> */}
       <div>
-        {ManageTest(testData[testId - 1].data, testData[testId - 1].name)}
-      </div> */}
+        <ManageTest testId={testId} />
+      </div>
     </div>
   );
 };
@@ -217,7 +218,7 @@ export default class TestTrialMaster extends Component {
     ).then(res => {
       let testByTest = res.data.results.testType.map((post, index) => {
         return (
-          <NavigationLink to={`/test/${index + 1}`}>
+          <NavigationLink to={`/test/${post.id}`}>
             <BasicCard
               testtrial
               finalproduct

@@ -90,8 +90,6 @@ class ManageMixDesignForm extends Component {
     console.log("Page: ", pageNumber);
   }
   getMixDesignProportion = code => {
-    console.log(code);
-
     api(
       "GET",
       "supermix",
