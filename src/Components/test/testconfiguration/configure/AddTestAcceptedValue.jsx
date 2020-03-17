@@ -751,51 +751,60 @@ export default class AddTestAcceptedValue extends Component {
               <div style={{ height: "6px" }}></div>
             </div>
 
-            <FlexContainer home>
-              <div className='input_wrapper'>
-                <PrimaryButton type='ghost'>Between</PrimaryButton>
-                <div style={{ height: "18px" }}></div>
-              </div>
-              {/* Maximum  */}
-              <div className='input_wrapper'>
-                <Input
-                  id='maximum'
-                  name='maximum'
-                  placeholder='Maximum'
-                  style={{ width: 90 }}
-                  value={maximum}
-                  onChange={this.handleChange}
-                />
-                {errors.maximum.length > 0 && (
-                  <div style={minierror}>{errors.maximum}</div>
-                )}
-                <div style={{ height: "12px" }}></div>
-              </div>
+            {/* Test Max and Min */}
+            {switchVal === false ? (
+              <FlexContainer>
+                <div className='input_wrapper'>
+                  <PrimaryButton type='ghost'>Between</PrimaryButton>
+                  <div style={{ height: "18px" }}></div>
+                </div>
+                {/* Maximum */}
+                <div className='input_wrapper'>
+                  <Input
+                    id='maximum'
+                    name='maximum'
+                    placeholder='Maximum'
+                    style={{ width: 90 }}
+                    value={maximum}
+                    onChange={this.handleChange}
+                  />
+                  {errors.maximum.length > 0 && (
+                    <div style={minierror}>{errors.maximum}</div>
+                  )}
+                  <div style={{ height: "12px" }}></div>
+                </div>
+                <div className='input_wrapper'>
+                  <PrimaryButton type='ghost'>To</PrimaryButton>
+                  <div style={{ height: "12px" }}></div>
+                </div>
+                {/* Minimum */}
+                <div className='input_wrapper'>
+                  <Input
+                    id='minimum'
+                    name='minimum'
+                    placeholder='Minimum'
+                    style={{ width: 90 }}
+                    value={minimum}
+                    onChange={this.handleChange}
+                  />
+                  {errors.minimum.length > 0 && (
+                    <div style={minierror}>{errors.minimum}</div>
+                  )}
+                  <div style={{ height: "12px" }}></div>
+                </div>
+              </FlexContainer>
+            ) : (
+              ""
+            )}
 
-              <div className='input_wrapper'>
-                <PrimaryButton type='ghost'>To</PrimaryButton>
-                <div style={{ height: "12px" }}></div>
-              </div>
-
-              {/* Minimum  */}
-              <div className='input_wrapper'>
-                <Input
-                  id='minimum'
-                  name='minimum'
-                  placeholder='Minimum'
-                  style={{ width: 90 }}
-                  value={minimum}
-                  onChange={this.handleChange}
-                />
-                {errors.minimum.length > 0 && (
-                  <div style={minierror}>{errors.minimum}</div>
-                )}
-                <div style={{ height: "12px" }}></div>
-              </div>
-              {/* Material */}
-              <div className='input_wrapper' style={{ marginTop: "5px" }}>
+            <FlexContainer>
+              {/* Material Switch */}
+              <div
+                className='input_wrapper'
+                style={{ marginTop: switchVal === false ? "5px" : "20px" }}
+              >
                 <label for='material_switch' className='label'>
-                  Material
+                  {switchVal === false ? "Test" : "Material"}
                 </label>
                 <Switch
                   onChange={checked => this.onChange(checked)}

@@ -126,7 +126,9 @@ class AddTestName extends Component {
           );
         });
         this.setState({
-          SelectEquation
+          SelectEquation,
+          equation:
+            res.data.results.equations[res.data.results.equations.length - 1]
         });
       }
     });
