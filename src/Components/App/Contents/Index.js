@@ -4,23 +4,17 @@ import Paragraph from "antd/lib/typography/Paragraph";
 import { Route, Switch } from "react-router-dom";
 import Image from "../../../assets/background.jpg";
 import HeaderComponent from "../../Constant/Header";
-
 import HomeScreen from "../../homescreen/HomeScreen";
 import PlantMaster from "../../master/plantlevel/PlantMaster";
-
 import MaterialMaster from "../../master/materiallevel/MaterialMaster";
-
 import CategoryMaster from "../../master/categorylevel/CategoryMaster";
-
 import SiteMaster from "../../master/sitelevel/SiteMaster";
 import Test from ".././../test/testtrial/TestMaster";
-
 import EquipmentMaster from "../../master/equipmentlevel/EquipmentMaster";
 import TestLevelMaster from "../../master/testlevel/TestLevelMaster";
 import ParameterMaster from "../../master/ParameterLevel/ParameterMaster";
 import UnitMaster from "../../master/unitlevel/UnitMaster";
 import TestConfigurationMaster from "../../test/testconfiguration/TestConfigurationMaster";
-
 import MixDesignMaster from "../../master/mixdesign/MixDesignMaster";
 import SampleMaster from "../../sample/SampleMaster";
 import TestTrialMaster, {
@@ -29,7 +23,6 @@ import TestTrialMaster, {
 import TestTypes from "../../test/testtrial/TestType";
 import MaterialTest from "../../test/testtrial/MaterialTest";
 import { TestTypePage } from "../../test/testtrial/TestType";
-
 import Profile from "../../profile/Profile";
 import CompanyPrivilege from "../../priviledges/Privileges";
 import FPViewStatus from "../../sample/finshproduct/FPViewStatus/FPViewStatus";
@@ -42,7 +35,6 @@ import ConcreteTest from "../../test/concrete/ManageConcreteTest";
 import ConcreteStrengthTest from "../../test/concreteStrength/ManageStrength";
 import TestTrialHome from "../../test/testtrial/card/TestTrialHome";
 import MaterialTestTrial from "../../test/testtrial/trials/MaterialTestTrial";
-
 // import AddMixDesign from "../../ConfigurationLevel/MixDesign/AddMixDesign";
 // import MixDesign from "../../ConfigurationLevel/MixDesign/AddMixDesign";
 
@@ -61,7 +53,7 @@ class RouterContent extends React.Component {
             background: `url(${Image})`
           }}
         >
-          <Route path='/'>
+          <Route path="/">
             <HeaderComponent />
           </Route>
 
@@ -71,21 +63,21 @@ class RouterContent extends React.Component {
             }}
           >
             <Switch>
-              <Route exact path='/'>
+              <Route exact path="/">
                 <HomeScreen />
               </Route>
 
-              <Route exact path='/dashboard'>
+              <Route exact path="/dashboard">
                 <GraphDashboard />
               </Route>
 
               {/* Plant Level */}
-              <Route exact path='/master/plantlevel'>
+              <Route exact path="/master/plantlevel">
                 <PlantMaster />
               </Route>
 
               {/* Category Level */}
-              <Route exact path='/master/categorylevel'>
+              <Route exact path="/master/categorylevel">
                 <CategoryMaster />
               </Route>
 
@@ -95,30 +87,30 @@ class RouterContent extends React.Component {
               {/* <Route exact path="/rawmaterial">
                 <RawMaterialHome />
               </Route> */}
-              <Route exact path='/master/materiallevel'>
+              <Route exact path="/master/materiallevel">
                 <MaterialMaster />
               </Route>
               {/* <Route  exact path="/MixDesign">
               <MixDesign/>
              </Route> */}
 
-              <Route exact path='/master/sitelevel'>
+              <Route exact path="/master/sitelevel">
                 <SiteMaster />
               </Route>
 
-              <Route exact path='/master/equipmentlevel'>
+              <Route exact path="/master/equipmentlevel">
                 <EquipmentMaster />
               </Route>
 
-              <Route exact path='/master/testlevel'>
+              <Route exact path="/master/testlevel">
                 <TestLevelMaster />
               </Route>
 
-              <Route exact path='/master/unitlevel'>
+              <Route exact path="/master/unitlevel">
                 <UnitMaster />
               </Route>
 
-              <Route exact path='/master/parameterlevel'>
+              <Route exact path="/master/parameterlevel">
                 <ParameterMaster />
               </Route>
 
@@ -127,92 +119,92 @@ class RouterContent extends React.Component {
               </Route> */}
 
               {/* Test Configuration */}
-              <Route exact path='/testconfiguration'>
+              <Route exact path="/testconfiguration">
                 <TestConfigurationMaster />
               </Route>
 
               {/* Samples */}
-              <Route exact path='/samples'>
+              <Route exact path="/samples">
                 <SampleMaster />
               </Route>
-              <Route exact path='/samples/incoming'>
+              <Route exact path="/samples/incoming">
                 <SampleMaster />
               </Route>
 
-              <Route exact path='/samples/viewincomingstatus'>
+              <Route exact path="/samples/viewincomingstatus">
                 <IncomingViewStatus />
               </Route>
 
-              <Route exact path='/samples/viewprocessstatus'>
+              <Route exact path="/samples/viewprocessstatus">
                 <ProcessViewStatus />
               </Route>
 
-              <Route exact path='/samples/viewfpstatus'>
+              <Route exact path="/samples/viewfpstatus">
                 <FPViewStatus />
               </Route>
 
-              <Route exact path='/mixdesign'>
+              <Route exact path="/mixdesign">
                 <MixDesignMaster />
               </Route>
 
               {/* Test Trial */}
-              <Route exact path='/test/testtrial'>
+              <Route exact path="/test/testtrial">
                 <TestTrialMaster />
               </Route>
 
               {/* TestTrialHome Cards */}
-              <Route exact path='/trialcards'>
+              <Route exact path="/trialcards">
                 <TestTrialHome />
               </Route>
 
-              <Route exact path='/test/:testId' component={TestPage} />
+              <Route exact path="/test/:testId" component={TestPage} />
               <Route
                 exact
-                path='/testtype/:testTypeId'
+                path="/testtype/:testTypeId"
                 component={TestTypePage}
               />
 
               <Route
                 exact
-                path='/matrialtest/:sampleId'
-                component={MaterialTest}
+                path="/matrialtest/:testId/:sampleId"
+                component={MaterialTestTrial}
               />
 
-              <Route exact path='/materialtesttrial'>
+              {/* <Route exact path="/materialtesttrial">
                 <MaterialTestTrial />
-              </Route>
+              </Route> */}
 
               {/* Test Reports and Results */}
-              <Route exact path='/testreport'>
+              <Route exact path="/testreport">
                 <TestResultsMaster />
               </Route>
 
-              <Route exact path='/testtype'>
+              <Route exact path="/testtype">
                 <TestTypes />
               </Route>
 
               {/* Profile */}
-              <Route exact path='/profile'>
+              <Route exact path="/profile">
                 <Profile />
               </Route>
 
-              <Route exact path='/concretetest'>
+              <Route exact path="/concretetest">
                 <ConcreteTest />
               </Route>
 
-              <Route exact path='/strengthtest'>
+              <Route exact path="/strengthtest">
                 <ConcreteStrengthTest />
               </Route>
 
               {/* Priviledges */}
-              <Route exact path='/settings/priviledges'>
+              <Route exact path="/settings/priviledges">
                 <CompanyPrivilege />
               </Route>
-              <Route exact path='/testinput'>
+              <Route exact path="/testinput">
                 <Test />
               </Route>
 
-              <Route exact path='/settings/auditlog'>
+              <Route exact path="/settings/auditlog">
                 <AuditLog />
               </Route>
             </Switch>

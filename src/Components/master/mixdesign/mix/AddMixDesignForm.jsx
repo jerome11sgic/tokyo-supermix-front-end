@@ -73,7 +73,7 @@ class AddMixDesignForm extends Component {
     disableAddQuantity: true,
     mixProportionData: "",
     SubCategoriesselect: "",
-    SubCategory: "",
+    SubCategory: undefined,
     datalist: "",
     unit: "",
     selectunit: "",
@@ -1171,8 +1171,9 @@ class AddMixDesignForm extends Component {
                     : false
                 }
               >
-                Add Quantity
+                {this.state.type == "edit" ? "Edit Quantity" : " Add Quantity"}
               </Button>
+              &nbsp; &nbsp; &nbsp;
               <Select
                 placeholder="Select SubCategory"
                 defaultActiveFirstOption
@@ -1184,16 +1185,19 @@ class AddMixDesignForm extends Component {
               >
                 {this.state.SubCategoriesselect}
               </Select>
-
-              <Table
-                style={{ width: "500px" }}
-                columns={columns}
-                dataSource={this.state.datalist}
-                size="middle"
-                scroll={{ Y: 80 }}
-                rowSelection={rowSelection}
-                pagination={false}
-              />
+              {this.state.type == "edit" ? (
+                ""
+              ) : (
+                <Table
+                  style={{ width: "500px" }}
+                  columns={columns}
+                  dataSource={this.state.datalist}
+                  size="middle"
+                  scroll={{ Y: 80 }}
+                  rowSelection={rowSelection}
+                  pagination={false}
+                />
+              )}
               <p style={{ color: "red" }}>{this.state.errormgs}</p>
             </div>
           </MasterLevelForm>
