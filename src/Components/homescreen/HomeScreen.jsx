@@ -8,6 +8,9 @@ import SupplierChain from "./SupplierChain";
 import Slider from "./Slider";
 import Slider2 from "./Slider2";
 import { connect } from "react-redux";
+import { api } from "../services/AxiosService";
+import Notification from "../Constant/Notification";
+import HandelError from "../Constant/HandleError";
 
 import { ToggleDisplayWindow } from "./ToggleDisplayWindow";
 import {
@@ -28,12 +31,89 @@ class HomeScreen extends Component {
     super(props);
 
     this.state = {
-      slider2: false
+      slider2: false,
+      sampleCount: {
+        fineAggregate: 0,
+        coarseAggregate: 0,
+        cement: 0,
+        admixture: 0
+      }
     };
   }
   componentDidMount() {
     const { navigationRefresh } = this.props;
     navigationRefresh();
+    api("GET", "supermix", "/incoming-samples", "", "", "").then(res => {
+      console.log(res.data.results.incomingSamples);
+      for (let k = 0; k < res.data.results.incomingSamples.length; k++) {
+        // fine aggregate
+        if (
+          res.data.results.incomingSamples[k].status === "NEW" &&
+          res.data.results.incomingSamples[k].rawMaterial.name ===
+            "Fine Aggregate"
+        ) {
+          this.setState({
+            sampleCount: {
+              fineAggregate: this.state.sampleCount.fineAggregate + 1,
+              coarseAggregate: this.state.sampleCount.coarseAggregate,
+              cement: this.state.sampleCount.cement,
+              admixture: this.state.sampleCount.admixture
+            }
+          });
+
+          console.log(this.state.sampleCount);
+        }
+        // coarse aggregate
+        if (
+          res.data.results.incomingSamples[k].status === "NEW" &&
+          res.data.results.incomingSamples[k].rawMaterial.name ===
+            "Coarse Aggregate"
+        ) {
+          console.log("c ag hit");
+          this.setState({
+            sampleCount: {
+              fineAggregate: this.state.sampleCount.fineAggregate,
+              coarseAggregate: this.state.sampleCount.coarseAggregate + 1,
+              cement: this.state.sampleCount.cement,
+              admixture: this.state.sampleCount.admixture
+            }
+          });
+          console.log(this.state.sampleCount);
+        }
+        // cement
+        if (
+          res.data.results.incomingSamples[k].status === "NEW" &&
+          res.data.results.incomingSamples[k].rawMaterial.name === "Cement"
+        ) {
+          console.log("cement hit");
+          this.setState({
+            sampleCount: {
+              fineAggregate: this.state.sampleCount.fineAggregate,
+              coarseAggregate: this.state.sampleCount.coarseAggregate,
+              cement: this.state.sampleCount.cement + 1,
+              admixture: this.state.sampleCount.admixture
+            }
+          });
+          console.log(this.state.sampleCount);
+        }
+        // admixture
+        if (
+          res.data.results.incomingSamples[k].status === "NEW" &&
+          res.data.results.incomingSamples[k].rawMaterial.name === "Admixture"
+        ) {
+          console.log("admixture hit");
+          this.setState({
+            sampleCount: {
+              fineAggregate: this.state.sampleCount.fineAggregate,
+              coarseAggregate: this.state.sampleCount.coarseAggregate,
+              cement: this.state.sampleCount.cement,
+              admixture: this.state.sampleCount.admixture + 1
+            }
+          });
+          console.log(this.state.sampleCount);
+        }
+      }
+    });
   }
 
   render() {
@@ -275,10 +355,22 @@ class HomeScreen extends Component {
             {CircularRadialBar(85)}
             {CircularRadialBar(65)}
             {CircularRadialBar(25)} */}
-            {HomeColoredCard("blue", "Fine Aggregate", 25)}
-            {HomeColoredCard("green", "Cement", 15)}
-            {HomeColoredCard("purple", "Admixture", 6)}
-            {HomeColoredCard("red", "Coarse Aggregate", 2)}
+            {HomeColoredCard(
+              "blue",
+              "Fine Aggregate",
+              this.state.sampleCount.fineAggregate
+            )}
+            {HomeColoredCard("green", "Cement", this.state.sampleCount.cement)}
+            {HomeColoredCard(
+              "purple",
+              "Admixture",
+              this.state.sampleCount.admixture
+            )}
+            {HomeColoredCard(
+              "red",
+              "Coarse Aggregate",
+              this.state.sampleCount.coarseAggregate
+            )}
 
             {/* <ToggleDisplayWindow /> */}
           </FlexContainer>
