@@ -109,7 +109,7 @@ export default class TestResults extends Component {
               // dataSource={data2}
               onChange={this.handleChange}
               pagination={false}
-              size='small'
+              size="small"
               // title={() => <h4>Equipment Related Parameter</h4>}
             />
           </FlexContainer>
@@ -125,14 +125,14 @@ export default class TestResults extends Component {
             marginTop: "20px"
           }}
         >
-          <div className='input_wrapper'>
-            <label for='designation_description' className='lable'>
+          <div className="input_wrapper">
+            <label for="designation_description" className="lable">
               Comments
             </label>
             <TextArea
-              id='designation_description'
-              name='designation_description'
-              placeholder='Enter your comments'
+              id="designation_description"
+              name="designation_description"
+              placeholder="Enter your comments"
               style={{ width: "350px", height: "100px" }}
             />
           </div>

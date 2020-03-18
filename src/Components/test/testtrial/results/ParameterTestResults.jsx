@@ -4,64 +4,139 @@ import { FlexContainer } from "../../../styledcomponents/container/FlexGrid";
 import TextArea from "antd/lib/input/TextArea";
 import { Tag } from "antd";
 import { AntTable } from "../../../styledcomponents/table/AntTabl";
+import { api } from "../../../services/AxiosService";
 
+const data1 = [];
 export default class ParameterTestResults extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      tsd: {
-        testName: "75 Micron",
-        date: "17/03/2020",
-        noOfTrial: "3",
-        material: "Sand"
-      },
-      tester: "Marque",
-      trials: [
-        {
-          test001tr01: {
-            parameter: {
-              wb: "50",
-              lbs: "20"
-            },
-            average: "14.8"
-          }
-        },
-        {
-          test001tr02: {
-            parameter: {
-              wb: "20",
-              lbs: "70"
-            },
-            average: "44.18"
-          }
-        }
-      ],
+      testId: this.props.match.params.material_testId,
       columns: [
         {
-          title: "Parameters",
-          dataIndex: "parameters",
-          key: "parameters"
+          title: "Average",
+          dataIndex: "Average",
+          key: "Average"
         }
-      ]
+      ],
+      trailParameter: [],
+      trailData: [],
+      trailColumns: [
+        {
+          title: "Average",
+          dataIndex: "Average",
+          key: "Average"
+        }
+      ],
+      noOfTrial: "",
+      testName: "",
+      date: "",
+      material: "",
+      tester: "",
+      Status: "",
+      acceptedMinValue: "",
+      acceptedMaxValue: "",
+      average: ""
     };
   }
 
-  componentWillMount() {
-    // loop no of trial column
-    for (let i = 0; i < this.state.trials.length; i++) {
-      console.log(this.state.trials[i]);
-      this.state.columns.push({
-        title: `Trial ${i + 1}`,
-        dataIndex: `trial${i + 1}`,
-        key: `trial${i + 1}`
-      });
-    }
+  componentDidMount() {
+    this.getMaterialTestByTestId();
   }
+  getAcceptedValueByTestId = testId => {
+    api("GET", "supermix", "/accepted-value/test", "", "", testId).then(res => {
+      console.log(res.data.results);
+      this.setState({
+        acceptedMinValue: res.data.results.test[0].minValue,
+        acceptedMaxValue: res.data.results.test[0].maxValue
+      });
+    });
+  };
 
+  getMaterialTestByTestId = () => {
+    api("GET", "supermix", "/material-test", "", "", this.state.testId).then(
+      res => {
+        console.log(res.data);
+        this.setState({
+          noOfTrial: res.data.results.MaterialTest.noOfTrial,
+          testName: res.data.results.MaterialTest.testName,
+          date: res.data.results.MaterialTest.date,
+          Status: res.data.results.MaterialTest.status,
+          average: res.data.results.MaterialTest.average
+        });
+        this.getMaterialTestTrailByMaterialTestId(
+          res.data.results.MaterialTest.code
+        );
+        this.getAcceptedValueByTestId(res.data.results.MaterialTest.testId);
+      }
+    );
+  };
+
+  getMaterialTestTrailByMaterialTestId = code => {
+    api(
+      "GET",
+      "supermix",
+      "/material-test-trial/material-test",
+      "",
+      "",
+      code
+    ).then(res => {
+      console.log(res.data.results.MaterialTest[0]);
+      this.setState({
+        material:
+          res.data.results.MaterialTest[0].materialTest.incomingSample
+            .rawMaterial.name
+      });
+      const tcol = [];
+      const tdata = [];
+      let tdataObj = {};
+      for (var i = 0; i < res.data.results.MaterialTest.length; i++) {
+        tcol.push({
+          title: `Trail${i + 1}`,
+          dataIndex: `t${i + 1}`,
+          key: `t${i + 1}`
+        });
+      }
+
+      for (var i = 0; i < res.data.results.MaterialTest.length; i++) {
+        if (i === 0) {
+          tdata.push({
+            [`t${i + 1}`]: res.data.results.MaterialTest[i].result
+          });
+        } else {
+          tdata[0] = {
+            ...tdata[0],
+            ...{ [`t${i + 1}`]: res.data.results.MaterialTest[i].result }
+          };
+        }
+      }
+      console.log(tdata);
+      this.setState({ trailData: tdata });
+      this.setState({ trailColumns: [...this.state.trailColumns, ...tcol] });
+    });
+  };
+  returnTable = () => {
+    return (
+      <AntTable
+        style={{
+          width: "94%",
+          boxShadow: "0px 0px 0px 0px rgba(0,0,0,0.0)"
+        }}
+        bordered
+        columns={this.state.trailColumns}
+        dataSource={this.state.trailData}
+        showHeader={true}
+        pagination={false}
+        footer={() => (
+          <h4 style={{ color: "#f25a5a" }}>
+            {`  Accepted Range :${this.state.acceptedMinValue} Min - ${this.state.acceptedMaxValue} Max`}
+          </h4>
+        )}
+      />
+    );
+  };
   render() {
-    const { tsd, tester, trials, columns } = this.state;
-    console.log(trials);
     return (
       <FlexContainer normal>
         <FlexContainer
@@ -93,26 +168,15 @@ export default class ParameterTestResults extends Component {
             </thead>
             <tbody>
               <tr>
-                <td>{tsd.testName}</td>
-                <td>{tsd.date}</td>
-                <td>{tsd.noOfTrial}</td>
-                <td>{tsd.material}</td>
+                <td>{this.state.testName}</td>
+                <td>{this.state.date}</td>
+                <td>{this.state.noOfTrial}</td>
+                <td>{this.state.material}</td>
               </tr>
             </tbody>
           </table>
-          <AntTable
-            style={{
-              width: "94%",
-              boxShadow: "0px 0px 0px 0px rgba(0,0,0,0.0)"
-            }}
-            bordered
-            columns={columns}
-            dataSource={trials}
-            showHeader={true}
-            pagination={false}
-            footer={() => <h4>Accepted Value : (30.5)</h4>}
-          />
-          <h4>OverAll average : (32.1)</h4>
+
+          {this.returnTable()}
         </FlexContainer>
         <FlexContainer column style={{ width: "20%", height: "350px" }}>
           <FlexContainer
@@ -124,8 +188,8 @@ export default class ParameterTestResults extends Component {
               borderRadius: "5px"
             }}
           >
-            <h4>Tester</h4>
-            <h5>{tester}</h5>
+            <h4>OverAll average</h4>
+            <h1 style={{ fontSize: "30px" }}>{this.state.average}</h1>
           </FlexContainer>
           <FlexContainer
             column
@@ -136,18 +200,18 @@ export default class ParameterTestResults extends Component {
               borderRadius: "5px"
             }}
           >
-            <div className='input_wrapper'>
-              <label className='label' htmlFor='comments'>
+            <div className="input_wrapper">
+              <label className="label" htmlFor="comments">
                 Comments
               </label>
-              <TextArea id='comments' name='comments' />
+              <TextArea id="comments" name="comments" />
             </div>
-            <div className='input_wrapper'>
-              <label className='label' htmlFor='status'>
+            <div className="input_wrapper">
+              <label className="label" htmlFor="status">
                 Status
               </label>
               <Tag
-                color='gold'
+                color={this.state.Status === "PASS" ? "green" : "red"}
                 style={{
                   height: "40px",
                   fontSize: "18px",
@@ -156,7 +220,7 @@ export default class ParameterTestResults extends Component {
                   justifyContent: "center"
                 }}
               >
-                Success
+                {this.state.Status}
               </Tag>
             </div>
           </FlexContainer>

@@ -55,12 +55,7 @@ class ManageConcreteTest extends Component {
         key: "temperature",
         width: "6%"
       },
-      {
-        title: "Plant Name",
-        dataIndex: "plantName",
-        key: "role",
-        width: "6%"
-      },
+
       {
         title: "Water Content",
         dataIndex: "waterContent",

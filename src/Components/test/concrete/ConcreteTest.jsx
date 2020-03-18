@@ -22,14 +22,14 @@ class ConcreteTest extends Component {
     visible: false,
     errors: {
       mix_design_code: "",
-      plant_code: "",
+
       slump: "",
       temperature: "",
       water_content: "",
       status: ""
     },
     mix_design_code: "",
-    plant_code: "",
+
     slump: "",
     temperature: "",
     water_content: "",
@@ -48,7 +48,7 @@ class ConcreteTest extends Component {
       visible: nextProps.visible,
       concreteTestId: nextProps.editPlantData.id,
       mix_design_code: nextProps.editPlantData.mixDesignCode,
-      plant_code: nextProps.editPlantData.plantCode,
+
       slump: nextProps.editPlantData.slump,
       temperature: nextProps.editPlantData.temperature,
       water_content: nextProps.editPlantData.waterContent,
@@ -64,14 +64,14 @@ class ConcreteTest extends Component {
       visible: true,
       errors: {
         mix_design_code: "",
-        plant_code: "",
+
         slump: "",
         temperature: "",
         water_content: "",
         status: ""
       },
       mix_design_code: "",
-      plant_code: "",
+
       slump: "",
       temperature: "",
       water_content: "",
@@ -92,14 +92,14 @@ class ConcreteTest extends Component {
       visible: false,
       errors: {
         mix_design_code: "",
-        plant_code: "",
+
         slump: "",
         temperature: "",
         water_content: "",
         status: ""
       },
       mix_design_code: "",
-      plant_code: "",
+
       slump: "",
       temperature: "",
       water_content: "",
@@ -112,26 +112,6 @@ class ConcreteTest extends Component {
   handleSelect = (name, value) => {
     console.log(name);
     console.log(value);
-    // handle select for  plant
-    if (name === "plant") {
-      this.setState({
-        plant_code: value,
-        edit_plant_code: value
-      });
-
-      if (value.length !== 0) {
-        this.setState({
-          errors: {
-            mix_design_code: this.state.errors.mix_design_code,
-            plant_code: "",
-            slump: this.state.errors.slump,
-            temperature: this.state.errors.temperature,
-            water_content: this.state.errors.water_content,
-            status: this.state.errors.status
-          }
-        });
-      }
-    }
 
     //handle select for designation
     if (name === "mixdesign") {
@@ -144,7 +124,7 @@ class ConcreteTest extends Component {
         this.setState({
           errors: {
             mix_design_code: "",
-            plant_code: this.state.errors.plant_code,
+
             slump: this.state.errors.slump,
             temperature: this.state.errors.temperature,
             water_content: this.state.errors.water_content,
@@ -164,7 +144,7 @@ class ConcreteTest extends Component {
         this.setState({
           errors: {
             mix_design_code: this.state.errors.mix_design_code,
-            plant_code: this.state.errors.plant_code,
+
             slump: this.state.errors.slump,
             temperature: this.state.errors.temperature,
             water_content: this.state.errors.water_content,
@@ -190,14 +170,7 @@ class ConcreteTest extends Component {
             ? "mixdesign code must be one characters long!"
             : "";
         break;
-      case "plant_code":
-        errors.plant_code =
-          value.length === 0
-            ? "plant code can't be empty"
-            : value.length < 2
-            ? "plant code \n must be 3 characters long!"
-            : "";
-        break;
+
       case "slump":
         errors.slump =
           value.length === 0
@@ -266,7 +239,7 @@ class ConcreteTest extends Component {
     });
   };
   componentDidMount() {
-    this.getAllplant();
+    // this.getAllplant();
     this.getallMixdesigns();
   }
   handleSubmit = event => {
@@ -274,7 +247,6 @@ class ConcreteTest extends Component {
     if (
       // this.state.employee_code.length === 0 &&
       this.state.mix_design_code.length === 0 &&
-      this.state.plant_code.length === 0 &&
       this.state.slump.length === 0 &&
       this.state.temperature.length === 0 &&
       this.state.water_content.length === 0 &&
@@ -283,7 +255,7 @@ class ConcreteTest extends Component {
       this.setState({
         errors: {
           mix_design_code: "mix design code can't be empty",
-          plant_code: "plant code can't be empty",
+
           slump: "slump can't be empty",
           temperature: "temperature can't be empty",
           water_content: "water content can't be empty",
@@ -299,22 +271,7 @@ class ConcreteTest extends Component {
           mix_design_code:
             this.state.errors.mix_design_code ||
             "mix design code can't be empty",
-          plant_code: this.state.errors.plant_code,
-          slump: this.state.errors.slump,
-          temperature: this.state.errors.temperature,
-          water_content: this.state.errors.water_content,
-          status: this.state.errors.status
-        }
-      });
-    } else if (
-      this.state.plant_code.length === 0 &&
-      this.state.errors.plant_code.length === 0
-    ) {
-      this.setState({
-        errors: {
-          mix_design_code: this.state.errors.mix_design_code,
-          plant_code:
-            this.state.errors.plant_code || "plant code can't be empty",
+
           slump: this.state.errors.slump,
           temperature: this.state.errors.temperature,
           water_content: this.state.errors.water_content,
@@ -328,7 +285,7 @@ class ConcreteTest extends Component {
       this.setState({
         errors: {
           mix_design_code: this.state.errors.mix_design_code,
-          plant_code: this.state.errors.plant_code,
+
           slump: this.state.errors.slump || "slump  can't be empty",
           temperature: this.state.errors.temperature,
           water_content: this.state.errors.water_content,
@@ -342,7 +299,7 @@ class ConcreteTest extends Component {
       this.setState({
         errors: {
           mix_design_code: this.state.errors.mix_design_code,
-          plant_code: this.state.errors.plant_code,
+
           slump: this.state.errors.slump,
           temperature:
             this.state.errors.temperature || "temperature can't be empty",
@@ -357,7 +314,7 @@ class ConcreteTest extends Component {
       this.setState({
         errors: {
           mix_design_code: this.state.errors.mix_design_code,
-          plant_code: this.state.errors.plant_code,
+
           slump: this.state.errors.slump,
           temperature: this.state.errors.temperature,
           water_content:
@@ -372,7 +329,7 @@ class ConcreteTest extends Component {
       this.setState({
         errors: {
           mix_design_code: this.state.errors.mix_design_code,
-          plant_code: this.state.errors.plant_code,
+
           slump: this.state.errors.slump,
           temperature: this.state.errors.temperature,
           water_content: this.state.errors.water_content,
@@ -382,7 +339,6 @@ class ConcreteTest extends Component {
     } else if (
       // this.state.code.length === 0 &&
       this.state.errors.mix_design_code.length === 0 &&
-      this.state.errors.plant_code.length === 0 &&
       this.state.errors.slump.length === 0 &&
       this.state.errors.temperature.length === 0 &&
       this.state.errors.water_content.length === 0 &&
@@ -394,7 +350,7 @@ class ConcreteTest extends Component {
         const data = {
           id: this.state.concreteTestId,
           mixDesignCode: this.state.mix_design_code,
-          plantCode: this.state.plant_code,
+
           slump: this.state.slump,
           temperature: this.state.temperature,
           waterContent: this.state.water_content,
@@ -415,14 +371,14 @@ class ConcreteTest extends Component {
                 this.setState({
                   errors: {
                     mix_design_code: "",
-                    plant_code: "",
+
                     slump: "",
                     temperature: "",
                     water_content: "",
                     status: ""
                   },
                   mix_design_code: "",
-                  plant_code: "",
+
                   slump: "",
                   temperature: "",
                   water_content: "",
@@ -451,7 +407,7 @@ class ConcreteTest extends Component {
       } else {
         const data = {
           mixDesignCode: this.state.mix_design_code,
-          plantCode: this.state.plant_code,
+
           slump: this.state.slump,
           temperature: this.state.temperature,
           waterContent: this.state.water_content,
@@ -470,14 +426,14 @@ class ConcreteTest extends Component {
               this.setState({
                 errors: {
                   mix_design_code: "",
-                  plant_code: "",
+
                   slump: "",
                   temperature: "",
                   water_content: "",
                   status: ""
                 },
                 mix_design_code: "",
-                plant_code: "",
+
                 slump: "",
                 temperature: "",
                 water_content: "",
@@ -583,7 +539,7 @@ class ConcreteTest extends Component {
 
               <div style={{ height: "12px" }}></div>
             </div>
-            <div className="input_wrapper">
+            {/* <div className="input_wrapper">
               <label for="plant code" className="label">
                 Plant Code
               </label>
@@ -603,7 +559,7 @@ class ConcreteTest extends Component {
                 <div style={error}>{errors.plant_code}</div>
               )}
               <div style={{ height: "12px" }}></div>
-            </div>
+            </div> */}
             {/* Code */}
             <div className="input_wrapper">
               <label for="slump" className="label">

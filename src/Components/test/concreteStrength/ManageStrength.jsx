@@ -57,12 +57,7 @@ class ManageStrength extends Component {
         key: "strength",
         width: "6%"
       },
-      {
-        title: "Plant Name",
-        dataIndex: "plantName",
-        key: "role",
-        width: "6%"
-      },
+
       {
         title: "Mix Design TargetGrade",
         dataIndex: "mixDesignTargetGrade",

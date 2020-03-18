@@ -23,13 +23,12 @@ class AddConcreteStrengthTest extends Component {
     visible: false,
     errors: {
       mix_design_code: "",
-      plant_code: "",
+
       concrete_age: "",
       strength: "",
       status: ""
     },
     mix_design_code: "",
-    plant_code: "",
     concrete_age: "",
     strength: "",
     status: "",
@@ -47,7 +46,6 @@ class AddConcreteStrengthTest extends Component {
       visible: nextProps.visible,
       concreteStrengthTestId: nextProps.editPlantData.id,
       mix_design_code: nextProps.editPlantData.mixDesignCode,
-      plant_code: nextProps.editPlantData.plantCode,
       concrete_age: nextProps.editPlantData.concreteAge,
       strength: nextProps.editPlantData.strength,
       status: nextProps.editPlantData.status,
@@ -62,13 +60,13 @@ class AddConcreteStrengthTest extends Component {
       visible: true,
       errors: {
         mix_design_code: "",
-        plant_code: "",
+
         concrete_age: "",
         strength: "",
         status: ""
       },
       mix_design_code: "",
-      plant_code: "",
+
       concrete_age: "",
       strength: "",
       status: ""
@@ -79,13 +77,13 @@ class AddConcreteStrengthTest extends Component {
       visible: true,
       errors: {
         mix_design_code: "",
-        plant_code: "",
+
         concrete_age: "",
         strength: "",
         status: ""
       },
       mix_design_code: "",
-      plant_code: "",
+
       concrete_age: "",
       strength: "",
       status: ""
@@ -100,13 +98,13 @@ class AddConcreteStrengthTest extends Component {
       visible: false,
       errors: {
         mix_design_code: "",
-        plant_code: "",
+
         concrete_age: "",
         strength: "",
         status: ""
       },
       mix_design_code: "",
-      plant_code: "",
+
       concrete_age: "",
       strength: "",
       status: "",
@@ -117,24 +115,6 @@ class AddConcreteStrengthTest extends Component {
     console.log(name);
     console.log(value);
     // handle select for  plant
-    if (name === "plant") {
-      this.setState({
-        plant_code: value,
-        edit_plant_code: value
-      });
-
-      if (value.length !== 0) {
-        this.setState({
-          errors: {
-            mix_design_code: this.state.errors.mix_design_code,
-            plant_code: "",
-            concrete_age: this.state.errors.concrete_age,
-            strength: this.state.errors.strength,
-            status: this.state.errors.status
-          }
-        });
-      }
-    }
 
     //handle select for designation
     if (name === "mixdesign") {
@@ -147,7 +127,7 @@ class AddConcreteStrengthTest extends Component {
         this.setState({
           errors: {
             mix_design_code: "",
-            plant_code: this.state.errors.plant_code,
+
             concrete_age: this.state.errors.concrete_age,
             strength: this.state.errors.strength,
             status: this.state.errors.status
@@ -166,7 +146,7 @@ class AddConcreteStrengthTest extends Component {
         this.setState({
           errors: {
             mix_design_code: this.state.errors.mix_design_code,
-            plant_code: this.state.errors.plant_code,
+
             concrete_age: this.state.errors.concrete_age,
             strength: this.state.errors.strength,
             status: ""
@@ -191,14 +171,7 @@ class AddConcreteStrengthTest extends Component {
             ? "mixdesign code must be one characters long!"
             : "";
         break;
-      case "plant_code":
-        errors.plant_code =
-          value.length === 0
-            ? "plant code can't be empty"
-            : value.length < 2
-            ? "plant code \n must be 3 characters long!"
-            : "";
-        break;
+
       case "concrete_age":
         errors.concrete_age =
           value.length === 0
@@ -262,7 +235,7 @@ class AddConcreteStrengthTest extends Component {
     });
   };
   componentDidMount() {
-    this.getAllplant();
+    // this.getAllplant();
     this.getallMixdesigns();
   }
   handleSubmit = event => {
@@ -270,7 +243,6 @@ class AddConcreteStrengthTest extends Component {
     if (
       // this.state.employee_code.length === 0 &&
       this.state.mix_design_code.length === 0 &&
-      this.state.plant_code.length === 0 &&
       this.state.concrete_age.length === 0 &&
       this.state.strength.length === 0 &&
       this.state.status.length === 0
@@ -278,7 +250,6 @@ class AddConcreteStrengthTest extends Component {
       this.setState({
         errors: {
           mix_design_code: "mix design code can't be empty",
-          plant_code: "plant code can't be empty",
           concrete_age: "concrete age can't be empty",
           strength: "strength can't be empty",
           status: "status No can't be empty"
@@ -293,21 +264,7 @@ class AddConcreteStrengthTest extends Component {
           mix_design_code:
             this.state.errors.mix_design_code ||
             "mix design code can't be empty",
-          plant_code: this.state.errors.plant_code,
-          concrete_age: this.state.errors.concrete_age,
-          strength: this.state.errors.strength,
-          status: this.state.errors.status
-        }
-      });
-    } else if (
-      this.state.plant_code.length === 0 &&
-      this.state.errors.plant_code.length === 0
-    ) {
-      this.setState({
-        errors: {
-          mix_design_code: this.state.errors.mix_design_code,
-          plant_code:
-            this.state.errors.plant_code || "plant code can't be empty",
+
           concrete_age: this.state.errors.concrete_age,
           strength: this.state.errors.strength,
           status: this.state.errors.status
@@ -320,7 +277,7 @@ class AddConcreteStrengthTest extends Component {
       this.setState({
         errors: {
           mix_design_code: this.state.errors.mix_design_code,
-          plant_code: this.state.errors.plant_code,
+
           concrete_age:
             this.state.errors.concrete_age || "concrete age  can't be empty",
           strength: this.state.errors.strength,
@@ -334,7 +291,7 @@ class AddConcreteStrengthTest extends Component {
       this.setState({
         errors: {
           mix_design_code: this.state.errors.mix_design_code,
-          plant_code: this.state.errors.plant_code,
+
           concrete_age: this.state.errors.concrete_age,
           strength: this.state.errors.strength || "strength can't be empty",
           status: this.state.errors.status
@@ -347,7 +304,7 @@ class AddConcreteStrengthTest extends Component {
       this.setState({
         errors: {
           mix_design_code: this.state.errors.mix_design_code,
-          plant_code: this.state.errors.plant_code,
+
           concrete_age: this.state.errors.concrete_age,
           strength: this.state.errors.strength,
           water_content: this.state.errors.water_content,
@@ -357,7 +314,6 @@ class AddConcreteStrengthTest extends Component {
     } else if (
       // this.state.code.length === 0 &&
       this.state.errors.mix_design_code.length === 0 &&
-      this.state.errors.plant_code.length === 0 &&
       this.state.errors.concrete_age.length === 0 &&
       this.state.errors.strength.length === 0 &&
       this.state.errors.status.length === 0
@@ -368,7 +324,7 @@ class AddConcreteStrengthTest extends Component {
         const data = {
           id: this.state.concreteStrengthTestId,
           mixDesignCode: this.state.mix_design_code,
-          plantCode: this.state.plant_code,
+
           strength: this.state.strength,
           concreteAge: this.state.concrete_age,
           status: this.state.status
@@ -388,13 +344,13 @@ class AddConcreteStrengthTest extends Component {
                 this.setState({
                   errors: {
                     mix_design_code: "",
-                    plant_code: "",
+
                     concrete_age: "",
                     strength: "",
                     status: ""
                   },
                   mix_design_code: "",
-                  plant_code: "",
+
                   concrete_age: "",
                   strength: "",
                   status: "",
@@ -422,7 +378,7 @@ class AddConcreteStrengthTest extends Component {
       } else {
         const data = {
           mixDesignCode: this.state.mix_design_code,
-          plantCode: this.state.plant_code,
+
           strength: this.state.strength,
           concreteAge: this.state.concrete_age,
           status: this.state.status
@@ -440,13 +396,13 @@ class AddConcreteStrengthTest extends Component {
               this.setState({
                 errors: {
                   mix_design_code: "",
-                  plant_code: "",
+
                   concrete_age: "",
                   strength: "",
                   status: ""
                 },
                 mix_design_code: "",
-                plant_code: "",
+
                 concrete_age: "",
                 strength: "",
                 status: "",
@@ -551,7 +507,7 @@ class AddConcreteStrengthTest extends Component {
 
               <div style={{ height: "12px" }}></div>
             </div>
-            <div className="input_wrapper">
+            {/* <div className="input_wrapper">
               <label for="plant code" className="label">
                 Plant Code
               </label>
@@ -571,7 +527,7 @@ class AddConcreteStrengthTest extends Component {
                 <div style={error}>{errors.plant_code}</div>
               )}
               <div style={{ height: "12px" }}></div>
-            </div>
+            </div> */}
             {/* Code */}
             <div className="input_wrapper">
               <label for="concrete age" className="label">

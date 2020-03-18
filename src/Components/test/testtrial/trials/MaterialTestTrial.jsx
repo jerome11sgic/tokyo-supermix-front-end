@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import { FlexContainer } from "../../../styledcomponents/container/FlexGrid";
 import { Input, Select, InputNumber, DatePicker } from "antd";
 import { PrimaryButton } from "../../../styledcomponents/button/button";
+import history from "../../../../Components/Constant/history";
 import theme from "../../../../theme";
 import moment from "moment";
 import { api } from "../../../services/AxiosService";
 import FormGenerator from "../../../Constant/FormGenerator";
+import Notification from "../../../Constant/Notification";
 import "./materialtesttrialstyle.scss";
 import { AntTable } from "../../../styledcomponents/table/AntTabl";
 
@@ -69,7 +71,7 @@ export default class MaterialTestTrial extends Component {
       trialCount: 1,
       submitMeg: "",
       materialId: "",
-      disible: false,
+      disible: true,
       columns: [
         {
           title: "Parameter",
@@ -431,6 +433,8 @@ export default class MaterialTestTrial extends Component {
             ""
           ).then(res => {
             console.log(res.data);
+            this.updateResult(MaterialTestTrialData.code);
+            Notification("success", res.data.message);
           });
 
           // this.setState({
@@ -445,6 +449,9 @@ export default class MaterialTestTrial extends Component {
           // console.log(HandelError(error.validationFailures[0]));
         }
       );
+    } else {
+      this.viewTestResults();
+      this.updateAverage();
     }
 
     this.state.trailColumns.push({
@@ -468,6 +475,29 @@ export default class MaterialTestTrial extends Component {
       }
     }
   };
+  updateAverage = () => {
+    api(
+      "GET",
+      "supermix",
+      "/material-test-trial/material-test/average",
+      "",
+      "",
+      this.state.code
+    ).then(res => {
+      console.log(res.data);
+    });
+  };
+
+  updateResult = id => {
+    api("GET", "supermix", "/parameter-result/calculation", "", "", id).then(
+      res => {
+        console.log(res.data);
+      }
+    );
+  };
+  viewTestResults() {
+    history.push(`/testresults/${this.state.code}`);
+  }
 
   trialCountLimt = () => {
     var sub = "";
@@ -760,7 +790,7 @@ const lableStyle = {
 };
 
 const btstyle = {
-  marginLeft: "220px",
+  marginLeft: "320px",
   height: "auto"
 };
 const fostyle = {

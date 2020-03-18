@@ -126,9 +126,7 @@ class AddTestName extends Component {
           );
         });
         this.setState({
-          SelectEquation,
-          equation:
-            res.data.results.equations[res.data.results.equations.length - 1]
+          SelectEquation
         });
       }
     });
@@ -267,14 +265,14 @@ class AddTestName extends Component {
         }}
       >
         {/* Code */}
-        <div className='input_wrapper'>
-          <label for='test_name' className='label'>
+        <div className="input_wrapper">
+          <label for="test_name" className="label">
             Test Name
           </label>
           <Input
-            id='test_name'
-            name='test_name'
-            placeholder='Enter Test Name'
+            id="test_name"
+            name="test_name"
+            placeholder="Enter Test Name"
             value={test_name}
             onChange={this.handleChange}
           />
@@ -285,15 +283,15 @@ class AddTestName extends Component {
         </div>
 
         {/* Equation */}
-        <div className='input_wrapper'>
-          <label for='equation' className='label'>
+        <div className="input_wrapper">
+          <label for="equation" className="label">
             Equation
           </label>
           <FlexContainer>
             <Select
-              id='equation'
-              name='equation'
-              placeholder='Select Equation'
+              id="equation"
+              name="equation"
+              placeholder="Select Equation"
               style={{ width: 150 }}
               value={equation}
               onChange={value => this.handleSelect("equation", value)}
@@ -308,7 +306,7 @@ class AddTestName extends Component {
 
             <div style={{ height: "6px" }}></div>
             <PrimaryButton
-              type='primary'
+              type="primary"
               value={this.props.togglerValue}
               style={{
                 background: theme.colors.primary,
@@ -329,14 +327,14 @@ class AddTestName extends Component {
         </div>
 
         {/* Test Type */}
-        <div className='input_wrapper'>
-          <label for='test_type' className='label'>
+        <div className="input_wrapper">
+          <label for="test_type" className="label">
             Test Type
           </label>
           <Select
-            id='test_type'
-            name='test_type'
-            placeholder='Select Test Type'
+            id="test_type"
+            name="test_type"
+            placeholder="Select Test Type"
             style={{ width: 180 }}
             value={test_type}
             onChange={value => this.handleSelect("test_type", value)}
@@ -411,7 +409,7 @@ class AddTestName extends Component {
           }}
         >
           <PrimaryButton
-            type='submit'
+            type="submit"
             primary
             style={{
               background: theme.colors.primary,
