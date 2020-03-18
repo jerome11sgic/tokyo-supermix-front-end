@@ -11,21 +11,6 @@ import Notification from "../../../Constant/Notification";
 import "./materialtesttrialstyle.scss";
 import { AntTable } from "../../../styledcomponents/table/AntTabl";
 
-const materialTestData = [
-  {
-    id: 1,
-    testId: 2,
-    date: "2020-03-21",
-    incomingSampleId: "sam01",
-    materialId: 1,
-    materialStateId: 2,
-    noOfTrial: 3,
-    test_level: "LAB_LEVEL",
-    average: 0,
-    status: "PASS"
-  }
-];
-
 const { Option } = Select;
 const error = {
   color: "red",
@@ -55,7 +40,7 @@ export default class MaterialTestTrial extends Component {
       material_state: undefined,
       no_of_trial: 3,
       test_level: "LAB_LEVEL",
-      status: "",
+      status: "NEW",
       errors: {
         date: "",
         material_state: "",
@@ -71,7 +56,7 @@ export default class MaterialTestTrial extends Component {
       trialCount: 1,
       submitMeg: "",
       materialId: "",
-      disible: true,
+      disible: false,
       columns: [
         {
           title: "Parameter",
@@ -331,7 +316,7 @@ export default class MaterialTestTrial extends Component {
         code: code,
         testId: this.state.testId,
         date: moment(date).format("YYYY-MM-DD"),
-        materialStateId: 17,
+        materialStateId: this.state.material_state,
         incomingSampleCode: this.state.incomingSampleId,
         noOfTrial: no_of_trial,
         testLevel: this.state.test_level,
@@ -341,6 +326,7 @@ export default class MaterialTestTrial extends Component {
       api("POST", "supermix", "/material-test", "", data, "").then(
         res => {
           console.log(res.data);
+          Notification("success", res.data.message);
           this.setState({
             statusCode: res.data.status
           });
@@ -450,7 +436,6 @@ export default class MaterialTestTrial extends Component {
         }
       );
     } else {
-      this.viewTestResults();
       this.updateAverage();
     }
 
@@ -476,14 +461,16 @@ export default class MaterialTestTrial extends Component {
     }
   };
   updateAverage = () => {
+    console.log("average hit");
     api(
-      "GET",
+      "PUT",
       "supermix",
       "/material-test-trial/material-test/average",
       "",
       "",
       this.state.code
     ).then(res => {
+      this.viewTestResults();
       console.log(res.data);
     });
   };
@@ -504,7 +491,7 @@ export default class MaterialTestTrial extends Component {
     if (this.state.trialCount <= this.state.no_of_trial) {
       sub = `Trial ${this.state.trialCount} / ${this.state.no_of_trial}`;
     } else {
-      sub = "Submit";
+      sub = "View Results";
     }
     return sub;
   };
@@ -681,7 +668,7 @@ export default class MaterialTestTrial extends Component {
             </FlexContainer>
           </FlexContainer>
           <br />
-          {this.state.disible ? (
+          {this.state.disible && this.state.statusCode === "OK" ? (
             <FlexContainer>
               <FlexContainer>
                 <FlexContainer
@@ -783,7 +770,7 @@ const instyle = {
 };
 
 const lableStyle = {
-  width: "400px",
+  width: "500px",
   height: "32px",
   color: "black",
   fontWeight: 580
@@ -794,7 +781,7 @@ const btstyle = {
   height: "auto"
 };
 const fostyle = {
-  marginTop: "-100px",
+  marginTop: "-50px",
   display: "flex",
   // background: "#F9F5F5 ",
   flexDirection: "row",

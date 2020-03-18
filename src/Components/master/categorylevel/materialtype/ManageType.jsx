@@ -155,7 +155,7 @@ class ManageType extends Component {
         columns={columns}
         dataSource={this.state.datalist}
         onChange={this.handleChange}
-        pagination={{ defaultPageSize: 3 }}
+        pagination={{ defaultPageSize: 10 }}
         size={this.state.size}
       />
     );

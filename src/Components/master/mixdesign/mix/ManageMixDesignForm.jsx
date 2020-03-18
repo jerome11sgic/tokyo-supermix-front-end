@@ -98,10 +98,10 @@ class ManageMixDesignForm extends Component {
       "",
       code
     ).then(res => {
-      console.log(JSON.stringify(res.data.results.mixDesignProportion));
+      console.log(JSON.stringify(res.data.results.mixDesignProportions));
 
       this.setState({
-        MixDesignProportionData: res.data.results.mixDesignProportion
+        MixDesignProportionData: res.data.results.mixDesignProportions
       });
     });
   };

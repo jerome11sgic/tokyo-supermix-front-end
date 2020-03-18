@@ -220,9 +220,9 @@ class AddMainCategoryForm extends Component {
           this.props.reload();
           this.setState({ loading: true });
           this.setState({
-            supllierCategory_code: "",
-            supplier_category: "",
-            supplierCategory_description: "",
+            subcategory_code: "",
+            subcategory_name: "",
+            material_category: "",
             errormgs: ""
           });
           setTimeout(() => {
@@ -252,10 +252,9 @@ class AddMainCategoryForm extends Component {
           this.props.reload();
           this.setState({ loading: true });
           this.setState({
-            name: "",
-            supplier_category: "",
-            supplierCategory_description: "",
-
+            subcategory_code: "",
+            subcategory_name: "",
+            material_category: "",
             errormgs: ""
           });
           setTimeout(() => {
@@ -325,7 +324,9 @@ class AddMainCategoryForm extends Component {
                   color: "white"
                 }}
               >
-                Add Material Sub Category
+                {this.state.type === "edit"
+                  ? " Edit Material Sub Category"
+                  : " Add Material Sub Category"}
               </p>
               <Icon
                 type="close-circle"
@@ -339,17 +340,17 @@ class AddMainCategoryForm extends Component {
         >
           <MasterLevelForm>
             {/* Code */}
-            {this.state.type === "edit" ? (
+            {/* {this.state.type === "edit" ? (
               <div className="input_wrapper">
                 <label for="code" className="label">
                   Code:
                 </label>
 
-                <Input id="code" name="subcategory_code" disabled />
+                <Input id="code" name="subcategory_code"  disabled />
               </div>
             ) : (
               ""
-            )}
+            )} */}
 
             {/* Sub Category Name */}
             <div className="input_wrapper">

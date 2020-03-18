@@ -96,25 +96,7 @@ class MaterialMasterAddForm extends Component {
     console.log(value);
 
     const { errors } = this.state;
-    // handle select for material_category
-    // if (name === "material_category") {
-    //   this.setState({
-    //     material_category: value
-    //   });
-    //   if (value.length !== 0) {
-    //     this.setState({
-    //       errors: {
-    //         material_category: "",
-    //         sub_category: errors.sub_category,
-    //         material_name: errors.material_name,
-    //         material_nature: errors.material_nature
-    //       },
-    //       formValid: this.validateForm(errors),
-    //       errorCount: this.countErrors(errors)
-    //     });
-    //   }
-    // }
-    // handle select for sub_category
+
     if (name === "sub_category") {
       this.setState({
         sub_category: value,
@@ -250,24 +232,7 @@ class MaterialMasterAddForm extends Component {
         formValid: this.validateForm(errors),
         errorCount: this.countErrors(errors)
       });
-    }
-    // else if (
-    //   material_category.length === 0 &&
-    //   errors.material_category.length === 0
-    // ) {
-    //   this.setState({
-    //     errors: {
-    //       material_category:
-    //         errors.material_category || "Material Category can't be empty",
-    //       sub_category: errors.sub_category,
-    //       material_name: errors.material_name,
-    //       material_nature: errors.material_nature
-    //     },
-    //     formValid: this.validateForm(errors),
-    //     errorCount: this.countErrors(errors)
-    //   });
-    // }
-    else if (sub_category.length === 0 && errors.sub_category.length === 0) {
+    } else if (sub_category.length === 0 && errors.sub_category.length === 0) {
       this.setState({
         errors: {
           // material_category: errors.material_category,
@@ -346,7 +311,8 @@ class MaterialMasterAddForm extends Component {
                   material_category: "",
                   sub_category: "",
                   material_name: "",
-                  material_nature: ""
+                  material_nature: "",
+                  edit_sub_category: ""
                 });
                 setTimeout(() => {
                   this.setState({ loading: false, visible: false });
@@ -523,35 +489,6 @@ class MaterialMasterAddForm extends Component {
               ""
             )}
 
-            {/* Plant Name */}
-
-            {/* Place */}
-            {/* <div className="input_wrapper">
-              <label for="material_category" className="label">
-                Material Category:
-              </label>
-
-              <Select
-                placeholder="Select material Category"
-                id="material_category"
-                name="material_category "
-                value={material_category}
-                onChange={value =>
-                  this.handleSelect("material_category", value)
-                }
-                style={{ width: 170 }}
-              >
-                {this.state.categoryselect}
-                {/* <Option value='mc01'>M C 01</Option>
-                <Option value='mc02'>M C 02</Option> */}
-            {/* </Select>
-              {errors.material_category.length > 0 && (
-                <div style={error}>{errors.material_category}</div>
-              )}
-              <div style={{ height: "12px" }}></div>
-            </div>  */}
-
-            {/* T.P No */}
             <div className="input_wrapper">
               <label for="sub_category" className="label">
                 Sub Category:

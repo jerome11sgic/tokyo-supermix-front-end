@@ -58,12 +58,13 @@ export default class ParameterTestResults extends Component {
     api("GET", "supermix", "/material-test", "", "", this.state.testId).then(
       res => {
         console.log(res.data);
+        let avg = res.data.results.MaterialTest.average;
         this.setState({
           noOfTrial: res.data.results.MaterialTest.noOfTrial,
           testName: res.data.results.MaterialTest.testName,
           date: res.data.results.MaterialTest.date,
           Status: res.data.results.MaterialTest.status,
-          average: res.data.results.MaterialTest.average
+          average: Number(avg.toFixed(2))
         });
         this.getMaterialTestTrailByMaterialTestId(
           res.data.results.MaterialTest.code

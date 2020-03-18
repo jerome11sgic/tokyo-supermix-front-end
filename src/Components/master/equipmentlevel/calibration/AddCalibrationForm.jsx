@@ -424,6 +424,8 @@ class AddCalibrationForm extends Component {
               tester: "",
               description: "",
               status: "",
+              edit_equipment_plant: "",
+              edit_supplier: "",
               errormgs: ""
             });
             setTimeout(() => {
@@ -477,7 +479,9 @@ class AddCalibrationForm extends Component {
               description: "",
               status: "",
               employeeId: "",
-              errormgs: ""
+              errormgs: "",
+              edit_equipment_plant: "",
+              edit_supplier: ""
             });
             setTimeout(() => {
               this.setState({ loading: false, visible: false });

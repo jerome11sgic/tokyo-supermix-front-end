@@ -64,7 +64,7 @@ class AddMixDesignForm extends Component {
     grade: "",
     date: "",
     target_strength: "",
-    actual_grade: "",
+    actual_grade: 0,
     water_cement_ratio: 0,
     water_binder_ratio: 0,
     errormgs: "",
@@ -126,9 +126,9 @@ class AddMixDesignForm extends Component {
       "",
       code
     ).then(res => {
-      console.log(res.data.results.mixDesignProportion);
+      console.log(res.data.results);
 
-      res.data.results.mixDesignProportion.map((post, index) => {
+      res.data.results.mixDesignProportions.map((post, index) => {
         objData[post.rawMaterialName] = post.quantity;
       });
       console.log(objData);
@@ -149,9 +149,9 @@ class AddMixDesignForm extends Component {
         });
       }
 
-      console.log(JSON.stringify(res.data.results.mixDesignProportion));
+      console.log(JSON.stringify(res.data.results.mixDesignProportions));
       this.setState({
-        MixDesignProportionData: res.data.results.mixDesignProportion,
+        MixDesignProportionData: res.data.results.mixDesignProportions,
         editmixProposionData: objData,
         // editdataform: this.state.editform,
         editunit
