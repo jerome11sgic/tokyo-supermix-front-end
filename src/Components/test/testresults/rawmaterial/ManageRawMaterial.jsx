@@ -6,6 +6,7 @@ import { AntTable } from "../../../styledcomponents/table/AntTabl";
 import RawMaterialTitle from "../titles/RawMaterialTitle";
 import { api } from "../../../services/AxiosService";
 import { FlexContainer } from "../../../styledcomponents/container/FlexGrid";
+import { PrimaryButton } from "../../../styledcomponents/button/button";
 
 export default class ManageRawMaterial extends Component {
   state = {
@@ -21,9 +22,9 @@ export default class ManageRawMaterial extends Component {
   //  get all plant API
   getAllMaterialTestTrials = () => {
     api("GET", "supermix", "/material-tests", "", "", "").then(res => {
-      console.log(res.data.results.MaterialTests);
+      console.log(res.data.results.materialTests);
       this.setState({
-        materialTests: res.data.results.MaterialTests
+        materialTests: res.data.results.materialTests
       });
     });
   };
@@ -234,14 +235,22 @@ export default class ManageRawMaterial extends Component {
         <Modal
           title='Basic Modal'
           visible={this.state.visible}
-          onOk={this.handleOk}
           onCancel={this.handleCancel}
+          footer={[
+            <PrimaryButton
+              type={"ghost"}
+              key='submit'
+              onClick={this.handleCancel}
+              style={{ background: "#001328", color: "white", border: "none" }}
+            >
+              Close
+            </PrimaryButton>
+          ]}
         >
           {this.state.filteredTestTrials.map((post, index) => (
-            <FlexContainer column>
+            <FlexContainer>
               <p>
-                <b style={{ width: "30px" }}>Trial Code : </b>
-                {"       "}
+                <b>Trial Code : </b>
                 {post.code}
               </p>
               <p>
