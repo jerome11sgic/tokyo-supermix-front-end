@@ -186,7 +186,7 @@ export default class ManageRawMaterial extends Component {
         key: "trials",
         render: (text, record = this.state.materialTests) => (
           <Icon
-            type='container'
+            type="container"
             style={{ color: "green" }}
             onClick={this.showTestTrials.bind(this, record.code)}
           />
@@ -199,18 +199,18 @@ export default class ManageRawMaterial extends Component {
         render: (text, record) => (
           <span>
             <a>
-              <Icon type='edit' />
+              <Icon type="edit" />
             </a>
-            <Divider type='vertical' />
+            <Divider type="vertical" />
             <a>
               <Popconfirm
-                title='Are you sure you want to Delete this?'
+                title="Are you sure you want to Delete this?"
                 icon={
-                  <Icon type='question-circle-o' style={{ color: "red" }} />
+                  <Icon type="question-circle-o" style={{ color: "red" }} />
                 }
               >
-                <a href='#'>
-                  <Icon type='delete'></Icon>
+                <a href="#">
+                  <Icon type="delete"></Icon>
                 </a>
               </Popconfirm>
             </a>
@@ -228,11 +228,11 @@ export default class ManageRawMaterial extends Component {
           columns={columns}
           dataSource={this.state.materialTests}
           onChange={this.handleChange}
-          pagination={{ defaultPageSize: 3 }}
+          pagination={{ defaultPageSize: 10 }}
           size={this.state.size}
         />
         <Modal
-          title='Basic Modal'
+          title="Basic Modal"
           visible={this.state.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
