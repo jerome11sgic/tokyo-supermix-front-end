@@ -32,8 +32,8 @@ class ManagePlants extends Component {
   componentDidMount() {
     this.getallPlant();
   }
-  //  get all plant API
 
+  //  get all plant API
   getallPlant = () => {
     api("GET", "supermix", "/plants", "", "", "").then(res => {
       console.log(res.data);
