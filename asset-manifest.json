@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/tokyo-supermix-front-end/static/css/main.6e0b9372.chunk.css",
-    "main.js": "/tokyo-supermix-front-end/static/js/main.38d5d097.chunk.js",
-    "main.js.map": "/tokyo-supermix-front-end/static/js/main.38d5d097.chunk.js.map",
+    "main.js": "/tokyo-supermix-front-end/static/js/main.aabf708a.chunk.js",
+    "main.js.map": "/tokyo-supermix-front-end/static/js/main.aabf708a.chunk.js.map",
     "runtime-main.js": "/tokyo-supermix-front-end/static/js/runtime-main.4b860aaf.js",
     "runtime-main.js.map": "/tokyo-supermix-front-end/static/js/runtime-main.4b860aaf.js.map",
     "static/css/2.21f2965d.chunk.css": "/tokyo-supermix-front-end/static/css/2.21f2965d.chunk.css",
     "static/js/2.28dcb5c0.chunk.js": "/tokyo-supermix-front-end/static/js/2.28dcb5c0.chunk.js",
     "static/js/2.28dcb5c0.chunk.js.map": "/tokyo-supermix-front-end/static/js/2.28dcb5c0.chunk.js.map",
     "index.html": "/tokyo-supermix-front-end/index.html",
-    "precache-manifest.67a33660af3322126247b149ee9ccb52.js": "/tokyo-supermix-front-end/precache-manifest.67a33660af3322126247b149ee9ccb52.js",
+    "precache-manifest.d64ac30d24f44c39aae9d1cafd1741ee.js": "/tokyo-supermix-front-end/precache-manifest.d64ac30d24f44c39aae9d1cafd1741ee.js",
     "service-worker.js": "/tokyo-supermix-front-end/service-worker.js",
     "static/css/2.21f2965d.chunk.css.map": "/tokyo-supermix-front-end/static/css/2.21f2965d.chunk.css.map",
     "static/css/main.6e0b9372.chunk.css.map": "/tokyo-supermix-front-end/static/css/main.6e0b9372.chunk.css.map",
@@ -56,6 +56,6 @@
     "static/css/2.21f2965d.chunk.css",
     "static/js/2.28dcb5c0.chunk.js",
     "static/css/main.6e0b9372.chunk.css",
-    "static/js/main.38d5d097.chunk.js"
+    "static/js/main.aabf708a.chunk.js"
   ]
 }
