@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from "react";
-import { Popconfirm, Divider, Icon } from "antd";
+import { Popconfirm, Divider, Icon, Modal } from "antd";
 
 import { AntTable } from "../../../styledcomponents/table/AntTabl";
 import RawMaterialTitle from "../titles/RawMaterialTitle";
-
-const data = [];
+import { api } from "../../../services/AxiosService";
+import { FlexContainer } from "../../../styledcomponents/container/FlexGrid";
 
 export default class ManageRawMaterial extends Component {
   state = {
@@ -13,8 +13,24 @@ export default class ManageRawMaterial extends Component {
     sortedInfo: null,
     searchText: "",
     visible: false,
-    size: "small"
+    size: "small",
+    materialTests: [],
+    filteredTestTrials: []
   };
+
+  //  get all plant API
+  getAllMaterialTestTrials = () => {
+    api("GET", "supermix", "/material-tests", "", "", "").then(res => {
+      console.log(res.data.results.MaterialTests);
+      this.setState({
+        materialTests: res.data.results.MaterialTests
+      });
+    });
+  };
+
+  componentDidMount() {
+    this.getAllMaterialTestTrials();
+  }
 
   componentWillMount() {
     if (window.screen.width > 1900) {
@@ -29,6 +45,32 @@ export default class ManageRawMaterial extends Component {
     }
   }
 
+  showTestTrials = code => {
+    const { filteredTestTrials } = this.state;
+    console.log(code);
+
+    api("GET", "supermix", "/material-test-trials", "", "", "").then(res => {
+      console.log(res.data.results);
+
+      console.log(res.data.results.materialTestTrial.length);
+      for (let j = 0; j < res.data.results.materialTestTrial.length; j++) {
+        if (code === res.data.results.materialTestTrial[j].materialTest.code) {
+          console.log("hit");
+          console.log(res.data.results.materialTestTrial[j].materialTest.code);
+          filteredTestTrials.push({
+            code: res.data.results.materialTestTrial[j].code,
+            trialNo: res.data.results.materialTestTrial[j].trialNo,
+            result: res.data.results.materialTestTrial[j].result
+          });
+          console.log(filteredTestTrials);
+        }
+      }
+      this.setState({
+        visible: true
+      });
+    });
+  };
+
   showModal = () => {
     this.setState({
       visible: true
@@ -40,6 +82,11 @@ export default class ManageRawMaterial extends Component {
     this.setState({
       visible: false
     });
+    this.state.filteredTestTrials.splice(
+      0,
+      this.state.filteredTestTrials.length
+    );
+    console.log(this.state.filteredTestTrials);
   };
 
   handleCancel = e => {
@@ -47,6 +94,11 @@ export default class ManageRawMaterial extends Component {
     this.setState({
       visible: false
     });
+    this.state.filteredTestTrials.splice(
+      0,
+      this.state.filteredTestTrials.length
+    );
+    console.log(this.state.filteredTestTrials);
   };
 
   handleChange = (pagination, filters, sorter) => {
@@ -82,84 +134,63 @@ export default class ManageRawMaterial extends Component {
   }
 
   render() {
-    let { sortedInfo, filteredInfo } = this.state;
-    sortedInfo = sortedInfo || {};
-    filteredInfo = filteredInfo || {};
     const columns = [
       {
         title: "Code",
         dataIndex: "code",
-        key: "code",
-        width: "9%",
-        filters: [
-          { text: "Joe", value: "Joe" },
-          { text: "Jim", value: "Jim" }
-        ],
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.code - b.code,
-        sortOrder: sortedInfo.columnKey === "code" && sortedInfo.order
-      },
-      {
-        title: "Name",
-        dataIndex: "name",
-        key: "name",
-        width: "10%",
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        key: "code"
       },
       {
         title: "Date",
         dataIndex: "date",
-        key: "date",
-        width: "10%",
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        key: "date"
       },
       {
-        title: "Grade",
-        dataIndex: "grade",
-        key: "grade",
-        width: "8%",
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        title: "No of Trial",
+        dataIndex: "noOfTrial",
+        key: "noOfTrial"
       },
       {
-        title: "Plant Name",
-        dataIndex: "plant_name",
-        key: "plant_name",
-        width: "12%",
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        title: "Average",
+        dataIndex: "average",
+        key: "average"
+      },
+      {
+        title: "Status",
+        dataIndex: "status",
+        key: "status"
       },
 
       {
-        title: "Raw Materials",
-        dataIndex: "raw_materials",
-        key: "raw_materials",
-        width: "12%",
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        title: "Test Level",
+        dataIndex: "testLevel",
+        key: "testLevel"
       },
       {
-        title: "Tests",
-        dataIndex: "tests",
-        key: "tests",
-        width: "8%",
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.user - b.user,
-        sortOrder: sortedInfo.columnKey === "user" && sortedInfo.order
+        title: "Incoming Sample",
+        dataIndex: "incomingSampleCode",
+        key: "incomingSampleCode"
+      },
+      {
+        title: "Test Name",
+        dataIndex: "testName",
+        key: "testName"
+      },
+      {
+        title: "Material State",
+        dataIndex: "materialState",
+        key: "materialState"
+      },
+      {
+        title: "Trials",
+        key: "trials",
+        render: (text, record = this.state.materialTests) => (
+          <Icon
+            type='container'
+            style={{ color: "green" }}
+            onClick={this.showTestTrials.bind(this, record.code)}
+          />
+        )
       },
       {
         title: "Edit & Delete",
@@ -195,11 +226,35 @@ export default class ManageRawMaterial extends Component {
           maxlength
           nomargin
           columns={columns}
-          dataSource={data}
+          dataSource={this.state.materialTests}
           onChange={this.handleChange}
           pagination={{ defaultPageSize: 3 }}
           size={this.state.size}
         />
+        <Modal
+          title='Basic Modal'
+          visible={this.state.visible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+        >
+          {this.state.filteredTestTrials.map((post, index) => (
+            <FlexContainer column>
+              <p>
+                <b style={{ width: "30px" }}>Trial Code : </b>
+                {"       "}
+                {post.code}
+              </p>
+              <p>
+                <b>Trial No : </b>
+                {post.trialNo}
+              </p>
+              <p>
+                <b>result: </b>
+                {post.result}
+              </p>
+            </FlexContainer>
+          ))}
+        </Modal>
       </div>
     );
   }
