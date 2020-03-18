@@ -460,7 +460,7 @@ export default class FormGenerator extends Component {
     if (input.constructor === Array) {
       return this.renderInputs(input);
     }
-    console.log("DEBUGasdfj: ", input);
+
     const { form, validationErrors, randomisedFields } = this.state;
 
     const {
@@ -639,7 +639,7 @@ export default class FormGenerator extends Component {
     inputs = inputs.filter(
       input => canRender.includes(input.name) || input.constructor === Array
     );
-    console.log("DEBUG545: ", inputs);
+
     const { lableStyle } = this.props;
     return (
       <div
@@ -657,7 +657,7 @@ export default class FormGenerator extends Component {
             : `${classPrefix}-${input.containerClass ||
                 defaultContainerClass ||
                 ""}`;
-          console.log("DEBUG3: ", input);
+
           return (
             <div>
               <FlexContainer style={{ height: "auto" }} key={i}>

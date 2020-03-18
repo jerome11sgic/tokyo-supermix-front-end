@@ -6,6 +6,8 @@ import theme from "../../../../theme";
 import moment from "moment";
 import { api } from "../../../services/AxiosService";
 import FormGenerator from "../../../Constant/FormGenerator";
+import "./materialtesttrialstyle.scss";
+import { AntTable } from "../../../styledcomponents/table/AntTabl";
 
 const materialTestData = [
   {
@@ -16,11 +18,12 @@ const materialTestData = [
     materialId: 1,
     materialStateId: 2,
     noOfTrial: 3,
-    testLevel: "LAP",
+    test_level: "LAB_LEVEL",
     average: 0,
     status: "PASS"
   }
 ];
+
 const { Option } = Select;
 const error = {
   color: "red",
@@ -34,6 +37,7 @@ const error2 = {
   width: "160px",
   height: "0.2px"
 };
+
 export default class MaterialTestTrial extends Component {
   constructor(props) {
     super(props);
@@ -48,6 +52,7 @@ export default class MaterialTestTrial extends Component {
       date: undefined,
       material_state: undefined,
       no_of_trial: 3,
+      test_level: "LAB_LEVEL",
       status: "",
       errors: {
         date: "",
@@ -64,13 +69,26 @@ export default class MaterialTestTrial extends Component {
       trialCount: 1,
       submitMeg: "",
       materialId: "",
-      disible: false
+      disible: false,
+      columns: [
+        {
+          title: "Parameter",
+          dataIndex: "parameter",
+          key: "parameter"
+        }
+      ],
+      trailParameter: [],
+      trailData: {},
+      trailColumns: [],
+      statusCode: "",
+      MaterialTestTrialCode: ""
     };
   }
   componentDidMount() {
     console.log(this.state.testId);
     this.gettestById();
     this.getsampleById();
+    this.getAllMatrialState();
   }
 
   gettestById = () => {
@@ -81,7 +99,7 @@ export default class MaterialTestTrial extends Component {
         test_name: res.data.results.test.name,
         equationId: res.data.results.test.equation.id
       });
-      this.gettestParameterById(res.data.results.test.equation.id);
+      this.gettestParameterById(res.data.results.test.id);
     });
   };
   getsampleById = () => {
@@ -106,18 +124,11 @@ export default class MaterialTestTrial extends Component {
   };
   gettestParameterById = id => {
     console.log(id);
-    api(
-      "GET",
-      "supermix",
-      "/equation-parameter/equationparameter",
-      "",
-      "",
-      id
-    ).then(res => {
+    api("GET", "supermix", "/test-parameter/test", "", "", id).then(res => {
       console.log(res.data);
       // this.createEquationParameters(res.data.results.equationParameters);
       this.setState({
-        equationParameters: res.data.results.equationParameters
+        equationParameters: res.data.results.testparameters
       });
     });
   };
@@ -127,15 +138,13 @@ export default class MaterialTestTrial extends Component {
 
     for (let i = 0; i < equationParameters.length; i++) {
       para.push({
-        name: `${equationParameters[i].parameterAbbreviation}`,
-        label: `${equationParameters[i].parameterName}  (${equationParameters[i].parameterAbbreviation})`,
-        type: "number"
+        name: `${equationParameters[i].parameter.abbreviation}`,
+        label: `${equationParameters[i].parameter.name}  (${equationParameters[i].parameter.abbreviation})`,
+        type: "number",
+        placeholder: equationParameters[i].unit.unit
       });
     }
     console.log(para);
-    // this.setState({
-    //   formParameter: JSON.stringify(para)
-    // });
     return JSON.stringify(para);
   };
   handleSelect = (field, value) => {
@@ -151,6 +160,11 @@ export default class MaterialTestTrial extends Component {
           status: errors.status,
           code: errors.code
         }
+      });
+    }
+    if (field === "test_level") {
+      this.setState({
+        test_level: value
       });
     }
   };
@@ -200,7 +214,7 @@ export default class MaterialTestTrial extends Component {
     console.log(name + " is \n" + value);
     switch (name) {
       case "code":
-        errors.status = value.length === 0 ? "code can't be empty" : "";
+        errors.code = value.length === 0 ? "code can't be empty" : "";
         break;
       case "status":
         errors.status =
@@ -308,25 +322,64 @@ export default class MaterialTestTrial extends Component {
       errors.code.length === 0
     ) {
       console.log("form is valid");
+
+      // private TestLevel testLevel;
+
       const data = {
         code: code,
         testId: this.state.testId,
         date: moment(date).format("YYYY-MM-DD"),
-        materialState: material_state,
-        materialId: this.state.materialId,
-        incomingSampleId: this.state.incomingSampleId,
+        materialStateId: 17,
+        incomingSampleCode: this.state.incomingSampleId,
         noOfTrial: no_of_trial,
-        testLevel: "LAP",
+        testLevel: this.state.test_level,
         average: 0,
         status: status
       };
+      api("POST", "supermix", "/material-test", "", data, "").then(
+        res => {
+          console.log(res.data);
+          this.setState({
+            statusCode: res.data.status
+          });
+        },
+        error => {
+          // this.setState({
+          //   errorvalmegss: error.validationFailures[0]
+          // });
+          console.log("DEBUG34: ", error);
+          // console.log(HandelError(error.validationFailures[0]));
+        }
+      );
+
       console.log(data);
+
       this.setState({ disible: true });
     }
   };
 
+  getAllMatrialState() {
+    api("GET", "supermix", "/material-states", "", "", "").then(res => {
+      console.log(res.data.results.materialState);
+
+      console.log("ggg");
+      let SelectStates = res.data.results.materialState.map((post, index) => {
+        return (
+          <Option value={post.id} key={index}>
+            {post.materialState}
+          </Option>
+        );
+      });
+      this.setState({
+        SelectStates
+      });
+    });
+  }
+
   ParameterformSubmit = data => {
-    console.log(data);
+    console.log(Object.keys(data)[0]);
+    console.log();
+
     if (this.state.trialCount <= this.state.no_of_trial) {
       console.log("hit");
       this.setState({
@@ -334,13 +387,85 @@ export default class MaterialTestTrial extends Component {
       });
     }
     if (this.state.trialCount <= this.state.no_of_trial) {
+      this.setState({
+        MaterialTestTrialCode: `${this.state.code}T${this.state.trialCount}`
+      });
       const MaterialTestTrialData = {
-        id: `${this.state.code}T${this.state.trialCount}`,
-        materialTestId: this.state.code,
+        code: `${this.state.code}T${this.state.trialCount}`,
+        materialTestCode: this.state.code,
         trialNo: this.state.trialCount,
-        results: 0
+        result: 0
       };
       console.log(MaterialTestTrialData);
+
+      let parameterResults = [];
+      for (let i = 0; i < this.state.equationParameters.length; i++) {
+        parameterResults.push({
+          materialTestTrial: {
+            code: MaterialTestTrialData.code
+          },
+          value: data[this.state.equationParameters[i].parameter.abbreviation],
+          testParameterId: this.state.equationParameters[i].id
+        });
+      }
+
+      console.log(parameterResults);
+
+      api(
+        "POST",
+        "supermix",
+        "/material-test-trial",
+        "",
+        MaterialTestTrialData,
+        ""
+      ).then(
+        res => {
+          console.log(res.data);
+          console.log(this.state.MaterialTestTrialCode);
+          api(
+            "POST",
+            "supermix",
+            "/parameter-result",
+            "",
+            parameterResults,
+            ""
+          ).then(res => {
+            console.log(res.data);
+          });
+
+          // this.setState({
+          //   statusCode: res.data.status
+          // });
+        },
+        error => {
+          // this.setState({
+          //   errorvalmegss: error.validationFailures[0]
+          // });
+          console.log("DEBUG34: ", error);
+          // console.log(HandelError(error.validationFailures[0]));
+        }
+      );
+    }
+
+    this.state.trailColumns.push({
+      title: `Trail${this.state.trialCount}`,
+      dataIndex: `t${this.state.trialCount}`,
+      key: `t${this.state.trialCount}`
+    });
+    if (this.state.trialCount === 1) {
+      for (var i = 0; i < Object.keys(data).length; i++) {
+        this.state.trailParameter.push({
+          parameter: Object.keys(data)[i],
+          [`t${this.state.trialCount}`]: Object.values(data)[i]
+        });
+      }
+    } else {
+      for (var i = 0; i < Object.keys(data).length; i++) {
+        this.state.trailParameter[i] = {
+          ...this.state.trailParameter[i],
+          ...{ [`t${this.state.trialCount}`]: Object.values(data)[i] }
+        };
+      }
     }
   };
 
@@ -355,6 +480,8 @@ export default class MaterialTestTrial extends Component {
   };
 
   render() {
+    console.log(this.state.trailParameter);
+    console.log(this.state.equationParameters);
     const {
       test_name,
       incoming_sample,
@@ -376,7 +503,7 @@ export default class MaterialTestTrial extends Component {
               padding: "15px",
               borderRadius: "15px",
               width: "1200px",
-              height: "120px"
+              height: "auto"
             }}
           >
             <FlexContainer home>
@@ -433,17 +560,39 @@ export default class MaterialTestTrial extends Component {
                   id="material_state"
                   name="material_state"
                   placeholder="Select Material State"
-                  style={{ width: 180 }}
+                  style={{ width: 120 }}
                   value={material_state}
                   onChange={value => this.handleSelect("material_state", value)}
                   disabled={this.state.disible}
                 >
-                  <Option value="cement">Cement</Option>
-                  <Option value="concrete">Concrete</Option>
+                  {this.state.SelectStates}
                 </Select>
                 {errors.material_state.length > 0 && (
                   <div style={error2}>{errors.material_state}</div>
                 )}
+                <div style={{ height: "22px" }} />
+              </div>
+              <div className="input_wrapper">
+                <label htmlFor="material_state" className="label">
+                  Test Level
+                </label>
+                <Select
+                  id="test_level"
+                  name="test_level"
+                  placeholder="Select Test Level"
+                  style={{ width: 120 }}
+                  value={this.state.test_level}
+                  onChange={value => this.handleSelect("test_level", value)}
+                  disabled={this.state.disible}
+                >
+                  <Option value="LAB_LEVEL">Lap</Option>
+                  <Option value="PLANT_LEVEL">Plant</Option>
+                  <Option value="TRUCK_LEVEL">Truck</Option>
+                  <Option value="BULK_LEVEL">Bulk</Option>
+                </Select>
+                {/* {errors.material_state.length > 0 && (
+                  <div style={error2}>{errors.material_state}</div>
+                )} */}
                 <div style={{ height: "22px" }} />
               </div>
               <div className="input_wrapper">
@@ -510,10 +659,32 @@ export default class MaterialTestTrial extends Component {
                     background: "#F9F5F5 ",
                     padding: "15px",
                     borderRadius: "15px",
-                    width: "890px",
+                    width: "750px",
                     height: "400px"
                   }}
                 >
+                  <FlexContainer
+                    column
+                    style={{
+                      background: theme.colors.primary,
+                      height: "40px",
+                      width: "890px",
+                      margin: "-15px",
+                      borderTopLeftRadius: "15px",
+                      borderTopRightRadius: "15px"
+                    }}
+                  >
+                    <h3
+                      style={{
+                        marginTop: "3px",
+                        marginLeft: "0px",
+                        color: "white"
+                      }}
+                    >
+                      Test Trial
+                    </h3>
+                  </FlexContainer>
+
                   <FormGenerator
                     form={JSON.parse(
                       this.createEquationParameters(
@@ -545,10 +716,27 @@ export default class MaterialTestTrial extends Component {
                     background: "white",
                     padding: "15px",
                     borderRadius: "15px",
-                    width: "300px",
-                    height: "400px"
+                    width: "440px",
+                    height: "auto"
                   }}
-                ></FlexContainer>
+                >
+                  <AntTable
+                    normal
+                    emptyTableTestTrial
+                    columns={[
+                      ...this.state.columns,
+                      ...this.state.trailColumns
+                    ]}
+                    dataSource={[
+                      ...this.state.trailParameter,
+                      this.state.trailData
+                    ]}
+                    onChange={this.handleChange}
+                    pagination={false}
+                    size="small"
+                    // title={() => <h4>Equipment Related Parameter</h4>}
+                  />
+                </FlexContainer>
               </FlexContainer>
             </FlexContainer>
           ) : (
@@ -565,23 +753,30 @@ const instyle = {
 };
 
 const lableStyle = {
-  width: "300px",
-  height: "32px"
+  width: "400px",
+  height: "32px",
+  color: "black",
+  fontWeight: 580
 };
 
 const btstyle = {
-  marginLeft: "720px"
+  marginLeft: "220px",
+  height: "auto"
 };
 const fostyle = {
-  marginTop: "10px",
+  marginTop: "-100px",
   display: "flex",
   // background: "#F9F5F5 ",
   flexDirection: "row",
-  width: "800px",
+  width: "700px",
   height: "auto",
   flexWrap: "wrap",
-  justifyContent: "space-around",
+  justifyContent: "space-evenly",
   position: "relative",
   // overflowY: "scroll",
   scrollBehavior: "smooth"
+};
+
+const btnStylePrimary = {
+  background: "black"
 };
