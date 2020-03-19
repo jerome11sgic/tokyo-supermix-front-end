@@ -21,9 +21,9 @@ export default class ManageRawMaterial extends Component {
   //  get all plant API
   getAllMaterialTestTrials = () => {
     api("GET", "supermix", "/material-tests", "", "", "").then(res => {
-      console.log(res.data.results.materialTests);
+      console.log(res.data.results.MaterialTests);
       this.setState({
-        materialTests: res.data.results.materialTests
+        materialTests: res.data.results.MaterialTests
       });
     });
   };
@@ -186,7 +186,7 @@ export default class ManageRawMaterial extends Component {
         key: "trials",
         render: (text, record = this.state.materialTests) => (
           <Icon
-            type='container'
+            type="container"
             style={{ color: "green" }}
             onClick={this.showTestTrials.bind(this, record.code)}
           />
@@ -199,18 +199,18 @@ export default class ManageRawMaterial extends Component {
         render: (text, record) => (
           <span>
             <a>
-              <Icon type='edit' />
+              <Icon type="edit" />
             </a>
-            <Divider type='vertical' />
+            <Divider type="vertical" />
             <a>
               <Popconfirm
-                title='Are you sure you want to Delete this?'
+                title="Are you sure you want to Delete this?"
                 icon={
-                  <Icon type='question-circle-o' style={{ color: "red" }} />
+                  <Icon type="question-circle-o" style={{ color: "red" }} />
                 }
               >
-                <a href='#'>
-                  <Icon type='delete'></Icon>
+                <a href="#">
+                  <Icon type="delete"></Icon>
                 </a>
               </Popconfirm>
             </a>
@@ -232,7 +232,7 @@ export default class ManageRawMaterial extends Component {
           size={this.state.size}
         />
         <Modal
-          title='Basic Modal'
+          title="Basic Modal"
           visible={this.state.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
